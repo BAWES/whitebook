@@ -138,7 +138,7 @@ $action = Yii::$app->controller->action->id;
                                 </a>
                             </li>
                             <li class="">
-                                <a href="<?= Url::toRoute('/contact-us',true);?>">
+                                <a href="" data-toggle="modal"  onclick="show_login_modal('-5');" data-target="#vendor-sign-up">
                                     <?= Yii::t('frontend', 'Become a Vendor'); ?>
                                 </a>
                             </li>

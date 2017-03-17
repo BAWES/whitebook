@@ -339,6 +339,103 @@ use frontend\models\Users;
     </div>
 </div>
 
+
+<!-- Sign-up Vendor Modal -->
+<div class="modal fade vendor_signup_modal_form" id="vendor-sign-up" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+    <div class="modal-dialog">
+        <div class="modal-content  modal_member_signup row">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div class="text-center">
+                    <div id="registration_msg"></div>
+                </div>
+                <h4 class="modal-title text-center" id="myModalLabel">
+                    <span> <?= Yii::t('frontend', 'Vendor Register Request') ?></span>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form class="form col-md-12 center-block" id="vendor_request_form">
+                    <div class="login-padding">
+                        <div class="clearfix">
+                            <div class="left-side pull-left col-md-6 col-sm-6 col-xs-12 padding-left-0  padding-right-0">
+                                <div class="form-group">
+                                    <label><?= Yii::t('frontend', 'Name of business') ?></label>
+                                    <input type="text" placeholder="" name="name_of_business" id="name_of_business" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
+                                    <input type="hidden" id="_csrf1" name="_csrf" value="<?= Yii::$app->request->csrfToken; ?>" />
+                                    <span class="vendor_name_of_business errors"></span>
+                                </div>
+                            </div>
+
+                            <div class="right-side pull-right col-md-6 col-sm-6 col-xs-12 padding-right-0">
+                                <div class="form-group">
+                                    <label><?= Yii::t('frontend', 'Contact person') ?></label>
+                                    <input type="text" placeholder="" name="contact_person" id="contact_person" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
+                                    <span class="vendor_contact_person errors"></span>
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="left-side pull-left col-md-6 col-sm-6 col-xs-12 padding-left-0  padding-right-0">
+                                <div class="form-group">
+                                    <label><?= Yii::t('frontend', 'Phone/mobile of contact person') ?></label>
+                                    <input type="text" placeholder="" name="phone" id="phone" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
+                                    <span class="customer_phone errors"></span>
+                                    <div id="vendor_phone" class="error"></div>
+                                </div>
+                            </div>
+                            <div class="left-side pull-left col-md-6 col-sm-6 col-xs-12 padding-left-0  padding-right-0">
+                                <div class="form-group">
+                                    <label><?= Yii::t('frontend', 'Email of contact person') ?></label>
+                                    <input type="text" placeholder="" name="email" id="email" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
+                                    <span class="vendor_email errors"></span>
+                                    <div id="vendor_email" class="error"></div>
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="left-side pull-left col-md-6 col-sm-6 col-xs-12 padding-left-0  padding-right-0">
+                                <div class="form-group reg_gender">
+                                    <label><?= Yii::t('frontend', 'Valid commercial license available?') ?></label>
+                                    <div class="col-md-12 padding0 gender-select">
+                                        <select class="selectpicker" data-style="btn-primary" id="license" name="license" style="display: none;">
+                                            <option value=""><?= Yii::t('frontend', 'Select Option') ?></option>
+                                            <option value="Yes"><?= Yii::t('frontend', 'Yes') ?></option>
+                                            <option value="No"><?= Yii::t('frontend', 'No') ?></option>
+                                        </select>
+                                    </div>
+                                    <div class="clearfix">
+                                        <span class="customer_status errors"></span>
+                                        <div id="gen_er" class="error"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="right-side pull-right col-md-6 col-sm-6 col-xs-12 padding-right-0">
+                                <div class="form-group">
+                                    <label><?= Yii::t('frontend', 'Business description') ?></label>
+                                    <input type="text" placeholder="" name="description" id="description" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
+                                    <span class="vendor_description errors"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div id="register_loader"><img src="<?= Url::to('@web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
+
+                            <div class="button-signin">
+                                <div id="loader1"><img src="<?=  Url::to('@web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
+                                <button type="button" id="vendor_send" name="vendor_send" class="btn btn-primary btn-lg btn-block login_btn"><?= Yii::t('frontend', 'Send') ?></button>
+                            </div>
+                        </div>
+                        <div class="success-block text-center" id="success-block"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
 <!-- end -->
 
 <!-- begin Add to event modal-->

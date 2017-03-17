@@ -884,4 +884,31 @@ class UsersController extends BaseController
             'questions' => $questions
         ]);
     }
+
+    public function actionVendorRequest(){
+        $request = Yii::$app->request;
+
+        if ($request->post('_csrf') && $request->post('name_of_business')) {
+            $business = $request->post('name_of_business');
+            $name = $request->post('contact_person');
+            $mobile = $request->post('phone');
+            $email = $request->post('email');
+            $license = $request->post('license');
+            $description = $request->post('description');
+
+            return $send = Yii::$app->mailer->compose("admin/vendor-request",
+                [
+                    "business"=>$business,"name"=>$name,'mobile'=>$mobile,
+                    'email'=>$email,'license'=>$license,'description'=>$description
+                ])
+                ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->params['SITE_NAME']])
+                ->setTo('anilkumar.dhiman1@gmail.com')
+                ->setSubject('Vendor Registration Request')
+                ->send();
+
+        } else {
+            return 0;
+            exit;
+        }
+    }
 }

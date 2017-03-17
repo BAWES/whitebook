@@ -2124,3 +2124,50 @@ $(document).delegate('#modal_event_from_package #create_event_button', 'click', 
     }
 });
 /* END ADD TO EVENT */
+
+
+
+//Register save function ajax
+
+$(document).delegate('#vendor_send', 'click', function()
+{
+
+    $('.errors,.success-block').html('');
+
+    if ($('#name_of_business').val() == '') {
+        $('.vendor_name_of_business.errors').html('Please ente name of business');
+        return false;
+    }
+
+    if ($('#contact_person').val() == '') {
+        $('.vendor_contact_person.errors').html('Please enter contact person');
+        return false;
+    }
+
+    $(this).attr('disabled', 'disabled');
+    $('#vendor_send').html('Please wait...');
+    $('#vendor_send').val('Please wait...');
+    var form = $("#vendor_request_form");
+    $.ajax({
+        url: vendor_request_url,
+        async:false,
+        type:"post",
+        data:form.serialize(),
+        success:function(data)
+        {
+            $('#vendor_send').removeAttr('disabled');
+            $('#vendor_send').html('Send');
+            if (data==1) {
+                $('#success-block').html('Request sent successfully. Admin will contact you soon.');
+            } else {
+                $('#success-block').html('Error while sending request. Please try after some time.');
+            }
+            window.setTimeout(function () {
+                $('#vendor_request_form')[0].reset();
+                $('.errors,.success-block').html('');
+                $('#vendor-sign-up').modal('hide');
+            }, 2000);
+            return false;
+        }
+    });
+});
