@@ -391,6 +391,11 @@ class CheckoutController extends BaseController
 
         $arr_booking_id = Yii::$app->session->get('arr_booking_id');
 
+        if(!$arr_booking_id)
+        {
+            return $this->redirect(['site/index']);
+        }
+
         return $this->render('success', [
             'arr_booking_id' => $arr_booking_id
         ]);
