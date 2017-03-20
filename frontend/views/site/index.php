@@ -206,6 +206,17 @@ if (!empty($feature_group_sql_result)) {
 
                         foreach ($feature_group_sql_result as $product_val) {
 
+                            if (
+                                $product_val['item_approved'] == 'Yes' &&
+                                $product_val['trash'] == 'Default' &&
+                                $product_val['item_status'] == 'Active' &&
+                                $product_val['item_for_sale'] == 'Yes'
+                            ) {
+                                $AvailableStock = true;
+                            } else {
+                                $AvailableStock = false;
+                            }
+
                             $image_row = Image::find()->select(['image_path'])
                                 ->where(['item_id' => $product_val['item_id']])
                                 ->orderby(['vendorimage_sort_order'=>SORT_ASC])
@@ -226,6 +237,9 @@ if (!empty($feature_group_sql_result)) {
 
                             ?>
                             <div class="item" data-id="<?= $product_val['item_id'] ?>">
+                                <?php if (!$AvailableStock) { ?>
+                                    <img src="<?php echo Url::to("@web/images/sold-out.png");?>" class="sold-out">
+                                <?php } ?>
                                 <div class="events_items fetu_product_list index_redirect" data-hr='<?= $item_url ?>'>
 
                                 <div class="hover_events">
