@@ -78,9 +78,6 @@ $order_request_count =
         				<?= Html::a('<i class="fa fa-arrows"></i><span class="title">Manage Area</span>', ['vendor-location/index'], ['class'=>'link-title']) ?>
         			</li>
         			<!-- Block date management-->
-        			<li class="<?=($cntrl == 'blocked-date' && $action == 'createweek') ? "active" : "noactive" ?>">
-        				<?= Html::a('<i class="fa fa-anchor"></i><span class="title">Weekly Off</span>', ['blocked-date/createweek'], ['class'=>'link-title']) ?>
-        			</li>
         			<li class="<?=($cntrl == 'blocked-date' && $action == 'index') ? "active" : "noactive" ?>">
         				<?= Html::a('<i class="fa fa-film"></i><span class="title">Block Date</span>', ['blocked-date/index'], ['class'=>'link-title']) ?>
         			</li>
