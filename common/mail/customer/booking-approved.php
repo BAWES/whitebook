@@ -16,7 +16,7 @@ use common\components\CFormatter;
 <tr>
     <td width="20"></td>
     <td style=" font:normal 14px/21px arial; color:#333333;">
-        Hi <?= $booking->customer_name ?>,
+        Hi <?= $booking->customer_name ?>,<br/><br/>
     </td>
     <td width="20"></td>
 </tr>
@@ -24,8 +24,8 @@ use common\components\CFormatter;
 <tr>
     <td width="20"></td>
     <td style=" font:normal 15px arial; color:#333333;">
-         Your item request approved. 
-
+        Your booking request has been approved by <?=$vendor->vendor_name?> for <?=$booking->bookingItems[0]->item_name?>.<br/>
+        To confirm your booking, please pay within the next 24 hours or the booking will be cancelled.
         <br />
         <br />
 
