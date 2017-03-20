@@ -14,6 +14,8 @@ use yii\db\Expression;
 * @property integer $ques_id
 * @property integer $address_type_id
 * @property string $question
+* @property string $question_ar
+* @property integer $required
 * @property string $status
 * @property integer $created_by
 * @property integer $modified_by
@@ -40,7 +42,7 @@ class AddressQuestion extends \yii\db\ActiveRecord
     {
         return [
             [['question', 'question_ar', 'address_type_id'], 'required'],
-            [['ques_id', 'address_type_id', 'created_by', 'modified_by'], 'integer'],
+            [['ques_id', 'address_type_id', 'created_by', 'modified_by','required'], 'integer'],
             [['status', 'trash'], 'string'],
             [['created_datetime', 'modified_datetime'], 'safe'],
         ];
@@ -78,6 +80,7 @@ class AddressQuestion extends \yii\db\ActiveRecord
             'question' => 'Question',
             'question_ar' => 'Question - Arabic',
             'status' => 'Status',
+            'required' => 'Is Required?',
             'typeName' => 'Address Type',
             'created_by' => 'Created By',
             'modified_by' => 'Modified By',
