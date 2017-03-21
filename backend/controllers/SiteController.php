@@ -237,9 +237,6 @@ class SiteController extends Controller
 
         if(!$model) 
         {
-            echo 1;
-
-            die();
             $model = VendorDraft::createDraft($vendor_id);
         }
 
