@@ -100,7 +100,7 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
             [['created_by', 'modified_by'], 'integer'],
             [['vendor_payable'], 'number'],
             [['vendor_return_policy','vendor_return_policy_ar', 'vendor_name', 'vendor_name_ar', 'vendor_contact_name',], 'string'],
-            [['created_datetime', 'modified_datetime'], 'safe'],
+            [['created_datetime', 'modified_datetime', 'vendor_fax'], 'safe'],
             [['vendor_website','vendor_facebook','vendor_twitter','vendor_instagram', 'vendor_youtube'],'url', 'defaultScheme' => 'http'],
             /* Validation Rules */
             [['confirm_password'], 'compare', 'compareAttribute'=>'vendor_password','message'=>'Password and confirm password not same' ],

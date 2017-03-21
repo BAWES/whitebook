@@ -90,7 +90,7 @@ class VendorDraft extends \yii\db\ActiveRecord
     {
         return [
             [['vendor_id', 'created_by', 'modified_by'], 'integer'],
-            [['vendor_name', 'vendor_name_ar', 'vendor_emergency_contact_name', 'vendor_emergency_contact_email', 'vendor_emergency_contact_number', 'vendor_fax', 'vendor_logo_path', 'created_by', 'modified_by', 'created_datetime', 'modified_datetime', 'vendor_bank_name', 'vendor_bank_branch', 'vendor_account_no'], 'required'],
+            [['vendor_name', 'vendor_contact_number', 'vendor_name_ar', 'vendor_emergency_contact_name', 'vendor_emergency_contact_email', 'vendor_emergency_contact_number', 'vendor_fax', 'vendor_logo_path', 'created_by', 'modified_by', 'created_datetime', 'modified_datetime', 'vendor_bank_name', 'vendor_bank_branch', 'vendor_account_no'], 'required'],
             [['vendor_return_policy', 'vendor_return_policy_ar', 'vendor_contact_address', 'vendor_contact_address_ar', 'short_description', 'short_description_ar'], 'string'],
             [['created_datetime', 'modified_datetime', 'is_ready'], 'safe'],
             [['vendor_name', 'vendor_public_email', 'vendor_contact_name', 'vendor_contact_email', 'vendor_emergency_contact_name', 'vendor_emergency_contact_email', 'vendor_website', 'vendor_facebook', 'vendor_twitter', 'vendor_instagram'], 'string', 'max' => 128],
