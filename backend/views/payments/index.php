@@ -22,10 +22,24 @@ $this->params['breadcrumbs'][] = 'Vendor Payments';
             'payment_id',
             'amount',
             'description:ntext',
-            'created_datetime',
+            [
+                'attribute'=>'created_datetime',
+                'value'=>function($model) {
+                    return date('Y-m-d',strtotime($model->created_datetime));
+                }
+            ]
             // 'modified_datetime',
 
             // ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 </div>
+<?php
+$this->registerCssFile('@web/themes/default/plugins/bootstrap-datepicker/css/datepicker.css');
+$this->registerJsFile('@web/themes/default/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJs("
+  $(\"[name='VendorPaymentSearch[created_datetime]']\").datepicker({
+    autoclose:true,
+  	format: 'yyyy-mm-dd',
+  });
+");

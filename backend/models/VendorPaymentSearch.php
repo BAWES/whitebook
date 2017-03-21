@@ -64,10 +64,11 @@ class VendorPaymentSearch extends VendorPayment
             'payment_id' => $this->payment_id,
             'vendor_id' => $this->vendor_id,
             'amount' => $this->amount,
-            'created_datetime' => $this->created_datetime,
+           // 'created_datetime' => $this->created_datetime,
             'modified_datetime' => $this->modified_datetime,
         ]);
 
+        $query->andFilterWhere(['like', 'created_datetime', $this->created_datetime]);
         $query->andFilterWhere(['like', 'description', $this->description]);
 
         return $dataProvider;
