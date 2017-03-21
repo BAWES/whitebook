@@ -19,6 +19,8 @@ use yii\web\View;
 
         <?= $form->field($model, 'status')->dropDownList(['Active' => 'Active', 'Deactive' => 'Deactive']); ?>
 
+        <?= $form->field($model, 'required')->dropDownList(['0' => 'No', '1' => 'Yes']); ?>
+
         <div class="form-group">
             <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
 
