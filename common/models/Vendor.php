@@ -16,7 +16,6 @@ use yii\db\Expression;
 * This is the model class for table "{{%vendor}}".
 *
 * @property string $vendor_id
-* @property string $image_id
 * @property string $vendor_name
 * @property string $vendor_return_policy
 * @property string $vendor_public_email
@@ -37,7 +36,6 @@ use yii\db\Expression;
 * @property string $trash
 *
 * @property Suborder[] $suborders
-* @property Image $image
 * @property VendorAddress[] $vendorAddresses
 * @property VendorBlockedDate[] $vendorBlockedDates
 * @property VendorDeliveryArea[] $vendorDeliveryAreas
@@ -130,7 +128,6 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
         return [
             'vendor_id' => 'Vendor',
             // 'commision' => 'Commision ( % )',
-            'image_id' => 'Image ',
             'vendor_payable' => 'Payable',
             'subcategory_id' => 'Sub category',
             'vendor_name' => 'Vendor Name',
@@ -179,14 +176,6 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
     public function getSuborders()
     {
         return $this->hasMany(Suborder::className(), ['vendor_id' => 'vendor_id']);
-    }
-
-    /**
-    * @return \yii\db\ActiveQuery
-    */
-    public function getImage()
-    {
-        return $this->hasOne(Image::className(), ['image_id' => 'image_id']);
     }
 
     /**

@@ -136,7 +136,8 @@ class Role extends \yii\db\ActiveRecord
             'booking' => ['index', 'view', 'invoice', 'booking-payment','delete'],
             'booking-request' => ['index', 'view', 'approve', 'reject'],
             'vendor-payment' => ['index', 'view', 'create', 'update', 'delete'],
-            'vendor-payable' => ['index']
+            'vendor-payable' => ['index'],
+            'vendor-draft' => ['index', 'view', 'approve'],
         ];        
     }
 }

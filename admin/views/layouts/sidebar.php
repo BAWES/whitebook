@@ -6,6 +6,11 @@ use admin\models\VendorItem;
 use admin\models\AccessControlList;
 use common\models\VendorDraftItem;
 use common\models\Booking;
+use common\models\VendorDraft;
+
+$draft_vendor_count = VendorDraft::find()
+	->where(['is_ready' => 1])
+	->count();
 
 $draft_item_count = VendorDraftItem::find()
 	->where(['is_ready' => 1])
@@ -35,6 +40,10 @@ $booking_request_count = Booking::find()
 	        [	
 	        	'label' => '<i class="icon-custom-home"></i><span class="title">Dashboard</span>', 
 	        	'url' => ['site/index']
+	        ],
+	        [	
+	        	'label' => '<i class="glyphicon glyphicon-send"></i><span class="title">Vendor Draft</span><span class="draft_item_count">'.$draft_vendor_count.'</span>', 
+	        	'url' => ['vendor-draft/index'],
 	        ],
 	        [	
 	        	'label' => '<i class="glyphicon glyphicon-send"></i><span class="title">Draft Item</span><span class="draft_item_count">'.$draft_item_count.'</span>', 

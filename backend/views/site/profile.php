@@ -360,7 +360,7 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-datetimepicker/js/b
 
 $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js');
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerJsFile('@web/themes/default/js/profile.js?v=1.4', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/themes/default/js/profile.js?v=1.5', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerJs('
 
@@ -381,6 +381,7 @@ $this->registerJs('
 		
 		if (error) {
 			$(\'.nav-tabs a[href="#5"]\').tab(\'show\') // Select tab by name
+			console.log(\'invalid emails\');
 			return false;
 		} else {
 			return true;
