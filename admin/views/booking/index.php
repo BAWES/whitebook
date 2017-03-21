@@ -59,5 +59,6 @@ $this->registerCssFile('@web/themes/default/plugins/bootstrap-datepicker/css/dat
 $this->registerJs("
     jQuery('.datepicker').datepicker({
         format: 'yyyy-mm-dd',
+        autoclose: true
     });
 ", View::POS_READY);
