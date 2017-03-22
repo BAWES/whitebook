@@ -28,6 +28,7 @@ if($customer_id) {
 } else {
     $my_addresses = array();
 }
+$themes = \common\models\Themes::find()->where(['!=', 'theme_status', 'Deactive'])->andwhere(['!=', 'trash', 'Deleted'])->all();
 
 ?>
 
@@ -35,7 +36,23 @@ if($customer_id) {
     <div class="desktop-view-search">
         <form id='area-selection' name='area-selection' action="<?=Url::toRoute(['browse/all'], true);?>">
             <div class="left-offset-25">&nbsp;</div>
-            <div class="col-lg-3 col-sm-3 col-md-3 location-div">
+            <div class="col-lg-2 col-sm-2 col-md-2 location-div">
+                <select class="selectpicker trigger" name="themes[]" data-style="btn-default" id="location_name" data-live-search="true" data-size="10">
+                    <option value=""><?=Yii::t('frontend','Themes')?></option>
+                    <?php
+
+                    if($themes) {
+                        foreach ($themes as $key => $value) { ?>
+                            <option value="<?= $value['slug']; ?>">
+                                <?= $value['theme_name'] ?>
+                            </option>
+                            <?php
+                        }
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="col-lg-2 col-sm-2 col-md-2 location-div">
                 <select class="selectpicker trigger" name="location" data-style="btn-default" id="location_name" data-live-search="true" data-size="10">
                     <option value=""><?=Yii::t('frontend','Area')?></option>
                     <?php
@@ -80,13 +97,13 @@ if($customer_id) {
                     ?>
                 </select>
             </div>
-            <div class="col-lg-2 col-sm-3 col-md-3 date-div">
+            <div class="col-lg-2 col-sm-2 col-md-3 date-div">
                 <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" id="dp3" class="input-append date">
                     <input value="<?=$date?>" type="text" name="date" id="delivery_date" readonly size="16" class="form-control required datetimepicker date1" placeholder="<?php echo Yii::t('frontend', 'Event Date'); ?>" title="<?php echo Yii::t('frontend', 'Choose Delivery Date'); ?>">
                     <span class="add-on position_news"> <i class="flaticon-calendar189"></i></span>
                 </div>
             </div>
-            <div class="col-lg-3 col-sm-3 col-md-3" id="event-time">
+            <div class="col-lg-2 col-sm-2 col-md-2" id="event-time">
                 <select id="event_time" name="event_time" class="selectpicker" data-live-search="false" data-size="10" data-placeholder="">
                     <option value="" class="label"><?= Yii::t('frontend', 'Choose Your Event Time') ?></option>
                     <optgroup label="am">                        
