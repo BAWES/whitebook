@@ -6,6 +6,8 @@ use common\models\Location;
 use common\models\CustomerCart;
 use common\components\LangFormat;
 
+$customer_address_modal->area_id = Yii::$app->session->get('deliver-location');
+
 ?>
 
 
@@ -76,12 +78,13 @@ use common\components\LangFormat;
                     //,['class' => 'selectpicker']
                 ); ?>
         <span class="error address_type_id"></span>
-        
-        <?php /* $form->field($customer_address_modal, 'area_id')->dropDownList(Location::areaOptions(),
+
+        <!--        
+        <?= $form->field($customer_address_modal, 'area_id')->dropDownList(Location::areaOptions(),
                 ['class' => 'selectpicker', 'data-live-search' => 'true', 'data-size' => 10]
-            );
-            <span class="error area_id"></span>
-        */ ?>
+            ); ?>
+        <span class="error area_id"></span>
+        -->
 
         <div class="question_wrapper">
             <!-- question will go here -->

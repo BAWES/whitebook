@@ -28,6 +28,7 @@ function address() {
 		if(html) {
 			$('.checkout_content_wrapper').html(html);
 			$('input[name="CustomerAddress[address_type_id]"]:checked').trigger('change');
+			$('.selectpicker').selectpicker();
 		}else{
 			location = cart_url;
 		}

@@ -7,6 +7,8 @@ use common\models\CustomerCart;
 use common\components\LangFormat;
 use common\models\Booking;
 
+$customer_address_modal->area_id = Yii::$app->session->get('deliver-location');
+
 ?>
 
 <div class="panel panel-default">
@@ -83,12 +85,13 @@ use common\models\Booking;
                     <?= $form->field($customer_address_modal, 'address_type_id')
                             ->radioList($addresstype, ['class' => 'selectpicker']); ?>
                     
-                    <?php /* $form->field($customer_address_modal, 'area_id')->dropDownList(Location::areaOptions(),
+                    <!--
+                    <?= $form->field($customer_address_modal, 'area_id')->dropDownList(Location::areaOptions(),
                             ['class' => 'selectpicker', 'data-live-search' => 'true', 'data-size' => 10]
-                        );
-                        <span class="error area_id"></span>
-                    */ ?>
-                    
+                        ); ?>
+                    <span class="error area_id"></span>
+                    -->
+
                     <div class="question_wrapper">
                         <!-- question will go here -->
                     </div>
