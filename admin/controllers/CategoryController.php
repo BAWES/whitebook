@@ -307,17 +307,15 @@ class CategoryController extends Controller
         if(!$model) {
             Yii::$app->session->setFlash('danger', 'Sorry, This category not available!');
 
-            return $this->redirect(['index']);
+            return $this->redirect(Yii::$app->request->referrer);
         }
 
         //check assing to items
         $vendor_item = VendorItemToCategory::find()->where(['category_id' => $id])->count();
 
         if ($vendor_item) {
-
             Yii::$app->session->setFlash('danger', 'Sorry, This category mapped with item.');
-
-            return $this->redirect(['index']);
+            return $this->redirect(Yii::$app->request->referrer);
         }
 
         //update all child and self
@@ -330,13 +328,13 @@ class CategoryController extends Controller
 
             Yii::$app->session->setFlash('success', 'Category deleted successfully!');
 
-            return $this->redirect(['index']);
+            return $this->redirect(Yii::$app->request->referrer);
 
         } else {
 
             Yii::$app->session->setFlash('success', 'Category delete failed!');
 
-            return $this->redirect(['index']);
+            return $this->redirect(Yii::$app->request->referrer);
         }
     }
 
