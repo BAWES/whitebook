@@ -999,11 +999,25 @@ if($model->images) {
 
                             foreach ($similiar_item as $s) {
 
+                                if (
+                                    $s->item_approved == 'Yes' &&
+                                    $s->trash == 'Default' &&
+                                    $s->item_status == 'Active' &&
+                                    $s->item_for_sale == 'Yes'
+                                ) {
+                                    $AvailableStock = true;
+                                } else {
+                                    $AvailableStock = false;
+                                }
+
                                 if (isset($s->images) && count($s->images) > 0) {
                                     $baselink = Yii::getAlias("@s3/vendor_item_images_210/") . $s->images[0]['image_path'];
                                 }
                             ?>
                                 <div class="item">
+                                    <?php if (!$AvailableStock) { ?>
+                                        <img src="<?php echo Url::to("@web/images/sold-out.png");?>" class="sold-out">
+                                    <?php } ?>
                                     <div class="fetu_product_list">
                                         <?php if ($s['slug'] != '') { ?>
                                             <a href="<?= Url::to(["browse/detail", 'slug' => $s['slug']]) ?>" title="Products" class="similar">
