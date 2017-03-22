@@ -76,8 +76,10 @@ use common\models\Booking;
                 </div>
                 <div class="modal-body body-update">
                     
-                    <?= $form->field($customer_address_modal, 'address_name'); ?>
-                    
+                    <?= $form->field($customer_address_modal, 'address_name', [
+                        'template' => "{label}*\n{input}\n{hint}\n{error}"
+                    ])->textInput(['maxlength' => true])?>
+
                     <?= $form->field($customer_address_modal, 'address_type_id')
                             ->radioList($addresstype, ['class' => 'selectpicker']); ?>
                     
