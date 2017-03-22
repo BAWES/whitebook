@@ -69,6 +69,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                             'deliver_location' => $deliver_location
                         ]);  ?>
                     </div>
+                    <!--
                     <div class="mid-space">
                         &nbsp;
                     </div>
@@ -98,6 +99,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                             </div>
                         </div>
                     </div>
+                    -->
                 </div>
 
                 <span class="filter_butt visible-xs visible-sm">
