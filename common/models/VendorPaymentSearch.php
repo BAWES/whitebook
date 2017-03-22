@@ -84,12 +84,12 @@ class VendorPaymentSearch extends VendorPayment
             'booking_id' => $this->booking_id,
             'type' => $this->type,
             'amount' => $this->amount,
-            'created_datetime' => $this->created_datetime,
+//            'created_datetime' => $this->created_datetime,
             'modified_datetime' => $this->modified_datetime,
         ]);
 
         $query->andFilterWhere(['like', 'description', $this->description]);
-
+        $query->andFilterWhere(['like', 'whitebook_vendor_payment.created_datetime', $this->created_datetime]);
         $query->joinWith(['vendor' => function ($q) {
             $q->where('whitebook_vendor.vendor_name LIKE "%' . $this->vendorName . '%"');
         }]);
