@@ -79,12 +79,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'title' => Yii::t('app', 'Change Password'), 'data-pjax'=>"0",
                                 ]);
                             },
-                            'request' => function ($url, $model) {
-                                $url = Url::to(['order-request-status/index', 'id' => $model->vendor_id]);
-                                return  Html::a('<i class="fa fa-user-plus"></i>', $url, [
-                                    'title' => Yii::t('app', 'View Request'), 'data-pjax'=>"0",
-                                ]);
-                            }
                         ],
                     ],
                 ],
