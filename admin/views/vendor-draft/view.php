@@ -10,7 +10,7 @@ use common\models\VendorOrderAlertEmails;
 /* @var $model common\models\VendorDraft */
 
 $this->title = $model->vendor_draft_id;
-$this->params['breadcrumbs'][] = ['label' => 'Vendor Drafts', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Profile Approvals', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 $vendor = $model->vendor;
