@@ -197,7 +197,7 @@ use yii\widgets\ActiveForm;
 				<input type='hidden' id='test' value='0' name='tests1'>
 
 				<?= $form->field($model, 'vendor_status')->checkbox(['Active' => 'Active']); ?>
-
+				<?= $form->field($model, 'vendor_booking_managed_by')->dropDownList(['admin'=>'Admin','vendor'=>'Vendor']); ?>
 				<hr />
 
 				<?= $form->field($model, 'category_id')->checkboxList($main_categories)->label('Categories'); ?>

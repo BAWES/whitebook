@@ -6,6 +6,7 @@ return [
     'user.passwordResetTokenExpire' => 3600,
     'adminEmail' => 'hello@thewhitebook.com.kw',
     'supportEmail' => 'hello@thewhitebook.com.kw',
+    'BookingEmail' => 'booking@thewhitebook.com.kw',
     'dateFormat'=> 'php:d/m/Y',
     'Currency' => 'KD',
     'CURRENCY_CODE' => '0',

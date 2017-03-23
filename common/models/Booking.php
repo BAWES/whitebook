@@ -462,12 +462,16 @@ class Booking extends \yii\db\ActiveRecord
         foreach ($arr_vendor_booking as $key => $arr_booking) 
         {   
             //get all vendor alert email 
-            
-            $emails = VendorOrderAlertEmails::find()
-                ->where(['vendor_id' => $arr_booking[0]->vendor_id])
-                ->all();
 
-            $emails = ArrayHelper::getColumn($emails, 'email_address');
+            if (Vendor::vendorManageBy($arr_booking[0]->vendor_id) == 'vendor') {
+                $emails = VendorOrderAlertEmails::find()
+                    ->where(['vendor_id' => $arr_booking[0]->vendor_id])
+                    ->all();
+
+                $emails = ArrayHelper::getColumn($emails, 'email_address');
+            } else {
+                $emails = Yii::$app->params['BookingEmail'];
+            }
 
             Yii::$app->mailer->compose([
                 "html" => "vendor/new-booking"
@@ -620,11 +624,15 @@ class Booking extends \yii\db\ActiveRecord
 
             //get all vendor alert email
 
-            $emails = VendorOrderAlertEmails::find()
-                ->where(['vendor_id' => $request->vendor_id])
-                ->all();
+            if (Vendor::vendorManageBy($request->vendor_id) == 'vendor') {
+                $emails = VendorOrderAlertEmails::find()
+                    ->where(['vendor_id' => $request->vendor_id])
+                    ->all();
 
-            $emails = ArrayHelper::getColumn($emails, 'email_address');
+                $emails = ArrayHelper::getColumn($emails, 'email_address');
+            } else {
+                $emails = Yii::$app->params['BookingEmail'];
+            }
 
             Yii::$app->mailer->compose()
                 ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->params['SITE_NAME']])
@@ -738,11 +746,15 @@ class Booking extends \yii\db\ActiveRecord
 
         //get all vendor alert email 
 
-        $emails = VendorOrderAlertEmails::find()
-            ->where(['vendor_id' => $booking->vendor_id])
-            ->all();
+        if (Vendor::vendorManageBy($booking->vendor_id) == 'vendor') {
+            $emails = VendorOrderAlertEmails::find()
+                ->where(['vendor_id' => $booking->vendor_id])
+                ->all();
 
-        $emails = ArrayHelper::map($emails, 'vendor_id', 'email_address');
+            $emails = ArrayHelper::getColumn($emails, 'email_address');
+        } else {
+            $emails = Yii::$app->params['BookingEmail'];
+        }
 
         Yii::$app->mailer->compose("vendor/booking-paid",
             [

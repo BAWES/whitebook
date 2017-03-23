@@ -67,7 +67,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'vendor_emergency_contact_email',
                 'vendor_emergency_contact_number',
                 'vendor_website',
-                'vendor_status'
+                'vendor_status',
+                'vendor_booking_managed_by'
             ]
         ]);?>
     </div>
