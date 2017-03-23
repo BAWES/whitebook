@@ -35,7 +35,7 @@ $form = ActiveForm::begin([
                     }
                 ],
                 [
-                    'label' =>'Item Sale for that day',
+                    'label' =>'Sold for that day',
                     'value' => function($model) {
                         $date = (Yii::$app->request->post('date')) ? Yii::$app->request->post('date') : date('Y-m-d');
                         return $model->getSoldItems($model,$date);
