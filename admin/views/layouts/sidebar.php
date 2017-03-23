@@ -42,11 +42,11 @@ $booking_request_count = Booking::find()
 	        	'url' => ['site/index']
 	        ],
 	        [	
-	        	'label' => '<i class="glyphicon glyphicon-send"></i><span class="title">Vendor Draft</span><span class="draft_item_count">'.$draft_vendor_count.'</span>', 
+	        	'label' => '<i class="glyphicon glyphicon-send"></i><span class="title">Profile Approvals</span><span class="draft_item_count">'.$draft_vendor_count.'</span>', 
 	        	'url' => ['vendor-draft/index'],
 	        ],
 	        [	
-	        	'label' => '<i class="glyphicon glyphicon-send"></i><span class="title">Draft Item</span><span class="draft_item_count">'.$draft_item_count.'</span>', 
+	        	'label' => '<i class="glyphicon glyphicon-send"></i><span class="title">Item Approvals</span><span class="draft_item_count">'.$draft_item_count.'</span>', 
 	        	'url' => ['vendor-draft-item/index'],
 	        ],
 	        [	

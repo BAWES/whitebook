@@ -23,7 +23,7 @@ foreach($categories as $key => $value)
     $arr_categories[] = $value->category->category_title;
 } 
 
-$this->title = 'Vendor Draft Item Details';
+$this->title = 'Item Approvals';
 
 $this->params['breadcrumbs'][] = ['label' => 'Draft Items', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $model->item_name;
