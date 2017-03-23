@@ -290,7 +290,7 @@ class DirectoryController extends BaseController
             Yii::t('frontend', 'Saturday'),
         );
         $working_days = ArrayHelper::map(VendorWorkingTiming::findAll(['vendor_id'=>$vendor_details->vendor_id]),'working_day','working_day');
-        $txt_day_off = implode(',',array_diff($replace,$working_days));
+        $txt_day_off = implode(', ',array_diff($replace,$working_days));
 
         $TopCategories = Category::find()
             ->where('(parent_category_id IS NULL or parent_category_id = 0) AND trash = "Default"')
