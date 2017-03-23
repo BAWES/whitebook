@@ -80,8 +80,8 @@ $this->params['breadcrumbs'][] = $this->title;
             <tr>                    
                 <td data-id="<?= $model->booking_id ?>">
                     Payment method :
-                    <?php if ($model->booking_status == Booking::STATUS_ACCEPTED) { ?>
-                        <span class="payment_method_<?= $model->booking_id ?>"><?= $model->payment_method ?></span>
+                    <span class="payment_method_<?= $model->booking_id ?>"><?= $model->payment_method ?></span>
+                    <?php if ($model->booking_status == Booking::STATUS_ACCEPTED && $model->transaction_id == '') { ?>
                         <a data-toggle="modal" href="#payment_method_modal" class="btn btn-default edit_payment pull-right">
                             <i class="glyphicon glyphicon-pencil"></i>
                         </a>
@@ -181,7 +181,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         <option val="0">Please select Payment Mode</option>
                         <option val="Cash">Cash</option>
                         <option val="Cheque">Cheque</option>
-                        <option val="Tap - Paid with KNET">Tap - Paid with KNET</option>
                     </select>
               </div>
               <div class="modal-footer">
