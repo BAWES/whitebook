@@ -497,13 +497,13 @@ class VendorController extends Controller
 
         VendorItemCapacityException::deleteAll($sub_query);
         Image::deleteAll($sub_query);
-        Vendoritempricing::deleteAll($sub_query);
+        VendorItemPricing::deleteAll($sub_query);
         VendorItemThemes::deleteAll($sub_query);
         VendorItemToCategory::deleteAll($sub_query);
         CustomerCart::deleteAll($sub_query);
-        Priorityitem::deleteAll($sub_query);
+        PriorityItem::deleteAll($sub_query);
         EventItemlink::deleteAll($sub_query);
-        Featuregroupitem::deleteAll($sub_query);
+        FeatureGroupItem::deleteAll($sub_query);
 
         //vendor related data 
         VendorCategory::deleteAll(['vendor_id' => $id]);
