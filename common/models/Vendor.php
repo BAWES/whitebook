@@ -33,6 +33,7 @@ use yii\db\Expression;
 * @property integer $modified_by
 * @property string $created_datetime
 * @property string $modified_datetime
+* @property string $vendor_booking_managed_by
 * @property string $trash
 *
 * @property Suborder[] $suborders
@@ -99,7 +100,7 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
             [['vendor_name', 'vendor_name_ar', 'vendor_contact_name','vendor_password','vendor_contact_email','vendor_contact_number'], 'required', 'on'=>'vendorUpdate'],
             [['created_by', 'modified_by'], 'integer'],
             [['vendor_payable'], 'number'],
-            [['vendor_return_policy','vendor_return_policy_ar', 'vendor_name', 'vendor_name_ar', 'vendor_contact_name',], 'string'],
+            [['vendor_return_policy','vendor_return_policy_ar', 'vendor_name', 'vendor_name_ar', 'vendor_contact_name','vendor_booking_managed_by'], 'string'],
             [['created_datetime', 'modified_datetime', 'vendor_fax'], 'safe'],
             [['vendor_website','vendor_facebook','vendor_twitter','vendor_instagram', 'vendor_youtube'],'url', 'defaultScheme' => 'http'],
             /* Validation Rules */
@@ -164,7 +165,8 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
             'short_description'=>'Vendor Short Description',
             'short_description_ar'=>'Vendor Short Description - Arabic',
             'approve_status'=>'Approve vendor',
-            'vendor_logo_path'=>'vendor logo'
+            'vendor_logo_path'=>'vendor logo',
+            'vendor_booking_managed_by'=>'Vendor Booking Managed By'
         ];
     }
 
@@ -356,4 +358,9 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
         $query = Vendor::find()->where('vendor_contact_email = "'.$session['email'].'"')->one();
         return (isset($query["$arr"]))?$query["$arr"]:'';
     }
+
+    public static function vendorManageBy($id){
+        return self::findOne($id)->vendor_booking_managed_by;
+    }
 }
+
