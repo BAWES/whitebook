@@ -152,6 +152,14 @@ class VendorDraft extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getVendor()
+    {
+        return $this->hasOne(Vendor::className(), ['vendor_id' => 'vendor_id']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getVendorDraftCategories()
     {
         return $this->hasMany(VendorDraftCategory::className(), ['vendor_draft_id' => 'vendor_draft_id']);
