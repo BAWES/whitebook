@@ -67,7 +67,7 @@ class VendorDraftController extends Controller
         
         $phone_nos = VendorDraftPhoneNo::findAll(['vendor_draft_id' => $id]);
         $emails = VendorDraftOrderAlertEmails::findAll(['vendor_draft_id' => $id]);
-
+        
         return $this->render('view', [
             'model' => $this->findModel($id),
             'phone_nos' => $phone_nos,
