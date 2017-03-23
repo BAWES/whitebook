@@ -175,6 +175,19 @@ var load_items = '".Url::to(['/vendor'])."';
 var product_slug = '".$slug."';
 var vendor_profile = '".$get['vendor']."';
 var current_page = 'vendor';
+
+jQuery(function()
+{
+    //open return policy tab 
+
+    if(location.hash == '#collapse2')
+    {
+        $('a[href=\"#collapse2\"]').trigger('click');
+
+        $('html, body').animate({ scrollTop: $('.vendor-profile-detail').offset().top }, 'slow');
+    }
+});
+
 ", yii\web\View::POS_BEGIN);
 
 $this->registerCss("
