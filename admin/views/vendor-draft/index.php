@@ -8,7 +8,7 @@ use yii\grid\GridView;
 /* @var $searchModel admin\models\VendorDraftSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Vendor Drafts';
+$this->title = 'Profile Approvals';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="vendor-draft-index">

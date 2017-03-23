@@ -103,9 +103,9 @@ $themes = \common\models\Themes::find()->where(['!=', 'theme_status', 'Deactive'
                     <span class="add-on position_news"> <i class="flaticon-calendar189"></i></span>
                 </div>
             </div>
-            <div class="col-lg-2 col-sm-2 col-md-2" id="event-time">
+            <div class="col-lg-3 col-sm-3 col-md-3" id="event-time">
                 <select id="event_time" name="event_time" class="selectpicker" data-live-search="false" data-size="10" data-placeholder="">
-                    <option value="" class="label"><?= Yii::t('frontend', 'Choose Your Event Time') ?></option>
+                    <option value="" class="label"><?= Yii::t('frontend', 'Event Time') ?></option>
                     <optgroup label="am">                        
                         <?php foreach ($arr_time as $key => $value) {
                             if($value.' am' == $event_time) 
@@ -133,12 +133,6 @@ $themes = \common\models\Themes::find()->where(['!=', 'theme_status', 'Deactive'
             <div class="col-lg-1 col-sm-1 col-md-1 width-5-percent padding-right-0">
                 <input type="submit" class="bg-000 color-fff btn btn-default btn-submit" value="Search">
             </div>
-            <div class="col-lg-1 col-sm-1 col-md-1 or-area">
-                <?=Yii::t('frontend','OR'); ?>
-            </div>
-            <div class="col-lg-1 col-sm-1 col-md-1 padding-left-0">
-                <?=Html::a('Just Browse',['browse/list','slug'=>'all'],['class'=>'btn btn-default btn-submit bg-000 color-fff']);?>
-            </div>
         </form>
     </div>
     <div class="mobile-view-search hide">
@@ -149,19 +143,31 @@ $themes = \common\models\Themes::find()->where(['!=', 'theme_status', 'Deactive'
                 <span class="add-on position_news"> <i class="flaticon-calendar189"></i></span>
             </div>
         </div>
-        <div class="width-10-percent or_mobile pull-left">
-            OR
-        </div>
-        <div class="width-44-percent pull-left">
-            <?= Html::a('Just Browse',['browse/list', 'slug'=>'all'],['class'=>'btn btn-default btn-submit bg-000  width-100-percent color-fff']);?>
-        </div>
     </div>
     <div class="mobile-view-form-popup" style="display: none;">
         <h4>Search <a href="#" class="text-right" id="close-search-div">x</a></h4>
         <form id='area-selection' name='area-selection' action="<?=Url::toRoute(['browse/all'], true); ?>">
+            
+            <div class="col-lg-12 margin-top-15 location-div">
+                <select class="selectpicker trigger" name="themes[]" data-style="btn-default" id="location_name" data-live-search="true" data-size="10">
+                    <option value=""><?=Yii::t('frontend','All Themes')?></option>
+                    <?php
+
+                    if($themes) {
+                        foreach ($themes as $key => $value) { ?>
+                            <option value="<?= $value['slug']; ?>">
+                                <?= $value['theme_name'] ?>
+                            </option>
+                            <?php
+                        }
+                    }
+                    ?>
+                </select>
+            </div>
+
             <div class="col-lg-12 col-sm-12 col-md-12 margin-top-15" id="event-time">
                 <select id="event_time" name="event_time" class="selectpicker" data-live-search="false" data-size="10" data-placeholder="">
-                    <option value="" class="label"><?= Yii::t('frontend', 'Choose Your Event Time') ?></option>
+                    <option value="" class="label"><?= Yii::t('frontend', 'Event Time') ?></option>
                     <optgroup label="am">                        
                         <?php foreach ($arr_time as $key => $value) {
                             if($value.' am' == $event_time) 
