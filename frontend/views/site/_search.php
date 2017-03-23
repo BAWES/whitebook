@@ -38,7 +38,7 @@ $themes = \common\models\Themes::find()->where(['!=', 'theme_status', 'Deactive'
             <div class="left-offset-25">&nbsp;</div>
             <div class="col-lg-2 col-sm-2 col-md-2 location-div">
                 <select class="selectpicker trigger" name="themes[]" data-style="btn-default" id="location_name" data-live-search="true" data-size="10">
-                    <option value=""><?=Yii::t('frontend','Themes')?></option>
+                    <option value=""><?=Yii::t('frontend','All Themes')?></option>
                     <?php
 
                     if($themes) {
