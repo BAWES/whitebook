@@ -1,19 +1,17 @@
 <?php
 
 use yii\db\Migration;
-use common\models\Category;
-use common\models\CategoryPath;
 
 class m160929_080945_working_day_category extends Migration
 {
     public function up()
     {
-        $this->dropColumn('whitebook_vendor', 'working_days');
-        $this->addColumn('whitebook_vendor', 'day_off', $this->string(100)->after('vendor_working_hours_to'));
+        $this->dropColumn('{{%vendor}}', 'working_days');
+        $this->addColumn('{{%vendor}}', 'day_off', $this->string(100)->after('vendor_working_hours_to'));
 
         // MySQL Hierarchical Data Closure Table Pattern for category 
 
-        $this->createTable('whitebook_category_path', [
+        $this->createTable('{{%category_path}}', [
             'id' => $this->primaryKey(),
             'category_id' => $this->integer(11),
             'path_id' => $this->integer(11),
@@ -21,40 +19,34 @@ class m160929_080945_working_day_category extends Migration
         ], 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB');
         
         //fill category path table 
-        $categories = Category::find()
-            ->orderBy('category_level ASC')
-            ->all();
+        
+        $sql  = 'select * from {{%category}} ';
+        $sql .= 'order by category_level ASC';
+
+        $categories = Yii::$app->db->createCommand($sql)->queryAll();
 
         foreach ($categories as $key => $value) {
 
             $level = 0;
 
-            $paths = CategoryPath::find()
-                        ->where(['category_id' => $value->parent_category_id])
-                        ->orderBy('level ASC')
-                        ->all();
+            $sql  = 'select * from {{%category_path}} ';
+            $sql .= 'where category_id="'.$value['parent_category_id'].'" ';
+            $sql .= 'order by level ASC';
+
+            $paths = Yii::$app->db->createCommand($sql)->queryAll();
 
             foreach ($paths as $path) {
 
-                $cp = new CategoryPath();
-                $cp->category_id = $value->category_id;
-                $cp->level = $level;
-                $cp->path_id = $path->path_id;
-                $cp->save();
+                $sql = 'insert into {{%category_path}} set category_id="'.$value['category_id'].'", level="'.$level.'", path_id="'.$path['path_id'].'"';
+
+                Yii::$app->db->createCommand($sql)->execute();
 
                 $level++;
             }
 
-            $cp = new CategoryPath();
-            $cp->category_id = $value->category_id;
-            $cp->path_id = $value->category_id;
-            $cp->level = $level;
-            $cp->save();
+            $sql = 'insert into {{%category_path}} set category_id="'.$value['category_id'].'", level="'.$level.'", path_id="'.$value['category_id'].'"';
+
+            Yii::$app->db->createCommand($sql)->execute();
         }
-    }
-
-    public function down()
-    {
-
     }
 }

@@ -6,7 +6,7 @@ class m160518_115534_insert_slug_country_table extends Migration
 {
     public function up()
     {
-         $this->addColumn('whitebook_country', 'slug', $this->string(250));
+         $this->addColumn('{{%country}}', 'slug', $this->string(250));
     }
 
     public function down()

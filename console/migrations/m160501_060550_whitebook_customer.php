@@ -6,7 +6,7 @@ class m160501_060550_whitebook_customer extends Migration
 {
     public function up()
     {
-        $this->dropColumn('whitebook_customer', 'customer_org_password');
+        $this->dropColumn('{{%customer}}', 'customer_org_password');
     }
 
     public function down()

@@ -9,17 +9,17 @@ class m160517_101420_table_user_delete extends Migration
          // drops foreign key for table `user`
         $this->dropForeignKey(
             'fk_user_profile',
-            'whitebook_profile'
+            '{{%profile}}'
         );
 
         $this->dropForeignKey(
             'fk_user_account',
-            'whitebook_social_account'
+            '{{%social_account}}'
         );
 
         $this->dropForeignKey(
             'fk_user_token',
-            'whitebook_token'
+            '{{%token}}'
         );
         $this->dropTable('{{%user}}');
     }

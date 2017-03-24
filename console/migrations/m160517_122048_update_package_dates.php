@@ -7,7 +7,7 @@ class m160517_122048_update_package_dates extends Migration
 {
     public function up()
     {
-        $this->update("whitebook_vendor_packages", [
+        $this->update("{{%vendor_packages}}", [
             'package_start_date' => new Expression('NOW()'),
             'created_datetime' => new Expression('NOW()'),
             'modified_datetime' => new Expression('NOW()'),

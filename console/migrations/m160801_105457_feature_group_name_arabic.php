@@ -7,7 +7,7 @@ class m160801_105457_feature_group_name_arabic extends Migration
     public function up()
     {
         $this->addColumn(
-            'whitebook_feature_group', 
+            '{{%feature_group}}', 
             'group_name_ar', 
             $this->string()->notNull()->after('group_name')
         );

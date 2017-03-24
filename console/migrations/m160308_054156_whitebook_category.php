@@ -7,7 +7,7 @@ class m160308_054156_whitebook_category extends Migration
 {
     public function up()
     {
-         $this->insert('whitebook_category',array(
+         $this->insert('{{%category}}',array(
                      'parent_category_id'=>0,
                       'category_level'=>0,
                       'category_name'=>'Venues',
@@ -35,15 +35,4 @@ class m160308_054156_whitebook_category extends Migration
 
         return false;
     }
-
-    /*
-    // Use safeUp/safeDown to run migration code within a transaction
-    public function safeUp()
-    {
-    }
-
-    public function safeDown()
-    {
-    }
-    */
 }

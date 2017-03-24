@@ -6,7 +6,7 @@ class m170220_061256_vendor_working_hour_table extends Migration
 {
     public function up()
     {
-        $this->createTable('whitebook_vendor_working_timing', [
+        $this->createTable('{{%vendor_working_timing}}', [
             'working_id' => $this->primaryKey(),
             'vendor_id' => $this->integer()->notNull(),
             'working_day' => "ENUM('Sunday', 'Monday', 'Tuesday', 'Wednesday','Thursday','Friday','Saturday') NOT NULL",

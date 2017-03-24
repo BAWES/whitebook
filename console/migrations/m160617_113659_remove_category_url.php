@@ -6,7 +6,7 @@ class m160617_113659_remove_category_url extends Migration
 {
     public function up()
     {
-        $this->dropColumn('whitebook_category','category_url');
+        $this->dropColumn('{{%category}}','category_url');
     }
 
     public function down()
