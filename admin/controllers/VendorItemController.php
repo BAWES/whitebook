@@ -726,14 +726,13 @@ class VendorItemController extends Controller
     {
         $model = $this->findModel($id);
 
-        if(Yii::$app->request->isPost) { 
-
-            // save themes 
+        if(Yii::$app->request->isPost) {
+            $vendor_item = Yii::$app->request->post('VendorItem');
+            // save themes
 
             if (empty($vendor_item['themes'])){
                 $vendor_item['themes'] = [];
             }
-
             $arr_theme = [];
 
             foreach ($vendor_item['themes'] as $value) {
