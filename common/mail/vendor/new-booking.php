@@ -4,12 +4,12 @@ use yii\web\View;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use common\bookings\Order;
-use common\bookings\Vendor;
-use common\bookings\Siteinfo;
-use common\bookings\OrderStatus;
-use common\bookings\SuborderItemMenu;
-use common\bookings\SuborderItemPurchase;
+use common\models\Order;
+use common\models\Vendor;
+use common\models\Siteinfo;
+use common\models\OrderStatus;
+use common\models\SuborderItemMenu;
+use common\models\SuborderItemPurchase;
 use common\components\CFormatter;
 
 ?>
