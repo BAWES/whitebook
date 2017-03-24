@@ -79,12 +79,21 @@ use common\components\CFormatter;
 	            </td>
 	        </tr>   
 	        <tr>
-	            <td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd;">
-                    <a href="<?= Yii::$app->urlManagerVendor->createUrl(['booking/status', 'token' => $booking->booking_token,'action'=>'1'], true); ?>" style="background-color:#008a00;border:1px solid #008a00;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;">Accept</a>
-                </td>
-	            <td style="border-bottom: 1px solid #ddd;">
-	                <a href="<?= Yii::$app->urlManagerVendor->createUrl(['booking/status', 'token' => $booking->booking_token,'action'=>'0'], true); ?>" style="background-color:#ff0000;border:1px solid #ff0000;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;">Reject</a>              
-	            </td>
+                <?php if (Vendor::vendorManageBy($arr_booking[0]->vendor_id) == 'vendor') { ?>
+                    <td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd;">
+                        <a href="<?= Yii::$app->urlManagerVendor->createUrl(['booking/status', 'token' => $booking->booking_token,'action'=>'1'], true); ?>" style="background-color:#008a00;border:1px solid #008a00;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;">Accept</a>
+                    </td>
+                    <td style="border-bottom: 1px solid #ddd;">
+                        <a href="<?= Yii::$app->urlManagerVendor->createUrl(['booking/status', 'token' => $booking->booking_token,'action'=>'0'], true); ?>" style="background-color:#ff0000;border:1px solid #ff0000;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;">Reject</a>
+                    </td>
+                <?php } else { ?>
+                    <td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd;">
+                        <a href="<?= Yii::$app->urlManagerAdmin->createUrl(['booking/status', 'token' => $booking->booking_token,'action'=>'1'], true); ?>" style="background-color:#008a00;border:1px solid #008a00;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;">Accept</a>
+                    </td>
+                    <td style="border-bottom: 1px solid #ddd;">
+                        <a href="<?= Yii::$app->urlManagerAdmin->createUrl(['booking/status', 'token' => $booking->booking_token,'action'=>'0'], true); ?>" style="background-color:#ff0000;border:1px solid #ff0000;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;">Reject</a>
+                    </td>
+                <?php } ?>
 	        </tr>  
 	    </table>
 	    

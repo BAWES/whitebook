@@ -149,12 +149,22 @@ class BookingController extends Controller
                 'booking_status' => '0',
                 'vendor_id' => Yii::$app->user->getId()
             ]);
-  
-        if ($booking) {
+        $_oldBookingStatus = $booking->booking_status;
 
+        if ($booking) {
             $booking->booking_status = ($action) ? $action : Booking::STATUS_REJECTED;
-            $booking->save(false);
-            Yii::$app->session->setFlash('success', 'Booking Status Changed Successfully');
+            if($booking->save(false)) {
+                if (($_oldBookingStatus != $booking->booking_status) && $booking->booking_status == Booking::STATUS_ACCEPTED) {
+                    Yii::$app->session->setFlash('success', 'Request Status changed successfully');
+                    Booking::approved($booking);
+                }
+
+                //if reject
+                if (($_oldBookingStatus != $booking->booking_status) && $booking->booking_status ==  Booking::STATUS_REJECTED) {
+                    Yii::$app->session->setFlash('success', 'Request Status changed successfully');
+                    Booking::rejected($booking);
+                }
+            }
             return $this->redirect(['index']);
 
         } else { // in case invalid booking
