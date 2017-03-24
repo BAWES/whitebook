@@ -135,13 +135,11 @@ $themes = \common\models\Themes::find()->where(['!=', 'theme_status', 'Deactive'
             </div>
         </form>
     </div>
-    <div class="mobile-view-search hide">
-        <div class="width-44-percent pull-left">
+    <div class="mobile-view-search hide">    
 <!--            <input type="submit" class=" width-100-percent bg-000 color-fff btn btn-default btn-submit" value="Search">-->
-            <div class="input-append date position-relative" id="open-filter">
-                <input type="text" name="date" readonly size="16" class="form-control height-46" placeholder="<?php echo Yii::t('frontend', 'Event Date'); ?>" >
-                <span class="add-on position_news"> <i class="flaticon-calendar189"></i></span>
-            </div>
+        <div class="input-append date position-relative" id="open-filter">
+            <input type="text" name="date" readonly size="16" class="form-control height-46" placeholder="<?php echo Yii::t('frontend', 'Event Date'); ?>" >
+            <span class="add-on position_news"> <i class="flaticon-calendar189"></i></span>
         </div>
     </div>
     <div class="mobile-view-form-popup" style="display: none;">
