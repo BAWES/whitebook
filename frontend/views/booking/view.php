@@ -121,7 +121,7 @@ $this->title = Yii::t('frontend', 'View Booking | Whitebook');
                                 }
 
                                 foreach ($item->bookingItemMenus as $key => $menu_item) {
-                                    echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];
+                                    echo '<div class="clearfix"></div><i class="cart_menu_item"> - '.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];
 
                                     $menu_item_total = $menu_item['quantity'] * $menu_item['price'];
 
