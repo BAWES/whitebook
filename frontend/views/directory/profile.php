@@ -35,6 +35,10 @@ $session = Yii::$app->session;
 $deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
 $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
 
+$description = nl2br(LangFormat::format(strip_tags($vendor_detail['short_description']), strip_tags($vendor_detail['short_description_ar'])));
+
+$return_policy = nl2br(LangFormat::format(strip_tags($vendor_detail['vendor_return_policy']), strip_tags($vendor_detail['vendor_return_policy_ar'])));
+
 ?>
 <!-- coniner start -->
 <section id="inner_pages_white_back">
@@ -65,6 +69,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                                 <br />
                                 <?php } ?>
 
+                                <?php if($description) { ?>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                       <h4 class="panel-title">
@@ -75,10 +80,11 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                                     </div>
                                     <div id="collapse1" class="panel-collapse collapse in">
                                       <div class="panel-body">
-                                        <p><?= nl2br(LangFormat::format(strip_tags($vendor_detail['short_description']), strip_tags($vendor_detail['short_description_ar']))); ?></p>
+                                        <p><?= $description; ?></p>
                                       </div>
                                     </div>
                                 </div><!-- END .panel -->
+                                <?php } ?>
 
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
@@ -90,11 +96,11 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                                     </div>
                                     <div id="collapse2" class="panel-collapse collapse">
                                       <div class="panel-body">
-                                        <p><?= nl2br(LangFormat::format(strip_tags($vendor_detail['vendor_return_policy']), strip_tags($vendor_detail['vendor_return_policy_ar']))); ?></p>
+                                        <p><?= $return_policy; ?></p>
                                       </div>
                                     </div>
                                 </div><!-- END .panel -->
-
+                                
                                 <?php 
 
                                 if ($vendor_detail['vendor_logo_path'] != '') {
