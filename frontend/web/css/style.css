@@ -2207,8 +2207,8 @@ img.sale_ribbon, .fa-shopping-cart, .fa-cart-plus {
 #accordion.vendor-profile-detail .panel-body,
 #accordion.vendor-item-detail .panel-body {
     border-bottom: 1px solid #cccccc;
-    padding-bottom: 20px;
-    padding-top: 18px;
+    padding-bottom: 10px;
+    padding-top: 10px;
 }
 
 #accordion.vendor-profile-detail .panel-body p,
