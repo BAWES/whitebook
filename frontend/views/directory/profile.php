@@ -58,18 +58,6 @@ $return_policy = nl2br(LangFormat::format(strip_tags($vendor_detail['vendor_retu
                             </div>
                             <div class="panel-group vendor-profile-detail" id="accordion">
 
-                                <?php if($txt_day_off) { ?>
-                                <hr />
-                                <div class="vendor-day-off">
-                                    <b>Working Days</b>
-                                    <i class="fa fa-clock-o"></i>
-                                    <?= Yii::t('frontend', '{txt_day_off} off', [
-                                            'txt_day_off' => $txt_day_off
-                                        ]); ?>
-                                </div>
-                                <br />
-                                <?php } ?>
-
                                 <?php if($description) { ?>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
@@ -82,6 +70,25 @@ $return_policy = nl2br(LangFormat::format(strip_tags($vendor_detail['vendor_retu
                                     <div id="collapse1" class="panel-collapse collapse in">
                                       <div class="panel-body">
                                         <p><?= $description; ?></p>
+                                      </div>
+                                    </div>
+                                </div><!-- END .panel -->
+                                <?php } ?>
+
+                                <?php if($txt_day_off) { ?>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                      <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse0" class="collapsed">
+                                            <?php echo Yii::t('frontend', 'Working Days'); ?>
+                                        </a>
+                                      </h4>
+                                    </div>
+                                    <div id="collapse0" class="panel-collapse collapse">
+                                      <div class="panel-body">
+                                        <p><?= Yii::t('frontend', '{txt_day_off} off', [
+                                                'txt_day_off' => $txt_day_off
+                                            ]); ?></p>
                                       </div>
                                     </div>
                                 </div><!-- END .panel -->
