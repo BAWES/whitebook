@@ -154,4 +154,38 @@ class BookingController extends Controller
 
         }
     }
+
+    /*
+     * booking status change from mail link
+     */
+    public function actionStatus($token, $action){
+
+        $booking = Booking::findOne([
+            'booking_token' => $token,
+            'booking_status' => '0',
+        ]);
+        $_oldBookingStatus = $booking->booking_status;
+
+        if ($booking) {
+            $booking->booking_status = ($action) ? $action : Booking::STATUS_REJECTED;
+            if($booking->save(false)) {
+                if (($_oldBookingStatus != $booking->booking_status) && $booking->booking_status == Booking::STATUS_ACCEPTED) {
+                    Yii::$app->session->setFlash('success', 'Request Status changed successfully');
+                    Booking::approved($booking);
+                }
+
+                //if reject
+                if (($_oldBookingStatus != $booking->booking_status) && $booking->booking_status ==  Booking::STATUS_REJECTED) {
+                    Yii::$app->session->setFlash('success', 'Request Status changed successfully');
+                    Booking::rejected($booking);
+                }
+            }
+            return $this->redirect(['index']);
+
+        } else { // in case invalid booking
+            Yii::$app->session->setFlash('danger', 'Invalid token ID');
+            return $this->redirect(['index']);
+        }
+    }
+
 }
