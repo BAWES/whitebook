@@ -13,27 +13,11 @@ use common\models\vendoritemthemesSearch;
 use frontend\models\Themes as ItemTheme;
 
 /**
-* This is the model class for table "whitebook_vendor_item".
+* This is the model class for table "whitebook_vendor_item_theme".
 *
-* @property string $item_id
-* @property string $type_id
-* @property string $vendor_id
-* @property string $category_id
-* @property string $item_name
-* @property string $item_description
-* @property string $item_additional_info
-* @property integer $item_amount_in_stock
-* @property integer $item_default_capacity
-* @property string $item_price_per_unit
-* @property string $item_customization_description
-* @property string $item_price_description
-* @property string $item_for_sale
-* @property integer $item_how_long_to_make
-* @property integer $item_minimum_quantity_to_order
-* @property string $item_archived
-* @property string $item_approved
-* @property integer $created_by
-* @property integer $modified_by
+* @property integer $id
+* @property integer $item_id
+* @property integer $theme_id
 * @property string $created_datetime
 * @property string $modified_datetime
 * @property string $trash
