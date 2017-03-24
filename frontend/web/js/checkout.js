@@ -169,30 +169,10 @@ $(document).delegate('.btn-guest-checkout', 'click', function(){
 	address();
 });
 
-$(document).delegate('.frm_guest', 'submit', function(e) {
+$(document).delegate('.frm_login', 'submit', function(e) {
 
-	$.post(login_url, $(this).serialize(), function(json) {
-		
-		$('.frm_guest .error').html('');
+	$('.frm_login .btn').attr('disabled', 'disabled');
 
-		if(json['status'] == 1) {
-			location = location;
-		}
-
-		if(json['errors']) {				
-			$.each(json['errors'], function(index, errors) {
-	            $.each(errors, function() {
-	                $('.frm_guest .error.' + index).append('<p>' + this + '</p>');
-	            });
-	        });	
-		}
-	});
-
-	e.preventDefault();
-});
-
-
-$(document).delegate('.frm_login', 'submit', function(e){
 	$.post(login_url, $(this).serialize(), function(json) {
 		
 		$('.frm_login .error').html('');
@@ -208,6 +188,8 @@ $(document).delegate('.frm_login', 'submit', function(e){
 	            });
 	        });	
 		}
+
+		$('.frm_login .btn').removeAttr('disabled');
 	});
 
 	e.preventDefault();
