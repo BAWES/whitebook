@@ -799,14 +799,10 @@ if($model->images) {
 
                                             <?php if ($AvailableStock && ($model->item_for_sale == 'Yes')) { ?>
 
-                                            <?php if(Yii::$app->user->isGuest) {  ?>
-                                                <button type="button" onclick="show_login_modal('-2');" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px; margin-top: 10px; max-width: 240px;" data-target="#myModal" data-toggle="modal">
-                                                            <?= Yii::t('frontend', 'Buy') ?></button>
-                                            <?php } else { ?>
                                                 <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px; margin-top: 10px; max-width: 240px;">
-                                                        <?= Yii::t('frontend', 'Buy') ?>
+                                                        <?= Yii::t('frontend', 'Add To Cart') ?>
                                                 </button>          
-                                            <?php } ?><!-- END not guest -->
+                                            
                                             <?php } ?><!-- END available in stock and for sale -->
 
                                           </div>
