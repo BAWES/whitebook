@@ -72,13 +72,13 @@ class BrowseController extends BaseController
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => (isset($Category->category_meta_description)) ? $Category->category_meta_description : Yii::$app->params['META_DESCRIPTION']]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => (isset($Category->category_meta_keywords)) ? $Category->category_meta_keywords : Yii::$app->params['META_KEYWORD']]);
 
-        if ((isset($data['location']) && $data['location'] != '')) {
+        if (!empty($data['location'])) {
             $session->set('deliver-location', $data['location']);
         } else {
             unset($_SESSION['deliver-location']);
         }
 
-        if (isset($data['date']) && $data['date'] != '') {
+        if (!empty($data['date'])) {
             $session->set('deliver-date', $data['date']);
             $date = date('Y-m-d', strtotime($data['date']));
             $block_date = $date;
@@ -86,7 +86,7 @@ class BrowseController extends BaseController
             $block_date = '';
         }
 
-        if (isset($data['event_time'])) {
+        if (!empty($data['event_time'])) {
             $session->set('event_time', $data['event_time']);
         }
 
@@ -144,7 +144,7 @@ class BrowseController extends BaseController
         }
 
         //theme filter
-        if (isset($data['themes']) && count($data['themes'])>0) {
+        if (!empty($data['themes'][0])) {
 
             $item_query->leftJoin('{{%vendor_item_theme}}', '{{%vendor_item}}.item_id = {{%vendor_item_theme}}.item_id');
             $item_query->leftJoin('{{%theme}}', '{{%theme}}.theme_id = {{%vendor_item_theme}}.theme_id');
@@ -197,7 +197,7 @@ class BrowseController extends BaseController
             $item_query->andWhere("{{%vendor}}.vendor_id NOT IN(SELECT vendor_id FROM `whitebook_vendor_blocked_date` where block_date = '".$date."')");
         }
 
-        if ($session->has('event_time')) {
+        if (!empty($session->get('event_time'))) {
             
             $delivery_date = $session->get('deliver-date');
 
