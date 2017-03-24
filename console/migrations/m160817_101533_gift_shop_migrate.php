@@ -7,10 +7,10 @@ class m160817_101533_gift_shop_migrate extends Migration
 {
     public function up()
     {
-        Yii::$app->db->createCommand('DELETE FROM `whitebook_category` WHERE `whitebook_category`.`slug` = "say-thank-you"')->execute(); #delete say thank you
-        Yii::$app->db->createCommand('DELETE FROM `whitebook_category` WHERE `whitebook_category`.`slug` = "gift-favors"')->execute(); #delete gift favors
+        Yii::$app->db->createCommand('DELETE FROM {{%category}} WHERE {{%category}}.`slug` = "say-thank-you"')->execute(); #delete say thank you
+        Yii::$app->db->createCommand('DELETE FROM {{%category}} WHERE {{%category}}.`slug` = "gift-favors"')->execute(); #delete gift favors
 
-        $this->insert('whitebook_category',array(
+        $this->insert('{{%category}}',array(
             'parent_category_id'=>0,
             'category_level'=>0,
             'category_name'=>'Gift Favor',

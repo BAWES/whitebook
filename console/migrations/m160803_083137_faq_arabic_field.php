@@ -7,13 +7,13 @@ class m160803_083137_faq_arabic_field extends Migration
     public function up()
     {
         $this->addColumn(
-            'whitebook_faq', 
+            '{{%faq}}', 
             'question_ar', 
             $this->string()->notNull()->after('question')
         );
 
         $this->addColumn(
-            'whitebook_faq', 
+            '{{%faq}}', 
             'answer_ar', 
             $this->string()->notNull()->after('answer')
         );

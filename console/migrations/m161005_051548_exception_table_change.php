@@ -6,7 +6,7 @@ class m161005_051548_exception_table_change extends Migration
 {
     public function up()
     {
-        $this->alterColumn('whitebook_vendor_item_capacity_exception','item_id',$this->integer(11));
+        $this->alterColumn('{{%vendor_item_capacity_exception}}','item_id',$this->integer(11));
     }
 
     public function down()

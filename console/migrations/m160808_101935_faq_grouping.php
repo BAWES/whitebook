@@ -13,64 +13,64 @@ class m160808_101935_faq_grouping extends Migration
           $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
-        $this->createTable('whitebook_faq_group', [
+        $this->createTable('{{%faq_group}}', [
             'faq_group_id' => $this->primaryKey(),
             'group_name' => $this->string()->notNull(),
             'group_name_ar' => $this->string()->notNull(),
             'sort_order' => $this->integer()
         ], $tableOptions);
 
-        $this->insert('whitebook_faq_group', [
+        $this->insert('{{%faq_group}}', [
             'group_name' => 'About Us',
             'group_name_ar' => 'معلومات عنا',
             'sort_order' => '0'
         ]);
 
-        $this->insert('whitebook_faq_group', [
+        $this->insert('{{%faq_group}}', [
             'group_name' => 'My White Book',
             'group_name_ar' => 'بلدي الكتاب الأبيض',
             'sort_order' => '0'
         ]);
 
-        $this->insert('whitebook_faq_group', [
+        $this->insert('{{%faq_group}}', [
             'group_name' => 'Membership',
             'group_name_ar' => 'عضوية',
             'sort_order' => '0'
         ]);
 
-        $this->insert('whitebook_faq_group', [
+        $this->insert('{{%faq_group}}', [
             'group_name' => 'Vendor',
             'group_name_ar' => 'بائع',
             'sort_order' => '0'
         ]);
 
-        $this->insert('whitebook_faq_group', [
+        $this->insert('{{%faq_group}}', [
             'group_name' => 'Orders',
             'group_name_ar' => 'أوامر',
             'sort_order' => '0'
         ]);
 
-        $this->insert('whitebook_faq_group', [
+        $this->insert('{{%faq_group}}', [
             'group_name' => 'Payment',
             'group_name_ar' => 'دفع',
             'sort_order' => '0'
         ]);
 
-        $this->insert('whitebook_faq_group', [
+        $this->insert('{{%faq_group}}', [
             'group_name' => 'Delivery',
             'group_name_ar' => 'خدمه توصيل',
             'sort_order' => '0'
         ]);
 
         $this->addColumn(
-            'whitebook_faq',
+            '{{%faq}}',
             'faq_group_id',
             $this->integer()->after('faq_id')
         );
 
-        $this->truncateTable('whitebook_faq');
+        $this->truncateTable('{{%faq}}');
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '1',
             'question' => 'What is The White Book?',
             'question_ar' => 'ما هو الكتاب الأبيض؟',
@@ -85,7 +85,7 @@ class m160808_101935_faq_grouping extends Migration
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '1',
             'question' => 'What does it take to plan an event?',
             'question_ar' => 'ما الذي يتطلبه الأمر ل وضع الخطة المناسبة ؟',
@@ -100,7 +100,7 @@ class m160808_101935_faq_grouping extends Migration
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '1',
             'question' => 'What\'s Plan, Shop, and Experience?',
             'question_ar' => 'ما \'ق خطة للتسوق و الخبرة ؟',
@@ -119,7 +119,7 @@ added services provided by The White Book’s Team.',
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '1',
             'question' => 'What\'s your contact details?',
             'question_ar' => 'ما \'ق تفاصيل الاتصال الخاصة بك ؟',
@@ -134,7 +134,7 @@ added services provided by The White Book’s Team.',
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '1',
             'question' => 'Suggestions and Complaints',
             'question_ar' => 'الاقتراحات و الشكاوى',
@@ -149,7 +149,7 @@ added services provided by The White Book’s Team.',
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '2',
             'question' => 'What is “My White Book”?',
             'question_ar' => 'ما هو " بلدي الكتاب الأبيض " ؟',
@@ -164,7 +164,7 @@ added services provided by The White Book’s Team.',
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '2',
             'question' => 'How does it assist users in planning their events?',
             'question_ar' => 'كيف تساعد المستخدمين في التخطيط لأحداث بهم؟',
@@ -179,7 +179,7 @@ added services provided by The White Book’s Team.',
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '2',
             'question' => 'Do I need to create an account to have a White Book?',
             'question_ar' => 'هل أنا بحاجة لإنشاء حساب ل ديك الكتاب الأبيض ؟',
@@ -194,7 +194,7 @@ added services provided by The White Book’s Team.',
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '2',
             'question' => 'Can I Save Items for later?',
             'question_ar' => 'هل يمكنني حفظ العناصر في وقت لاحق ؟',
@@ -209,7 +209,7 @@ added services provided by The White Book’s Team.',
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '3',
             'question' => 'Why should I create an account?',
             'question_ar' => 'لماذا يجب أن أقوم بإنشاء حساب؟',
@@ -224,7 +224,7 @@ added services provided by The White Book’s Team.',
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '3',
             'question' => 'How do I become a member?',
             'question_ar' => 'كيف تصبح عضوا ؟',
@@ -239,7 +239,7 @@ added services provided by The White Book’s Team.',
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '3',
             'question' => 'I have forgotten my password.',
             'question_ar' => 'نسيت كلمة المرور الخاصة بي.',
@@ -254,7 +254,7 @@ added services provided by The White Book’s Team.',
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '3',
             'question' => 'How do I change my account settings?',
             'question_ar' => 'كيف يمكنني تغيير إعدادات الحساب الخاص بي؟',
@@ -269,7 +269,7 @@ added services provided by The White Book’s Team.',
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '4',
             'question' => 'How can I become a vendor?',
             'question_ar' => 'كيف يمكنني أن أصبح بائع ؟',
@@ -286,7 +286,7 @@ details.',
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '4',
             'question' => 'Do I qualify to become a vendor?',
             'question_ar' => 'هل أنا مؤهل ليصبح بائع ؟',
@@ -301,7 +301,7 @@ details.',
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '5',
             'question' => 'Can I order By Telephone?',
             'question_ar' => 'يمكنني طلب عن طريق الهاتف ؟',
@@ -316,7 +316,7 @@ details.',
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '5',
             'question' => 'Can I cancel or change my order once it is placed?',
             'question_ar' => 'هل أستطيع إلغاء أو تغيير طلبي مرة واحدة يتم وضعها ؟',
@@ -331,7 +331,7 @@ details.',
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '5',
             'question' => 'What is the Return Policy on my orders?',
             'question_ar' => 'ما هي سياسة عائد على أوامري؟',
@@ -346,7 +346,7 @@ details.',
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '5',
             'question' => 'What happens with Faulty Or Damaged items?',
             'question_ar' => 'ما يحدث مع البنود المعيبة أو التالفة ؟',
@@ -361,7 +361,7 @@ details.',
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '6',
             'question' => 'Which Payment Methods Do you accept?',
             'question_ar' => 'الذي طرق الدفع هل تقبل؟',
@@ -376,7 +376,7 @@ details.',
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '6',
             'question' => 'Is shopping secure?',
             'question_ar' => 'و تسوق آمن ؟',
@@ -391,7 +391,7 @@ details.',
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '6',
             'question' => 'When will I be charged?',
             'question_ar' => 'عندما ستتم محاسبتي ؟',
@@ -406,7 +406,7 @@ details.',
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '7',
             'question' => 'How much does delivery cost?',
             'question_ar' => 'وكم تكلفة التوصيل ؟',
@@ -421,7 +421,7 @@ details.',
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '7',
             'question' => 'I need something urgently. Can you help me?',
             'question_ar' => 'أنا بحاجة الى شيء على وجه السرعة. هل بإمكانك مساعدتي؟',
@@ -436,7 +436,7 @@ details.',
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '7',
             'question' => 'Part of my order is missing?',
             'question_ar' => 'جزء من طلبي مفقود ؟',
@@ -451,7 +451,7 @@ details.',
             'trash' => 'Default'
         ]);
 
-        $this->insert('whitebook_faq', [
+        $this->insert('{{%faq}}', [
             'faq_group_id' => '7',
             'question' => 'What if I have received an incorrect item ?',
             'question_ar' => 'ما إذا كنت قد تلقيت البند غير صحيحة ؟',

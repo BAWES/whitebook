@@ -6,7 +6,7 @@ class m170221_100933_order_product_request_status extends Migration
 {
     public function up()
     {
-        $this->createTable('whitebook_order_request_status', [
+        $this->createTable('{{%order_request_status}}', [
             'request_id' => $this->primaryKey(),
             'order_id' => $this->integer(11)->notNull(),
             'request_status' => "ENUM('Pending', 'Approved','Declined') NOT NULL DEFAULT 'Pending'",
@@ -18,6 +18,6 @@ class m170221_100933_order_product_request_status extends Migration
 
     public function down()
     {
-        $this->dropTable('whitebook_order_request_status');
+        $this->dropTable('{{%order_request_status}}');
     }
 }

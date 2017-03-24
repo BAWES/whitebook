@@ -6,7 +6,7 @@ class m160402_142307_drop_whitebook_activity_log extends Migration
 {
     public function up()
     {
-        $this->dropTable('whitebook_activity_log');
+        $this->dropTable('{{%activity_log}}');
     }
 
     public function down()

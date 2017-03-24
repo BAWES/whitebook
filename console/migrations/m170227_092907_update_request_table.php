@@ -6,7 +6,7 @@ class m170227_092907_update_request_table extends Migration
 {
     public function up()
     {
-        $this->renameColumn('whitebook_order_request_status', 'order_id', 'suborder_id');
+        $this->renameColumn('{{%order_request_status}}', 'order_id', 'suborder_id');
     }
 
     public function down()

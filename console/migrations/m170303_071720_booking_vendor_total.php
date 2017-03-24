@@ -6,7 +6,7 @@ class m170303_071720_booking_vendor_total extends Migration
 {
     public function up()
     {
-        $this->renameColumn('whitebook_booking', 'total _vendor', 'total_vendor');
+        $this->renameColumn('{{%booking}}', 'total _vendor', 'total_vendor');
     }
 
     public function down()

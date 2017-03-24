@@ -7,13 +7,13 @@ class m160803_085346_cms_arabic_field extends Migration
     public function up()
     {
         $this->addColumn(
-            'whitebook_cms', 
+            '{{%cms}}', 
             'page_name_ar', 
             $this->string()->notNull()->after('page_name')
         );
 
         $this->addColumn(
-            'whitebook_cms', 
+            '{{%cms}}', 
             'page_content_ar', 
             $this->string()->notNull()->after('page_content')
         );

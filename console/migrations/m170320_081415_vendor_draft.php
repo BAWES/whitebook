@@ -6,13 +6,13 @@ class m170320_081415_vendor_draft extends Migration
 {
     public function up()
     {
-        $this->dropForeignKey('vendor_image_fk', 'whitebook_vendor');
+        $this->dropForeignKey('vendor_image_fk', '{{%vendor}}');
 
-        $this->dropColumn('whitebook_vendor', 'image_id');
+        $this->dropColumn('{{%vendor}}', 'image_id');
 
         // vendor draft
 
-        $this->createTable('whitebook_vendor_draft', [
+        $this->createTable('{{%vendor_draft}}', [
             'vendor_draft_id' => $this->primaryKey(11),
             'vendor_id' => $this->integer(11).' UNSIGNED DEFAULT NULL',
             'vendor_name' => $this->string(128) . ' NOT NULL',
@@ -52,60 +52,60 @@ class m170320_081415_vendor_draft extends Migration
             'is_ready' => $this->smallInteger(1)
         ], 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB');
 
-        $this->createIndex ('ind-vendor_draft-vendor_id', 'whitebook_vendor_draft', 'vendor_id');
+        $this->createIndex ('ind-vendor_draft-vendor_id', '{{%vendor_draft}}', 'vendor_id');
 
-        $this->addForeignKey ('fk-vendor_draft-vendor_id', 'whitebook_vendor_draft', 'vendor_id', 'whitebook_vendor', 'vendor_id', 'SET NULL' , 'SET NULL');
+        $this->addForeignKey ('fk-vendor_draft-vendor_id', '{{%vendor_draft}}', 'vendor_id', 'whitebook_vendor', 'vendor_id', 'SET NULL' , 'SET NULL');
 
         // vendor draft phone no  
 
-        $this->createTable('whitebook_vendor_draft_phone_no', [
+        $this->createTable('{{%vendor_draft_phone_no}}', [
             'draft_phone_no_id' => $this->primaryKey(11),
             'vendor_draft_id' => $this->integer(11), 
             'phone_no' => $this->string(15),  
             'type' => "enum('Office', 'Mobile', 'Fax', 'Whatsapp')"
         ], 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB');
 
-        $this->createIndex ('ind-vendor_draft_phone_no-vendor_draft_id', 'whitebook_vendor_draft_phone_no', 'vendor_draft_id');
+        $this->createIndex ('ind-vendor_draft_phone_no-vendor_draft_id', '{{%vendor_draft_phone_no}}', 'vendor_draft_id');
 
-        $this->addForeignKey ('fk-vendor_draft_phone_no-vendor_draft_id', 'whitebook_vendor_draft_phone_no', 'vendor_draft_id', 'whitebook_vendor_draft', 'vendor_draft_id', 'SET NULL' , 'SET NULL');
+        $this->addForeignKey ('fk-vendor_draft_phone_no-vendor_draft_id', '{{%vendor_draft_phone_no}}', 'vendor_draft_id', '{{%vendor_draft}}', 'vendor_draft_id', 'SET NULL' , 'SET NULL');
        
         // vendor draft category 
 
-        $this->createTable('whitebook_vendor_draft_category', [
+        $this->createTable('{{%vendor_draft_category}}', [
             'draft_id' => $this->primaryKey(11),
             'category_id' => $this->integer(11) .' UNSIGNED DEFAULT NULL', 
             'vendor_draft_id' => $this->integer(11)            
         ], 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB');
 
-        $this->createIndex ('ind-vendor_draft_category-category_id', 'whitebook_vendor_draft_category', 'category_id');
+        $this->createIndex ('ind-vendor_draft_category-category_id', '{{%vendor_draft_category}}', 'category_id');
 
-        $this->addForeignKey ('fk-vendor_draft_category-category_id', 'whitebook_vendor_draft_category', 'category_id', 'whitebook_category', 'category_id', 'SET NULL' , 'SET NULL');
+        $this->addForeignKey ('fk-vendor_draft_category-category_id', '{{%vendor_draft_category}}', 'category_id', 'whitebook_category', 'category_id', 'SET NULL' , 'SET NULL');
 
-        $this->createIndex ('ind-vendor_draft_category-vendor_draft_id', 'whitebook_vendor_draft_category', 'vendor_draft_id');
+        $this->createIndex ('ind-vendor_draft_category-vendor_draft_id', '{{%vendor_draft_category}}', 'vendor_draft_id');
 
-        $this->addForeignKey ('fk-vendor_draft_category-vendor_draft_id', 'whitebook_vendor_draft_category', 'vendor_draft_id', 'whitebook_vendor_draft', 'vendor_draft_id', 'SET NULL' , 'SET NULL');
+        $this->addForeignKey ('fk-vendor_draft_category-vendor_draft_id', '{{%vendor_draft_category}}', 'vendor_draft_id', '{{%vendor_draft}}', 'vendor_draft_id', 'SET NULL' , 'SET NULL');
 
         // vendor draft alert emails  
 
-        $this->createTable('whitebook_vendor_draft_order_alert_emails', [
+        $this->createTable('{{%vendor_draft_order_alert_emails}}', [
             'vdoae_id' => $this->primaryKey(11),
             'vendor_draft_id' => $this->integer(11),
             'email_address' => $this->string(100)
         ], 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB');
         
-        $this->createIndex ('ind-vendor_draft_order_alert_emails-vendor_draft_id', 'whitebook_vendor_draft_order_alert_emails', 'vendor_draft_id');
+        $this->createIndex ('ind-vendor_draft_order_alert_emails-vendor_draft_id', '{{%vendor_draft_order_alert_emails}}', 'vendor_draft_id');
 
-        $this->addForeignKey ('fk-vendor_draft_order_alert_emails-vendor_draft_id', 'whitebook_vendor_draft_order_alert_emails', 'vendor_draft_id', 'whitebook_vendor_draft', 'vendor_draft_id', 'SET NULL' , 'SET NULL');
+        $this->addForeignKey ('fk-vendor_draft_order_alert_emails-vendor_draft_id', '{{%vendor_draft_order_alert_emails}}', 'vendor_draft_id', '{{%vendor_draft}}', 'vendor_draft_id', 'SET NULL' , 'SET NULL');
     }   
 
     public function down()
     {
-        $this->dropTable('whitebook_vendor_draft_order_alert_emails');
+        $this->dropTable('{{%vendor_draft_order_alert_emails}}');
 
-        $this->dropTable('whitebook_vendor_draft_phone_no');
+        $this->dropTable('{{%vendor_draft_phone_no}}');
 
-        $this->dropTable('whitebook_vendor_draft_category');
+        $this->dropTable('{{%vendor_draft_category}}');
         
-        $this->dropTable('whitebook_vendor_draft');
+        $this->dropTable('{{%vendor_draft}}');
     }
 }

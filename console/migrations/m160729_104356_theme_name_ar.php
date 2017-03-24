@@ -6,7 +6,7 @@ class m160729_104356_theme_name_ar extends Migration
 {
     public function up()
     {
-        $this->addColumn('whitebook_theme', 'theme_name_ar', $this->string()->notNull()->after('theme_name'));
+        $this->addColumn('{{%theme}}', 'theme_name_ar', $this->string()->notNull()->after('theme_name'));
     }
 
     public function down()

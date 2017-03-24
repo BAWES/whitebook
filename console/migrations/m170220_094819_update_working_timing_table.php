@@ -6,7 +6,7 @@ class m170220_094819_update_working_timing_table extends Migration
 {
     public function up()
     {
-        $this->addColumn('whitebook_vendor_working_timing', 'trash', "ENUM('Default', 'Deleted') NOT NULL DEFAULT 'Default' after `working_end_time`");
+        $this->addColumn('{{%vendor_working_timing}}', 'trash', "ENUM('Default', 'Deleted') NOT NULL DEFAULT 'Default' after `working_end_time`");
     }
 
     public function down()

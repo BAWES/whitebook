@@ -6,7 +6,7 @@ class m160722_124156_home_slider_alias extends Migration
 {
     public function up()
     {
-        $this->addColumn('whitebook_siteinfo', 'home_slider_alias', $this->string()->notNull());
+        $this->addColumn('{{%siteinfo}}', 'home_slider_alias', $this->string()->notNull());
 
     }
 

@@ -12,7 +12,7 @@ class m160606_104804_drop_auth_item_from_whitebook_access_control extends Migrat
      */
     public function up()
     {
-        $this->dropColumn('whitebook_access_control', 'auth_item');
+        $this->dropColumn('{{%access_control}}', 'auth_item');
     }
 
     /**

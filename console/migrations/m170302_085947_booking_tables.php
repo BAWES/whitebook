@@ -6,7 +6,7 @@ class m170302_085947_booking_tables extends Migration
 {
     public function up()
     {
-        $this->createTable('whitebook_booking', [
+        $this->createTable('{{%booking}}', [
             'booking_id' => $this->primaryKey(),
             'booking_token' => $this->char(13),
             'vendor_id' => $this->integer(11) . ' UNSIGNED NULL',
@@ -35,15 +35,15 @@ class m170302_085947_booking_tables extends Migration
             'modified_datetime' => $this->dateTime(),
         ], 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB');
 
-        $this->createIndex ('ind-booking-vendor_id', 'whitebook_booking', 'vendor_id');
+        $this->createIndex ('ind-booking-vendor_id', '{{%booking}}', 'vendor_id');
 
-        $this->addForeignKey ('fk-booking-vendor_id', 'whitebook_booking', 'vendor_id', 'whitebook_vendor', 'vendor_id', 'SET NULL' , 'SET NULL');
+        $this->addForeignKey ('fk-booking-vendor_id', '{{%booking}}', 'vendor_id', 'whitebook_vendor', 'vendor_id', 'SET NULL' , 'SET NULL');
 
-        $this->createIndex ('ind-booking-customer_id', 'whitebook_booking', 'customer_id');
+        $this->createIndex ('ind-booking-customer_id', '{{%booking}}', 'customer_id');
 
-        $this->addForeignKey ('fk-booking-customer_id', 'whitebook_booking', 'customer_id', 'whitebook_customer', 'customer_id', 'SET NULL' , 'SET NULL');
+        $this->addForeignKey ('fk-booking-customer_id', '{{%booking}}', 'customer_id', 'whitebook_customer', 'customer_id', 'SET NULL' , 'SET NULL');
 
-        $this->createTable('whitebook_booking_item', [
+        $this->createTable('{{%booking_item}}', [
             'booking_item_id' => $this->primaryKey(),
             'booking_id' => $this->integer(11),
             'item_id' => $this->integer(11) . ' UNSIGNED NULL',
@@ -61,15 +61,15 @@ class m170302_085947_booking_tables extends Migration
             'special_request' => $this->text()
         ], 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB');
 
-        $this->createIndex ('ind-booking_item-booking_id', 'whitebook_booking_item', 'booking_id');
+        $this->createIndex ('ind-booking_item-booking_id', '{{%booking_item}}', 'booking_id');
 
-        $this->addForeignKey ('fk-booking_item-booking_id', 'whitebook_booking_item', 'booking_id', 'whitebook_booking', 'booking_id', 'SET NULL' , 'SET NULL');
+        $this->addForeignKey ('fk-booking_item-booking_id', '{{%booking_item}}', 'booking_id', '{{%booking}}', 'booking_id', 'SET NULL' , 'SET NULL');
 
-        $this->createIndex ('ind-booking_item-item_id', 'whitebook_booking_item', 'item_id');
+        $this->createIndex ('ind-booking_item-item_id', '{{%booking_item}}', 'item_id');
 
-        $this->addForeignKey ('fk-booking_item-item_id', 'whitebook_booking_item', 'item_id', 'whitebook_vendor_item', 'item_id', 'SET NULL' , 'SET NULL');
+        $this->addForeignKey ('fk-booking_item-item_id', '{{%booking_item}}', 'item_id', 'whitebook_vendor_item', 'item_id', 'SET NULL' , 'SET NULL');
 
-        $this->createTable('whitebook_booking_item_menu', [
+        $this->createTable('{{%booking_item_menu}}', [
             'booking_item_menu_id' => $this->primaryKey(),
             'booking_item_id' => $this->integer(11),
             'menu_id' => $this->integer(11),
@@ -84,17 +84,17 @@ class m170302_085947_booking_tables extends Migration
             'total' => $this->decimal(11, 3)
         ], 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB');  
         
-        $this->createIndex ('ind-booking_item_menu-booking_item_id', 'whitebook_booking_item_menu', 'booking_item_id');
+        $this->createIndex ('ind-booking_item_menu-booking_item_id', '{{%booking_item_menu}}', 'booking_item_id');
 
-        $this->addForeignKey ('fk-booking_item_menu-booking_item_id', 'whitebook_booking_item_menu', 'booking_item_id', 'whitebook_booking_item', 'booking_item_id', 'SET NULL' , 'SET NULL');
+        $this->addForeignKey ('fk-booking_item_menu-booking_item_id', '{{%booking_item_menu}}', 'booking_item_id', '{{%booking_item}}', 'booking_item_id', 'SET NULL' , 'SET NULL');
 
-        $this->createIndex ('ind-booking_item_menu-menu_id', 'whitebook_booking_item_menu', 'menu_id');
+        $this->createIndex ('ind-booking_item_menu-menu_id', '{{%booking_item_menu}}', 'menu_id');
 
-        $this->addForeignKey ('fk-booking_item_menu-menu_id', 'whitebook_booking_item_menu', 'menu_id', 'whitebook_vendor_item_menu', 'menu_id', 'SET NULL' , 'SET NULL');
+        $this->addForeignKey ('fk-booking_item_menu-menu_id', '{{%booking_item_menu}}', 'menu_id', '{{%vendor_item_menu}}', 'menu_id', 'SET NULL' , 'SET NULL');
 
-        $this->createIndex ('ind-booking_item_menu-menu_item_id', 'whitebook_booking_item_menu', 'menu_item_id');
+        $this->createIndex ('ind-booking_item_menu-menu_item_id', '{{%booking_item_menu}}', 'menu_item_id');
     
-        $this->addForeignKey ('fk-booking_item_menu-menu_item_id', 'whitebook_booking_item_menu', 'menu_item_id', 'whitebook_vendor_item_menu_item', 'menu_item_id', 'SET NULL' , 'SET NULL');
+        $this->addForeignKey ('fk-booking_item_menu-menu_item_id', '{{%booking_item_menu}}', 'menu_item_id', '{{%vendor_item_menu_item}}', 'menu_item_id', 'SET NULL' , 'SET NULL');
     }
 
     public function down()

@@ -8,7 +8,7 @@ class m170316_072553_address_questions extends Migration
     {
         $this->execute("SET foreign_key_checks = 0;");
 
-        $this->createTable('whitebook_address_question', [
+        $this->createTable('{{%address_question}}', [
             'ques_id' => $this->primaryKey(11),
             'address_type_id' => $this->integer(11).' unsigned DEFAULT NULL',
             'question' => $this->string(128),
@@ -23,24 +23,24 @@ class m170316_072553_address_questions extends Migration
             'trash' => "enum('Default','Deleted') NOT NULL"
         ], 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB');
 
-        $this->addForeignKey ('address_question_type_fk', 'whitebook_address_question', 'address_type_id', 'whitebook_address_type', 'type_id', 'SET NULL' , 'SET NULL');
+        $this->addForeignKey ('address_question_type_fk', '{{%address_question}}', 'address_type_id', '{{%address_type}}', 'type_id', 'SET NULL' , 'SET NULL');
 
-        $this->createTable('whitebook_customer_address_response', [
+        $this->createTable('{{%customer_address_response}}', [
             'response_id' => $this->primaryKey(11),
             'address_id' => $this->integer(11). ' UNSIGNED NULL',
             'address_type_question_id' => $this->integer(11),
             'response_text' => $this->string(250)
         ], 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB');
     
-        $this->addForeignKey ('customer_address_r_a_fk', 'whitebook_customer_address_response', 'address_id', 'whitebook_customer_address', 'address_id', 'SET NULL' , 'SET NULL');
+        $this->addForeignKey ('customer_address_r_a_fk', '{{%customer_address_response}}', 'address_id', '{{%customer_address}}', 'address_id', 'SET NULL' , 'SET NULL');
 
-        $this->addForeignKey ('customer_address_r_q_fk', 'whitebook_customer_address_response', 'address_type_question_id', 'whitebook_address_question', 'ques_id', 'SET NULL' , 'SET NULL');
+        $this->addForeignKey ('customer_address_r_q_fk', '{{%customer_address_response}}', 'address_type_question_id', '{{%address_question}}', 'ques_id', 'SET NULL' , 'SET NULL');
 
         // address types 
         
-        $this->truncateTable('whitebook_address_type');
+        $this->truncateTable('{{%address_type}}');
 
-        $this->batchInsert('whitebook_address_type', 
+        $this->batchInsert('{{%address_type}}', 
             ['type_name', 'type_name_ar', 'status', 'trash'],
             [
                 ['House', 'منزل', 'Active', 'Default'],
@@ -52,9 +52,9 @@ class m170316_072553_address_questions extends Migration
 
         //address question 
 
-        $this->truncateTable('whitebook_address_question');
+        $this->truncateTable('{{%address_question}}');
 
-        $this->batchInsert('whitebook_address_question', 
+        $this->batchInsert('{{%address_question}}', 
             ['address_type_id', 'question', 'question_ar', 'required', 'status', 'trash'],
             [
                 //house 
@@ -89,16 +89,16 @@ class m170316_072553_address_questions extends Migration
             ]
         );
 
-        $this->addColumn('whitebook_customer_address', 'address_data', $this->text());
+        $this->addColumn('{{%customer_address}}', 'address_data', $this->text());
             
-        $this->dropColumn('whitebook_customer_address', 'block');
-        $this->dropColumn('whitebook_customer_address', 'street');
-        $this->dropColumn('whitebook_customer_address', 'avenue');
-        $this->dropColumn('whitebook_customer_address', 'building');
-        $this->dropColumn('whitebook_customer_address', 'floor');
-        $this->dropColumn('whitebook_customer_address', 'apartment');
-        $this->dropColumn('whitebook_customer_address', 'extra_details');
-        $this->dropColumn('whitebook_customer_address', 'recipient_number');   
+        $this->dropColumn('{{%customer_address}}', 'block');
+        $this->dropColumn('{{%customer_address}}', 'street');
+        $this->dropColumn('{{%customer_address}}', 'avenue');
+        $this->dropColumn('{{%customer_address}}', 'building');
+        $this->dropColumn('{{%customer_address}}', 'floor');
+        $this->dropColumn('{{%customer_address}}', 'apartment');
+        $this->dropColumn('{{%customer_address}}', 'extra_details');
+        $this->dropColumn('{{%customer_address}}', 'recipient_number');   
 
         $this->execute("SET foreign_key_checks = 1;");  
     }

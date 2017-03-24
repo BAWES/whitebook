@@ -7,13 +7,13 @@ class m160803_100903_category_arabic_field extends Migration
     public function up()
     {
         $this->addColumn(
-            'whitebook_category', 
+            '{{%category}}', 
             'category_name_ar', 
             $this->string()->notNull()->after('category_name')
         );
 
         $this->addColumn(
-            'whitebook_category', 
+            '{{%category}}', 
             'icon', 
             $this->string()->notNull()->after('category_name_ar')
         );
