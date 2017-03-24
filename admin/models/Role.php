@@ -93,7 +93,7 @@ class Role extends \yii\db\ActiveRecord
     /**
      * @return controller_id to method_id relations
      */
-    public function actionList() {
+    public static function actionList() {
         
         return [
 	        'site' => ['index'],

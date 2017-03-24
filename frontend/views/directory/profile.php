@@ -61,6 +61,7 @@ $return_policy = nl2br(LangFormat::format(strip_tags($vendor_detail['vendor_retu
                                 <?php if($txt_day_off) { ?>
                                 <hr />
                                 <div class="vendor-day-off">
+                                    <b>Working Days</b>
                                     <i class="fa fa-clock-o"></i>
                                     <?= Yii::t('frontend', '{txt_day_off} off', [
                                             'txt_day_off' => $txt_day_off
