@@ -65,7 +65,7 @@ $this->beginPage();
 
                 <div class="page-title">
                     <?=Html::a('<i class="icon-custom-left"></i>',Yii::$app->request->referrer)?>
-                    <h3><span class="semi-bold"><?= Html::encode($this->title) ?></span></h3>
+                    <h3><span class="semi-bold"><?= $this->title ?></span></h3>
                 </div>
                 <div class="row">
                     <div class="col-md-12">

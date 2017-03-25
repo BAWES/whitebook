@@ -6,7 +6,7 @@ class m160817_131835_adjust_field_text extends Migration
 {
     public function up()
     {
-        $this->alterColumn("whitebook_cms", "page_content_ar", $this->text());
+        $this->alterColumn("{{%cms}}", "page_content_ar", $this->text());
     }
 
     public function down()

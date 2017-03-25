@@ -151,4 +151,55 @@ class CheckoutController extends Controller
 			"order_id" => $order_id,
 		];
     }
+
+    public function actionCartItemWithAddress() {
+        $cartItemsWithAddress = [];
+	    $items = CustomerCart::find()
+            ->select('
+                {{%customer_cart}}.area_id, 
+                {{%customer_cart}}.cart_id, 
+                {{%customer_cart}}.cart_delivery_date, 
+                {{%customer_cart}}.item_id, 
+                {{%vendor_item}}.item_name,
+            ')
+            ->joinWith('item',false)
+            ->where([
+                '{{%customer_cart}}.customer_id' => Yii::$app->user->getId(),
+                '{{%customer_cart}}.cart_valid' => 'yes',
+                '{{%customer_cart}}.trash' => 'Default',
+                '{{%vendor_item}}.trash' => 'Default',
+                '{{%vendor_item}}.item_for_sale' => 'Yes',
+                '{{%vendor_item}}.item_status' => 'Active',
+                '{{%vendor_item}}.item_approved' => 'Yes',
+            ])
+            ->asArray()
+            ->all();
+        foreach ($items as $item) {
+            $addresses = CustomerAddress::find()
+                ->select('
+                {{%location}}.location, 
+                {{%city}}.city_name, 
+                {{%customer_address}}.address_id, 
+                {{%customer_address}}.city_id, 
+                {{%customer_address}}.area_id, 
+                {{%customer_address}}.customer_id, 
+                {{%customer_address}}.address_name,
+                {{%customer_address}}.address_data,
+                ')
+                ->joinWith('location',false)
+                ->joinWith('city',false)
+                ->where([
+                    '{{%customer_address}}.customer_id' => Yii::$app->user->id,
+                    '{{%customer_address}}.trash' => 'Default',
+                    '{{%location}}.id' => $item['area_id'],
+                    '{{%location}}.status' => 'Active',
+                    '{{%location}}.trash' => 'Default',
+                    '{{%city}}.status' => 'Active',
+                    '{{%city}}.trash' => 'Default'])
+                ->asArray()
+                ->all();
+            $cartItemsWithAddress[] = array_merge($item + ['address'=>$addresses]);
+        }
+        return $cartItemsWithAddress;
+    }
 }

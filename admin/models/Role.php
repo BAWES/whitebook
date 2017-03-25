@@ -93,7 +93,7 @@ class Role extends \yii\db\ActiveRecord
     /**
      * @return controller_id to method_id relations
      */
-    public function actionList() {
+    public static function actionList() {
         
         return [
 	        'site' => ['index'],
@@ -115,7 +115,6 @@ class Role extends \yii\db\ActiveRecord
             'item-type' => ['index', 'view', 'create', 'update', 'delete'],
             'location' => ['index', 'view', 'create', 'update', 'delete', 'city', 'area'],
             'log' => ['view'],
-            'order' => ['index', 'view', 'invoice', 'order-status', 'delete'],
             'order-status' => ['index', 'view', 'create', 'update', 'delete'],
             'package' => ['index', 'view', 'create', 'update', 'delete', 'update-item'],
             'payment-gateway' => ['index', 'view', 'create', 'update', 'delete'],
@@ -128,12 +127,17 @@ class Role extends \yii\db\ActiveRecord
             'social-info' => ['index', 'view', 'create', 'update', 'delete'],
             'themes' => ['index', 'view', 'create', 'update', 'delete', 'block', 'move-items'],
             'vendor' => ['index', 'view', 'vendoritemview', 'password', 'create', 'update', 'delete', 'loadcategory', 'loadsubcategory', 'emailcheck', 'block', 'changepackage', 'changeeditpackage', 'loadpackagedate', 'packageupdate', 'vendornamecheck', 'validate-vendor', 'vendor-logo', 'basic-info', 'main-info', 'additional-info', 'social-info','email-addresses', 'vendor-validate', 'croped-image-upload'],
-            'vendor-item' => ['index', 'view', 'create', 'update', 'delete', 'check', 'block', 'approve', 'status', 'removequestion', 'sort_vendor_item', 'addquestion', 'guideimage', 'renderquestion', 'viewrenderquestion', 'renderanswer', 'galleryupload', 'ttemgallery', 'salesguideimage', 'deletesalesimage', 'deleteitemimage', 'deleteserviceguideimage', 'itemnamecheck', 'upload-cropped-image', 'item-info', 'item-description', 'item-price', 'item-approval', 'item-images', 'item-themes-groups', 'item-validate', 'add-theme', 'add-group', 'add-category', 'category-list','menu-items','addon-menu-items'],
+            'vendor-item' => ['item-inventory','index', 'view', 'create', 'update', 'delete', 'check', 'block', 'approve', 'status', 'removequestion', 'sort_vendor_item', 'addquestion', 'guideimage', 'renderquestion', 'viewrenderquestion', 'renderanswer', 'galleryupload', 'ttemgallery', 'salesguideimage', 'deletesalesimage', 'deleteitemimage', 'deleteserviceguideimage', 'itemnamecheck', 'upload-cropped-image', 'item-info', 'item-description', 'item-price', 'item-approval', 'item-images', 'item-themes-groups', 'item-validate', 'add-theme', 'add-group', 'add-category', 'category-list','menu-items','addon-menu-items'],
             'vendor-item-pending' => ['index'],
             'vendor-draft-item' => ['index', 'approve', 'reject', 'view'],
             'vendor-item-question-answer-option' => ['index', 'view', 'create', 'update', 'delete', 'deletequestionoptions'],
             'vendor-item-question' => ['index', 'view', 'create', 'update', 'delete'],
-            'vendor-item-question-guide' => ['index', 'view', 'create', 'update', 'delete']
+            'vendor-item-question-guide' => ['index', 'view', 'create', 'update', 'delete'],
+            'booking' => ['index', 'view', 'invoice', 'booking-payment','delete','status'],
+            'booking-request' => ['index', 'view', 'approve', 'reject'],
+            'vendor-payment' => ['index', 'view', 'create', 'update', 'delete'],
+            'vendor-payable' => ['index'],
+            'vendor-draft' => ['index', 'view', 'approve'],
         ];        
     }
 }

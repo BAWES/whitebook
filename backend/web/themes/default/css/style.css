@@ -8531,3 +8531,11 @@ ul>li.orange{background:#f8a31f}ul>li.red{background:#e51400}ul>li.green{backgro
   color: white;
   position: relative;
 }
+
+ .badge {
+   background: red;
+   color: white;
+   border-radius: 100%;
+   padding: 3px 5px;
+   margin-left: 10px;
+ }

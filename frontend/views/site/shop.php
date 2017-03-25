@@ -18,9 +18,6 @@ use yii\helpers\Html;
 
         </div>
 
-        <div class="add_banner">
-            <?= Html::img("@web/images/explore_banner.jpg") ?>
-        </div>
 
     </div>
 </section>

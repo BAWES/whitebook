@@ -42,21 +42,6 @@ $action = Yii::$app->controller->action->id;
                 <div id="mobile_search_fail"></div>
                 <div id="desktop_search_fail"></div>
             </div>
-            <div class="mobile-logo-text col-xs-12 text-center padding0">
-                <?php if (Yii::$app->user->isGuest) { ?>
-
-                    <a href="" data-toggle="modal" onclick="show_login_modal('-2');" data-target="#myModal"  title="THEWHITEBOOK">
-                        <?= Yii::t('frontend', 'My Events') ?>
-                    </a>
-
-                <?php } else { ?>
-
-                    <a href="<?= Url::toRoute(['events/index']); ?>" title="THEWHITEBOOK">
-                        <?= Yii::t('frontend', 'My Events') ?>
-                    </a>
-                <?php } ?>
-            </div>
-
             <div class="desktop-menu">
                 <div class="col-md-12">
                     <div class="col-md-3 col-xs-12 col-sm-4 respo_hidde"></div>
@@ -113,7 +98,7 @@ $action = Yii::$app->controller->action->id;
                             </ul>
                         </div>
                     </div>
-                    <div class="col-md-3 col-xs-12 col-sm-6 padding-left0 <?php if (!Yii::$app->user->isGuest) { echo 'new_user_name'; } ?>">
+                    <div class="col-md-3 col-xs-12 col-sm-6 padding-right0 padding-left0 <?php if (!Yii::$app->user->isGuest) { echo 'new_user_name'; } ?>">
                         <?php if (!Yii::$app->user->isGuest) { ?>
                         <div class="user_name_cont">
                             <p>
@@ -137,13 +122,23 @@ $action = Yii::$app->controller->action->id;
                         <?php if (Yii::$app->user->isGuest) { ?>
                             <li class="">
                                 <a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal"
-                                title="<?php echo Yii::t('frontend', 'Sign in / Register'); ?>">
-                                    <?php echo Yii::t('frontend', 'Sign in / Register'); ?>
+                                title="<?php echo Yii::t('frontend', 'Log In'); ?>">
+                                    <?php echo Yii::t('frontend', 'Log In'); ?>
                                 </a>
                             </li>
 
                             <li class="">
-                                <a href="<?= Url::toRoute('/contact-us',true);?>">
+                                <a href="<?= Url::toRoute(['booking/view'],true);?>">
+                                    <?= Yii::t('frontend', 'Track Booking'); ?>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="<?php echo Url::to(['cart/index']); ?>">
+                                    <?php echo Yii::t('frontend', 'Cart ({count})', ['count' => CustomerCart::item_count()]); ?>
+                                </a>
+                            </li>
+                            <li class="">
+                                <a href="" data-toggle="modal"  onclick="show_login_modal('-5');" data-target="#vendor-sign-up">
                                     <?= Yii::t('frontend', 'Become a Vendor'); ?>
                                 </a>
                             </li>
@@ -155,10 +150,9 @@ $action = Yii::$app->controller->action->id;
                                 <?php echo Yii::t('frontend', 'My Account'); ?>
                             </a>
                             <ul class="account-dropdown-menu">
-                                <li><a href="<?php echo Url::to(['orders/index']); ?>" title="<?php echo Yii::t('frontend', 'My Orders'); ?>"><?php echo Yii::t('frontend', 'My Orders'); ?></a></li>
+                                <li><a href="<?php echo Url::to(['booking/index']); ?>" title="<?php echo Yii::t('frontend', 'My Booking'); ?>"><?php echo Yii::t('frontend', 'My Booking'); ?></a></li>
                                 <li><a href="<?php echo Url::toRoute('/users/account_settings', true); ?>" title="<?php echo Yii::t('frontend', 'Account Settings'); ?>"><?php echo Yii::t('frontend', 'Account Settings'); ?></a></li>
                                 <li><a href="<?php echo Url::toRoute('/users/address', true); ?>" title="<?php echo Yii::t('frontend', 'Address Book'); ?>"><?php echo Yii::t('frontend', 'Address Book'); ?></a></li>
-
                                 <li><a href="<?php echo Url::to(['things-i-like/index'], true); ?>" title="<?php echo Yii::t('frontend', 'Things I like'); ?>"><?php echo Yii::t('frontend', 'Things I like'); ?></a></li>
                             </ul>
                         </li>
@@ -167,7 +161,12 @@ $action = Yii::$app->controller->action->id;
                                 <?php echo Yii::t('frontend', 'Cart ({count})', ['count' => CustomerCart::item_count()]); ?>
                             </a>
                         </li>
+                        <?php
+                            /*
+                                @TODO Removed Event Section
+                        ?>
                         <li><a href="<?php echo Url::toRoute(['/events/index']) ?>" title="<?php echo Yii::t('frontend', 'My Events'); ?>"><?php echo Yii::t('frontend', 'My Events'); ?></a></li>
+                        <?php */ ?>
                         <li><a href="<?php echo Url::toRoute('/users/logout', true); ?>" title="<?php echo Yii::t('frontend', 'Logout'); ?>"><?php echo Yii::t('frontend', 'Logout'); ?></a></li>
                         <?php } ?>
 
@@ -445,9 +444,16 @@ $action = Yii::$app->controller->action->id;
 
 
         <?php if (Yii::$app->user->isGuest) { ?>
-            <li class=""><a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal" title="<?php echo Yii::t('frontend', 'Sign in / Register'); ?>"><?php echo Yii::t('frontend', 'Sign in / Register'); ?></a>
+
+            <li class=""><a href="" data-toggle="modal"  onclick="show_login_modal('-2');" data-target="#myModal" title="<?php echo Yii::t('frontend', 'Log In'); ?>"><?php echo Yii::t('frontend', 'Log In'); ?></a>
             </li>
 
+            <li class="">
+                <a href="<?= Url::toRoute(['booking/view'],true); ?>">
+                    <?= Yii::t('frontend', 'Track Booking'); ?>
+                </a>
+            </li>
+            
         <?php } else { ?>
 
         <li>
@@ -463,8 +469,8 @@ $action = Yii::$app->controller->action->id;
         </li>
 
         <li>
-            <a href="<?php echo Url::to(['orders/index']); ?>">
-                <?php echo Yii::t('frontend', 'My Orders'); ?>
+            <a href="<?php echo Url::to(['booking/index']); ?>">
+                <?php echo Yii::t('frontend', 'My Bookings'); ?>
             </a>
         </li>
 
@@ -473,9 +479,6 @@ $action = Yii::$app->controller->action->id;
                 <?php echo Yii::t('frontend', 'Things I like'); ?>
             </a>
         </li>
-
-        <li><a href="<?= Url::toRoute(['/events/index']) ?>" title="<?php echo Yii::t('frontend', 'My Events'); ?>"><?php echo Yii::t('frontend', 'My Events'); ?></a></li>
-
         <li>
             <a href="<?php echo Url::toRoute('/users/address', true); ?>">
                 <?php echo Yii::t('frontend', 'Address Book'); ?>

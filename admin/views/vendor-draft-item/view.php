@@ -23,7 +23,7 @@ foreach($categories as $key => $value)
     $arr_categories[] = $value->category->category_title;
 } 
 
-$this->title = 'Vendor Draft Item Details';
+$this->title = 'Item Approvals';
 
 $this->params['breadcrumbs'][] = ['label' => 'Draft Items', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $model->item_name;
@@ -137,10 +137,6 @@ $this->params['breadcrumbs'][] = $model->item_name;
                             'value' => strip_tags($model->item_additional_info_ar),
                         ],
                         [
-                            'label' => $vendor_item->item_amount_in_stock != $model->item_amount_in_stock ? 'ITEM AMOUNT IN STOCK *' : 'ITEM AMOUNT IN STOCK',
-                            'value' => $model->item_amount_in_stock,
-                        ],
-                        [
                             'label' => $vendor_item->item_default_capacity != $model->item_default_capacity ? 'ITEM DEFAULT CAPACITY *' : 'ITEM DEFAULT CAPACITY',
                             'value' => $model->item_default_capacity,
                         ],
@@ -234,9 +230,13 @@ $this->params['breadcrumbs'][] = $model->item_name;
                             'label' => 'created date',
                         ],
                         [
-                            'label' => $vendor_item->item_price_per_unit != $model->item_price_per_unit ? 'ITEM PRICE PER UNIT *' : 'ITEM PRICE PER UNIT',
+                            'label' => $vendor_item->item_price_per_unit != $model->item_price_per_unit ? 'ITEM INCREMENT PRICE PER UNIT *' : 'ITEM INCREMENT PRICE PER UNIT',
                             'value' => $model->item_price_per_unit
-                        ]                        
+                        ],
+                        [
+                            'label' => $vendor_item->item_base_price != $model->item_base_price ? 'ITEM BASE PRICE *' : 'ITEM BASE PRICE',
+                            'value' => $model->item_base_price
+                        ]
                   ],
                 ]) ?>
 

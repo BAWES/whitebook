@@ -30,39 +30,20 @@ $deliver_date = $item->cart_delivery_date;
 
 	<div class="col-md-12 padding-left-0 timeslot_id_div <?php if($vendor_timeslot) { echo 'hidden'; }; ?>">
 		<div class="form-group">
-			<label><?=Yii::t('frontend', 'Delivery Time Slot'); ?></label>
+			<label><?=Yii::t('frontend', 'Delivery Time'); ?></label>
 			<div class="text padding-top-12"><?=Yii::t('frontend','Please Select Delivery Date');?></div>
 		</div>
 	</div>
 
 	<div class="col-md-12 padding-left-0 timeslot_id_select <?php if(!$vendor_timeslot) { echo 'hidden'; }; ?>">
 		<div class="form-group">
-			<label><?=Yii::t('frontend', 'Delivery Time Slot'); ?></label>
-			<select name="timeslot_id" id="timeslot_id" class="selectpicker" data-size="10" data-style="">
+			<label><?=Yii::t('frontend', 'Delivery Time'); ?></label>
+			<select name="time_slot" id="timeslot_id" class="selectpicker" data-size="10" data-style="">
                <?php foreach ($vendor_timeslot as $key => $value) {
-
-                        if($item->timeslot_id == $value['timeslot_id']) {
-                            $selected = 'selected';
-                        } else {
-                            $selected = '';
-                        }
-
-                        if (strtotime($item->cart_delivery_date) == time()) {
-                            
-                            if (strtotime(date('H:i:s')) < strtotime($value['timeslot_start_time'])) {
-                                $start = date('g:i A', strtotime($value['timeslot_start_time']));
-                                $end = date('g:i A', strtotime($value['timeslot_end_time']));
-                                echo '<option value="' . $value['timeslot_id'] . '" '.$selected.'>' . $start . ' - ' . $end . '</option>';
-                            }
-
-                        } else {
-                            $start = date('g:i A', strtotime($value['timeslot_start_time']));
-                            $end = date('g:i A', strtotime($value['timeslot_end_time']));
-                            echo '<option value="' . $value['timeslot_id'] . '" '.$selected.'>' . $start . ' - ' . $end . '</option>';
-                        }
+                    echo '<option value="' . $value . '" >' . $value . '</option>';
                     } ?>         
             </select>
-			<span class="error timeslot_id"></span>
+			<span class="error time_slot"></span>
 		</div>
 	</div>
 	<div class="col-md-12 padding-left-0 timeslot_id_select <?php if(!$vendor_timeslot) { echo 'hidden'; }; ?>">
@@ -134,18 +115,22 @@ $deliver_date = $item->cart_delivery_date;
 
                             $menu_items = VendorItemMenuItem::findAll(['menu_id' => $value->menu_id]);
 
-                            foreach ($menu_items as $menu_item) { ?>
+                            foreach ($menu_items as $menu_item) { 
+
+                                $cart_menu_item = CustomerCartMenuItem::findOne([
+                                        'menu_item_id' => $menu_item->menu_item_id,
+                                        'cart_id' => $item->cart_id
+                                    ]); ?>
 
                                 <li> 
                                     
-
                                     <?php if($value->quantity_type == 'selection') { ?>
 
                                     <!-- qty box -->
 
                                     <span class="menu-item-qty-box">
                                         <i class="fa fa-minus"></i>
-                                        <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="0" readonly />
+                                        <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="<?= $cart_menu_item?$cart_menu_item->quantity:0 ?>" readonly />
                                         <i class="fa fa-plus"></i>
                                     </span>
 
@@ -162,7 +147,7 @@ $deliver_date = $item->cart_delivery_date;
                                     <?php } else { ?>
 
                                     <div class="checkbox checkbox-inline">
-                                        <input name="menu_item[<?= $menu_item->menu_item_id ?>]" id="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="1" type="checkbox" />
+                                        <input name="menu_item[<?= $menu_item->menu_item_id ?>]" id="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="1" type="checkbox" <?php if($cart_menu_item) echo 'checked'; ?> />
 
                                         <label for="menu_item[<?= $menu_item->menu_item_id ?>]">
                                             <?php if(Yii::$app->language == 'en') { 
@@ -257,14 +242,19 @@ $deliver_date = $item->cart_delivery_date;
 
                             $menu_items = VendorItemMenuItem::findAll(['menu_id' => $value->menu_id]);
 
-                            foreach ($menu_items as $menu_item) { ?>
+                            foreach ($menu_items as $menu_item) { 
+
+                                $cart_menu_item = CustomerCartMenuItem::findOne([
+                                        'menu_item_id' => $menu_item->menu_item_id,
+                                        'cart_id' => $item->cart_id
+                                    ]); ?>
 
                                 <li> 
                                     <!-- qty box -->
 
                                     <span class="menu-item-qty-box">
                                         <i class="fa fa-minus"></i>
-                                        <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="0" readonly />
+                                        <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="<?= $cart_menu_item?$cart_menu_item->quantity:0 ?>" readonly />
                                         <i class="fa fa-plus"></i>
                                     </span>
 
@@ -351,8 +341,15 @@ $deliver_date = $item->cart_delivery_date;
         </div>
         <?php } ?>
     </div>
-
+        
 	<div class="col-md-12 padding-left-0" style="padding-top: 15px;">
-		<input type="submit" name="change" value="Change" class="btn btn-primary pull-right btn-checkout btn-cart-change">
+	    <div class="row">
+            <div class="col-sm-10">
+                <p class="alert alert-danger cart-update-error-msg"><?= Yii::t('frontend', 'Please check form catefully!') ?></p>
+            </div>
+            <div class="col-sm-2">
+                <input type="submit" name="change" value="Change" class="btn btn-primary pull-right btn-checkout btn-cart-change">
+            </div>
+        </div>
 	</div>
 </form>

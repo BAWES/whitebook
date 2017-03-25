@@ -7,7 +7,7 @@ class m160928_105044_category_refactor extends Migration
 {
     public function up()
     {
-        $this->createTable('whitebook_vendor_item_to_category', [
+        $this->createTable('{{%vendor_item_to_category}}', [
             'id' => $this->primaryKey(),
             'item_id' => $this->integer(11),
             'category_id' => $this->integer(11)
@@ -18,7 +18,7 @@ class m160928_105044_category_refactor extends Migration
 
         foreach ($items as $key => $value) {
             Yii::$app->db->createCommand()->batchInsert(
-                'whitebook_vendor_item_to_category', 
+                '{{%vendor_item_to_category}}', 
                 [
                     'item_id', 
                     'category_id'

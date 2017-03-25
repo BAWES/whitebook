@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use common\models\Booking;
 use common\models\Image;
 use common\models\CustomerCart;
 use common\components\CFormatter;
@@ -10,11 +11,9 @@ use common\models\VendorItemPricing;
 use common\models\CustomerCartMenuItem;
 
 ?>
-<h3>
-	<?= Yii::t('frontend', 'Payment method selected : <strong>{payment_method}</strong>', [
-		'payment_method' => $payment_method
-	]) ?>	
-</h3>
+    <h4 class="panel-title">
+        <?= Yii::t('frontend', 'Please Confirms Booking Requests') ?>
+    </h4>
 <hr />
 <?php if($items) { ?>
 
@@ -74,7 +73,7 @@ use common\models\CustomerCartMenuItem;
 			
 			$sub_total += $row_total;
 
-            $address_data = CustomerCart::getAddressData($address[$item['cart_id']]);
+            $address_data = CustomerCart::getAddressData($address);
 
             $delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
 
@@ -102,7 +101,7 @@ use common\models\CustomerCartMenuItem;
         		</td>
         		<td>
         			<a target="_blank" href="<?= Url::to(["browse/detail", 'slug' => $item['slug']]) ?>">
-        				<?=LangFormat::format($item['item_name'],$item['item_name_ar']) ?>
+        				<?= LangFormat::format($item['item_name'],$item['item_name_ar']) ?>
         			</a>
 
                     <?php 
@@ -144,28 +143,7 @@ use common\models\CustomerCartMenuItem;
                         <?php } ?>
         		</td>
         		<td>
-        			<?php 
-
-        			if(isset($delivery_area->location)) { 
-
-						$delivery_charge += $delivery_area->delivery_price;
-
-        				?>
-        				
-        				<?= nl2br($address_data); ?> <br />
-                        <?=LangFormat::format($delivery_area->location->location,$delivery_area->location->location_ar);?><br/>
-                        <?=LangFormat::format($delivery_area->location->city->city_name,$delivery_area->location->city->city_name_ar);?><br/>
-
-                        <?= $item['cart_delivery_date'] ?> <br />
-        			
-                        <?= date('h:m A', strtotime($item['timeslot_start_time'])) ?> - 
-                        <?= date('h:m A', strtotime($item['timeslot_end_time'])); ?>
-
-        			<?php } else { ?>
-        				<span class="error">
-        					<?= Yii::t('frontend', 'We cannot delivery this item!'); ?>
-        				</span>
-        			<?php } ?>		        			
+        			<?= Booking::getPurchaseDeliveryAddress(Yii::$app->session->get('address_id')); ?>
         		</td>
         		<td align="left">
 	        		<?= $item['cart_quantity'] ?>
@@ -184,6 +162,7 @@ use common\models\CustomerCartMenuItem;
 
 </form>
 
+<?php /* ?>
 <div class="row">
     <div class="col-sm-4 pull-right">
       <table class="table table-bordered">
@@ -204,13 +183,13 @@ use common\models\CustomerCartMenuItem;
       </table>
     </div>
 </div>
-        
+<?php */ ?>
 <div class="btn-set">
-        <button onclick="payment();" class="btn btn-primary btn-checkout pull-left margin-left-0">
+        <button onclick="address();" class="btn btn-primary btn-checkout pull-left margin-left-0">
                 <?= Yii::t('frontend', 'Back') ?>
         </button>
         <a href="<?= $pg_link ?>" class="btn btn-primary btn-checkout pull-right">
-            <?= Yii::t('frontend', 'Confirm Order') ?>
+            <?= Yii::t('frontend', 'Confirm Request(s)') ?>
         </a>
 </div>
 <br />

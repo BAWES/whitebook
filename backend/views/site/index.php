@@ -31,13 +31,6 @@ $this->title = 'Whitebook Application';
 					<span>Today item</span>
 				</div>
 			</li>
-			<li class="teal">
-				<i class="fa fa-money"></i>
-				<div class="details">
-					<span class="big"><?= $commission_total ?></span>
-					<span>Commission total</span>
-				</div>
-			</li>
 			<li class="orange">
 				<i class="fa fa-rocket"></i>
 				<div class="details">
@@ -45,9 +38,15 @@ $this->title = 'Whitebook Application';
 					<span>Earning total</span>
 				</div>
 			</li>
+			<li class="satblue">
+				<i class="fa fa-money"></i>
+				<div class="details">
+					<span class="big"><?= $vendor_payable ?></span>
+					<span>Account Receivable</span>
+				</div>
+			</li>
 		</ul>
 	</div>
-
 </div>
 <!-- END DASHBOARD TILES -->
 

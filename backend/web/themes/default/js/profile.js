@@ -36,51 +36,51 @@ $('.onevalid1').click(function() {
 		return false;
 	}
 
-  	if($('#vendor-vendor_name').val()=='')
+  	if($('#vendordraft-vendor_name').val()=='')
 	{
-		$('.field-vendor-vendor_name').addClass('has-error');
-		$('.field-vendor-vendor_name').find('.help-block').html('Vendor name cannot be blank.');
+		$('.field-vendordraft-vendor_name').addClass('has-error');
+		$('.field-vendordraft-vendor_name').find('.help-block').html('Vendor name cannot be blank.');
 		c1=false;
   	}
 
-  	if($('#vendor-vendor_contact_email').val()=='')
+  	if($('#vendordraft-vendor_contact_email').val()=='')
 	{
-		$('.field-vendor-vendor_contact_email').addClass('has-error');
-		$('.field-vendor-vendor_contact_email').find('.help-block').html('Email cannot be blank.');
+		$('.field-vendordraft-vendor_contact_email').addClass('has-error');
+		$('.field-vendordraft-vendor_contact_email').find('.help-block').html('Email cannot be blank.');
 		c1=false;
   	}
 
     // check only if its new record
 
-  	if($('#vendor-vendor_password').val()=='')
+  	if($('#vendordraft-vendor_password').val()=='')
 	{
-		$('.field-vendor-vendor_password').addClass('has-error');
-		$('.field-vendor-vendor_password').find('.help-block').html('Password cannot be blank');
+		$('.field-vendordraft-vendor_password').addClass('has-error');
+		$('.field-vendordraft-vendor_password').find('.help-block').html('Password cannot be blank');
 		c1=false;
   	}
 
-  	if($('#vendor-vendor_contact_name').val()=='')
+  	if($('#vendordraft-vendor_contact_name').val()=='')
 	{
-		$('.field-vendor-vendor_contact_name').addClass('has-error');
-		$('.field-vendor-vendor_contact_name').find('.help-block').html('Contact name  cannot be blank.');
+		$('.field-vendordraft-vendor_contact_name').addClass('has-error');
+		$('.field-vendordraft-vendor_contact_name').find('.help-block').html('Contact name  cannot be blank.');
 		c1=false;
   	}
 
-    if($('#vendor-vendor_contact_number').val()=='')
+    if($('#vendordraft-vendor_contact_number').val()=='')
 	{
-		$('.field-vendor-vendor_contact_number').addClass('has-error');
-		$('.field-vendor-vendor_contact_number').find('.help-block').html('Contact number cannot be blank.');
+		$('.field-vendordraft-vendor_contact_number').addClass('has-error');
+		$('.field-vendordraft-vendor_contact_number').find('.help-block').html('Contact number cannot be blank.');
 		c1=false;
   	}
 
-    if($('#vendor-vendor_contact_address').val()=='')
+    if($('#vendordraft-vendor_contact_address').val()=='')
 	{
-		$('.field-vendor-vendor_contact_address').addClass('has-error');
-		$('.field-vendor-vendor_contact_address').find('.help-block').html('Contact address cannot be blank.');
+		$('.field-vendordraft-vendor_contact_address').addClass('has-error');
+		$('.field-vendordraft-vendor_contact_address').find('.help-block').html('Contact address cannot be blank.');
 		c1=false;
   	} else {
-  		$('.field-vendor-vendor_contact_address').removeClass('has-error');
-		$('.field-vendor-vendor_contact_address').addClass('has-success');
+  		$('.field-vendordraft-vendor_contact_address').removeClass('has-error');
+		$('.field-vendordraft-vendor_contact_address').addClass('has-success');
 		c1=true;
   	}
 	  
@@ -90,15 +90,15 @@ $('.onevalid1').click(function() {
 	   return false;
 	}
 
-	var item_len = $('#vendor-vendor_name').val().length;
+	var item_len = $('#vendordraft-vendor_name').val().length;
      
-    if($('#vendor-vendor_name').val()=='') {
-	 	$('.field-vendor-vendor_name').addClass('has-error');
-		$('.field-vendor-vendor_name').find('.help-block').html('Item name cannot be blank.');
+    if($('#vendordraft-vendor_name').val()=='') {
+	 	$('.field-vendordraft-vendor_name').addClass('has-error');
+		$('.field-vendordraft-vendor_name').find('.help-block').html('Item name cannot be blank.');
 		c1=false;
 	} else if(item_len < 3){
-		$('.field-vendor-vendor_name').addClass('has-error');
-		$('.field-vendor-vendor_name').find('.help-block').html('Item name minimum 4 letters.');
+		$('.field-vendordraft-vendor_name').addClass('has-error');
+		$('.field-vendordraft-vendor_name').find('.help-block').html('Item name minimum 4 letters.');
 		c1=false;
 	}
 
@@ -107,38 +107,38 @@ $('.onevalid1').click(function() {
 
 $('.twovalid2').click(function() {
 
-	if($('#vendor-vendor_name').val()=='')
+	if($('#vendordraft-vendor_name').val()=='')
 	{
-		$('.field-vendor-vendor_name').addClass('has-error');
-		$('.field-vendor-vendor_name').find('.help-block').html('Vendor name cannot be blank.');
+		$('.field-vendordraft-vendor_name').addClass('has-error');
+		$('.field-vendordraft-vendor_name').find('.help-block').html('Vendor name cannot be blank.');
 		return false;
 		}
 
-		if($('#vendor-vendor_contact_email').val()=='')
+		if($('#vendordraft-vendor_contact_email').val()=='')
 	{
-		$('.field-vendor-vendor_contact_email').addClass('has-error');
-		$('.field-vendor-vendor_contact_email').find('.help-block').html('Email cannot be blank.');
+		$('.field-vendordraft-vendor_contact_email').addClass('has-error');
+		$('.field-vendordraft-vendor_contact_email').find('.help-block').html('Email cannot be blank.');
 		return false;
 		}
 
-	if($('#vendor-vendor_contact_name').val()=='')
+	if($('#vendordraft-vendor_contact_name').val()=='')
 	{
-		$('.field-vendor-vendor_contact_name').addClass('has-error');
-		$('.field-vendor-vendor_contact_name').find('.help-block').html('Contact name  cannot be blank.');
+		$('.field-vendordraft-vendor_contact_name').addClass('has-error');
+		$('.field-vendordraft-vendor_contact_name').find('.help-block').html('Contact name  cannot be blank.');
 		return false;
 		}
 
-    if($('#vendor-vendor_contact_number').val()=='')
+    if($('#vendordraft-vendor_contact_number').val()=='')
 	{
-		$('.field-vendor-vendor_contact_number').addClass('has-error');
-		$('.field-vendor-vendor_contact_number').find('.help-block').html('Contact number cannot be blank.');
+		$('.field-vendordraft-vendor_contact_number').addClass('has-error');
+		$('.field-vendordraft-vendor_contact_number').find('.help-block').html('Contact number cannot be blank.');
 		return false;
     }
 
-    if($('#vendor-vendor_contact_address').val()=='')
+    if($('#vendordraft-vendor_contact_address').val()=='')
 	{
-		$('.field-vendor-vendor_contact_address').addClass('has-error');
-		$('.field-vendor-vendor_contact_address').find('.help-block').html('Contact address cannot be blank.');
+		$('.field-vendordraft-vendor_contact_address').addClass('has-error');
+		$('.field-vendordraft-vendor_contact_address').find('.help-block').html('Contact address cannot be blank.');
 		return false;
 	} else {
 		return true;
@@ -150,34 +150,34 @@ var j= ".($count_vendor + 1).";
 
 function addPhone(current)
 {
-	$('#addnumber').before('<div class="controls'+j+'"><input type="text" id="vendor-vendor_contact_number'+j+'" class="form-control" name="Vendor[vendor_contact_number][]" multiple = "multiple" maxlength="15" Placeholder="Phone Number" style="margin:5px 0px;"><input type="button" name="remove" id="remove" value="Remove" onClick="removePhone('+j+')" style="margin:5px;" /></div>');
+	$('#addnumber').before('<div class="controls'+j+'"><input type="text" id="vendordraft-vendor_contact_number'+j+'" class="form-control" name="VendorDraft[vendor_contact_number][]" multiple = "multiple" maxlength="15" Placeholder="Phone Number" style="margin:5px 0px;"><input type="button" name="remove" id="remove" value="Remove" onClick="removePhone('+j+')" style="margin:5px;" /></div>');
 
    j++;
 
-  	$("#vendor-vendor_contact_number2").keypress(function (e) {
+  	$("#vendordraft-vendor_contact_number2").keypress(function (e) {
      	if (e.which  != 43   && e.which  != 45 && e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57 )) {
-          	$(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number digits only+.').animate({ color: "#a94442" }).show().fadeOut(2000);
+          	$(".field-vendordraft-vendor_contact_number").find('.help-block').html('Contact number digits only+.').animate({ color: "#a94442" }).show().fadeOut(2000);
             return false;
     	}
    });
 
-    $("#vendor-vendor_contact_number3").keypress(function (e) {
+    $("#vendordraft-vendor_contact_number3").keypress(function (e) {
      	if ( e.which  != 43   && e.which  != 45  && e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
-          $(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number digits only.').animate({ color: "#a94442" }).show().fadeOut(2000);
+          $(".field-vendordraft-vendor_contact_number").find('.help-block').html('Contact number digits only.').animate({ color: "#a94442" }).show().fadeOut(2000);
                return false;
     	}
    });
 
-  	$("#vendor-vendor_contact_number4").keypress(function (e) {
+  	$("#vendordraft-vendor_contact_number4").keypress(function (e) {
      	if (e.which  != 43   && e.which  != 45 && e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
-          	$(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number digits only.').animate({ color: "#a94442" }).show().fadeOut(2000);
+          	$(".field-vendordraft-vendor_contact_number").find('.help-block').html('Contact number digits only.').animate({ color: "#a94442" }).show().fadeOut(2000);
             return false;
     	}
     });
 
-  	$("#vendor-vendor_contact_number5").keypress(function (e) {
+  	$("#vendordraft-vendor_contact_number5").keypress(function (e) {
      	if (e.which  != 43 && e.which  != 45 && e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
-            $(".field-vendor-vendor_contact_number").find('.help-block').html('Contact number digits only.').animate({ color: "#a94442" }).show().fadeOut(2000);
+            $(".field-vendordraft-vendor_contact_number").find('.help-block').html('Contact number digits only.').animate({ color: "#a94442" }).show().fadeOut(2000);
             return false;
     	}
     });

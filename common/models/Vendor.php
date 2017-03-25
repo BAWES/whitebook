@@ -16,7 +16,6 @@ use yii\db\Expression;
 * This is the model class for table "{{%vendor}}".
 *
 * @property string $vendor_id
-* @property string $image_id
 * @property string $vendor_name
 * @property string $vendor_return_policy
 * @property string $vendor_public_email
@@ -34,10 +33,10 @@ use yii\db\Expression;
 * @property integer $modified_by
 * @property string $created_datetime
 * @property string $modified_datetime
+* @property string $vendor_booking_managed_by
 * @property string $trash
 *
 * @property Suborder[] $suborders
-* @property Image $image
 * @property VendorAddress[] $vendorAddresses
 * @property VendorBlockedDate[] $vendorBlockedDates
 * @property VendorDeliveryArea[] $vendorDeliveryAreas
@@ -100,8 +99,9 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
             [['vendor_name', 'vendor_name_ar', 'vendor_contact_name'], 'required', 'on'=>'vendorprofile'],
             [['vendor_name', 'vendor_name_ar', 'vendor_contact_name','vendor_password','vendor_contact_email','vendor_contact_number'], 'required', 'on'=>'vendorUpdate'],
             [['created_by', 'modified_by'], 'integer'],
-            [['vendor_return_policy','vendor_return_policy_ar', 'vendor_name', 'vendor_name_ar', 'vendor_contact_name',], 'string'],
-            [['created_datetime', 'modified_datetime'], 'safe'],
+            [['vendor_payable'], 'number'],
+            [['vendor_return_policy','vendor_return_policy_ar', 'vendor_name', 'vendor_name_ar', 'vendor_contact_name','vendor_booking_managed_by'], 'string'],
+            [['created_datetime', 'modified_datetime', 'vendor_fax'], 'safe'],
             [['vendor_website','vendor_facebook','vendor_twitter','vendor_instagram', 'vendor_youtube'],'url', 'defaultScheme' => 'http'],
             /* Validation Rules */
             [['confirm_password'], 'compare', 'compareAttribute'=>'vendor_password','message'=>'Password and confirm password not same' ],
@@ -129,7 +129,7 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
         return [
             'vendor_id' => 'Vendor',
             // 'commision' => 'Commision ( % )',
-            'image_id' => 'Image ',
+            'vendor_payable' => 'Payable',
             'subcategory_id' => 'Sub category',
             'vendor_name' => 'Vendor Name',
             'vendor_name_ar' => 'Vendor Name - Arabic', 
@@ -165,7 +165,8 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
             'short_description'=>'Vendor Short Description',
             'short_description_ar'=>'Vendor Short Description - Arabic',
             'approve_status'=>'Approve vendor',
-            'vendor_logo_path'=>'vendor logo'
+            'vendor_logo_path'=>'vendor logo',
+            'vendor_booking_managed_by'=>'Vendor Booking Managed By'
         ];
     }
 
@@ -177,14 +178,6 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
     public function getSuborders()
     {
         return $this->hasMany(Suborder::className(), ['vendor_id' => 'vendor_id']);
-    }
-
-    /**
-    * @return \yii\db\ActiveQuery
-    */
-    public function getImage()
-    {
-        return $this->hasOne(Image::className(), ['image_id' => 'image_id']);
     }
 
     /**
@@ -365,4 +358,9 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
         $query = Vendor::find()->where('vendor_contact_email = "'.$session['email'].'"')->one();
         return (isset($query["$arr"]))?$query["$arr"]:'';
     }
+
+    public static function vendorManageBy($id){
+        return self::findOne($id)->vendor_booking_managed_by;
+    }
 }
+

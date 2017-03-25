@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\VendorWorkingTiming;
 use Yii;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
@@ -121,7 +122,7 @@ class DirectoryController extends BaseController
         $data = Yii::$app->request->get();
 
         $item_query = CategoryPath::find()
-            ->select('{{%vendor_item}}.item_how_long_to_make, {{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar')
+            ->select('{{%vendor_item}}.item_status,{{%vendor_item}}.trash,{{%vendor_item}}.item_approved,{{%vendor_item}}.item_how_long_to_make, {{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar')
             ->leftJoin(
                 '{{%vendor_item_to_category}}',
                 '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
@@ -278,6 +279,7 @@ class DirectoryController extends BaseController
         //day off 
         $search = array(0, 1, 2, 3, 4, 5, 6, ',');
 
+
         $replace = array(
             Yii::t('frontend', 'Sunday'),
             Yii::t('frontend', 'Monday'),
@@ -286,12 +288,9 @@ class DirectoryController extends BaseController
             Yii::t('frontend', 'Thursday'),
             Yii::t('frontend', 'Friday'),
             Yii::t('frontend', 'Saturday'),
-            ', '
         );
-
-        $day_off = explode(',', $vendor_details['day_off']);
-
-        $txt_day_off = str_replace($search, $replace, $vendor_details['day_off']);
+        $working_days = ArrayHelper::map(VendorWorkingTiming::findAll(['vendor_id'=>$vendor_details->vendor_id]),'working_day','working_day');
+        $txt_day_off = implode(', ',array_diff($replace,$working_days));
 
         $TopCategories = Category::find()
             ->where('(parent_category_id IS NULL or parent_category_id = 0) AND trash = "Default"')

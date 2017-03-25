@@ -1,6 +1,12 @@
 <?php
 use yii\helpers\Html;
 use common\models\Vendor;
+
+$order_request_count =
+    \common\models\Booking::find()
+    ->where(['booking_status' => '0','vendor_id'=>Yii::$app->user->getId()])
+    ->count();
+
 ?>
  	<!-- BEGIN SIDEBAR -->
 	<!-- BEGIN MENU -->
@@ -19,7 +25,7 @@ use common\models\Vendor;
 		$cntrl = Yii::$app->controller->id;
 
 		$itemTab = ['vendor-item', 'vendor-item-capacity-exception'];
-        $DeliveryTab = array('vendor-location','delivery-time-slot', 'blocked-date');
+        $DeliveryTab = array('vendor-location','blocked-date');
 
 		?>
 		<!-- END MINI-PROFILE -->
@@ -30,8 +36,16 @@ use common\models\Vendor;
 				<?= Html::a('<i class="icon-custom-home"></i><span class="title">Dashboard</span>', ['site/index'], ['class'=>'link-title']) ?>
 			</li>
 
-			<li class="<?=($cntrl == 'sub-order') ? "active" : "noactive" ?>">
-				<?= Html::a('<i class="icon-custom-extra"></i><span class="title">Sub Order</span>', ['sub-order/index'], ['class'=>'link-title']) ?>
+			<li class="<?=($cntrl == 'booking' && ($action == 'pending' || $action == 'view-pending')) ? "active" : "noactive" ?>">
+				<?= Html::a('<i class="glyphicon glyphicon-send"></i><span class="title">Booking Requests</span>  <span class="badge badge-danger">'.$order_request_count.'</span>', ['booking/pending'], ['class'=>'link-title']) ?>
+			</li>
+			
+			<li class="<?=($cntrl == 'booking' && ($action == 'index' || $action == 'view')) ? "active" : "noactive" ?>">
+				<?= Html::a('<i class="icon-custom-extra"></i><span class="title">All Booking</span>', ['booking/index'], ['class'=>'link-title']) ?>
+			</li>
+
+			<li class="<?=($cntrl == 'payments') ? "active" : "noactive" ?>">
+				<?= Html::a('<i class="fa fa-money"></i><span class="title">Payments</span>', ['payments/index'], ['class'=>'link-title']) ?>
 			</li>
 
             <li class="<?=(in_array($cntrl,$itemTab)) ? "open" : "noactive" ?>">
@@ -41,12 +55,15 @@ use common\models\Vendor;
 					<span class="<?=(in_array($cntrl,$itemTab)) ? "arrow open" : "arrow" ?>"></span>
 				</a>
 				<ul class="sub-menu" style='<?= in_array($cntrl,$itemTab)?"display:block":"" ?>'>
-                    <li class="<?=($cntrl == 'vendor-item') ? "active"  : "noactive";?>">
+                    <li class="<?=($cntrl == 'vendor-item' && $action == 'index') ? "active"  : "noactive";?>">
         				<?= Html::a('<i class="fa fa-certificate"></i><span class="title">Manage Item</span>', ['vendor-item/index'], ['class'=>'link-title']) ?>
         			</li>
-                    <li class="<?=($cntrl == 'vendor-item-capacity-exception'  && $action == 'index') ? "active"  : "noactive"; ?>">
+                    <li class="<?=($cntrl == 'vendor-item-capacity-exception' && $action == 'index') ? "active"  : "noactive"; ?>">
 						<?= Html::a('<i class="fa fa-calendar-o"></i><span class="title">Exception Dates</span>', ['vendor-item-capacity-exception/index'], ['class'=>'link-title']) ?>
         			</li>
+                    <li class="<?=($cntrl == 'vendor-item'  && $action == 'item-inventory') ? "active"  : "noactive"; ?>">
+                        <?= Html::a('<i class="fa fa-calculator"></i><span class="title">Inventory</span>', ['vendor-item/item-inventory'], ['class'=>'link-title']) ?>
+                    </li>
                 </ul>
             </li>
 
@@ -60,14 +77,7 @@ use common\models\Vendor;
                     <li class="<?=($cntrl == 'vendor-location') ? "active" : "noactive" ?>">
         				<?= Html::a('<i class="fa fa-arrows"></i><span class="title">Manage Area</span>', ['vendor-location/index'], ['class'=>'link-title']) ?>
         			</li>
-        			<!-- Manage Address End-->
-        			<li class="<?=($cntrl == 'delivery-time-slot') ? "active" : "noactive" ?>">
-        				<?= Html::a('<i class="fa fa-clock-o"></i><span class="title">Delivery Time slot</span>', ['delivery-time-slot/index'], ['class'=>'link-title']) ?>
-        			</li>
         			<!-- Block date management-->
-        			<li class="<?=($cntrl == 'blocked-date' && $action == 'createweek') ? "active" : "noactive" ?>">
-        				<?= Html::a('<i class="fa fa-anchor"></i><span class="title">Weekly Off</span>', ['blocked-date/createweek'], ['class'=>'link-title']) ?>
-        			</li>
         			<li class="<?=($cntrl == 'blocked-date' && $action == 'index') ? "active" : "noactive" ?>">
         				<?= Html::a('<i class="fa fa-film"></i><span class="title">Block Date</span>', ['blocked-date/index'], ['class'=>'link-title']) ?>
         			</li>
@@ -76,6 +86,10 @@ use common\models\Vendor;
 
 			<li class="<?=($cntrl == 'site'  && $action == 'profile') ? "active" : "noactive" ?>">
 				<?= Html::a('<i class="fa fa-user"></i><span class="title">My Profile</span>', ['site/profile'], ['class'=>'link-title']) ?>
+			</li>
+
+            <li class="<?=($cntrl == 'vendor-working-timing') ? "active" : "noactive" ?>">
+				<?= Html::a('<i class="fa fa-clock-o"></i><span class="title">Working Days & Timing</span>', ['vendor-working-timing/index'], ['class'=>'link-title']) ?>
 			</li>
 		</ul>
 			<div class="clearfix"></div>

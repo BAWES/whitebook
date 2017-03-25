@@ -7,7 +7,7 @@ use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 use common\models\Vendor;
 
-$this->title = 'Vendor Draft Items';
+$this->title = 'Item Approvals';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>

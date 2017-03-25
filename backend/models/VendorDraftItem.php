@@ -10,10 +10,11 @@ use common\models\Image;
 use common\models\VendorItemToCategory;
 use common\models\VendorDraftItemToCategory;
 use common\models\VendorItemMenu;
+use common\models\VendorDraftImage;
+use common\models\VendorDraftItemPricing;
 use common\models\VendorItemMenuItem;
 use common\models\VendorDraftItemMenu;
 use common\models\VendorDraftItemMenuItem;
-use common\models\VendorDraftImage;
 
 use Yii;
 
@@ -31,7 +32,6 @@ use Yii;
  * @property string $item_description_ar
  * @property string $item_additional_info
  * @property string $item_additional_info_ar
- * @property integer $item_amount_in_stock
  * @property integer $item_default_capacity
  * @property string $item_price_per_unit
  * @property string $item_customization_description
@@ -39,6 +39,7 @@ use Yii;
  * @property string $item_price_description
  * @property string $item_price_description_ar
  * @property string $item_for_sale
+ * @property string $item_base_price
  * @property integer $sort
  * @property integer $item_how_long_to_make
  * @property integer $item_minimum_quantity_to_order
@@ -69,12 +70,14 @@ class VendorDraftItem extends \common\models\VendorDraftItem
 
             [['quantity_label', 'item_for_sale', 'item_price_description','item_price_description_ar', 'item_customization_description', 'item_customization_description_ar'], 'string', 'on' => ['ItemPrice']],
             
-            [['item_amount_in_stock', 'item_default_capacity', 'item_minimum_quantity_to_order'], 'integer', 'on' => ['ItemPrice']],
+            [['item_default_capacity', 'item_minimum_quantity_to_order'], 'integer', 'on' => ['ItemPrice']],
             
-            [['min_order_amount', 'item_price_per_unit'], 'number', 'on' => ['ItemPrice']],
+            [['min_order_amount', 'item_price_per_unit','item_base_price'], 'number', 'on' => ['ItemPrice']],
 
-            [['type_id'], 'integer', 'on' => ['ItemPrice']],
+            [['type_id', 'minimum_increment'], 'integer', 'on' => ['ItemPrice']],
 
+            [['type_id'], 'required', 'on' => ['ItemPrice']],
+            
             //ItemDescription
             
             [['set_up_time', 'set_up_time_ar', 'max_time', 'max_time_ar', 'requirements','requirements_ar', 'item_how_long_to_make', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'], 'string', 'on' => ['ItemDescription']],
@@ -91,7 +94,7 @@ class VendorDraftItem extends \common\models\VendorDraftItem
         
         $scenarios['MenuItems'] = ['allow_special_request', 'have_female_service'];
         
-        $scenarios['ItemPrice'] = ['min_order_amount', 'quantity_label', 'item_for_sale', 'item_amount_in_stock', 'item_default_capacity', 'item_minimum_quantity_to_order', 'item_price_per_unit', 'item_price_description', 'item_price_description_ar', 'item_customization_description', 'item_customization_description_ar'];
+        $scenarios['ItemPrice'] = ['type_id','minimum_increment', 'min_order_amount', 'quantity_label', 'item_for_sale', 'item_default_capacity', 'item_minimum_quantity_to_order', 'item_price_per_unit', 'item_base_price', 'item_price_description', 'item_price_description_ar', 'item_customization_description', 'item_customization_description_ar'];
         
         $scenarios['ItemDescription'] = ['set_up_time', 'set_up_time_ar', 'max_time', 'max_time_ar', 'requirements', 'requirements_ar', 'item_how_long_to_make', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'];
 

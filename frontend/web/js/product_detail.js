@@ -1,7 +1,10 @@
 
     jQuery(document).ready(function () {
 
-        $start_date = '+' + $('#item_how_long_to_make').val() + 'd';
+        $notice_period = parseInt($('#item_how_long_to_make').val());
+
+        $start_date = new Date();
+        $start_date.setHours($start_date.getHours() + $notice_period);
 
         $('#item_delivery_date').datepicker({
             format: 'dd-mm-yyyy',
@@ -283,60 +286,73 @@
 
 
 /* BEGIN Buy Item */
-if (!isGuest) {
 
-    jQuery(document).delegate('#form_product_option', 'submit', function(e) {
-        jQuery.post(
-            addtobasket_url,
-            jQuery('#form_product_option').serialize(),
-            function (data)
-            {
-                jQuery('#form_product_option .error').html('');
+jQuery(document).delegate('#form_product_option', 'submit', function(e) {
 
-                if(data['success']) {
-                    location = location;
-                } else {
+    e.preventDefault();
+    // code commented to allow user to add to cart without login
+    // if (isGuest) {
+    //     show_login_modal(-2);
+    //     $('#myModal').modal('show');
+    // }
 
-                    $.each(data.errors, function(index, errors) {
-                        $.each(errors, function(key, value) {
-                            jQuery('#form_product_option .error.' + index).append('<p>' + this + '</p>');
-                        });
+    jQuery.post(
+        addtobasket_url,
+        jQuery('#form_product_option').serialize(),
+        function (data)
+        {
+            jQuery('#form_product_option .error').html('');
+
+            if(data['success']) {
+                location = location;
+            } else {
+
+                $.each(data.errors, function(index, errors) {
+                    $.each(errors, function(key, value) {
+                        jQuery('#form_product_option .error.' + index).append('<p>' + this + '</p>');
                     });
+                });
 
-                    if($('#collapse-options').length > 0 && !$('#collapse-options').hasClass('in')) {
-                        $('a[href="#collapse-options"]').trigger('click');
-                    }
-
-                    $('html, body').animate({ scrollTop: $('#form_product_option .error p').offset().top - 300 }, 'slow');
+                if($('#collapse-options').length > 0 && !$('#collapse-options').hasClass('in')) {
+                    $('a[href="#collapse-options"]').trigger('click');
                 }
+
+                $('html, body').animate({ scrollTop: $('#form_product_option .error p').offset().top - 300 }, 'slow');
             }
-        );
-
-        e.preventDefault();
-    });
-
-    // Shop product page quantity increment and decrement stepper
-    jQuery(document).on('click','.btn-stepper',function() {
-
-        $qty = parseInt($('input[name="quantity"]').val());
-        $capacity = parseInt($('#capacity').val());
-        $item_type_name = $('#item_type_name').val();
-
-        if (jQuery(this).data('case') == 0) {
-            if ($qty >= parseInt(jQuery('#quantity').data('min'))+1) {
-                jQuery('#quantity').val($qty - 1);
-                update_option_menu_item_qty();//remove option qty for max option rule 
-            }
-        } else if (jQuery(this).data('case') == 1 && ($item_type_name == 'Product' || $qty < $capacity)) {
-            jQuery('#quantity').val($qty + 1);
         }
+    );
+});
 
+// Shop product page quantity increment and decrement stepper
+jQuery(document).on('click','.btn-stepper',function() {
+
+    $qty = parseInt($('input[name="quantity"]').val());
+    $capacity = parseInt($('#capacity').val());
+    $item_type_name = $('#item_type_name').val();
+
+    $minimum_increment = $('#minimum_increment').val();
+
+    if($minimum_increment) {
+        $minimum_increment = parseInt($minimum_increment);
+    }else{
+        $minimum_increment = 1;
+    }
+
+    if (jQuery(this).data('case') == 0) {
+        if ($qty >= parseInt(jQuery('#quantity').data('min')) + $minimum_increment) {
+            jQuery('#quantity').val($qty - $minimum_increment);
+            update_price();
+            update_option_menu_title_hint();
+            update_option_menu_item_qty();//remove option qty for max option rule             
+        }
+    } else if (jQuery(this).data('case') == 1 && ($item_type_name == 'Product' || ($qty + $minimum_increment <= $capacity))) {
+        jQuery('#quantity').val($qty + $minimum_increment);
         update_price();
         update_option_menu_title_hint();
+    }
 
-        return false;
-    });
-}
+    return false;
+});
 
 function deliveryTimeSlot(date){
     var myDate = new Date()
@@ -350,7 +366,7 @@ function deliveryTimeSlot(date){
         {
             if (jQuery.trim(data) == 0) {
                 $('.timeslot_id_div').show();
-                $('.timeslot_id_div .text').html('Delivery not available for the selected date');
+                $('.timeslot_id_div .text').html('Item is not available on selected date');
                 $('.timeslot_id_select').hide();
                 jQuery('#timeslot_id').html('');
             } else {
@@ -365,6 +381,7 @@ function deliveryTimeSlot(date){
 }
 
 function productAvailability(date){
+    $('.timeslot_id_div .text').html('Please Wait...');
     jQuery.ajax({
         type: 'POST',
         url: product_availability,
@@ -372,15 +389,18 @@ function productAvailability(date){
         success: function (json)
         {
             if (json['error']) {
-
                 $('.timeslot_id_div').show();
                 $('.timeslot_id_div .text').html(json['error']);
                 $('.timeslot_id_select').hide();
                 $('#timeslot_id').html('');
-                return false;   
+                $('.button-signin button').html('Out of stock');
+                $('.button-signin button').attr('disabled',true);
+                return false;
 
-            } else { 
-                
+            } else {
+                $('.button-signin button').html('ADD TO CART');
+                $('.button-signin button').attr('disabled',false);
+
                 deliveryTimeSlot(date);
 
                 //set capacity for given date 
@@ -418,11 +438,11 @@ $("#item_delivery_date").on("changeDate", function(e) {
 
 $(document).delegate('.menu-item-qty-box .fa-minus', 'click', function() {
    
-    if (isGuest) {
+    /*if (isGuest) {
         show_login_modal('-2');
         $('#myModal').modal('show');
         return false;
-    }
+    }*/
 
     $qty_input = $(this).parent().find('input');
 
@@ -438,11 +458,11 @@ $(document).delegate('.menu-item-qty-box .fa-minus', 'click', function() {
 
 $(document).delegate('.menu-item-qty-box .fa-plus', 'click', function() {
 
-    if (isGuest) {
+    /*if (isGuest) {
         show_login_modal('-2');
         $('#myModal').modal('show');
         return false;
-    }
+    }*/
 
     $qty = $('input[name="quantity"]').val();
 
@@ -473,11 +493,11 @@ $(document).delegate('.menu-item-qty-box .fa-plus', 'click', function() {
 
 $(document).delegate('.menu-items .checkbox input', 'click', function(e) {
 
-    if (isGuest) {
+    /*if (isGuest) {
         show_login_modal('-2');
         $('#myModal').modal('show');
         return false;
-    }
+    }*/
 
     $qty = $('input[name="quantity"]').val();
 
@@ -643,4 +663,13 @@ function update_option_menu_item_qty() {
     });
 }
         
+$(document).delegate('.lnk-price-chart', 'click', function() {
 
+    $('.price_chart_wrapper').toggleClass('hidden');
+
+    if($('.price_chart_wrapper').hasClass('hidden')) {
+        $('.lnk-price-chart .fa-minus-square-o').removeClass('fa-minus-square-o').addClass('fa-plus-square-o');
+    }else{
+        $('.lnk-price-chart .fa-plus-square-o').removeClass('fa-plus-square-o').addClass('fa-minus-square-o');
+    }
+});

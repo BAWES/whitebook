@@ -219,10 +219,6 @@ function cmp($a, $b)
 				<?= $form->field($model, 'item_for_sale')->dropDownList(['Yes'=>'Yes', 'No'=>'No'], 
 						['id' => 'vendoritem-item_for_sale']) ?>
 				
-				<?= $form->field($model, 'item_amount_in_stock')
-						->label('Item Number of Stock '.Html::tag('span', '*',['class'=>'required mandatory']))
-						->textInput(['maxlength' => 128, 'id' => 'vendoritem-item_amount_in_stock']); ?>
-
 				<?= $form->field($model, 'item_default_capacity')
 						->label('Item Default Capacity '.Html::tag('span', '*',['class'=>'required mandatory']))
 						->textInput(['maxlength' => 128, 'id' => 'vendoritem-item_default_capacity']); ?>
@@ -236,6 +232,8 @@ function cmp($a, $b)
 						->textInput(['maxlength' => 128, 'id' => 'vendoritem-item_minimum_quantity_to_order']); ?>
 
 				<?= $form->field($model, 'item_price_per_unit')->textInput(['maxlength' => 128]); ?>
+
+                <?= $form->field($model, 'item_base_price')->textInput(['maxlength' => 128]); ?>
 
 				<?php if($model->isNewRecord) { ?>
 					<div class="form-group multiple_price" style="padding: 5px;  font-size: 14px;">

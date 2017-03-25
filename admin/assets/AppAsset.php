@@ -24,7 +24,7 @@ class AppAsset extends AssetBundle
         'plugins/pace/pace-theme-flash.css',
         'plugins/boostrapv3/css/bootstrap.min.css',
         'plugins/boostrapv3/css/bootstrap-theme.min.css',
-        'plugins/font-awesome/css/font-awesome.css',
+        'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css',
         'plugins/jquery-scrollbar/jquery.scrollbar.css',
         'css/style.css?v=1.8',
     ];

@@ -2143,7 +2143,7 @@ hr {
   font-size: 14px;
   letter-spacing: 0px;
   font-weight: 300;
-  color: #888;
+  color: black;/*#888;*/
 }
 .page-title .actions {
   font-family: 'Arial';

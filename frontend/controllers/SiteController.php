@@ -367,39 +367,6 @@ class SiteController extends BaseController
         ]);
     }
 
-//    public function actionDeleteevent()
-//    {
-//        if (!Yii::$app->request->isAjax) {
-//            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-//        }
-//
-//        $customer_id = Yii::$app->user->identity->customer_id;
-//
-//        $data = Yii::$app->request->post();
-//
-//        if (!empty($data['event_id'])) {
-//
-//            $command = Events::deleteAll('event_id='.$data['event_id']);
-//
-//            if ($command) {
-//                $user_event_list = \common\models\Events::find()
-//    				->select(['event_name','event_id','event_date','event_type','slug'])
-//    				->innerJoin('{{%event_type}} AS et', '{{%events}}.event_type = et.type_name')
-//    				->Where(['et.trash'=>'default'])
-//    				->andWhere(['{{%events}}.customer_id'=>$customer_id])
-//    				->asArray()
-//    				->all();
-//
-//		        return $this->renderPartial('/users/user_event_list', [
-//                    'user_event_list' => $user_event_list
-//                ]);
-//
-//            } else {
-//                return 0;
-//            }
-//        }
-//    }
-
     public function actionArea()
     {
         if (!Yii::$app->request->isAjax) {

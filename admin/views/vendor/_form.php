@@ -131,70 +131,6 @@ use yii\widgets\ActiveForm;
 
 				<?= $form->field($model, 'vendor_contact_address_ar')->textArea(); ?>
 
-				<div class="working_hours_wrapper row">
-					<label class="col-md-12">Working hours</label>
-					<div class="col-md-2">
-						<?= $form->field($model, 'vendor_working_hours', [
-								'template' => '{input}'
-							])->textInput([
-								'placeholder' => 'From'
-							]); ?>
-					</div>
-					<div class="col-md-2">
-						<?= $form->field($model, 'vendor_working_hours_to', [
-								'template' => '{input}'
-							])->textInput([
-								'placeholder' => 'To'
-							]); ?>
-					</div>
-				</div>
-
-				<div class="form-group">
-					<label>Days off</label>
-					<div class="checkbox-inline">
-						<label for="day_1">
-							<input type="checkbox" name="vendor_day_off[]" value="1" id="day_1" <?php if(in_array('1', $day_off)) echo 'checked'; ?> />
-							Monday
-						</label>
-					</div>
-					<div class="checkbox-inline">
-						<label for="day_2">
-							<input type="checkbox" name="vendor_day_off[]" value="2" id="day_2" <?php if(in_array('2', $day_off)) echo 'checked'; ?> />
-							Tuesday
-						</label>
-					</div>
-					<div class="checkbox-inline">
-						<label for="day_3">
-							<input type="checkbox" name="vendor_day_off[]" value="3" id="day_3" <?php if(in_array('3', $day_off)) echo 'checked'; ?> />
-							Wednesday
-						</label>
-					</div>
-					<div class="checkbox-inline">
-						<label for="day_4">
-							<input type="checkbox" name="vendor_day_off[]" value="4" id="day_4" <?php if(in_array('4', $day_off)) echo 'checked'; ?> />
-							Thirsday
-						</label>
-					</div>
-					<div class="checkbox-inline">
-						<label for="day_5">
-							<input type="checkbox" name="vendor_day_off[]" value="5" id="day_5" <?php if(in_array('5', $day_off)) echo 'checked'; ?> />
-							Friday
-						</label>
-					</div>
-					<div class="checkbox-inline">
-						<label for="day_6">
-							<input type="checkbox" name="vendor_day_off[]" value="6" id="day_6" <?php if(in_array('6', $day_off)) echo 'checked'; ?> />
-							Saturday
-						</label>
-					</div>
-					<div class="checkbox-inline">
-						<label for="day_0">
-							<input type="checkbox" name="vendor_day_off[]" value="0" id="day_0" <?php if(in_array('0', $day_off)) echo 'checked'; ?> />
-							Sunday
-						</label>
-					</div>
-				</div>
-
 				<?= $form->field($model, 'vendor_public_email'); ?>
 
 				<?= $form->field($model, 'vendor_website') ?>
@@ -261,7 +197,7 @@ use yii\widgets\ActiveForm;
 				<input type='hidden' id='test' value='0' name='tests1'>
 
 				<?= $form->field($model, 'vendor_status')->checkbox(['Active' => 'Active']); ?>
-
+				<?= $form->field($model, 'vendor_booking_managed_by')->dropDownList(['admin'=>'Admin','vendor'=>'Vendor']); ?>
 				<hr />
 
 				<?= $form->field($model, 'category_id')->checkboxList($main_categories)->label('Categories'); ?>

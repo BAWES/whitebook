@@ -162,14 +162,6 @@ class VendorController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
 
-            $vendor_day_off = Yii::$app->request->post('vendor_day_off');
-
-            if(is_array($vendor_day_off)) {
-                $model->day_off = implode(',', $vendor_day_off);
-            }else{
-                $model->day_off = '';
-            }
-
             $vendor = Yii::$app->request->post('Vendor');
 
             $model->vendor_emergency_contact_name = $vendor['vendor_emergency_contact_name'];
@@ -329,14 +321,6 @@ class VendorController extends Controller
                 );  
             }
 
-            $vendor_day_off = Yii::$app->request->post('vendor_day_off');
-
-            if(is_array($vendor_day_off)) {
-                $model->day_off = implode(',', $vendor_day_off);
-            }else{
-                $model->day_off = '';
-            }
-
             $vendor = Yii::$app->request->post('Vendor');
 
             $model->slug = Yii::$app->request->post()['Vendor']['vendor_name'];
@@ -429,8 +413,6 @@ class VendorController extends Controller
 
         } else {
 
-            $day_off = explode(',', $model->day_off);
-
             if (($model->commision) > 1) {
             } else {
                 $model->commision = Siteinfo::info('commission');
@@ -462,7 +444,6 @@ class VendorController extends Controller
                 'main_categories' => ArrayHelper::map($main_categories,'category_id','category_name'),
                 'vendor_contact_number' => $vendor_contact_number,
                 'vendor_order_alert_emails' => $vendor_order_alert_emails,
-                'day_off' => $day_off,
                 'phones' => VendorPhoneNo::findAll(['vendor_id' => $model->vendor_id])
             ]);
         }
@@ -624,14 +605,7 @@ class VendorController extends Controller
         //load posted data to model 
         $model->load(['Vendor' => $posted_data]);
 
-        //data posted as array but saving in single column 
-        $vendor_day_off = Yii::$app->request->post('vendor_day_off');
-
-        if(is_array($vendor_day_off)) {
-            $model->day_off = implode(',', $vendor_day_off);
-        }else{
-            $model->day_off = '';
-        }
+        //data posted as array but saving in single column
 
         $model->vendor_contact_number = implode(',', $model->vendor_contact_number);
 
@@ -688,13 +662,6 @@ class VendorController extends Controller
         $model->load(['Vendor' => $posted_data]);
 
         //data posted as array but saving in single column 
-        $vendor_day_off = Yii::$app->request->post('vendor_day_off');
-
-        if(is_array($vendor_day_off)) {
-            $model->day_off = implode(',', $vendor_day_off);
-        }else{
-            $model->day_off = '';
-        }
 
         $model->vendor_contact_number = implode(',', $model->vendor_contact_number);
 
@@ -762,13 +729,6 @@ class VendorController extends Controller
         $model->load(['Vendor' => $posted_data]);
 
         //data posted as array but saving in single column 
-        $vendor_day_off = Yii::$app->request->post('vendor_day_off');
-
-        if(is_array($vendor_day_off)) {
-            $model->day_off = implode(',', $vendor_day_off);
-        }else{
-            $model->day_off = '';
-        }
 
         $model->vendor_contact_number = implode(',', $model->vendor_contact_number);
 
@@ -834,13 +794,6 @@ class VendorController extends Controller
         $model->load(['Vendor' => $posted_data]);
 
         //data posted as array but saving in single column 
-        $vendor_day_off = Yii::$app->request->post('vendor_day_off');
-
-        if(is_array($vendor_day_off)) {
-            $model->day_off = implode(',', $vendor_day_off);
-        }else{
-            $model->day_off = '';
-        }
 
         $model->vendor_contact_number = implode(',', $model->vendor_contact_number);
 
@@ -890,14 +843,6 @@ class VendorController extends Controller
         //load posted data to model 
         $model->load(['Vendor' => $posted_data]);
 
-        //data posted as array but saving in single column 
-        $vendor_day_off = Yii::$app->request->post('vendor_day_off');
-
-        if(is_array($vendor_day_off)) {
-            $model->day_off = implode(',', $vendor_day_off);
-        }else{
-            $model->day_off = '';
-        }
 
         $model->vendor_contact_number = implode(',', $model->vendor_contact_number);
 
@@ -947,14 +892,6 @@ class VendorController extends Controller
         //load posted data to model 
         $model->load(['Vendor' => $posted_data]);
 
-        //data posted as array but saving in single column 
-        $vendor_day_off = Yii::$app->request->post('vendor_day_off');
-
-        if(is_array($vendor_day_off)) {
-            $model->day_off = implode(',', $vendor_day_off);
-        }else{
-            $model->day_off = '';
-        }
 
         $model->vendor_contact_number = implode(',', $model->vendor_contact_number);
 

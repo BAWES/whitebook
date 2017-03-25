@@ -12,6 +12,7 @@ use frontend\models\VendorItem;
 use frontend\models\Users;
 use frontend\models\Vendor;
 use frontend\models\Website;
+use frontend\models\Customer;
 use common\models\Events;
 use common\models\ItemType;
 use common\models\Category;
@@ -71,18 +72,22 @@ class BrowseController extends BaseController
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => (isset($Category->category_meta_description)) ? $Category->category_meta_description : Yii::$app->params['META_DESCRIPTION']]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => (isset($Category->category_meta_keywords)) ? $Category->category_meta_keywords : Yii::$app->params['META_KEYWORD']]);
 
-        if ((isset($data['location']) && $data['location'] != '')) {
+        if (!empty($data['location'])) {
             $session->set('deliver-location', $data['location']);
         } else {
             unset($_SESSION['deliver-location']);
         }
 
-        if (isset($data['date']) && $data['date'] != '') {
+        if (!empty($data['date'])) {
             $session->set('deliver-date', $data['date']);
             $date = date('Y-m-d', strtotime($data['date']));
             $block_date = $date;
         }else{
             $block_date = '';
+        }
+
+        if (!empty($data['event_time'])) {
+            $session->set('event_time', $data['event_time']);
         }
 
         if (isset($data['vendor']) && $data['vendor'] != '') {
@@ -99,7 +104,7 @@ class BrowseController extends BaseController
         );
 
         $item_query = CategoryPath::find()
-            ->select('{{%vendor_item}}.item_how_long_to_make, {{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar')
+            ->select('{{%vendor_item}}.item_status,{{%vendor_item}}.trash,{{%vendor_item}}.item_approved,{{%vendor_item}}.item_how_long_to_make, {{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar')
             ->leftJoin(
                 '{{%vendor_item_to_category}}',
                 '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
@@ -139,13 +144,18 @@ class BrowseController extends BaseController
         }
 
         //theme filter
-        if (isset($data['themes']) && count($data['themes'])>0) {
+        if (!empty($data['themes'][0])) {
 
             $item_query->leftJoin('{{%vendor_item_theme}}', '{{%vendor_item}}.item_id = {{%vendor_item_theme}}.item_id');
             $item_query->leftJoin('{{%theme}}', '{{%theme}}.theme_id = {{%vendor_item_theme}}.theme_id');
             $item_query->andWhere(['IN', '{{%theme}}.slug', $data['themes']]);
 
         }//if themes
+
+        //event time 
+        if($session->has('event_time')) {
+            $item_query->leftJoin('{{%vendor_working_timing}}', '{{%vendor_working_timing}}.vendor_id = {{%vendor}}.vendor_id');
+        }
 
         //category filter
         $cats = '';
@@ -182,13 +192,24 @@ class BrowseController extends BaseController
             $item_query->andWhere('EXISTS (SELECT 1 FROM {{%vendor_location}} WHERE {{%vendor_location}}.area_id="'.$location.'" AND {{%vendor_item}}.vendor_id = {{%vendor_location}}.vendor_id)');
         }
 
-
         if ($session->has('deliver-date')) {
             $date = date('Y-m-d', strtotime($session->get('deliver-date')));
-            $condition .= " ({{%vendor}}.vendor_id NOT IN(SELECT vendor_id FROM `whitebook_vendor_blocked_date` where block_date = '".$date."')) ";
+            $item_query->andWhere("{{%vendor}}.vendor_id NOT IN(SELECT vendor_id FROM `whitebook_vendor_blocked_date` where block_date = '".$date."')");
         }
 
-        $item_query->andWhere($condition);
+        if (!empty($session->get('event_time'))) {
+            
+            $delivery_date = $session->get('deliver-date');
+
+            if($delivery_date)
+                $working_day = date('D', strtotime($delivery_date));
+            else 
+                $working_day = date('D');
+
+            $event_time = date('H:i:s', strtotime($session->get('event_time')));
+            
+            $item_query->andWhere("'".$event_time."' >= {{%vendor_working_timing}}.working_start_time AND '".$event_time."' < {{%vendor_working_timing}}.working_end_time AND working_day='".$working_day."day'");
+        }
 
         $expression = new Expression(
             "CASE 
@@ -372,10 +393,6 @@ class BrowseController extends BaseController
             $item_type_name = 'Product';
         }
 
-        if($item_type_name == 'Product' && $model->item_amount_in_stock <= 0) {
-            $AvailableStock = false;
-        }
-
         $output = \common\models\Image::find()->select(['image_path'])
             ->where(['item_id' => $model['item_id']])
             ->orderby(['vendorimage_sort_order' => SORT_ASC])
@@ -426,9 +443,9 @@ class BrowseController extends BaseController
             ', '
         );
 
-        $day_off = explode(',', $vendor_detail->day_off);
+        $working_days = ArrayHelper::map(\common\models\VendorWorkingTiming::findAll(['vendor_id'=>$vendor_detail->vendor_id]),'working_day','working_day');
+        $txt_day_off = implode(',',array_diff($replace,$working_days));
 
-        $txt_day_off = str_replace($search, $replace, $vendor_detail->day_off);
 
         if ($vendor_detail->vendor_website && strpos($vendor_detail->vendor_website, 'http://') === false) {
             $vendor_detail->vendor_website = 'http://'.$vendor_detail->vendor_website;
@@ -468,10 +485,23 @@ class BrowseController extends BaseController
                 ->groupby(['{{%location}}.id'])
                 ->asArray()
                 ->all();
+
+            $customer = Customer::findOne(Yii::$app->user->getId());
         }
         else
         {
             $my_addresses = [];
+            $customer = null;
+        }
+
+        if($customer) {
+            $customer_name = $customer->customer_name.' '.$customer->customer_last_name;
+            $customer_phone = $customer->customer_mobile;
+            $customer_email = $customer->customer_email;
+        } else {
+            $customer_name = '';
+            $customer_phone = '';
+            $customer_email = '';
         }
 
         $myaddress_area_list =  \yii\helpers\ArrayHelper::map($my_addresses, 'address_id', 'address_name');
@@ -517,6 +547,9 @@ class BrowseController extends BaseController
             'customer_events_list' => $customer_events_list,
             'vendor_area' => $vendor_area_list,
             'my_addresses' => $my_addresses,
+            'customer_name' => $customer_name,
+            'customer_phone' => $customer_phone,
+            'customer_email' => $customer_email,
             'price_table' => $price_table
         ]);
     }
@@ -543,7 +576,7 @@ class BrowseController extends BaseController
 
         Yii::$app->getSession()->setFlash('success', Yii::t(
                     'frontend', 
-                    'Success: We got your request, we will contact you ASAP!'
+                    'Thank you for your request, we will get back to you within the next 24 hours.'
                 ));
 
         return $this->redirect(['browse/detail', 'slug' => $item['slug']]);

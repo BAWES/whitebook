@@ -887,12 +887,15 @@ function forgot_password()
                 {
                     $('#forgot_loader').hide();
                     $('#forgotPwdModal').modal('hide');
+                    $('#chkForgotPwdModal').modal('hide');
                     $('#MyModal').modal('hide');
                     $('#EventModal').modal('hide');
                     $('#login_success').modal('show');
                     $('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+receive_email+'</span>');
                     //window.setTimeout(function(){location.reload()},2000)
-                    window.setTimeout(function() {$('#login_success').modal('hide');}, 3000);
+                    window.setTimeout(function() {
+                        $('#login_success').modal('hide');
+                    }, 3000);
                 }
                 else if(data==-1)
                 {
@@ -1670,6 +1673,7 @@ var loadmore = 0;
 function filter(){
     var ajax_data = {},
         date = '',
+        event_time = '',
         areas = 'All',
         slug = '',
         search = '',
@@ -1716,6 +1720,11 @@ function filter(){
     if ($('#delivery_date_2').length>0) {
         var date = $('#delivery_date_2').val();
     }
+
+    if ($('#event_time').length>0) {
+        event_time = $('#event_time').val();
+    }
+
     if ($('#delivery_area_filter').length>0) {
         var areas = $('#delivery_area_filter').val();
     }
@@ -1779,6 +1788,11 @@ function filter(){
         ajax_data.date = date;
     }
 
+    if(event_time != '') {
+        url_path += '&event_time=' + event_time;
+        ajax_data.event_time = event_time;
+    }
+    
     if(areas != '') {
         url_path += '&location=' + areas;
         ajax_data.location = areas;
@@ -2112,3 +2126,48 @@ $(document).delegate('#modal_event_from_package #create_event_button', 'click', 
 /* END ADD TO EVENT */
 
 
+
+//Register save function ajax
+
+$(document).delegate('#vendor_send', 'click', function()
+{
+
+    $('.errors,.success-block').html('');
+
+    if ($('#name_of_business').val() == '') {
+        $('.vendor_name_of_business.errors').html('Please ente name of business');
+        return false;
+    }
+
+    if ($('#contact_person').val() == '') {
+        $('.vendor_contact_person.errors').html('Please enter contact person');
+        return false;
+    }
+
+    $(this).attr('disabled', 'disabled');
+    $('#vendor_send').html('Please wait...');
+    $('#vendor_send').val('Please wait...');
+    var form = $("#vendor_request_form");
+    $.ajax({
+        url: vendor_request_url,
+        async:false,
+        type:"post",
+        data:form.serialize(),
+        success:function(data)
+        {
+            $('#vendor_send').removeAttr('disabled');
+            $('#vendor_send').html('Send');
+            if (data==1) {
+                $('#success-block').html('Request sent successfully. Admin will contact you soon.');
+            } else {
+                $('#success-block').html('Error while sending request. Please try after some time.');
+            }
+            window.setTimeout(function () {
+                $('#vendor_request_form')[0].reset();
+                $('.errors,.success-block').html('');
+                $('#vendor-sign-up').modal('hide');
+            }, 2000);
+            return false;
+        }
+    });
+});

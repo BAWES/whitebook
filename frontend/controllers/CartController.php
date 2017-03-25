@@ -3,18 +3,20 @@
 namespace frontend\controllers;
 
 use Yii;
-use yii\helpers\Url;
 use yii\web\Response;
+use yii\filters\AccessControl;
+use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use frontend\models\Vendor;
 use common\models\VendorItem;
 use common\models\City;
 use common\models\ItemType;
+use common\models\Customer;
 use common\models\CustomerCart;
-use common\models\DeliveryTimeSlot;
 use common\models\VendorItemMenu;
 use common\models\VendorItemMenuItem;
 use common\models\CustomerCartMenuItem;
-use yii\filters\AccessControl;
+use common\models\VendorWorkingTiming;
 
 class CartController extends BaseController
 {
@@ -38,12 +40,12 @@ class CartController extends BaseController
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','update-cart-item-popup','update-cart-item','add', 'update', 'validation-product-available', 'get-delivery-timeslot', 'save-delivery-timeslot'],
+                        'actions' => ['index','update-cart-item-popup','update-cart-item','add', 'update', 'validation-product-available', 'get-delivery-timeslot', 'save-delivery-timeslot','slots'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['validation-product-available', 'get-delivery-timeslot', 'save-delivery-timeslot'],
+                        'actions' => ['index','update-cart-item-popup','update-cart-item','add', 'update', 'validation-product-available', 'get-delivery-timeslot', 'save-delivery-timeslot','slots'],
                         'allow' => true,
                         'roles' => ['?'],
                     ]
@@ -96,121 +98,37 @@ class CartController extends BaseController
         ]);
 
         //get timeslots 
-        $vendor_timeslot = DeliveryTimeSlot::find()
-            ->select(['timeslot_id','timeslot_start_time','timeslot_end_time'])
+        $vendor_timeslot = VendorWorkingTiming::find()
+            ->select(['working_id','working_start_time','working_end_time'])
             ->where([
                 'vendor_id' => $model->vendor_id,
-                'timeslot_day' => date("l", strtotime($item->cart_delivery_date))
+                'working_day' => date("l", strtotime($item->cart_delivery_date))
             ])
             ->asArray()
             ->all();
+        $slots = [];
+
+        if ($vendor_timeslot) {
+
+            foreach ($vendor_timeslot as $key => $value) {
+                $slots = array_merge($slots,$this->slots($value['working_start_time'],$value['working_end_time']));
+            }
+
+        }
 
         return $this->renderPartial('edit_cart', [
             'item' => $item,
             'model' => $model,
             'menu' => $menu,
             'addons' => $addons,
-            'vendor_timeslot' => $vendor_timeslot
+            'vendor_timeslot' => $slots
         ]);
     }
 
-    public function actionUpdateCartItem(){
-        if(Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-
-            $data = Yii::$app->request->post();
-
-            if($this->validate_item($data)) {
-
-                $cart = CustomerCart::findOne($data['cart_id']);
-                
-                if ($cart) {
-                    $cart->cart_delivery_date = $data['delivery_date'];
-                    $cart->timeslot_id  =   $data['timeslot_id'];
-                    $cart->cart_quantity =  $data['quantity'];
-                    $cart->cart_delivery_date = date('Y-m-d', strtotime($data['delivery_date']));
-                    $cart->modified_datetime  = date('Y-d-m h:i:s');
-
-                    if(!empty($data['female_service'])) {
-                        $cart->female_service = $data['female_service'];
-                    }
-
-                    if(!empty($data['special_request'])) {
-                        $cart->special_request = $data['special_request'];
-                    }
-
-                    if ($cart->save()) {
-
-                        // remove old 
-
-                        CustomerCartMenuItem::deleteAll(['cart_id' => $cart->cart_id]);
-
-                        // add menu 
-
-                        if(empty($data['menu_item'])) {
-                            $data['menu_item'] = [];
-                        }
-                        
-                        foreach ($data['menu_item'] as $key => $value) {
-
-                            if($value > 0) {
-                                                        
-                                $mi = VendorItemMenuItem::findOne($key);
-
-                                $cart_menu_item = new CustomerCartMenuItem;
-                                $cart_menu_item->cart_id = $cart->cart_id;
-                                $cart_menu_item->menu_id = $mi->menu_id;
-                                $cart_menu_item->menu_item_id = $mi->menu_item_id;
-                                $cart_menu_item->quantity = $value;
-                                $cart_menu_item->save();   
-                            }
-                        }
-
-                        Yii::$app->getSession()->setFlash('success', Yii::t(
-                            'frontend',
-                            'Success: Product <a href="{product_link}">{product_name}</a> added to cart!',
-                            [
-                                'product_link' => Url::to(['browse/detail', 'slug' => $cart->item->slug]),
-                                'product_name' => Yii::$app->language == 'en'? $cart->item->item_name : $cart->item->item_name_ar
-                            ]
-                        ));
-
-                        return [
-                            'success' => 1
-                        ];
-                    } else {
-                        return [
-                            'error' => Yii::t('frontend','Error while updateing cart')
-                        ];
-                    }
-                }
-                exit;
-            } else {
-                return [
-                    'errors' => $this->errors
-                ];
-            }
-        }
-    }
-
-    /*  
-     *  Add product to cart  
-     ----------------------------
-        - Show product options on get request 
-        - On post validate options and add item to cart 
-     */
-    public function actionAdd() {
-
-        if(Yii::$app->request->isGet) {
-            
-            $cities = City::find()
-                    ->where('status="Active" AND trash="Default"')
-                    ->all();
-
-            return $this->renderPartial('add', [
-              'cities' => $cities,
-              'item_id' => Yii::$app->request->get('item_id')
-            ]);    
+    public function actionUpdateCartItem()
+    {
+        if(!Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -218,16 +136,148 @@ class CartController extends BaseController
         $data = Yii::$app->request->post();
 
         if($this->validate_item($data)) {
+
+            $cart = CustomerCart::findOne($data['cart_id']);
             
-            $cart = CustomerCart::find()
+            if ($cart) {
+                $cart->cart_delivery_date = $data['delivery_date'];
+                $cart->time_slot =   $data['time_slot'];
+                $cart->cart_quantity =  $data['quantity'];
+                $cart->cart_delivery_date = date('Y-m-d', strtotime($data['delivery_date']));
+                $cart->modified_datetime  = date('Y-d-m h:i:s');
+
+                if(!empty($data['female_service'])) {
+                    $cart->female_service = $data['female_service'];
+                }
+
+                if(!empty($data['special_request'])) {
+                    $cart->special_request = $data['special_request'];
+                }
+
+                if ($cart->save()) {
+
+                    // remove old 
+
+                    CustomerCartMenuItem::deleteAll(['cart_id' => $cart->cart_id]);
+
+                    // add menu 
+
+                    if(empty($data['menu_item'])) {
+                        $data['menu_item'] = [];
+                    }
+                    
+                    foreach ($data['menu_item'] as $key => $value) {
+
+                        if($value > 0) {
+                                                    
+                            $mi = VendorItemMenuItem::findOne($key);
+
+                            $cart_menu_item = new CustomerCartMenuItem;
+                            $cart_menu_item->cart_id = $cart->cart_id;
+                            $cart_menu_item->menu_id = $mi->menu_id;
+                            $cart_menu_item->menu_item_id = $mi->menu_item_id;
+                            $cart_menu_item->quantity = $value;
+                            $cart_menu_item->save();   
+                        }
+                    }
+
+                    Yii::$app->getSession()->setFlash('success', Yii::t(
+                        'frontend',
+                        'Success: Product <a href="{product_link}">{product_name}</a> added to cart!',
+                        [
+                            'product_link' => Url::to(['browse/detail', 'slug' => $cart->item->slug]),
+                            'product_name' => Yii::$app->language == 'en'? $cart->item->item_name : $cart->item->item_name_ar
+                        ]
+                    ));
+
+                    return [
+                        'success' => 1
+                    ];
+                } else {
+                    return [
+                        'error' => Yii::t('frontend','Error while updateing cart')
+                    ];
+                }
+            }
+            exit;
+        } else {
+            return [
+                'errors' => $this->errors
+            ];
+        }
+    }
+
+    /**  
+     * On post validate options and add item to cart 
+     */
+    public function actionAdd() {
+
+        $data = Yii::$app->request->post();
+
+        //remove menu item with 0 quantity 
+
+        if(empty($data['menu_item'])) {
+            $data['menu_item'] = [];
+        }
+
+        foreach ($data['menu_item'] as $key => $value)
+        {
+            if($value == 0)
+                unset($data['menu_item'][$key]);
+        }
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        if($this->validate_item($data)) {
+            
+            $query = CustomerCart::find()
                 ->where([
                     'item_id' => $data['item_id'],
                     'area_id'   => isset($data['area_id'])?$data['area_id']:'',
-                    'timeslot_id' => isset($data['timeslot_id'])?$data['timeslot_id']:'',
-                    'cart_delivery_date' => date('Y-m-d', strtotime($data['delivery_date']))
-                ])
-                ->one();
+                    'time_slot' => isset($data['time_slot'])?$data['time_slot']:'',
+                    'cart_delivery_date' => date('Y-m-d', strtotime($data['delivery_date'])),
+                ]);
+            
+            if(!empty($data['female_service'])){
+                $query->andWhere(['female_service' => $data['female_service']]);
+            }
 
+            if(!empty($data['special_request'])){
+                $query->andWhere(['special_request' => $data['special_request']]);
+            }
+
+            if (Yii::$app->user->getId()) {
+                $query->andWhere(['customer_id'=>Yii::$app->user->getId()]);
+            } else {
+                $query->andWhere(['cart_session_id'=>Customer::currentUser()]);
+            }
+
+            $cart = $query->one();
+
+            //if available in cart check if have exact menu and quantity combo 
+
+            if($cart) {
+                $cart_menu_items = CustomerCartMenuItem::findAll(['cart_id' => $cart->cart_id]);
+                    
+                $arr_cart_menu_items = ArrayHelper::map($cart_menu_items, 'menu_item_id', 'quantity');
+
+                //if cart menu are same as posted menu_item 
+
+                if(sizeof($arr_cart_menu_items) != sizeof($data['menu_item']))
+                    $cart = false;
+
+                //check menu item quantity is same for 1 quantity of item in cart and we trying to add 
+                // so we can add cart item with p quantity to cart item item with q quantity if both ahve 
+                // same no of menu items 
+
+                foreach ($arr_cart_menu_items as $key => $value) {
+                    if(empty($data['menu_item'][$key]) || $data['menu_item'][$key]/$data['quantity'] != $value/$cart->cart_quantity){
+                        $cart = false;
+                        break;
+                    }
+                }
+            }
+            
             /* 
                 product already available in cart 
                 Just need to update quantity 
@@ -242,6 +292,13 @@ class CartController extends BaseController
                 }   
 
                 $cart->cart_quantity = $cart->cart_quantity + $quantity;
+
+                //update menu item quantities 
+
+                foreach ($cart_menu_items as $key => $menu_item) {
+                    $menu_item->quantity += $data['menu_item'][$menu_item->menu_item_id];
+                    $menu_item->save();
+                }
             }
 
             /*
@@ -267,13 +324,35 @@ class CartController extends BaseController
                 $cart->customer_id = Yii::$app->user->getId();
                 $cart->item_id = $data['item_id'];
                 $cart->area_id = $location;
-                $cart->timeslot_id = isset($data['timeslot_id'])?$data['timeslot_id']:'';
+                $cart->time_slot  = isset($data['time_slot'])?$data['time_slot']:'';
                 $cart->cart_delivery_date = date('Y-m-d', strtotime($data['delivery_date']));
                 $cart->cart_customization_price_per_unit = 0;
                 $cart->cart_quantity = $data['quantity'];
                 $cart->cart_datetime_added = date('Y-d-m h:i:s');
+                $cart->cart_session_id = (!Yii::$app->user->getId()) ? Customer::currentUser() : '';
                 $cart->cart_valid = 'yes';
                 $cart->trash = 'Default';
+
+                if(!$cart->save())
+                {
+                    return [
+                        'errors' => array_merge($this->errors, $cart->getErrors())
+                    ];
+                }
+
+                // add menu 
+                
+                foreach ($data['menu_item'] as $key => $value) {
+
+                    $mi = VendorItemMenuItem::findOne($key);
+
+                    $cart_menu_item = new CustomerCartMenuItem;
+                    $cart_menu_item->cart_id = $cart->cart_id;
+                    $cart_menu_item->menu_id = $mi->menu_id;
+                    $cart_menu_item->menu_item_id = $mi->menu_item_id;
+                    $cart_menu_item->quantity = $value;
+                    $cart_menu_item->save(); 
+                }
             }
             
             if(!empty($data['female_service'])) {
@@ -285,27 +364,6 @@ class CartController extends BaseController
             }
 
             if($cart->save()) {
-                
-                // add menu 
-
-                if(empty($data['menu_item'])) {
-                    $data['menu_item'] = [];
-                }
-                
-                foreach ($data['menu_item'] as $key => $value) {
-
-                    if($value > 0) {
-                                                
-                        $mi = VendorItemMenuItem::findOne($key);
-
-                        $cart_menu_item = new CustomerCartMenuItem;
-                        $cart_menu_item->cart_id = $cart->cart_id;
-                        $cart_menu_item->menu_id = $mi->menu_id;
-                        $cart_menu_item->menu_item_id = $mi->menu_item_id;
-                        $cart_menu_item->quantity = $value;
-                        $cart_menu_item->save();   
-                    }
-                }
 
                 $item = VendorItem::findOne($data['item_id']);
 
@@ -341,6 +399,7 @@ class CartController extends BaseController
     */
     public function validate_item($data) {
 
+        // will change them too
         $this->errors = CustomerCart::validate_item($data);
 
         return !$this->errors;
@@ -349,6 +408,7 @@ class CartController extends BaseController
 
     public function actionValidationProductAvailable() {
 
+        // will change them too
         if (!Yii::$app->request->isAjax) {
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
@@ -358,6 +418,12 @@ class CartController extends BaseController
         $json = [];
 
         $data = Yii::$app->request->post();
+
+        if(empty($data['item_id'])) {
+            $json['error'] = Yii::t('frontend', 'Item ID require!');
+
+            return $json;
+        }
 
         $item = VendorItem::find()->where([
             'item_id' => $data['item_id'],
@@ -382,11 +448,13 @@ class CartController extends BaseController
 
         // get date after x day then convert it to unix time 
         
-        $min_delivery_time = strtotime(date('d-m-Y', strtotime('+'.$item->item_how_long_to_make.' days')));
+        $min_delivery_time = strtotime(date('d-m-Y', strtotime('+'.$item->item_how_long_to_make.' hours')));
 
         if(strtotime($data['delivery_date']) < $min_delivery_time) 
         {
-            $json['error'] = Yii::t('frontend', 'Item notice period '.$item->item_how_long_to_make.' day!');
+            $json['error'] = Yii::t('frontend', 'Item notice period {count} hour(s)!', [
+                    'count' => $item->item_how_long_to_make
+                ]);
 
             return $json;
         }
@@ -420,12 +488,6 @@ class CartController extends BaseController
             }
         }
 
-//        //validate to add product to cart
-//        if ($data['quantity'] > ($item->item_amount_in_stock)) {
-//
-//            return Yii::t('frontend', 'Item is not available on selected date');
-//        }
-
         //-------------- Start Item Capacity -----------------//
         //default capacity is how many of it they can process per day
 
@@ -443,16 +505,14 @@ class CartController extends BaseController
         }
 
         //2) get no of item purchased for selected date
-
-        $purchased_result = Yii::$app->db->createCommand('select sum(ip.purchase_quantity) as purchased from whitebook_suborder_item_purchase ip inner join whitebook_suborder so on so.suborder_id = ip.suborder_id where ip.item_id = "' . $data['item_id'] . '" AND ip.trash = "Default" AND so.trash ="Default" AND so.status_id != 0 AND DATE(ip.purchase_delivery_date) = DATE("' . date('Y-m-d', strtotime($data['delivery_date'])) . '")')->queryOne();
-
+        $purchased_result = \common\models\Booking::totalPurchasedItem($data['item_id'],$data['delivery_date']);
         if ($purchased_result) {
             $purchased = $purchased_result['purchased'];
         } else {
             $purchased = 0;
         }
 
-        if ($item_type_name != 'Product' && $purchased > $capacity) 
+        if ($purchased > $capacity) 
         {
             $json['error'] = Yii::t('frontend', 'Item is not available on selected date');
 
@@ -491,7 +551,8 @@ class CartController extends BaseController
     }
 
     /*
-        Update item quantity 
+        Update item quantity
+        function not in use
     */
     public function actionUpdate() {
         $quantity = Yii::$app->request->post('quantity');
@@ -532,40 +593,28 @@ class CartController extends BaseController
         $data = Yii::$app->request->post();
         $string = $data['sel_date'];
         $timestamp = strtotime($string);
-
+        $slots = [];
         $deliver_timeslot = Yii::$app->session->get('deliver-timeslot');
 
         Yii::$app->session->set('deliver-date', $data['sel_date']);
 
-        $vendor_timeslot = DeliveryTimeSlot::find()
-            ->select(['timeslot_id','timeslot_start_time','timeslot_end_time'])
+        $vendor_timeslot = VendorWorkingTiming::find()
+            ->select(['working_id','working_start_time','working_end_time'])
             ->where(['vendor_id' => $data['vendor_id']])
-            ->andwhere(['timeslot_day' => date("l", $timestamp)])
+            ->andwhere(['working_day' => date("l", $timestamp)])
             ->asArray()
             ->all();
 
         if ($vendor_timeslot) {
 
             foreach ($vendor_timeslot as $key => $value) {
-
-                if($deliver_timeslot == $value['timeslot_id']) {
-                    $selected = 'selected';
-                } else {
-                    $selected = '';
-                }
-
-                if (strtotime($data['sel_date']) == (strtotime($data['currentDate']))) {
-                    if (strtotime($data['time']) < strtotime($value['timeslot_start_time'])) {
-                        $start = date('g:i A', strtotime($value['timeslot_start_time']));
-                        $end = date('g:i A', strtotime($value['timeslot_end_time']));
-                        echo '<option value="' . $value['timeslot_id'] . '" '.$selected.'>' . $start . ' - ' . $end . '</option>';
-                    }
-                } else {
-                    $start = date('g:i A', strtotime($value['timeslot_start_time']));
-                    $end = date('g:i A', strtotime($value['timeslot_end_time']));
-                    echo '<option value="' . $value['timeslot_id'] . '" '.$selected.'>' . $start . ' - ' . $end . '</option>';
-                }
+                $slots = array_merge($slots,$this->slots($value['working_start_time'],$value['working_end_time']));
             }
+
+            foreach($slots as $slot) {
+                echo '<option value="' . $slot . '" >' . $slot . '</option>';
+            }
+
         } else {
             echo 0;
             exit;
@@ -584,6 +633,27 @@ class CartController extends BaseController
         $deliver_timeslot = Yii::$app->request->post('deliver-timeslot');
 
         Yii::$app->session->set('deliver-timeslot', $deliver_timeslot);
+    }
+
+    /*
+     * method provide time slots interval between two time slots
+     */
+    private function slots($startTime = '11:00:00', $endTime = '22:45:00'){
+        $slots = [];
+        if ($startTime && $endTime) {
+            $from = date('h:i A', strtotime($startTime));
+            $to ='';
+            while (strtotime($from) < strtotime($endTime)) {
+                $to = strtotime("+30 minutes", strtotime($from));
+                if ($to > strtotime($endTime)) {
+                    $slots[] = $from;// . '-' . date('H:i:s',strtotime($endTime));
+                    break;
+                }
+                $slots[] = date('h:i A',strtotime($from));// . ' - ' . date('h:i A',$to);
+                $from = date('h:i A',$to);
+            }
+        }
+        return $slots;
     }
 }
 

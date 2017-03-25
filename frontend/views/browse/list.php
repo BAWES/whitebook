@@ -27,11 +27,13 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
 
     <!-- coniner start -->
     <section id="inner_pages_white_back" class="<?=Yii::$app->controller->id;?>">
+        <?php /* @TODO Removed Event Section ?>
         <div id="event_slider_wrapper">
             <div class="container paddng0">
                 <?php echo $this->render('/product/events_slider.php');  ?>
             </div>
         </div>
+        <?php */ ?>
         <div class="container paddng0">
             <div class="breadcrumb_common">
                 <div class="bs-example">
@@ -56,11 +58,18 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                     <div class="mid-space">
                         &nbsp;
                     </div>
+                    <div class="col-lg-3 padding-left-0 event-filter">
+                        <?= $this->render('@frontend/views/common/filter/event_time.php');  ?>
+                    </div>
+                    <div class="mid-space">
+                        &nbsp;
+                    </div>
                     <div class="col-lg-3 padding-left-0 location-filter">
                         <?= $this->render('@frontend/views/common/filter/locations.php', [
                             'deliver_location' => $deliver_location
                         ]);  ?>
                     </div>
+                    <!--
                     <div class="mid-space">
                         &nbsp;
                     </div>
@@ -90,6 +99,7 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                             </div>
                         </div>
                     </div>
+                    -->
                 </div>
 
                 <span class="filter_butt visible-xs visible-sm">
@@ -109,22 +119,13 @@ $deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-d
                     ]);  ?>
 
                 </div>
-                <div class="col-md-9 paddingright0 right-sidebar">
-                    <div class="banner_section_plan">
-                        <?= Html::img("@web/images/banner_plan.png") ?>
-                    </div>
-
-                    <!-- BEGIN Item lists -->
+                <div class="col-md-9 paddingright0 right-sidebar">                  
                     <div class="listing_right">
                         <?= $this->render('@frontend/views/common/items', [
                             'items' => $provider, 
                             'customer_events_list' => $customer_events_list
                         ]); ?>
                     </div>
-                    <div class="banner_section_plan">
-                        <?= Html::img("@web/images/banner_plan.png") ?>
-                    </div>
-                    <!-- END Item lists -->
                 </div>
             </div>
         </div>

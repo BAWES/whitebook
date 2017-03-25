@@ -19,11 +19,11 @@ use yii\helpers\Url;
     <td width="20"></td>
     <td style=" font:normal 15px arial; color:#333333;">
 
-        Order ID : #<?= $order_id ?>
+        Order ID : <?= $order_id ?>
 
         <br />
 
-        Sub order ID : #<?= $sub_order_id ?>
+        Sub order ID : <?= $sub_order_id ?>
 
         <br />
 

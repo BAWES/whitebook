@@ -6,6 +6,10 @@ class CFormatter
 {
     public static function format($value)
     {
-        return 'KD ' . number_format($value, 3);
+    	if($value == floor($value)) {
+    		return 'KD ' . round($value);
+    	}
+
+    	return 'KD ' . number_format($value, 3);		
     }
 }

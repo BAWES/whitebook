@@ -255,8 +255,7 @@ class VendorItemController extends Controller
         $model->slug = '';
 
         if($model->load(Yii::$app->request->post()) && $model->save()) {
-
-            //force to generate slug again by removing old slug 
+            //force to generate slug again by removing old slug
             $model->slug = '';
 
             //remove all old category 
@@ -285,6 +284,8 @@ class VendorItemController extends Controller
                 $model->is_ready = 1;
                 $model->item_approved = 'Pending';
                 $model->save();
+
+                VendorItem::notifyAdmin($id);
 
                 Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
 
@@ -348,6 +349,13 @@ class VendorItemController extends Controller
 
         if($model->load(Yii::$app->request->post()) && $model->save()) {
 
+            $notice_period_type = Yii::$app->request->post('notice_period_type');
+
+            if($notice_period_type == 'Day') {
+                $model->item_how_long_to_make *= 24;
+                $model->save(false);
+            }
+            
             $complete = Yii::$app->request->post('complete');
 
             if($complete) {
@@ -357,6 +365,8 @@ class VendorItemController extends Controller
                 $model->is_ready = 1;
                 $model->item_approved = 'Pending';
                 $model->save();
+                
+                VendorItem::notifyAdmin($id);
 
                 Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
 
@@ -391,6 +401,7 @@ class VendorItemController extends Controller
 
         if($model->load(Yii::$app->request->post()) && $model->save()) {
 
+
             //remove old price chart
             VendorDraftItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
 
@@ -412,12 +423,13 @@ class VendorItemController extends Controller
             $complete = Yii::$app->request->post('complete');
 
             if($complete) {
-
                 //to make draft visible to admin 
 
                 $model->is_ready = 1;
                 $model->item_approved = 'Pending';
                 $model->save();
+
+                VendorItem::notifyAdmin($id);
 
                 Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
 
@@ -519,6 +531,8 @@ class VendorItemController extends Controller
                 $model->item_approved = 'Pending';
                 $model->save();
 
+                VendorItem::notifyAdmin($id);
+
                 Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
 
                 Yii::info('[Item Updated] Vendor updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
@@ -619,6 +633,8 @@ class VendorItemController extends Controller
                 $model->item_approved = 'Pending';
                 $model->save();
 
+                VendorItem::notifyAdmin($id);
+
                 Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
 
                 Yii::info('[Item Updated] Vendor updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
@@ -671,6 +687,8 @@ class VendorItemController extends Controller
                 $image->save();
             }
 
+            VendorItem::notifyAdmin($id);
+            
             Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
 
             Yii::info('[Item Updated] Vendor updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
@@ -944,5 +962,35 @@ class VendorItemController extends Controller
         return [
             'categories' => Category::findAll(['parent_category_id' => $category_id])
         ];
+    }
+
+    public function actionItemInventory() {
+
+        $query = VendorItem::find();
+        $date = date('Y-m-d');
+        $item_id = '';
+        $query->where(['trash'=>'Default']);
+        if (Yii::$app->request->post()) {
+            if (Yii::$app->request->post('date')) {
+                $date =Yii::$app->request->post('date');
+            } else {
+                Yii::$app->session->setFlash('danger', 'Please select date');
+            }
+        }
+
+        if (Yii::$app->request->post('item_id') && Yii::$app->request->post('item_id') != '') {
+            $query->andWhere(['item_id' => Yii::$app->request->post('item_id')]);
+            $item_id =Yii::$app->request->post('item_id');
+        }
+        $query->andWhere(['vendor_id' => Yii::$app->user->getId()]);
+
+        $provider = new \yii\data\ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+
+        return $this->render('inventory',['provider'=>$provider,'date'=>$date,'item_id'=>$item_id]);
     }
 }

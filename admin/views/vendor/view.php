@@ -20,6 +20,11 @@ $this->title = $model->vendor_name.' info ';
 $this->params['breadcrumbs'][] = ['label' => 'Manage Vendors', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<style>
+    .delivery_days div{  border-right: 1px solid #f2f2f2;width: 147px!important;text-align: center;}
+    .vendor-admin-new .day_head {  width: 145px;  }
+    .delivery_days >div ul li {  margin-bottom: 8px;  }
+</style>
 <div class="loadingmessage" style="display: none;">
 <p>
 <?= Html::img(Yii::getAlias('@web/themes/default/img/loading.gif'), ['class'=>'','width'=>'64px','height'=>'64px','id'=>'loading','alt'=>'loading']);?>
@@ -32,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <ul class="nav nav-tabs">
         <li class="active"><a href="#1" data-toggle="tab">Vendor Info </a></li>
         <li><a href="#4" data-toggle="tab">Vendor Item Details</a></li>
-        <li><a href="#5" data-toggle="tab">Delivery timeslot</a></li>
+        <li><a href="#5" data-toggle="tab">Delivery Times</a></li>
         <li><a href="#6" data-toggle="tab">Exception dates</a></li>
         <li><a href="#7" data-toggle="tab">Email addresses</a></li>
     </ul>
@@ -55,7 +60,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value'=>strip_tags($model->vendor_return_policy)
                 ],
                 'vendor_public_email',
-                'vendor_working_hours',
                 'vendor_contact_name',
                 'vendor_contact_email',
                 'vendor_contact_number',
@@ -63,7 +67,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'vendor_emergency_contact_email',
                 'vendor_emergency_contact_number',
                 'vendor_website',
-                'vendor_status'
+                'vendor_status',
+                'vendor_booking_managed_by'
             ]
         ]);?>
     </div>
@@ -107,7 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	<?php
     $timeslot_val = array();
-    $delivery_data = DeliveryTimeSlot::vendor_delivery_details($model->vendor_id);
+    $delivery_data = \common\models\VendorWorkingTiming::findAll(['vendor_id'=>$model->vendor_id]);
     if ($delivery_data>0) { ?>
 
 	<div class="vendor-admin-new">
@@ -121,109 +126,79 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="delivery_days">
         <div class="sun">
-        <ul>
+        <ul style="margin-left: 0px;padding: 8px 13px;">
             <?php
-            $sun = DeliveryTimeSlot::vendor_deliverytimeslot($model->vendor_id,'Sunday');
+            $sun = \common\models\VendorWorkingTiming::findAll(['vendor_id'=>$model->vendor_id,'working_day'=>'Sunday']);
             foreach ($sun as $key => $value) {
-            $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
-            $start = date('g:ia', strtotime($value['timeslot_start_time']));
-            $end =  date('g:ia', strtotime($value['timeslot_end_time']));
-            $orders =  $value['timeslot_maximum_orders'];
-            echo '<div class="one_slot">';
-            echo '<li>'. $start .' - '. $end .'</li>'.'</a>';
-            echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
-            echo '</div>';
+            $start = date('g:ia', strtotime($value['working_start_time']));
+            $end =  date('g:ia', strtotime($value['working_end_time']));
+            echo '<li>'. $start .' - '. $end .'</li>';
             } ?>
         </ul>
         </div>
         <div class="mon">
-            <ul>
-                <?php  $mon = DeliveryTimeSlot::vendor_deliverytimeslot($model->vendor_id,'Monday');
-                foreach ($mon as $key => $value) {
-                $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
-                $start = date('g:ia', strtotime($value['timeslot_start_time']));
-                $end =  date('g:ia', strtotime($value['timeslot_end_time']));
-                $orders =  $value['timeslot_maximum_orders'];
-                echo '<div class="one_slot">';
-                echo '<li>'. $start .' - '. $end .'</li>';
-                echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
-                echo '</div>';
+            <ul style="margin-left: 0px;padding: 8px 13px;">
+                <?php
+                $sun = \common\models\VendorWorkingTiming::findAll(['vendor_id'=>$model->vendor_id,'working_day'=>'Monday']);
+                foreach ($sun as $key => $value) {
+                    $start = date('g:ia', strtotime($value['working_start_time']));
+                    $end =  date('g:ia', strtotime($value['working_end_time']));
+                    echo '<li>'. $start .' - '. $end .'</li>';
                 } ?>
             </ul>
         </div>
         <div class="tue">
-            <ul>
-                <?php  $tue = DeliveryTimeSlot::vendor_deliverytimeslot($model->vendor_id,'Tuesday');
-
-                foreach ($tue as $key => $value) {
-                $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
-                $start = date('g:ia', strtotime($value['timeslot_start_time']));
-                $end =  date('g:ia', strtotime($value['timeslot_end_time']));
-                $orders =  $value['timeslot_maximum_orders'];
-                echo '<div class="one_slot">';
-                echo '<li>'. $start .' - '. $end .'</li>';
-                echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
-                echo '</div>';
+            <ul style="margin-left: 0px;padding: 8px 13px;">
+                <?php
+                $sun = \common\models\VendorWorkingTiming::findAll(['vendor_id'=>$model->vendor_id,'working_day'=>'Tuesday']);
+                foreach ($sun as $key => $value) {
+                    $start = date('g:ia', strtotime($value['working_start_time']));
+                    $end =  date('g:ia', strtotime($value['working_end_time']));
+                    echo '<li>'. $start .' - '. $end .'</li>';
                 } ?>
             </ul>
         </div>
         <div class="wed">
-            <ul>
-                <?php  $wed = DeliveryTimeSlot::vendor_deliverytimeslot($model->vendor_id,'Wednesday');
-                foreach ($wed as $key => $value) {
-                $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
-                $start = date('g:ia', strtotime($value['timeslot_start_time']));
-                $end =  date('g:ia', strtotime($value['timeslot_end_time']));
-                $orders =  $value['timeslot_maximum_orders'];
-                echo '<div class="one_slot">';
-                echo '<li>'. $start .' - '. $end .'</li>';
-                echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
-                echo '</div>';
+            <ul style="margin-left: 0px;padding: 8px 13px;">
+                <?php
+                $sun = \common\models\VendorWorkingTiming::findAll(['vendor_id'=>$model->vendor_id,'working_day'=>'Wednesday']);
+                foreach ($sun as $key => $value) {
+                    $start = date('g:ia', strtotime($value['working_start_time']));
+                    $end =  date('g:ia', strtotime($value['working_end_time']));
+                    echo '<li>'. $start .' - '. $end .'</li>';
                 } ?>
             </ul>
         </div>
         <div class="thu">
-            <ul>
-                <?php  $thu = DeliveryTimeSlot::vendor_deliverytimeslot($model->vendor_id,'Thursday');
-                foreach ($thu as $key => $value) {
-                $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
-                $start = date('g:ia', strtotime($value['timeslot_start_time']));
-                $end =  date('g:ia', strtotime($value['timeslot_end_time']));
-                $orders =  $value['timeslot_maximum_orders'];
-                echo '<div class="one_slot">';
-                echo '<li>'. $start .' - '. $end .'</li>'.'</a>';
-                echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
-                echo '</div>';
+            <ul style="margin-left: 0px;padding: 8px 13px;">
+                <?php
+                $sun = \common\models\VendorWorkingTiming::findAll(['vendor_id'=>$model->vendor_id,'working_day'=>'Thursday']);
+                foreach ($sun as $key => $value) {
+                    $start = date('g:ia', strtotime($value['working_start_time']));
+                    $end =  date('g:ia', strtotime($value['working_end_time']));
+                    echo '<li>'. $start .' - '. $end .'</li>';
                 } ?>
             </ul>
         </div>
         <div class="fri">
-            <ul>
-                <?php  $fri = DeliveryTimeSlot::vendor_deliverytimeslot($model->vendor_id,'Friday');
-                foreach ($fri as $key => $value) {
-                $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
-                $start = date('g:ia', strtotime($value['timeslot_start_time']));
-                $end =  date('g:ia', strtotime($value['timeslot_end_time']));
-                $orders =  $value['timeslot_maximum_orders'];
-                echo '<div class="one_slot">';
-                echo '<li>'. $start .' - '. $end .'</li>';
-                echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
-                echo '</div>';
+            <ul style="margin-left: 0px;padding: 8px 13px;">
+                <?php
+                $sun = \common\models\VendorWorkingTiming::findAll(['vendor_id'=>$model->vendor_id,'working_day'=>'Friday']);
+                foreach ($sun as $key => $value) {
+                    $start = date('g:ia', strtotime($value['working_start_time']));
+                    $end =  date('g:ia', strtotime($value['working_end_time']));
+                    echo '<li>'. $start .' - '. $end .'</li>';
                 } ?>
             </ul>
         </div>
         <div class="sat">
-            <ul>
-                <?php  $sat = DeliveryTimeSlot::vendor_deliverytimeslot($model->vendor_id,'Saturday');
-                foreach ($sat as $key => $value) {
-                $timeslot_id = array_push($timeslot_val, $value['timeslot_id']);
-                $start = date('g:ia', strtotime($value['timeslot_start_time']));
-                $end =  date('g:ia', strtotime($value['timeslot_end_time']));
-                $orders =  $value['timeslot_maximum_orders'];
-                echo '<div class="one_slot">';
-                echo '<li>'. $start .' - '. $end .'</li>';
-                echo '<li><span class="timeslot_orders">'.$orders.'</span></li>';
-                echo '</div>';
+            <ul style="margin-left: 0px;padding: 8px 13px;">
+                <?php
+                $sun = \common\models\VendorWorkingTiming::findAll(['vendor_id'=>$model->vendor_id,'working_day'=>'Saturday']);
+                foreach ($sun as $key => $value) {
+                    $start = date('g:ia', strtotime($value['working_start_time']));
+                    $end =  date('g:ia', strtotime($value['working_end_time']));
+                    echo '<li>'. $start .' - '. $end .'</li>';
                 } ?>
             </ul>
         </div>

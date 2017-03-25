@@ -1,9 +1,6 @@
 <?php
 
 use yii\db\Migration;
-use common\models\VendorItemMenu;
-use common\models\SuborderItemMenu;
-use common\models\VendorItemMenuItem;
 
 class m170131_090237_item_menu_addons extends Migration
 {
@@ -11,14 +8,13 @@ class m170131_090237_item_menu_addons extends Migration
     {
         // menu_type = addons /options 
 
-        $this->addColumn('whitebook_vendor_item_menu', 'menu_type', "ENUM('addons', 'options') AFTER menu_name_ar");
-        $this->addColumn('whitebook_suborder_item_menu', 'menu_type', "ENUM('addons', 'options') AFTER menu_name_ar");
+        $this->addColumn('{{%vendor_item_menu}}', 'menu_type', "ENUM('addons', 'options') AFTER menu_name_ar");
+        $this->addColumn('{{%suborder_item_menu}}', 'menu_type', "ENUM('addons', 'options') AFTER menu_name_ar");
 
-        VendorItemMenu::updateAll(['menu_type' => 'options']);
-        SuborderItemMenu::updateAll(['menu_type' => 'options']);
-
+        Yii::$app->db->createCommand('update {{%vendor_item_menu}} set menu_type="options"')->execute();
+        
         // options will not have price 
 
-        VendorItemMenuItem::updateAll(['price' => 0]);
+        Yii::$app->db->createCommand('update {{%vendor_item_menu_item}} set price="0"')->execute();
     }
 }

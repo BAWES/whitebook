@@ -15,7 +15,7 @@ $(function() {
 	    {
 	    	$error += '<p><i class="fa fa-exclamation"></i> Please add item description - arabic.</p>';
 	    }
-	    
+
 	    if($error) {
 
 		    e.preventDefault();

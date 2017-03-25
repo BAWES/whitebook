@@ -21,6 +21,8 @@ return [
         'user' => [
             'identityClass' => 'common\models\Customer',
             'enableAutoLogin' => true,
+            'on '.\yii\web\User::EVENT_BEFORE_LOGIN => ['common\models\Customer', 'handleBeforeLogin'],
+
         ],
         'session' => [
             'name' => 'app-frontend',
@@ -52,6 +54,9 @@ return [
             // Url Rules for Frontend
             'rules' => [
                   '' => 'site/index',
+                  'payment/<token:[0-9]+>' => 'payment/index',
+                  'payment/tap' => 'payment/tap/index',
+                  'payment/cod' => 'payment/cod/index',
                   'my-events' => 'events/index',
                   'things-i-like' => 'things-i-like/index',
                   'themes' => 'themes/index',

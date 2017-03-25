@@ -5,8 +5,8 @@ $action = Yii::$app->controller->action->id;
 ?>
 <div class="col-md-2 hidde_res">
     <ul class="nav nav-pills nav-stacked side-bar-menu">
-        <li role="presentation" class="<?=($cntrl == 'orders' && (($action == 'index') || ($action == 'view'))) ? 'active' : '';?>">
-            <?=\yii\bootstrap\Html::a('<i class="fa fa-list-alt" aria-hidden="true"></i> My Order',['/orders/index']) ?>
+        <li role="presentation" class="<?=($cntrl == 'booking' && (($action == 'index') || ($action == 'view'))) ? 'active' : '';?>">
+            <?=\yii\bootstrap\Html::a('<i class="fa fa-list-alt" aria-hidden="true"></i> My Bookings',['/booking/index']) ?>
         </li>
         <li role="presentation" class="<?=($cntrl == 'users' && (($action == 'account_settings'))) ? 'active' : '';?>">
             <?=\yii\bootstrap\Html::a('<i class="fa fa-user-circle" aria-hidden="true"></i> Account Settings',['/account-settings']) ?>
@@ -14,9 +14,13 @@ $action = Yii::$app->controller->action->id;
         <li role="presentation" class="<?=($cntrl == 'users' && (($action == 'address') || ($action == 'view-address') || ($action == 'edit-address'))) ? 'active' : '';?>">
             <?=\yii\bootstrap\Html::a('<i class="fa fa-address-book-o" aria-hidden="true"></i> Address Book',['/users/address']) ?>
         </li>
+        <?php /*
+                @TODO Removed Event Section
+        ?>
         <li role="presentation" class="<?=($cntrl == 'events' && (($action == 'index') || ($action == 'detail'))) ? 'active' : '';?>">
             <?=\yii\bootstrap\Html::a('<i class="fa fa-calendar" aria-hidden="true"></i> My Events',['/events/index']) ?>
         </li>
+        <?php */ ?>
         <li role="presentation" class="<?=($cntrl == 'things-i-like' && (($action == 'index'))) ? 'active' : '';?>">
             <?=\yii\bootstrap\Html::a('<i class="fa fa-heart-o" aria-hidden="true"></i> Things I like',['/things-i-like/index']) ?>
         </li>

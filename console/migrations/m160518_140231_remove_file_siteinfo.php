@@ -6,9 +6,9 @@ class m160518_140231_remove_file_siteinfo extends Migration
 {
     public function up()
     {
-        $this->dropColumn('whitebook_siteinfo', 'site_logo');
-        $this->dropColumn('whitebook_siteinfo', 'site_favicon');
-        $this->dropColumn('whitebook_siteinfo', 'site_noimage');
+        $this->dropColumn('{{%siteinfo}}', 'site_logo');
+        $this->dropColumn('{{%siteinfo}}', 'site_favicon');
+        $this->dropColumn('{{%siteinfo}}', 'site_noimage');
     }
 
     public function down()

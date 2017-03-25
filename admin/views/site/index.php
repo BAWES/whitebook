@@ -17,59 +17,6 @@ use yii\log\Logger;
 
 $this->title = 'Dashboard';
 ?>
-<div class="row">
-	<div class="col-md-12" style="margin-bottom:20px;">
-		<h1>Recent Activity</h1>
-
-		<?php
-		$logDataProvider = new ActiveDataProvider([
-			'query' => Log::find()->where("category != 'application'")->orderBy("log_time DESC"),
-			'pagination' => [
-				'pageSize' => 10,
-			]
-		]);
-		?>
-		<?= GridView::widget([
-			'dataProvider' => $logDataProvider,
-			'columns' => [
-				[
-					'attribute' => 'Time',
-					'format' => 'raw',
-					'value' => function ($model) {
-						return Yii::$app->formatter->asDatetime(explode('.', $model->log_time)[0]);
-					},
-				],
-				[
-					'attribute' => 'Message',
-					'format' => 'raw',
-					'value' => function ($model) {
-						return $model->message;
-					},
-				],
-				[
-					'attribute' => 'Level',
-					'format' => 'raw',
-					'value' => function ($model) {
-						switch($model->level){
-							case Logger::LEVEL_INFO:
-							return "<div style='text-align:center; background:green; color:white; font-weight:bold;'>Info</div>";
-							break;
-							case Logger::LEVEL_ERROR:
-							return "<div style='text-align:center; background:red; font-weight:bold;'>Error</span></div>";
-							break;
-							case Logger::LEVEL_WARNING:
-							return "<div style='text-align:center; background:yellow; font-weight:bold;'>Warning</div>";
-							break;
-						}
-					},
-				],
-
-				['class' => 'yii\grid\ActionColumn', 'controller' => 'log', 'template' => '{view}'],
-			],
-		]);
-		?>
-	</div>
-</div>
 <!-- BEGIN DASHBOARD TILES -->
 <div class="row">
 	<div class="col-md-4 col-vlg-3 col-sm-6">
@@ -226,7 +173,7 @@ $this->title = 'Dashboard';
 				->count();
 			}
 			$data=array_map('intVal', $h);
-			
+
 			echo Highcharts::widget([
 				'options' => [
 					'credits' => ['enabled' => false],
@@ -278,7 +225,7 @@ $this->title = 'Dashboard';
 				->count();
 			}
 			$deactive=array_map('intVal', $deactive);
-			
+
 			echo  Highcharts::widget([
 				'options' => [
 					'credits' => ['enabled' => false],

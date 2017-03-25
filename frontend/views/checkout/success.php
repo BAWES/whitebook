@@ -7,16 +7,32 @@
 			<h1><?= Yii::t('frontend', 'Success'); ?></h1>
 		</div>
 		<center>
-			<h2><?= Yii::t('frontend', 'Congratulation! Your Order Placed Successfully!') ?></h2>
+			<h2><?= Yii::t('frontend', 'Congratulation! Your Booking Request Sent To Admin Successfully!') ?></h2>
 			<br />
-			<p><?= Yii::t(
-					'frontend', 
-					'Your order ID is #{id}. You can track and view detail of your order in <a href="{order_page}">My Orders</a>. Thank You, for shopping with us.',
-					[
-						'id' => $order_id,
-						'order_page' => $order_page
-					]
-				); ?></p>
+			<p>
+                <?php
+                if (Yii::$app->user->isGuest) {
+                    $booking_page = \yii\helpers\Url::to(['booking/view'],true);
+                    echo Yii::t(
+                        'frontend',
+                        'Product Request has been sent successfully. Your Booking ID {id}. You can track and view detail of your booking in <a href="{booking_page}">Track Bookings</a> using booking Token sent in your email. <br/>Thank You, for shopping with us.',
+                        [
+                            'id' => implode(', ', $arr_booking_id),
+                            'booking_page' => $booking_page
+                        ]
+                    );
+                } else {
+                    $booking_page = \yii\helpers\Url::to(['booking/index'], true);
+                    echo Yii::t(
+                        'frontend',
+                        'Product Request has been sent successfully. Your Booking ID {id}. You can track and view detail of your booking in <a href="{booking_page}">My Bookings</a>. Thank You, for shopping with us.',
+                        [
+                            'id' => implode(', ', $arr_booking_id),
+                            'booking_page' => $booking_page
+                        ]
+                    );
+                }
+                ?></p>
 
 		</center>
 		<br />

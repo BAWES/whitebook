@@ -1,8 +1,10 @@
 
 function deliveryTimeSlotCart(date){
     var myDate = new Date()
+    
     time = myDate.getHours()+':'+myDate.getMinutes()+':'+myDate.getSeconds(),
         currentDate = myDate.getDate()+ '-' +("0" + (myDate.getMonth() + 1)).slice(-2)+ '-' +myDate.getFullYear();
+
     $.ajax({
         type: 'POST',
         url: getdeliverytimeslot_url,
@@ -11,7 +13,7 @@ function deliveryTimeSlotCart(date){
         {
             if ($.trim(data) == 0) {
                 $('.timeslot_id_div').show();
-                $('.timeslot_id_div .text').html('Delivery not available for the selected date');
+                $('.timeslot_id_div .text').html('Item is not available on selected date');
                 $('.timeslot_id_select').hide();
                 $('#timeslot_id').html('');
             } else {
@@ -199,7 +201,10 @@ $(function() {
     });
 });
 
-$('body').on('click','.btn-cart-change',function(){
+$(document).delegate('.btn-cart-change', 'click', function(){
+
+    $('.cart-update-error-msg').hide();    
+
     $.ajax({
         type: 'POST',
         url: update_cart_url,
@@ -218,9 +223,11 @@ $('body').on('click','.btn-cart-change',function(){
                     });
                 });
 
+                $('.cart-update-error-msg').show();
             }
         }
     });
+
     return false;
 });
 
@@ -242,3 +249,13 @@ $('.fa-edit').click(function(){
         }
     });
 });
+
+/*
+jQuery(document).delegate('#cart-form', 'submit', function(e) {
+
+    if (isGuest) {
+        show_login_modal(-2);
+        $('#myModal').modal('show');
+        e.preventDefault();
+    }
+});*/

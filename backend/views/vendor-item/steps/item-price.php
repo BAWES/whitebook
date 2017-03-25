@@ -65,6 +65,10 @@ $this->params['breadcrumbs'][] = 'Update';
 
 				<?= $form->field($model, 'item_price_per_unit')->textInput(['maxlength' => 128]); ?>
 
+                <?= $form->field($model, 'item_base_price')->textInput(['maxlength' => 128]); ?>
+
+				<?= $form->field($model, 'minimum_increment'); ?>
+				
 				<?= $form->field($model, 'min_order_amount'); ?>
 
 				<?= $form->field($model, 'item_price_description')->textarea([
@@ -111,13 +115,12 @@ $this->params['breadcrumbs'][] = 'Update';
 				
 			<fieldset>
 				<legend>Inventory</legend>
-
 				<?= $form->field($model, 'type_id')
 						->dropDownList($itemtype, ['prompt'=>'Select...', 'id' => 'vendoritem-type_id']) ?>
 
 				<?= $form->field($model, 'quantity_label')->radioList([
 						'Quantity' => 'Quantity',
-						'Serve' => 'Serve'
+						'Guests' => 'Guests'
 					]); ?>
 
 				<?= $form->field($model, 'item_minimum_quantity_to_order')
@@ -127,10 +130,6 @@ $this->params['breadcrumbs'][] = 'Update';
 				<?= $form->field($model, 'item_default_capacity')
 						->label('Maximum quantity ordered per day '.Html::tag('span', '*',['class'=>'required mandatory']))
 						->textInput(['maxlength' => 128, 'id' => 'vendoritem-item_default_capacity']); ?>
-
-				<?= $form->field($model, 'item_amount_in_stock')
-						->label('Item # of stock '.Html::tag('span', '*',['class'=>'required mandatory']))
-						->textInput(['maxlength' => 128, 'id' => 'vendoritem-item_amount_in_stock']); ?>
 
 				<?= $form->field($model, 'item_for_sale')->dropDownList(['Yes'=>'Yes', 'No'=>'No'], 
 							['id' => 'vendoritem-item_for_sale']) ?>
@@ -168,4 +167,4 @@ $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depe
 
 $this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.21", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_steps/price.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_steps/price.js?v=1.5", ['depends' => [\yii\web\JqueryAsset::className()]]);

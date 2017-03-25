@@ -55,7 +55,9 @@ currency: 'USD'
 <!-- Content start -->
 <section id="content_section">
 
-<?php if (!Yii::$app->user->isGuest) { ?>
+<?php
+/* @TODO Removed Event Section
+if (!Yii::$app->user->isGuest) { ?>
     <br />
     <div id="event_slider_wrapper">
         <div class="container paddng0">
@@ -63,13 +65,16 @@ currency: 'USD'
         </div>
     </div>
     <br />
-<?php } ?>
+<?php } */ ?>
 
 <div class="container_plan">
 
 <div class="container_common">
 
-<?php if (Yii::$app->user->isGuest) { ?>
+<?php
+/*
+@TODO Removed Event Section
+if (Yii::$app->user->isGuest) { ?>
 <span class="first_events">
     <?= Yii::t('frontend', 'My Events'); ?>
 </span>
@@ -82,7 +87,7 @@ currency: 'USD'
 </div>
 <br />
 <br />
-<?php } ?>
+<?php } */ ?>
 
 <!-- Events slider end -->
 <!-- hide temporary
@@ -201,6 +206,17 @@ if (!empty($feature_group_sql_result)) {
 
                         foreach ($feature_group_sql_result as $product_val) {
 
+                            if (
+                                $product_val['item_approved'] == 'Yes' &&
+                                $product_val['trash'] == 'Default' &&
+                                $product_val['item_status'] == 'Active' &&
+                                $product_val['item_for_sale'] == 'Yes'
+                            ) {
+                                $AvailableStock = true;
+                            } else {
+                                $AvailableStock = false;
+                            }
+
                             $image_row = Image::find()->select(['image_path'])
                                 ->where(['item_id' => $product_val['item_id']])
                                 ->orderby(['vendorimage_sort_order'=>SORT_ASC])
@@ -221,9 +237,13 @@ if (!empty($feature_group_sql_result)) {
 
                             ?>
                             <div class="item" data-id="<?= $product_val['item_id'] ?>">
+                                <?php if (!$AvailableStock) { ?>
+                                    <img src="<?php echo Url::to("@web/images/sold-out.png");?>" class="sold-out">
+                                <?php } ?>
                                 <div class="events_items fetu_product_list index_redirect" data-hr='<?= $item_url ?>'>
 
                                 <div class="hover_events">
+                                    <?php /* @TODO Removed Event Section
                                     <div class="pluse_cont">
                                         <?php if(Yii::$app->user->isGuest) { ?>
                                             <a role="button" class="" data-toggle="modal"  onclick="show_login_modal(<?php echo $product_val['item_id'];?>);" data-target="#myModal" title="<?php echo Yii::t('frontend','Add to Event');?>">
@@ -235,6 +255,7 @@ if (!empty($feature_group_sql_result)) {
                                             </a>
                                         <?php } ?>
                                     </div>
+                                */ ?>
 
                                     <?php if(Yii::$app->user->isGuest) { ?>
                                         <div class="faver_icons">
@@ -264,9 +285,20 @@ if (!empty($feature_group_sql_result)) {
                                     <?php if($product_val['item_how_long_to_make'] > 0) { ?>
                                     <div class="callout-container" style="bottom: 10px;">
                                         <span class="callout light">
-                                            <?= Yii::t('frontend', 'Notice: {count} days', [
+                                            <?php 
+
+                                            if($product_val['item_how_long_to_make'] % 24 == 0) 
+                                            { 
+                                                echo Yii::t('frontend', 'Notice: {count} day(s)', [
+                                                    'count' => $product_val['item_how_long_to_make']/24
+                                                ]); 
+                                            }
+                                            else
+                                            {
+                                                echo Yii::t('frontend', 'Notice: {count} hours', [
                                                     'count' => $product_val['item_how_long_to_make']
-                                                ]); ?>
+                                                ]);
+                                            } ?>
                                         </span>
                                     </div>
                                     <?php } ?>
@@ -282,7 +314,6 @@ if (!empty($feature_group_sql_result)) {
                                         </p>
                                     </div>
                                 </a>
-
                                 </div>
                             </div><!-- END .item -->
                         <?php $i++;
@@ -389,7 +420,7 @@ $this->registerJs("
 $this->registerCss("
 .fetu_product_list .index_redirect img {width: 100%;height: 219px;}
 .color-white{color:#fff;}
-.left-offset-25{float: left;width: 15%;}
+.left-offset-25{float: left;width: 8%;}
 .left-div{width:100%;position:absolute;bottom: 1px;padding:13px;z-index: 99;}
 .date-div{padding-right: 0px; margin-bottom: 13px;}
 .black-overlay{width:100%;background-color: #000;position:absolute;bottom: 1px;padding: 42px;opacity: 0.69}
@@ -453,7 +484,9 @@ $this->registerCss("
 .mobile-search-enable .border-top-yellow{
     min-height:63px;
 }
-
+#event-time .btn {
+    padding: 11px 12px;
+}
 ");?>
 <!-- Hide BG FOR EVENT SLIDER
  VIDEO PLAY HOME END -->

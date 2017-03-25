@@ -5,9 +5,19 @@ use yii\widgets\Menu;
 use admin\models\VendorItem;
 use admin\models\AccessControlList;
 use common\models\VendorDraftItem;
+use common\models\Booking;
+use common\models\VendorDraft;
+
+$draft_vendor_count = VendorDraft::find()
+	->where(['is_ready' => 1])
+	->count();
 
 $draft_item_count = VendorDraftItem::find()
 	->where(['is_ready' => 1])
+	->count();
+
+$booking_request_count = Booking::find()
+	->where(['booking_status' => Booking::STATUS_PENDING])
 	->count();
 
 ?>
@@ -25,7 +35,6 @@ $draft_item_count = VendorDraftItem::find()
 	<?php } ?>
 
 	<p class="menu-title">NAVIGATION</p>
-
 	<?= \admin\widgets\MenuExtended::widget([
 	    'items' => [
 	        [	
@@ -33,12 +42,28 @@ $draft_item_count = VendorDraftItem::find()
 	        	'url' => ['site/index']
 	        ],
 	        [	
-	        	'label' => '<i class="glyphicon glyphicon-send"></i><span class="title">Draft Item</span><span class="draft_item_count">'.$draft_item_count.'</span>', 
+	        	'label' => '<i class="glyphicon glyphicon-send"></i><span class="title">Profile Approvals</span><span class="draft_item_count">'.$draft_vendor_count.'</span>', 
+	        	'url' => ['vendor-draft/index'],
+	        ],
+	        [	
+	        	'label' => '<i class="glyphicon glyphicon-send"></i><span class="title">Item Approvals</span><span class="draft_item_count">'.$draft_item_count.'</span>', 
 	        	'url' => ['vendor-draft-item/index'],
 	        ],
 	        [	
-	        	'label' => '<i class="icon-custom-extra"></i><span class="title">Order</span>', 
-	        	'url' => ['order/index'],
+	        	'label' => '<i class="glyphicon glyphicon-send"></i><span class="title">Booking Requests</span><span class="draft_item_count">'.$booking_request_count.'</span>', 
+	        	'url' => ['booking-request/index'],
+	        ],
+	        [	
+	        	'label' => '<i class="icon-custom-extra"></i><span class="title">Booking</span>', 
+	        	'url' => ['booking/index'],
+	        ],
+	        [	
+	        	'label' => '<i class="fa fa-money"></i><span class="title">Vendor Payment</span>',
+	        	'url' => ['vendor-payment/index'],
+	        ],
+	        [	
+	        	'label' => '<i class="fa fa-money"></i><span class="title">Vendor Payable</span>',
+	        	'url' => ['vendor-payable/index'],
 	        ],
 	        [
 	        	'label' => '<i class="fa fa-university"></i><span class="title">General Settings</span>',
@@ -85,6 +110,7 @@ $draft_item_count = VendorDraftItem::find()
 				'items' => [
 					['label' => 'Manage Vendor', 'url' => ['vendor/index']],
 					['label' => 'Manage Vendor Item', 'url' => ['vendor-item/index']],
+					['label' => 'Item Inventor', 'url' => ['vendor-item/item-inventory']],
 				]
 			],
 			[
@@ -114,7 +140,7 @@ $draft_item_count = VendorDraftItem::find()
 				'options'=>['class'=>'dropdown'],
 				'template' => '<a href="javascript:;">{label}<span class="arrow"></span></a>',
 				'items' => [
-					['label' => 'Vendor packages', 'url' => ['report/package']],
+					//['label' => 'Vendor packages', 'url' => ['report/package']],
 					['label' => 'Vendor commission', 'url' => ['report/commission']]
 				]
 			],

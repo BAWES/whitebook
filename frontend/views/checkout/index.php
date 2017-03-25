@@ -2,8 +2,14 @@
 
 use yii\helpers\Url;
 use yii\web\view;
+
 $this->title = Yii::t('frontend', 'Checkout | Whitebook'); 
 
+if(Yii::$app->user->isGuest) {
+    $step_width = 'col-xs-4';
+}else{
+    $step_width = 'col-xs-6';
+}
 ?>
 
 <section id="inner_pages_white_back">
@@ -14,7 +20,20 @@ $this->title = Yii::t('frontend', 'Checkout | Whitebook');
 		</div>
 
 		<div class="lead text-center row checkout-wizard">
-            <div id="ar-step-address" class="col-xs-4 checkout-step text-muted" data-checkout-step="1">
+
+            <?php if(Yii::$app->user->isGuest) { ?>
+            <div id="ar-step-login" class="<?= $step_width ?> checkout-step text-muted" data-checkout-step="1">
+                <div class="progress"><div class="progress-bar"></div></div>
+                <div class="glyphicon-stack">
+                    <i class="glyphicon glyphicon-user"></i>
+                </div>
+                <div class="glyphicon-title">
+                    <span><?= Yii::t('frontend', 'Login') ?></span>
+                </div>
+            </div>
+            <?php } ?>
+            
+            <div id="ar-step-address" class="<?= $step_width ?> checkout-step text-muted" data-checkout-step="2">
                 <div class="progress"><div class="progress-bar"></div></div>
                 <div class="glyphicon-stack">
                     <i class="glyphicon glyphicon-map-marker"></i>
@@ -23,22 +42,13 @@ $this->title = Yii::t('frontend', 'Checkout | Whitebook');
                     <span><?= Yii::t('frontend', 'Address') ?></span>
                 </div>
             </div>
-            <div id="ar-step-payment" class="col-xs-4 checkout-step text-muted" data-checkout-step="2">
-                <div class="progress"><div class="progress-bar"></div></div>
-                <div class="glyphicon-stack">
-                    <i class="glyphicon glyphicon-credit-card"></i>
-                </div>
-                <div class="glyphicon-title">
-                    <span><?= Yii::t('frontend', 'Payment') ?></span>
-                </div>
-            </div>
-            <div id="ar-step-account" class="col-xs-4 checkout-step text-primary" data-checkout-step="3">
+            <div id="ar-step-payment" class="<?= $step_width ?> checkout-step text-muted" data-checkout-step="3">
                 <div class="progress"><div class="progress-bar"></div></div>
                 <div class="glyphicon-stack">
                     <i class="glyphicon glyphicon-list-alt"></i>
                 </div>
                 <div class="glyphicon-title">
-                    <span><?= Yii::t('frontend', 'Confirm') ?></span>
+                    <span><?= Yii::t('frontend', 'Confirm Request') ?></span>
                 </div>
             </div>
         </div>
@@ -56,9 +66,11 @@ $this->title = Yii::t('frontend', 'Checkout | Whitebook');
 
 $this->registerJs("
 
-	var cart_url = '".Url::to(['cart/index'])."'; 
+    var login_url = '".Url::to(['checkout/login'])."'; 
+    var cart_url = '".Url::to(['cart/index'])."'; 
     var address_url = '".Url::to(['checkout/address'])."'; 
 	var save_address_url = '".Url::to(['checkout/save-address'])."'; 
+    var save_guest_address_url = '".Url::to(['checkout/save-guest-address'])."'; 
 	var payment_url = '".Url::to(['checkout/payment'])."'; 
 	var save_payment_url = '".Url::to(['checkout/save-payment'])."'; 
 	var confirm_url = '".Url::to(['checkout/confirm'])."'; 
@@ -70,4 +82,4 @@ $this->registerJs("
 
 ", View::POS_HEAD);
 
-$this->registerJsFile('@web/js/checkout.js?v=1.2', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/checkout.js?v=1.5', ['depends' => [\yii\web\JqueryAsset::className()]]);

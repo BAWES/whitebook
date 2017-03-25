@@ -47,7 +47,7 @@ class CustomerAddress extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['country_id', 'city_id'], 'required'],
+            [['country_id', 'city_id', 'address_type_id'], 'required'],
             [['customer_id', 'address_type_id', 'country_id', 'city_id', 'area_id', 'created_by', 'modified_by'], 'integer'],
             [['address_archived', 'trash'], 'string'],
             [['customer', 'address_name', 'address_data', 'created_datetime', 'modified_datetime'], 'safe']
@@ -89,7 +89,7 @@ class CustomerAddress extends \yii\db\ActiveRecord
             'city_id' => Yii::t('frontend', 'Governorate'),
             'area_id' => Yii::t('frontend', 'Area name'),
             'address_archived' => Yii::t('frontend', 'Delete'),
-            'address_data' =>  Yii::t('frontend', 'Address Data'),
+            'address_data' =>  Yii::t('frontend', 'Other direction or note'),
             'created_by' => Yii::t('frontend', 'Created By'),
             'modified_by' => Yii::t('frontend', 'Modified By'),
             'created_datetime' => Yii::t('frontend', 'Created Datetime'),

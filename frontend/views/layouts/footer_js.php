@@ -17,6 +17,7 @@ $this->registerJs("
     var reg_email = '".Yii::t('frontend','Enter registered email')."';
     var email_check = '".Url::toRoute('/users/email_check')."';
     var signup = '".Url::toRoute('/users/signup')."';
+    var vendor_request_url = '".Url::toRoute('/users/vendor-request')."';
     var create_event = '".Url::toRoute('/events/create-event')."';
     var event_exist = '".Yii::t('frontend','Same event name already exists')."';
     var update_event = '".Url::toRoute('/events/update-event')."';

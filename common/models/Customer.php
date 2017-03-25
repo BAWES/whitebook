@@ -6,6 +6,7 @@ use Yii;
 use yii\web\IdentityInterface;
 use common\models\CustomerAddress;
 use common\models\CustomerCart;
+use common\models\Booking;
 
 /**
 * This is the model class for table "whitebook_customer".
@@ -135,9 +136,9 @@ class Customer extends \yii\db\ActiveRecord implements IdentityInterface
     /**
     * @return \yii\db\ActiveQuery
     */
-    public function getOrders()
+    public function getBookings()
     {
-        return $this->hasMany(Order::className(), ['customer_id' => 'customer_id']);
+        return $this->hasMany(Booking::className(), ['customer_id' => 'customer_id']);
     }
 
    /*
@@ -268,5 +269,58 @@ class Customer extends \yii\db\ActiveRecord implements IdentityInterface
     public function getCustomerCart()
     {
         return $this->hasMany(CustomerCart::className(), ['customer_id' => 'customer_id']);
+    }
+
+    /*
+     *  method return current temp session user id
+     */
+    public static function currentUser($newIfNotExist = 1){
+        return self::getSessionUser($newIfNotExist);
+    }
+
+    /*
+     * method return current temp user session id
+     * if exist if not then regenerate and return
+     */
+
+    public static function getSessionUser($newIfNotExist = 1) {
+        if (Yii::$app->session->has('_user')) {
+            return Yii::$app->session->get('_user');
+        } else if ($newIfNotExist) {
+            $SessionUserID = self::getSessionCartID();
+            Yii::$app->session->set('_user', $SessionUserID);
+            return Yii::$app->session->get('_user');
+        }
+    }
+
+    /*
+     * method to destroy session user id
+     */
+    public static function destroySessionUser() {
+        if (Yii::$app->session->has('_user')) {
+            Yii::$app->session->remove('_user');
+        }
+    }
+
+    /*
+     * method to get generate unique session id
+     */
+    public static function getSessionCartID() {
+        $unique = Yii::$app->getSecurity()->generateRandomString(13);
+        return $unique.strtotime('now');
+    }
+
+    /*
+     * event call before login and store data logged in user
+     */
+    public static function handleBeforeLogin($event)
+    {
+        if (self::getSessionUser()) {
+            $sessionCartItems = CustomerCart::find()->where(['cart_session_id'=>self::getSessionUser()])->exists();
+            if ($sessionCartItems) {
+                return CustomerCart::updateAll(['created_by'=>$event->identity->customer_id,'customer_id'=>$event->identity->customer_id,'cart_session_id'=>''],['cart_session_id'=>self::getSessionUser()]);
+                self::destroySessionUser();
+            }
+        }
     }
 }

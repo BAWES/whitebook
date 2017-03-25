@@ -107,7 +107,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			<tr>
 				<td><?= date('Y-m-d', strtotime($row['date_start'])) ?></td>
 				<td><?= date('Y-m-d', strtotime($row['date_end'])) ?></td>
-				<td><?= $row['suborder_count'] ?></td>
+				<td><?= $row['count'] ?></td>
 				<td><?= $row['commission'] ?> KWD</td>
 			</tr>
 			<?php } ?>

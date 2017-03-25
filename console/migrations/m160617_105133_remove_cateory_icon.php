@@ -6,7 +6,7 @@ class m160617_105133_remove_cateory_icon extends Migration
 {
     public function up()
     {
-        $this->dropColumn('whitebook_category','category_icon');
+        $this->dropColumn('{{%category}}','category_icon');
     }
 
     public function down()

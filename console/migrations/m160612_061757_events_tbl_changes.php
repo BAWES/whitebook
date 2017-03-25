@@ -6,7 +6,7 @@ class m160612_061757_events_tbl_changes extends Migration
 {
     public function up()
     {
-         $this->dropColumn('whitebook_events', 'created_date');
+         $this->dropColumn('{{%events}}', 'created_date');
     }
 
     public function down()

@@ -8,6 +8,7 @@ use yii\helpers\ArrayHelper;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\helpers\Url;
 use common\models\Vendor;
 use common\models\VendorDraftItem;
 use common\models\VendorItemToPackage;
@@ -22,20 +23,23 @@ use common\models\VendorItemToPackage;
 * @property string $item_name
 * @property string $item_description
 * @property string $item_additional_info
-* @property integer $item_amount_in_stock
 * @property integer $item_default_capacity
 * @property string $item_price_per_unit
 * @property string $item_price_description
 * @property string $item_for_sale
+* @property string $item_base_price
 * @property integer $item_how_long_to_make
 * @property integer $item_minimum_quantity_to_order
 * @property string $item_archived
 * @property string $item_approved
+* @property integer $version
+* @property integer $hide_from_admin
 * @property integer $created_by
 * @property integer $modified_by
 * @property string $created_datetime
 * @property string $modified_datetime
 * @property string $trash
+* @property string $slug
 *
 * @property CustomerCart[] $customerCarts
 * @property EventItemLink[] $eventItemLinks
@@ -80,13 +84,6 @@ class VendorItem extends \yii\db\ActiveRecord
     {
         return [
             [
-                'class' => SluggableBehavior::className(),
-                'slugAttribute' => 'slug',
-                'attribute' => 'item_name',
-                'immutable' => true,
-                'ensureUnique'=>true,
-            ],
-            [
                 'class' => BlameableBehavior::className(),
                 'createdByAttribute' => 'created_by',
                 'updatedByAttribute' => 'modified_by',
@@ -108,11 +105,11 @@ class VendorItem extends \yii\db\ActiveRecord
         return [
             [['type_id', 'vendor_id', 'item_name', 'item_name_ar'], 'required'],
             
-            [['type_id', 'vendor_id', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
+            [['minimum_increment', 'type_id', 'vendor_id', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
             
-            [['item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_price_description','item_price_description_ar', 'item_for_sale', 'item_approved', 'trash', 'quantity_label'], 'string'],
+            [['item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_price_description','item_price_description_ar', 'item_for_sale', 'item_approved', 'trash', 'quantity_label','slug'], 'string'],
             
-            [['item_price_per_unit', 'min_order_amount'], 'number'],
+            [['item_price_per_unit', 'min_order_amount','item_base_price'], 'number'],
             
             [['created_datetime', 'modified_datetime','item_status','image_path', 'allow_special_request', 'have_female_service'], 'safe'],
 
@@ -123,21 +120,9 @@ class VendorItem extends \yii\db\ActiveRecord
             [['image_path'],'image', 'extensions' => 'png,jpg,jpeg','maxFiles'=>20],
 
             // set scenario for vendor item add functionality
-            [['type_id', 'item_description','item_description_ar', 'item_amount_in_stock', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order','item_name', 'item_name_ar', 'item_for_sale', 'item_price_per_unit'], 'required', 'on'=>'VendorItemAdd'],
+            [['type_id', 'item_description','item_description_ar', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order','item_name', 'item_name_ar', 'item_for_sale', 'item_price_per_unit'], 'required', 'on'=>'VendorItemAdd'],
         ];
     }
-
-    public function scenarios()
-    {
-        $scenarios = parent::scenarios();
-        $scenarios['VendorItemAdd'] = ['type_id', 'item_description','item_description_ar', 'item_additional_info','item_additional_info_ar', 'item_amount_in_stock',
-        'item_default_capacity', 'item_price_description',
-            'item_price_description_ar', 'item_how_long_to_make',
-        'item_minimum_quantity_to_order','item_name','item_name_ar',
-        'item_for_sale','item_price_per_unit'];
-        return $scenarios;
-    }
-
 
     /**
     * @inheritdoc
@@ -155,9 +140,9 @@ class VendorItem extends \yii\db\ActiveRecord
             'item_description_ar' => 'Item Description - Arabic',
             'item_additional_info' => 'Item Additional Info',
             'item_additional_info_ar' => 'Item Additional Info - Arabic',
-            'item_amount_in_stock' => 'Item Number of Stock',
             'item_default_capacity' => 'Maximum quantity ordered per day',
-            'item_price_per_unit' => 'Price',
+            'item_price_per_unit' => 'Increment Price',
+            'item_base_price' => 'Base Price',
             'item_price_description' => 'Item Price Description',
             'item_price_description_ar' => 'Item Price Description - Arabic',
             'item_for_sale' => 'Shop - Available for sale',
@@ -180,7 +165,8 @@ class VendorItem extends \yii\db\ActiveRecord
             'requirements_ar' => 'Requirements - Arabic',
             'whats_include' => 'What\'s include?', 
             'whats_include_ar' => 'What\'s include? - Arabic', 
-            'min_order_amount' => 'Min. Order KD'
+            'min_order_amount' => 'Min. Order KD',
+            'slug' => 'slug'
         ];
     }
 
@@ -206,14 +192,6 @@ class VendorItem extends \yii\db\ActiveRecord
     public function getEventItemLinks()
     {
         return $this->hasMany(EventItemLink::className(), ['item_id' => 'item_id']);
-    }
-
-    /**
-    * @return \yii\db\ActiveQuery
-    */
-    public function getSuborderItemPurchases()
-    {
-        return $this->hasMany(SuborderItemPurchase::className(), ['item_id' => 'item_id']);
     }
 
     /**
@@ -445,5 +423,57 @@ class VendorItem extends \yii\db\ActiveRecord
         } else {
             return false;
         }
+    }
+
+    public function getSoldItems($item, $date) {
+
+        $purchased_result = \common\models\Booking::totalPurchasedItem($item->item_id,$date);
+
+        return (int)$purchased_result['purchased'];
+    }
+
+    public function getItemInStock($item, $date) {
+
+        $capacity_exception = VendorItemCapacityException::findOne([
+            'item_id' => $item->item_id,
+            'exception_date' => date('Y-m-d', strtotime($date))
+        ]);
+
+        if($capacity_exception && $capacity_exception->exception_capacity) {
+            $capacity = $capacity_exception->exception_capacity;
+        } else {
+            $capacity = $item->item_default_capacity;
+        }
+        //2) get no of item purchased for selected date
+
+        $purchased_result = \common\models\Booking::totalPurchasedItem($item->item_id,$date);
+
+        if($purchased_result) {
+            $purchased = $purchased_result['purchased'];
+        } else {
+            $purchased = 0;
+        }
+
+        return $capacity - $purchased_result['purchased'];
+    }
+
+    /** 
+     * Notify admin on item update 
+     * @param $item_id 
+     */
+    public static function notifyAdmin($id)
+    {
+        Yii::$app->mailer->htmlLayout = 'layouts/empty';
+        
+        Yii::$app->mailer->compose("admin/item-updated",
+            [
+                "model" => self::findOne($id),
+                "image_1" => Url::to("@web/twb-logo-trans.png", true),
+                "image_2" => Url::to("@web/twb-logo-horiz-white.png", true)
+            ])
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->params['SITE_NAME']])
+            ->setTo(Yii::$app->params['adminEmail'])
+            ->setSubject('Vendor Updated Item #'.$id)
+            ->send();
     }
 }

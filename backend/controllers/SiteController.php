@@ -1,6 +1,8 @@
 <?php
 namespace backend\controllers;
 
+use common\models\Booking;
+use common\models\VendorWorkingTiming;
 use Yii;
 use yii\db\Query;
 use yii\helpers\Security;
@@ -18,6 +20,10 @@ use backend\models\Vendor;
 use backend\models\VendorItem;
 use backend\models\VendorLogin;
 use backend\models\VendorPassword;
+use common\models\VendorDraft;
+use common\models\VendorDraftOrderAlertEmails;
+use common\models\VendorDraftPhoneNo;
+use common\models\VendorDraftCategory;
 
 class SiteController extends Controller
 {
@@ -63,20 +69,19 @@ class SiteController extends Controller
         $monthitemcnt = VendorItem::vendoritemmonthcount($vendor_id);
         $dateitemcnt = VendorItem::vendoritemdatecount($vendor_id);
 
-        $commission_total = Suborder::find()
-            ->where(['vendor_id' => $vendor_id])
-            ->sum('suborder_commission_total');
+        $earning_total = Booking::find()
+            ->where('transaction_id is not NULL')
+            ->andWhere(['vendor_id' => $vendor_id,'booking_status'=>1])
+            ->sum('total_vendor');
 
-        $earning_total = Suborder::find()
-            ->where(['vendor_id' => $vendor_id])
-            ->sum('suborder_vendor_total');
+        $vendor = Vendor::findOne($vendor_id);
 
         return $this->render('index', [
             'vendoritemcnt' => $vendoritemcnt,
             'monthitemcnt' => $monthitemcnt,
             'dateitemcnt' => $dateitemcnt,
-            'commission_total' => number_format($commission_total, 3).' KD',
-            'earning_total' => number_format($earning_total, 3).' KD'
+            'earning_total' => number_format($earning_total, 3).' KD',
+            'vendor_payable' => number_format($vendor->vendor_payable, 3).' KD'
         ]);
     }
 
@@ -228,15 +233,19 @@ class SiteController extends Controller
 
         $vendor_id = Yii::$app->user->getId();
 
-        $model = Vendor::findOne($vendor_id);
-        $model->scenario = 'vendorprofile';
-        $base = Yii::$app->basePath;
-        $len = rand(1,1000);
+        $model = VendorDraft::findOne(['vendor_id' => $vendor_id]);
 
-        $v_category = VendorCategory::find()
+        if(!$model) 
+        {
+            $model = VendorDraft::createDraft($vendor_id);
+        }
+
+        //$model->scenario = 'vendorprofile';
+
+        $v_category = VendorDraftCategory::find()
             ->select('{{%category}}.category_name')
-            ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_category}}.category_id')
-            ->where(['{{%vendor_category}}.vendor_id' => $vendor_id])
+            ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_draft_category}}.category_id')
+            ->where(['{{%vendor_draft_category}}.vendor_draft_id' => $model->vendor_draft_id])
             ->asArray()
             ->all();
 
@@ -250,35 +259,12 @@ class SiteController extends Controller
         $exist_logo_image = $model['vendor_logo_path'];
 
         // Current Phone numbers
-        $vendor_contact_number = explode(',',$model['vendor_contact_number']);
+        $vendor_contact_number = explode(',', $model['vendor_contact_number']);
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
-            $vendor_day_off = Yii::$app->request->post('vendor_day_off');
-
-            if(is_array($vendor_day_off)) {
-                $model->day_off = implode(',', $vendor_day_off);    
-            }else{
-                $model->day_off = '';
-            }
-            
-            $vendor = Yii::$app->request->post('Vendor');
+            $vendor = Yii::$app->request->post('VendorDraft');
             $model->vendor_contact_number = implode(',', $vendor['vendor_contact_number']);
-
-            //remove old alert emails 
-            VendorOrderAlertEmails::deleteAll(['vendor_id' => $vendor_id]);
-
-            //save vendor order alert email 
-            $vendor_order_alert_emails = Yii::$app->request->post('vendor_order_alert_emails');
-
-            if($vendor_order_alert_emails) {
-                foreach ($vendor_order_alert_emails as $key => $value) {
-                    $email = new VendorOrderAlertEmails;
-                    $email->vendor_id = $vendor_id;
-                    $email->email_address = $value;
-                    $email->save();
-                }
-            }
 
             if(Yii::$app->request->post('image')) {
 
@@ -303,44 +289,58 @@ class SiteController extends Controller
                 );
 
                 $model->vendor_logo_path = $image_name . $image_extension;             
-            }          
-            
-            if($model->save()) {
-
-                //public phone 
-                VendorPhoneNo::deleteAll(['vendor_id' => $model->vendor_id]);
-
-                $phones = Yii::$app->request->post('phone');
-
-                if(!$phones) {
-                    $phones = [];
-                }
-
-                foreach ($phones as $key => $value) {
-                   $vp = new VendorPhoneNo;
-                   $vp->vendor_id = $model->vendor_id;
-                   $vp->phone_no = $value['phone_no'];
-                   $vp->type = $value['type'];
-                   $vp->save();
-                }
-
-                $v_name = $model['vendor_name'];
-                
-                Yii::info('[Vendor Profile Updated] Vendor updated profile information', __METHOD__);
-                Yii::$app->session->setFlash('success', "Successfully updated your profile!");
-                return $this->redirect(['index']);
-
-            } else {
-                Yii::$app->session->setFlash('danger', "Something went wrong!");
-                return $this->render('profile', ['model' => $model]);
             }
-        }
+            
+            $model->is_ready = 1;
+            $model->save();
 
-        $day_off = explode(',', $model->day_off);
+            //remove old alert emails 
+
+            VendorDraftOrderAlertEmails::deleteAll(['vendor_draft_id' => $model->vendor_draft_id]);
+
+            //save vendor order alert email 
+            
+            $vendor_order_alert_emails = Yii::$app->request->post('vendor_order_alert_emails');
+
+            if($vendor_order_alert_emails) {
+                foreach ($vendor_order_alert_emails as $key => $value) {
+                    $email = new VendorDraftOrderAlertEmails;
+                    $email->vendor_draft_id = $model->vendor_draft_id;
+                    $email->email_address = $value;
+                    $email->save();
+                }
+            }
+
+            //public phone 
+
+            VendorDraftPhoneNo::deleteAll(['vendor_draft_id' => $model->vendor_draft_id]);
+
+            $phones = Yii::$app->request->post('phone');
+
+            if(!$phones) {
+                $phones = [];
+            }
+
+            foreach ($phones as $key => $value) {
+               $vp = new VendorDraftPhoneNo;
+               $vp->vendor_draft_id = $model->vendor_draft_id;
+               $vp->phone_no = $value['phone_no'];
+               $vp->type = $value['type'];
+               $vp->save();
+            }
+
+            $v_name = $model['vendor_name'];
+            
+            Yii::info('[Vendor Profile Updated] Vendor updated profile information', __METHOD__);
+            Yii::$app->session->setFlash('success', "Successfully updated your profile!");
+            
+            return $this->redirect(['index']);        
+        } 
 
         //get vendor order notification email address 
-        $vendor_order_alert_emails = VendorOrderAlertEmails::find()
-            ->where(['vendor_id' => $vendor_id])
+
+        $vendor_order_alert_emails = VendorDraftOrderAlertEmails::find()
+            ->where(['vendor_draft_id' => $model->vendor_draft_id])
             ->all();
 
         return $this->render('profile', [
@@ -348,8 +348,7 @@ class SiteController extends Controller
             'vendor_order_alert_emails' => $vendor_order_alert_emails,
             'vendor_contact_number' => $vendor_contact_number,
             'vendor_categories' => $vendor_categories,
-            'day_off' => $day_off,
-            'phones' => VendorPhoneNo::findAll(['vendor_id' => $model->vendor_id])
+            'phones' => VendorDraftPhoneNo::findAll(['vendor_draft_id' => $model->vendor_draft_id]),
         ]);
     }
 
