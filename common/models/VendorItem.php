@@ -39,6 +39,7 @@ use common\models\VendorItemToPackage;
 * @property string $created_datetime
 * @property string $modified_datetime
 * @property string $trash
+* @property string $slug
 *
 * @property CustomerCart[] $customerCarts
 * @property EventItemLink[] $eventItemLinks
@@ -83,13 +84,6 @@ class VendorItem extends \yii\db\ActiveRecord
     {
         return [
             [
-                'class' => SluggableBehavior::className(),
-                'slugAttribute' => 'slug',
-                'attribute' => 'item_name',
-                'immutable' => true,
-                'ensureUnique'=>true,
-            ],
-            [
                 'class' => BlameableBehavior::className(),
                 'createdByAttribute' => 'created_by',
                 'updatedByAttribute' => 'modified_by',
@@ -113,7 +107,7 @@ class VendorItem extends \yii\db\ActiveRecord
             
             [['minimum_increment', 'type_id', 'vendor_id', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
             
-            [['item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_price_description','item_price_description_ar', 'item_for_sale', 'item_approved', 'trash', 'quantity_label'], 'string'],
+            [['item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_price_description','item_price_description_ar', 'item_for_sale', 'item_approved', 'trash', 'quantity_label','slug'], 'string'],
             
             [['item_price_per_unit', 'min_order_amount','item_base_price'], 'number'],
             
@@ -171,7 +165,8 @@ class VendorItem extends \yii\db\ActiveRecord
             'requirements_ar' => 'Requirements - Arabic',
             'whats_include' => 'What\'s include?', 
             'whats_include_ar' => 'What\'s include? - Arabic', 
-            'min_order_amount' => 'Min. Order KD'
+            'min_order_amount' => 'Min. Order KD',
+            'slug' => 'slug'
         ];
     }
 
