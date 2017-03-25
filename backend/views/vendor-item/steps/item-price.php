@@ -115,7 +115,6 @@ $this->params['breadcrumbs'][] = 'Update';
 				
 			<fieldset>
 				<legend>Inventory</legend>
-
 				<?= $form->field($model, 'type_id')
 						->dropDownList($itemtype, ['prompt'=>'Select...', 'id' => 'vendoritem-type_id']) ?>
 
