@@ -255,8 +255,7 @@ class VendorItemController extends Controller
         $model->slug = '';
 
         if($model->load(Yii::$app->request->post()) && $model->save()) {
-
-            //force to generate slug again by removing old slug 
+            //force to generate slug again by removing old slug
             $model->slug = '';
 
             //remove all old category 
@@ -401,6 +400,7 @@ class VendorItemController extends Controller
         $model->scenario = 'ItemPrice';
 
         if($model->load(Yii::$app->request->post()) && $model->save()) {
+
 
             //remove old price chart
             VendorDraftItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
