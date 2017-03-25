@@ -232,7 +232,11 @@ $this->params['breadcrumbs'][] = $model->item_name;
                         [
                             'label' => $vendor_item->item_price_per_unit != $model->item_price_per_unit ? 'ITEM PRICE PER UNIT *' : 'ITEM PRICE PER UNIT',
                             'value' => $model->item_price_per_unit
-                        ]                        
+                        ],
+                        [
+                            'label' => $vendor_item->item_base_price != $model->item_base_price ? 'ITEM BASE PRICE *' : 'ITEM BASE PRICE',
+                            'value' => $model->item_base_price
+                        ]
                   ],
                 ]) ?>
 

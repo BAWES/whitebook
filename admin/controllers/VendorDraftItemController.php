@@ -151,7 +151,7 @@ class VendorDraftItemController extends Controller
         $item->attributes = $attributes;
         $item->item_approved = 'Yes';
         $item->hide_from_admin = 0;
-        $item->update();
+        $item->save(false);
 
         //remove old price table data 
 
