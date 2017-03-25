@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 use common\models\Order;
 use common\models\Vendor;
@@ -20,21 +20,21 @@ $this->title = Yii::t('frontend', 'View Booking | Whitebook');
 
 
         <div class="account_setings_sections">
-            
-            <?php 
 
-                if(!Yii::$app->user->isGuest) 
-                { 
+            <?php
+
+                if(!Yii::$app->user->isGuest)
+                {
                     $class = 'col-md-9 border-left';
 
-                    echo $this->render('/users/_sidebar_menu'); 
-                } 
-                else 
+                    echo $this->render('/users/_sidebar_menu');
+                }
+                else
                 {
                     $class = 'col-md-12';
 
                     echo '<br /><br />';
-                }  
+                }
 
             ?>
 
@@ -79,7 +79,7 @@ $this->title = Yii::t('frontend', 'View Booking | Whitebook');
                             <td>
                                 <?= Yii::t('frontend', 'Transaction ID') ?>: <?= $booking->transaction_id ?>
                             </td>
-                        </tr>    
+                        </tr>
                         <tr>
                             <td>
                                 <?= Yii::t('frontend', 'Order status') ?>: <?=$booking->getStatusName();?>
@@ -106,6 +106,7 @@ $this->title = Yii::t('frontend', 'View Booking | Whitebook');
                             <td align="left"><?= Yii::t('frontend', 'Delivery Address') ?></th>
                             <td aligh="left" class="hidden-xs hidden-sm"><?= Yii::t('frontend', 'Quantity') ?></th>
                             <td align="right" class="hidden-xs hidden-sm"><?= Yii::t('frontend', 'Unit Price') ?></th>
+                            <td align="right" class="hidden-xs hidden-sm"><?= Yii::t('frontend', 'Base Price') ?></th>
                             <td align="right" class="hidden-xs hidden-sm"><?= Yii::t('frontend', 'Total') ?></th>
                         </tr>
                     </thead>
@@ -159,6 +160,10 @@ $this->title = Yii::t('frontend', 'View Booking | Whitebook');
                             <td class="hidden-xs hidden-sm" align="right">
                                 <?= $item->price ?>
                             </td>
+
+                            <td class="hidden-xs hidden-sm" align="right">
+                                <?= ($item->item_base_price != '0.000') ? $item->item_base_price : Yii::t('frontend','Price based <br/>on selection'); ?>
+                            </td>
                             <td class="hidden-xs hidden-sm" align="right">
                                 <?= $item->total ?> KD</th>
                         </tr>
@@ -184,18 +189,18 @@ $this->title = Yii::t('frontend', 'View Booking | Whitebook');
 
                     <!-- for desktop -->
                     <tr class="hidden-xs hidden-sm">
-                        <td align="right" colspan="5"><?=Yii::t('frontend','Sub Total')?></td>
+                        <td align="right" colspan="6"><?=Yii::t('frontend','Sub Total')?></td>
                         <td align="right">
                             <?= CFormatter::format($booking->total_without_delivery) ?>
                         </td>
                     </tr>
                     <tr class="hidden-xs hidden-sm">
-                        <td align="right" colspan="5"><?=Yii::t('frontend','Delivery Charge')?></td>
+                        <td align="right" colspan="6"><?=Yii::t('frontend','Delivery Charge')?></td>
                         <td align="right">
                             <?= CFormatter::format($booking->total_delivery_charge) ?></td>
                     </tr>
                     <tr class="hidden-xs hidden-sm">
-                        <td align="right" colspan="5"><?=Yii::t('frontend','Total')?></td>
+                        <td align="right" colspan="6"><?=Yii::t('frontend','Total')?></td>
                         <td align="right">
                             <?= CFormatter::format($booking->total_with_delivery) ?>
                         </td>

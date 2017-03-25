@@ -237,19 +237,12 @@ class Booking extends \yii\db\ActiveRecord
                 ->one();
 
             if ($price) {
-
                 $price_chart[$item['item_id']]['unit_price'] = $price->pricing_price_per_unit;
-
-            } else if ($item['item']['item_base_price']){ // new base price changes
-
-                $BasePrice = true;
-                $price_chart[$item['item_id']]['unit_price'] = $item['item']['item_base_price'];
-
             } else{
-
                 $price_chart[$item['item_id']]['unit_price'] = $item['item_price_per_unit'];
-
             }
+
+            $price_chart[$item['item_id']]['base_price'] = ($item['item']['item_base_price']) ? $item['item']['item_base_price'] : 0.0;
 
             $menu_items = CustomerCartMenuItem::find()
                 ->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
@@ -296,24 +289,8 @@ class Booking extends \yii\db\ActiveRecord
 
         foreach ($items as $item) {
 
-            if ($BasePrice) { // new base price changes
-
-                if($item['item']['item_minimum_quantity_to_order'] > 0) {
-                    $min_quantity_to_order = $item['item']['item_minimum_quantity_to_order'];
-                }else{
-                    $min_quantity_to_order = 1;
-                }
-
-                if ($min_quantity_to_order == $item['cart_quantity']) {
-                    $total = $item['item']['item_base_price'];
-                } else {
-                    $total = $item['item']['item_base_price'] + ($item['item_price_per_unit'] * ($item['cart_quantity'] - $min_quantity_to_order));
-                }
-                $total += $price_chart[$item['item_id']]['menu_price'];
-            } else {
-                $total = ($price_chart[$item['item_id']]['unit_price'] * $item['cart_quantity']) + $price_chart[$item['item_id']]['menu_price'];
-            }
-
+            $total = $price_chart[$item['item_id']]['base_price']; // base price change
+            $total += ($price_chart[$item['item_id']]['unit_price'] * $item['cart_quantity']) + $price_chart[$item['item_id']]['menu_price'];
             $booking = new Booking;
             $booking->vendor_id = $item['vendor_id'];
             $booking->customer_id = $customer_id;
@@ -337,6 +314,7 @@ class Booking extends \yii\db\ActiveRecord
             $booking_item->delivery_address = $address;
             
             $booking_item->delivery_date = $item['cart_delivery_date'];
+            $booking_item->item_base_price = ($price_chart[$item['item_id']]['base_price']) ? $price_chart[$item['item_id']]['base_price'] : 0.000;
             $booking_item->price = $price_chart[$item['item_id']]['unit_price'];
             $booking_item->quantity = $item['cart_quantity'];
             $booking_item->total = $total;

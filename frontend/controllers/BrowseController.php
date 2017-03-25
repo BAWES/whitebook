@@ -673,12 +673,6 @@ class BrowseController extends BaseController
 
         $total = ($item->item_base_price) ? $item->item_base_price : 0;
 
-        if($item->item_minimum_quantity_to_order > 0) {
-            $min_quantity_to_order = $item->item_minimum_quantity_to_order;
-        }else{
-            $min_quantity_to_order = 1;
-        }
-
         $price_chart = VendorItemPricing::find()
             ->where(['item_id' => $item['item_id'], 'trash' => 'Default'])
             ->andWhere(['<=', 'range_from', Yii::$app->request->post('quantity')])
@@ -692,7 +686,7 @@ class BrowseController extends BaseController
             $unit_price = $item->item_price_per_unit;
         }
 
-        $actual_item_quantity = Yii::$app->request->post('quantity') - $min_quantity_to_order;
+        $actual_item_quantity = Yii::$app->request->post('quantity');
 
         $total += $unit_price * $actual_item_quantity;
 

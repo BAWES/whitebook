@@ -40,6 +40,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        			</span>
 	        		</th>
 	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Unit Price') ?></th>
+	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Base Price') ?></th>
 	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Total') ?></th>
 	        	</tr>
 	        </thead>
@@ -49,7 +50,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        	$sub_total = $delivery_charge = 0;
 
 	        	foreach ($items as $item) {
-                    $BasePrice = false;
+                    $row_total = ($item['item']['item_base_price']) ? $item['item']['item_base_price'] : 0;
 	        		//$menu_items = CustomerCartMenuItem::findAll(['cart_id' => $item['cart_id']]);
 	        		
 	        		$menu_items = CustomerCartMenuItem::find()
@@ -80,30 +81,13 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 
 					if ($price_chart) {
 						$unit_price = $price_chart->pricing_price_per_unit;
-					} else if ($item['item']['item_base_price']){ // new base price changes
-                        $BasePrice = true;
-						$unit_price = $item['item']['item_base_price'];
 					} else {
 					    $unit_price = $item['item_price_per_unit'];
 					}
 
-					if ($BasePrice) { // new base price changes
+                    $actual_item_quantity = $item['cart_quantity'];
 
-                        if($item['item']['item_minimum_quantity_to_order'] > 0) {
-                            $min_quantity_to_order = $item['item']['item_minimum_quantity_to_order'];
-                        }else{
-                            $min_quantity_to_order = 1;
-                        }
-
-                        if ($min_quantity_to_order == $item['cart_quantity']) {
-                            $row_total = $item['item']['item_base_price'];
-                        } else {
-                            $row_total = $item['item']['item_base_price'] + ($item['item_price_per_unit'] * ($item['cart_quantity'] - $min_quantity_to_order));
-                        }
-                    } else {
-                        $row_total = $unit_price * $item['cart_quantity'];
-                    }
-
+                    $row_total += $unit_price * $actual_item_quantity;
 
 	    			foreach ($menu_items as $key => $value) {
 	    				$row_total += $value['quantity'] * $value['price'];
@@ -282,8 +266,15 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 		        				} 
 		        			} ?>
 	                    </td>
+
+                        <td align="right" class="visible-md visible-lg">
+                            <?= CFormatter::format($unit_price)  ?>
+                        </td>
 		        		<td align="right" class="visible-md visible-lg">
-		        			<?= CFormatter::format($unit_price)  ?>
+		        			<?=($item['item']['item_base_price']) ?
+                                CFormatter::format($item['item']['item_base_price']) :
+                                    Yii::t('frontend','Price based <br/>on selection');
+                            ?>
 		        		</td>
 		        		<td align="right" class="visible-md visible-lg">
 		        			<?= CFormatter::format($row_total)  ?>
