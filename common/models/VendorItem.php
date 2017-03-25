@@ -32,6 +32,8 @@ use common\models\VendorItemToPackage;
 * @property integer $item_minimum_quantity_to_order
 * @property string $item_archived
 * @property string $item_approved
+* @property integer $version
+* @property integer $hide_from_admin
 * @property integer $created_by
 * @property integer $modified_by
 * @property string $created_datetime
