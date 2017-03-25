@@ -671,7 +671,30 @@ class BrowseController extends BaseController
 
         $item = VendorItem::findOne($item_id);
 
-        $total = $item->item_price_per_unit * Yii::$app->request->post('quantity');
+        $total = ($item->item_base_price) ? $item->item_base_price : 0;
+
+        if($item->item_minimum_quantity_to_order > 0) {
+            $min_quantity_to_order = $item->item_minimum_quantity_to_order;
+        }else{
+            $min_quantity_to_order = 1;
+        }
+
+        $price_chart = VendorItemPricing::find()
+            ->where(['item_id' => $item['item_id'], 'trash' => 'Default'])
+            ->andWhere(['<=', 'range_from', Yii::$app->request->post('quantity')])
+            ->andWhere(['>=', 'range_to', Yii::$app->request->post('quantity')])
+            ->orderBy('pricing_price_per_unit DESC')
+            ->one();
+
+        if ($price_chart) {
+            $unit_price = $price_chart->pricing_price_per_unit;
+        } else {
+            $unit_price = $item->item_price_per_unit;
+        }
+
+        $actual_item_quantity = Yii::$app->request->post('quantity') - $min_quantity_to_order;
+
+        $total += $unit_price * $actual_item_quantity;
 
         $menu_items = Yii::$app->request->post('menu_item');
 

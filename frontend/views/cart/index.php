@@ -47,9 +47,9 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        	<?php
 	        	
 	        	$sub_total = $delivery_charge = 0;
-	        	
-	        	foreach ($items as $item) {
 
+	        	foreach ($items as $item) {
+                    $BasePrice = false;
 	        		//$menu_items = CustomerCartMenuItem::findAll(['cart_id' => $item['cart_id']]);
 	        		
 	        		$menu_items = CustomerCartMenuItem::find()
@@ -78,20 +78,39 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 						->orderBy('pricing_price_per_unit DESC')
 						->one();
 
-					if($price_chart) {
+					if ($price_chart) {
 						$unit_price = $price_chart->pricing_price_per_unit;
-					}else{
-						$unit_price = $item['item_price_per_unit'];
+					} else if ($item['item']['item_base_price']){ // new base price changes
+                        $BasePrice = true;
+						$unit_price = $item['item']['item_base_price'];
+					} else {
+					    $unit_price = $item['item_price_per_unit'];
 					}
 
-	    			$row_total = $unit_price * $item['cart_quantity'];
+					if ($BasePrice) { // new base price changes
+
+                        if($item['item']['item_minimum_quantity_to_order'] > 0) {
+                            $min_quantity_to_order = $item['item']['item_minimum_quantity_to_order'];
+                        }else{
+                            $min_quantity_to_order = 1;
+                        }
+
+                        if ($min_quantity_to_order == $item['cart_quantity']) {
+                            $row_total = $item['item']['item_base_price'];
+                        } else {
+                            $row_total = $item['item']['item_base_price'] + ($item['item_price_per_unit'] * ($item['cart_quantity'] - $min_quantity_to_order));
+                        }
+                    } else {
+                        $row_total = $unit_price * $item['cart_quantity'];
+                    }
+
 
 	    			foreach ($menu_items as $key => $value) {
 	    				$row_total += $value['quantity'] * $value['price'];
 	    			}
 
-	    			$sub_total += $row_total;
-		        	
+	    			$sub_total += $row_total; // not in use
+
 		        	?>
 		        	<tr>
 		        		<td align="center">
