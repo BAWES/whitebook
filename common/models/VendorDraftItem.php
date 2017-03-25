@@ -29,6 +29,7 @@ use Yii;
  * @property string $item_price_description
  * @property string $item_price_description_ar
  * @property string $item_for_sale
+ * @property string $item_base_price
  * @property integer $sort
  * @property integer $item_how_long_to_make
  * @property integer $item_minimum_quantity_to_order
@@ -98,7 +99,7 @@ class VendorDraftItem extends \yii\db\ActiveRecord
             
             [['item_name_ar', 'priority', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar', 'item_customization_description', 'item_customization_description_ar', 'item_price_description', 'item_price_description_ar', 'item_for_sale', 'item_archived', 'item_approved', 'item_status', 'trash'], 'string'],
 
-            [['item_price_per_unit'], 'number'],
+            [['item_price_per_unit','item_base_price'], 'number'],
             [['created_datetime', 'modified_datetime'], 'safe'],
             [['item_name'], 'string', 'max' => 128],
             [['slug'], 'string', 'max' => 255],
@@ -125,7 +126,7 @@ class VendorDraftItem extends \yii\db\ActiveRecord
             'item_additional_info' => Yii::t('app', 'Item Additional Info'),
             'item_additional_info_ar' => Yii::t('app', 'Item Additional Info - Arabic'),
             'item_default_capacity' => Yii::t('app', 'Item Default Capacity'),
-            'item_price_per_unit' => Yii::t('app', 'Price'),
+            'item_price_per_unit' => Yii::t('app', 'Increment Price'),
             'item_customization_description' => Yii::t('app', 'Item Customization Description'),
             'item_customization_description_ar' => Yii::t('app', 'Item Customization Description - Arabic'),
             'item_price_description' => Yii::t('app', 'Price Description'),

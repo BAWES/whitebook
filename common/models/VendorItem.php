@@ -27,6 +27,7 @@ use common\models\VendorItemToPackage;
 * @property string $item_price_per_unit
 * @property string $item_price_description
 * @property string $item_for_sale
+* @property string $item_base_price
 * @property integer $item_how_long_to_make
 * @property integer $item_minimum_quantity_to_order
 * @property string $item_archived
@@ -112,7 +113,7 @@ class VendorItem extends \yii\db\ActiveRecord
             
             [['item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_price_description','item_price_description_ar', 'item_for_sale', 'item_approved', 'trash', 'quantity_label'], 'string'],
             
-            [['item_price_per_unit', 'min_order_amount'], 'number'],
+            [['item_price_per_unit', 'min_order_amount','item_base_price'], 'number'],
             
             [['created_datetime', 'modified_datetime','item_status','image_path', 'allow_special_request', 'have_female_service'], 'safe'],
 
@@ -144,7 +145,8 @@ class VendorItem extends \yii\db\ActiveRecord
             'item_additional_info' => 'Item Additional Info',
             'item_additional_info_ar' => 'Item Additional Info - Arabic',
             'item_default_capacity' => 'Maximum quantity ordered per day',
-            'item_price_per_unit' => 'Price',
+            'item_price_per_unit' => 'Increment Price',
+            'item_base_price' => 'Base Price',
             'item_price_description' => 'Item Price Description',
             'item_price_description_ar' => 'Item Price Description - Arabic',
             'item_for_sale' => 'Shop - Available for sale',

@@ -65,6 +65,8 @@ $this->params['breadcrumbs'][] = 'Update';
 
 				<?= $form->field($model, 'item_price_per_unit')->textInput(['maxlength' => 128]); ?>
 
+                <?= $form->field($model, 'item_base_price')->textInput(['maxlength' => 128]); ?>
+
 				<?= $form->field($model, 'minimum_increment'); ?>
 				
 				<?= $form->field($model, 'min_order_amount'); ?>
