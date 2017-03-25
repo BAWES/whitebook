@@ -9,7 +9,7 @@ class m170221_120547_update_suborder_item_purchase_table extends Migration
         $this->execute("SET foreign_key_checks = 0;");
         $this->truncateTable('{{%suborder_item_purchase}}');
 
-        $this->dropForeignKey('suborder_item_purchase_t_fk', '{{%suborder_item_purchase}}');
+        $this->dropForeignKey('whitebook_suborder_item_purchase_t_fk', '{{%suborder_item_purchase}}');
         $this->dropIndex('timeslot_id','{{%suborder_item_purchase}}');
 
         $this->renameColumn('{{%suborder_item_purchase}}','timeslot_id','working_id');

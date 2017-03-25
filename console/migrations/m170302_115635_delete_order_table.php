@@ -13,10 +13,10 @@ class m170302_115635_delete_order_table extends Migration
         $this->dropIndex('answer_id', '{{%suborder_item_purchase_customization}}');
         
         // whitebook_suborder_item_purchase
-        $this->dropForeignKey('suborder_item_purchase_address_fk', '{{%suborder_item_purchase}}');
-        $this->dropForeignKey('suborder_item_purchase_area_fk', '{{%suborder_item_purchase}}');
-        $this->dropForeignKey('suborder_item_purchase_i_fk', '{{%suborder_item_purchase}}');
-        $this->dropForeignKey('suborder_item_purchase_s_fk', '{{%suborder_item_purchase}}');
+        $this->dropForeignKey('whitebook_suborder_item_purchase_address_fk', '{{%suborder_item_purchase}}');
+        $this->dropForeignKey('whitebook_suborder_item_purchase_area_fk', '{{%suborder_item_purchase}}');
+        $this->dropForeignKey('whitebook_suborder_item_purchase_i_fk', '{{%suborder_item_purchase}}');
+        $this->dropForeignKey('whitebook_suborder_item_purchase_s_fk', '{{%suborder_item_purchase}}');
         $this->dropIndex('suborder_id', '{{%suborder_item_purchase}}');
         $this->dropIndex('item_id', '{{%suborder_item_purchase}}');
         $this->dropIndex('area_id', '{{%suborder_item_purchase}}');
