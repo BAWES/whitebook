@@ -34,6 +34,7 @@ use common\models\CustomerCartMenuItem;
                     </span>
                 </td>
         		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Unit Price') ?></th>
+                <td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Base Price') ?></th>
         		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Total') ?></th>
         	</tr>
         </thead>
@@ -41,9 +42,12 @@ use common\models\CustomerCartMenuItem;
         	<?php 
 
         	$sub_total = $delivery_charge = 0;
-            $BasePrice = '';
+
         	foreach ($items as $item) {
-                $BasePrice = false;
+
+        	    // base price
+        	    $row_total = ($item['item']['item_base_price']) ? $item['item']['item_base_price'] : 0;
+
                 //check quantity fall in price chart
                 $price_chart = VendorItemPricing::find()
                     ->where(['item_id' => $item['item_id'], 'trash' => 'Default'])
@@ -54,37 +58,11 @@ use common\models\CustomerCartMenuItem;
 
                 if ($price_chart) {
                     $unit_price = $price_chart->pricing_price_per_unit;
-                } else if ($item['item']['item_base_price']){ // new base price changes
-                    $BasePrice = true;
-                    $unit_price = $item['item']['item_base_price'];
                 } else {
                     $unit_price = $item['item_price_per_unit'];
                 }
 
-    //            if($price_chart) {
-    //                $unit_price = $price_chart->pricing_price_per_unit;
-    //            }else{
-    //                $unit_price = $item['item_price_per_unit'];
-    //            }
-
-                if ($BasePrice) { // new base price changes
-
-                    if($item['item']['item_minimum_quantity_to_order'] > 0) {
-                        $min_quantity_to_order = $item['item']['item_minimum_quantity_to_order'];
-                    }else{
-                        $min_quantity_to_order = 1;
-                    }
-
-                    if ($min_quantity_to_order == $item['cart_quantity']) {
-                        $row_total = $item['item']['item_base_price'];
-                    } else {
-                        $row_total = $item['item']['item_base_price'] + ($item['item_price_per_unit'] * ($item['cart_quantity'] - $min_quantity_to_order));
-                    }
-                } else {
-                    $row_total = $unit_price * $item['cart_quantity'];
-                }
-
-                //$row_total = $unit_price * $item['cart_quantity'];
+                $row_total += $unit_price * $item['cart_quantity'];
 
                 $menu_items = CustomerCartMenuItem::find()
                     ->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
@@ -177,6 +155,12 @@ use common\models\CustomerCartMenuItem;
                     </td>
                     <td align="right" class="visible-md visible-lg">
                         <?= CFormatter::format($unit_price); ?>
+                    </td>
+                    <td align="right" class="visible-md visible-lg">
+                        <?=($item['item']['item_base_price']) ?
+                            CFormatter::format($item['item']['item_base_price']) :
+                            Yii::t('frontend','Price based <br/>on selection');
+                        ?>
                     </td>
                     <td align="right" class="visible-md visible-lg">
                         <?= CFormatter::format($row_total) ?>

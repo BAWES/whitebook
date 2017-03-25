@@ -106,7 +106,11 @@ use common\components\CFormatter;
 	                        echo $item->item_name;
 	                    } else {
 	                        echo $item->item_name_ar; 
-	                    } 
+	                    }
+
+                        if ($item->item_base_price != '0.000') {
+                            echo '<div class="clearfix"></div> - <i class="cart_menu_item">Base Price : KD '.$item->item_base_price.'</i>';
+                        }
 	                    
 	                    foreach ($item->bookingItemMenus as $key => $menu_item) { 
 
