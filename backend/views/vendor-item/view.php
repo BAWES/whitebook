@@ -61,7 +61,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr><th>Item Default Capacity</th><td><?= $model->item_default_capacity; ?></td></tr>
                         <tr><th>No of days delivery</th><td><?= $model->item_how_long_to_make ?></td></tr>
                         <tr><th>Item Minimum Quantity to Order</th><td><?= $model->item_minimum_quantity_to_order ?></td></tr>
-                        <tr><th>Item Price per Unit</th><td><?= $model->item_price_per_unit ?></td></tr>
+                        <tr><th>Item Increment Price per Unit</th><td><?= $model->item_price_per_unit ?></td></tr>
+                        <tr><th>Item Base Price</th><td><?= $model->item_base_price ?></td></tr>
                         <tr>
                             <th>Item price</th>
                             <td>

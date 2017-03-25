@@ -230,7 +230,7 @@ $this->params['breadcrumbs'][] = $model->item_name;
                             'label' => 'created date',
                         ],
                         [
-                            'label' => $vendor_item->item_price_per_unit != $model->item_price_per_unit ? 'ITEM PRICE PER UNIT *' : 'ITEM PRICE PER UNIT',
+                            'label' => $vendor_item->item_price_per_unit != $model->item_price_per_unit ? 'ITEM INCREMENT PRICE PER UNIT *' : 'ITEM INCREMENT PRICE PER UNIT',
                             'value' => $model->item_price_per_unit
                         ],
                         [

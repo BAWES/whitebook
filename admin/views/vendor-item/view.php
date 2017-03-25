@@ -152,6 +152,7 @@ $this->params['breadcrumbs'][] = $model->item_name;
                     'model' => $model,
                     'attributes' => [
                           'item_price_per_unit',
+                          'item_base_price',
                     ],
                   ]);
                   VendorItemPricing::loadviewprice($model->item_id, $model->type_id, $model->item_price_per_unit);
