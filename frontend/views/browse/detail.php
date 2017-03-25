@@ -170,10 +170,14 @@ if($model->images) {
                             <b class="font-27">
                                 <p class="item-final-price">
                                    
-                                    <?php if($model['item_price_per_unit'] > 0) { 
-                                         
+                                    <?php if($model['item_price_per_unit'] > 0) {
+
+                                        if ($model['item_base_price']) {
+                                            echo CFormatter::format($model['item_base_price']);
+                                        } else {
                                             echo CFormatter::format($model['item_price_per_unit'] * $min_quantity_to_order);
-                                         
+                                        }
+
                                           } elseif ($menu) { 
                                         
                                             echo '<span class="small">'.Yii::t('frontend','Price on selection of menu items').'<span>';
@@ -185,7 +189,6 @@ if($model->images) {
                                           } ?>                                        
                                 </p>
                             </b>
-
                             <?php 
 
                             $pricing = VendorItemPricing::find()
@@ -212,7 +215,7 @@ if($model->images) {
                                         <tbody>
                                             <?php foreach ($pricing as $key => $value) { ?>
                                             <tr>
-                                                <td><?= $value['range_to'] ?>+</td>
+                                                <td><?= $value['range_from'] ?>+</td>
                                                 <td>
                                                     <?= CFormatter::format($value['pricing_price_per_unit']) ?>
                                                 </td>
@@ -313,9 +316,14 @@ if($model->images) {
                                     <b class="font-27 item-final-price">
 
 
-                                        <?php if($model['item_price_per_unit'] > 0) { 
-                                         
-                                            echo CFormatter::format($model['item_price_per_unit'] * $min_quantity_to_order);
+                                        <?php
+                                        if($model['item_price_per_unit'] > 0) {
+
+                                            if ($model['item_base_price']) {
+                                                echo CFormatter::format($model['item_base_price']);
+                                            } else {
+                                                echo CFormatter::format($model['item_price_per_unit'] * $min_quantity_to_order);
+                                            }
                                          
                                           } elseif ($menu) { 
                                         
@@ -369,7 +377,7 @@ if($model->images) {
                                                 <tbody>
                                                     <?php foreach ($pricing as $key => $value) { ?>
                                                     <tr>
-                                                        <td><?= $value['range_to'] ?>+</td>
+                                                        <td><?= $value['range_from'] ?>+</td>
                                                         <td>
                                                             <?= CFormatter::format($value['pricing_price_per_unit']) ?>
                                                         </td>
@@ -851,103 +859,6 @@ if($model->images) {
                                         </div>
                                     </div>
                                     <?php } ?>
-
-                                    <?php if ($model->item_for_sale != 'Yes' || !$AvailableStock) { ?>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                          <h4 class="panel-title">
-                                            <a data-toggle="collapse"  href="#collapse3" aria-expanded="true">
-                                                <?= Yii::t('frontend', 'Contact info'); ?>
-                                            </a>
-                                          </h4>
-                                        </div>
-                                        <div id="collapse3" class="panel-collapse collapse in">
-                                            <div class="panel-body vendor_social_info">
-                                                <ul>
-                                                    <?php if($phones) { ?>
-                                                    <li class="vendor_phone_list">
-                                                        <?php foreach ($phones as $key => $value) { ?>
-                                                            <a class="color-808080" href="tel:<?= $value->phone_no; ?>"><i class="<?= $phone_icons[$value->type] ?>"></i><?= $value->phone_no; ?>
-                                                            </a>
-                                                        <?php } ?>
-                                                    </li>
-                                                    <?php } ?>
-
-                                                    <?php if (!empty($vendor_detail['vendor_contact_address'])) { ?>
-                                                    <li>
-                                                        <a target="_blank" href="http://maps.google.com/?q=<?= $vendor_detail['vendor_contact_address'] ?>">
-                                                            <i class="fa fa-map-marker"></i>
-                                                            <?= LangFormat::format($vendor_detail['vendor_contact_address'], $vendor_detail['vendor_contact_address_ar']); ?>
-                                                        </a>
-                                                    </li>
-                                                    <?php } ?>
-
-                                                    <?php if($txt_day_off) { ?>
-                                                    <li>
-                                                        <a>
-                                                            <i class="fa fa-clock-o"></i>
-                                                            <?= Yii::t('frontend', '{txt_day_off} off', [
-                                                                    'txt_day_off' => $txt_day_off
-                                                                ]); ?>
-                                                        </a>
-                                                    </li>
-                                                    <?php } ?>
-
-                                                    <?php if (!empty($vendor_detail['vendor_public_email'])) { ?>
-                                                    <li>
-                                                        <a href="mailto:<?=$vendor_detail['vendor_public_email']; ?>" title="<?= $vendor_detail['vendor_public_email']; ?>">
-                                                            <i class="fa fa-envelope-o"></i>
-                                                            <?= $vendor_detail['vendor_public_email']; ?>
-                                                        </a>
-                                                    </li>
-                                                    <?php } ?>
-
-                                                    <?php if (!empty($vendor_detail['vendor_website'])) { ?>
-                                                    <li>
-                                                        <a target="_blank" href="<?= $vendor_detail['vendor_website']; ?>" title="<?php echo $vendor_detail['vendor_website']; ?>">
-                                                            <i class="fa fa-globe"></i>
-                                                            <?php echo $vendor_detail['vendor_website']; ?>
-                                                        </a>
-                                                    </li>
-                                                    <?php } ?>
-
-                                                    <?php if($vendor_detail['vendor_instagram']) { ?>
-                                                    <li>
-                                                        <a target="_blank" href="<?= $vendor_detail['vendor_instagram'] ?>" alt="<?= Yii::t('frontend', 'Instatgram') ?>"><i class="fa fa-instagram"></i>
-                                                            <?= $vendor_detail['vendor_instagram_text'] ?>
-                                                        </a>
-                                                    </li>
-                                                    <?php } ?>
-
-                                                    <?php if($vendor_detail['vendor_twitter']) { ?>
-                                                    <li>
-                                                        <a target="_blank" href="<?= $vendor_detail['vendor_twitter'] ?>" alt="<?= Yii::t('frontend', 'Twitter') ?>"><i class="fa fa-twitter"></i>
-                                                            <?= $vendor_detail['vendor_twitter_text'] ?>
-                                                        </a>
-                                                    </li>
-                                                    <?php } ?>
-
-                                                    <?php if($vendor_detail['vendor_facebook']) { ?>
-                                                    <li>
-                                                        <a target="_blank" href="<?= $vendor_detail['vendor_facebook'] ?>" alt="<?= Yii::t('frontend', 'Facebook') ?>"><i class="fa fa-facebook"></i>
-                                                            <?= $vendor_detail['vendor_facebook_text'] ?>
-                                                        </a>
-                                                    </li>
-                                                    <?php } ?>
-
-                                                    <?php if($vendor_detail['vendor_youtube']) { ?>
-                                                    <li>
-                                                        <a target="_blank" href="<?= $vendor_detail['vendor_youtube'] ?>" alt="<?= Yii::t('frontend', 'Youtube') ?>"><i class="fa fa-youtube"></i>
-                                                            <?= $vendor_detail['vendor_youtube_text'] ?>
-                                                        </a>
-                                                    </li>
-                                                    <?php } ?>
-                                                </ul>
-                                            </div><!-- END .panel-body -->
-                                        </div>
-                                    </div><!-- END .panel -->
-                                    <?php } ?>
-
                                     <?php if (!empty($model['item_customization_description'])) { ?>
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
