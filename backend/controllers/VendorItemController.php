@@ -423,7 +423,6 @@ class VendorItemController extends Controller
             $complete = Yii::$app->request->post('complete');
 
             if($complete) {
-
                 //to make draft visible to admin 
 
                 $model->is_ready = 1;

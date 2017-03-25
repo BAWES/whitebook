@@ -172,8 +172,9 @@ if($model->isNewRecord){
 						->label('Item Minimum Quantity to Order '.Html::tag('span', '*',['class'=>'required mandatory']))
 						->textInput(['maxlength' => 128]); ?>
 
-				<?= $form->field($model, 'item_price_per_unit')
-						->textInput(['maxlength' => 128]); ?>
+				<?= $form->field($model, 'item_price_per_unit')->textInput(['maxlength' => 128]); ?>
+
+				<?= $form->field($model, 'item_base_price')->textInput(['maxlength' => 128]); ?>
 
 				<?php if($model->isNewRecord) { ?>
 					<div class="form-group multiple_price" style="padding: 5px;  font-size: 14px;">

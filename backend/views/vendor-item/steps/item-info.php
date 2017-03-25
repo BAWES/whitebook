@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\web\view;
 
-if($model->isNewRecord) {
+if(!isset($model->item_id)) {
 	$this->title = 'Create vendor item';
 }else{
 	$this->title = 'Update vendor item';	
@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = 'Update';
 
 <div class="tabbable">
 	<ul class="nav nav-tabs">
-		<?php if($model->isNewRecord) { ?>
+		<?php if(!  isset($model->item_id)) { ?>
 	    <li class="active">
 	    	<a href="javascript::void();">
 	    		Item Info 
