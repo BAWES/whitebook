@@ -9,6 +9,24 @@ return [
             'charset' => 'utf8',
             'tablePrefix'=>'whitebook_',
         ],
+        'urlManagerFrontend' => [
+            'class' => 'yii\web\UrlManager',
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'baseUrl' => 'http://dev.thewhitebook.com.kw',
+        ],
+        'urlManagerVendor' => [
+            'class' => 'yii\web\UrlManager',
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'baseUrl' => 'http://devvendor.thewhitebook.com.kw',
+        ],
+        'urlManagerAdmin' => [
+            'class' => 'yii\web\UrlManager',
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'baseUrl' => 'http://devadmin.thewhitebook.com.kw',
+        ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@common/mail',

@@ -25,6 +25,24 @@ return [
                 'database' => 1,
             ]
         ],
+        'urlManagerFrontend' => [
+            'class' => 'yii\web\UrlManager',
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'baseUrl' => 'https://thewhitebook.com.kw',
+        ],
+        'urlManagerVendor' => [
+            'class' => 'yii\web\UrlManager',
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'baseUrl' => 'https://vendor.thewhitebook.com.kw',
+        ],
+        'urlManagerAdmin' => [
+            'class' => 'yii\web\UrlManager',
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'baseUrl' => 'https://admin.thewhitebook.com.kw',
+        ],
         'log' => [
             'targets' => [
                 [
