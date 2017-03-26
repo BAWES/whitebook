@@ -52,6 +52,15 @@ currency: 'USD'
     ?>
 </div>
 
+<!-- WhatsApp !!-->
+<div id='whatsapp' style='background:#128C7E; padding:8px; text-align:center;'>
+    <a href='whatsapp://send?text=Hello!&phone=+96590049924'
+        style='color:white; font-weight:bold;'>
+        <img src='https://www.whatsappbrand.com/apple-icon-144x144.png' style='width:20px; height:20px;'>
+        WhatsApp +965 90049924
+    </a>
+</div>
+
 <!-- Content start -->
 <section id="content_section">
 
@@ -285,13 +294,13 @@ if (!empty($feature_group_sql_result)) {
                                     <?php if($product_val['item_how_long_to_make'] > 0) { ?>
                                     <div class="callout-container" style="bottom: 10px;">
                                         <span class="callout light">
-                                            <?php 
+                                            <?php
 
-                                            if($product_val['item_how_long_to_make'] % 24 == 0) 
-                                            { 
+                                            if($product_val['item_how_long_to_make'] % 24 == 0)
+                                            {
                                                 echo Yii::t('frontend', 'Notice: {count} day(s)', [
                                                     'count' => $product_val['item_how_long_to_make']/24
-                                                ]); 
+                                                ]);
                                             }
                                             else
                                             {
