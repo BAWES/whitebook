@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use yii\db\Expression;
+use yii\web\NotFoundHttpException;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use common\models\VendorItemPricing;
@@ -61,7 +62,7 @@ class VendorDraftItem extends \common\models\VendorDraftItem
     public function rules()
     {
         return [
-           
+
             //MenuItems
 
             [['allow_special_request', 'have_female_service'], 'number', 'on' => ['MenuItems']],
@@ -69,33 +70,33 @@ class VendorDraftItem extends \common\models\VendorDraftItem
             //ItemPrice
 
             [['quantity_label', 'item_for_sale', 'item_price_description','item_price_description_ar', 'item_customization_description', 'item_customization_description_ar'], 'string', 'on' => ['ItemPrice']],
-            
+
             [['item_default_capacity', 'item_minimum_quantity_to_order'], 'integer', 'on' => ['ItemPrice']],
-            
+
             [['min_order_amount', 'item_price_per_unit','item_base_price'], 'number', 'on' => ['ItemPrice']],
 
             [['type_id', 'minimum_increment'], 'integer', 'on' => ['ItemPrice']],
 
             [['type_id'], 'required', 'on' => ['ItemPrice']],
-            
+
             //ItemDescription
-            
+
             [['set_up_time', 'set_up_time_ar', 'max_time', 'max_time_ar', 'requirements','requirements_ar', 'item_how_long_to_make', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'], 'string', 'on' => ['ItemDescription']],
 
             //ItemInfo
-            
-            [['item_name', 'item_name_ar'], 'required', 'on' => ['ItemInfo']]    
+
+            [['item_name', 'item_name_ar'], 'required', 'on' => ['ItemInfo']]
         ];
     }
 
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        
+
         $scenarios['MenuItems'] = ['allow_special_request', 'have_female_service'];
-        
+
         $scenarios['ItemPrice'] = ['type_id','minimum_increment', 'min_order_amount', 'quantity_label', 'item_for_sale', 'item_default_capacity', 'item_minimum_quantity_to_order', 'item_price_per_unit', 'item_base_price', 'item_price_description', 'item_price_description_ar', 'item_customization_description', 'item_customization_description_ar'];
-        
+
         $scenarios['ItemDescription'] = ['set_up_time', 'set_up_time_ar', 'max_time', 'max_time_ar', 'requirements', 'requirements_ar', 'item_how_long_to_make', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'];
 
         $scenarios['ItemInfo'] = ['item_name', 'item_name_ar', 'item_status'];
@@ -103,7 +104,7 @@ class VendorDraftItem extends \common\models\VendorDraftItem
         return $scenarios;
     }
 
-    public function create_from_item($id) { 
+    public function create_from_item($id) {
 
         $model = VendorItem::findOne(['item_id' => $id, 'vendor_id'=>Yii::$app->user->getId()]);
 
@@ -116,7 +117,7 @@ class VendorDraftItem extends \common\models\VendorDraftItem
         $draft->item_approved = 'Pending';
         $draft->save();
 
-        //copy draft related data 
+        //copy draft related data
 
         $pricing = VendorItemPricing::loadpricevalues($model->item_id);
 
@@ -125,7 +126,7 @@ class VendorDraftItem extends \common\models\VendorDraftItem
             $vdip->attributes = $value->attributes;
             $vdip->save();
         }
-        
+
         $images = Image::findAll(['item_id' => $model->item_id]);
 
         foreach ($images as $key => $value) {
@@ -142,11 +143,11 @@ class VendorDraftItem extends \common\models\VendorDraftItem
             $dic->save();
         }
 
-        //menu 
+        //menu
         $menues = VendorItemMenu::findAll(['item_id' => $model->item_id]);
 
         foreach ($menues as $key => $menu) {
-            
+
             $dm = new VendorDraftItemMenu;
             $dm->attributes = $menu->attributes;
             $dm->save();
