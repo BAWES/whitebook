@@ -314,24 +314,23 @@ class UsersController extends BaseController
     {
         $request = Yii::$app->request;
 
-        if ($request->post('item_id')) {
+        if(Yii::$app->user->isGuest || empty($request->post('item_id')))
+        {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
 
-            $model = new Users();
-            $item_id = $request->post('item_id');
-            $customer_id = Yii::$app->user->identity->customer_id;
+        $model = new Users();
+        $item_id = $request->post('item_id');
+        $customer_id = Yii::$app->user->identity->customer_id;
 
-            $update_wishlist = $model->update_wishlist($item_id, $customer_id);
-            
-            if ($update_wishlist == 1) {
-                $wishlist = Users::loadCustomerWishlist(Yii::$app->user->identity->customer_id);
-                return  count($wishlist);
-            } else {
-                $wishlist = Users::loadCustomerWishlist(Yii::$app->user->identity->customer_id);
-                return count($wishlist);
-            }
-
+        $update_wishlist = $model->update_wishlist($item_id, $customer_id);
+        
+        if ($update_wishlist == 1) {
+            $wishlist = Users::loadCustomerWishlist(Yii::$app->user->identity->customer_id);
+            return  count($wishlist);
         } else {
-            return $this->goHome();
+            $wishlist = Users::loadCustomerWishlist(Yii::$app->user->identity->customer_id);
+            return count($wishlist);
         }
     }
 
