@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="vendoritem-index">
     <p>
-        <?= Html::a('Create vendor item', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create vendor item', ['create','_u'=>'a'], ['class' => 'btn btn-success']) ?>
         <?= Html::a('Reject', [''], ['class' => 'btn btn-info','id'=>'active','onclick'=>'return Status("Reject")', 'style'=>'float:right;']) ?>
         <?= Html::a('Approve', [''], ['class' => 'btn btn-info','id'=>'Approve','onclick'=>'return approve("Yes")', 'style'=>'float:right;']) ?>
         <?= Html::a('Delete', [''], ['class' => 'btn btn-info','id'=>'Delete','onclick'=>'return Status("Delete")', 'style'=>'float:right;']) ?>

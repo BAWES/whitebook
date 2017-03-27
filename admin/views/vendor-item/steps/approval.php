@@ -81,7 +81,7 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 
 			<div class="row">
 				<div class="col-md-4">
-					<a href="<?= Url::to(['vendor-item/addon-menu-items', 'id' => $model->item_id]) ?>" class="btn btn-info pull-left">Prev</a>
+					<a href="<?= Url::to(['vendor-item/addon-menu-items', 'id' => $model->item_id,'_u'=>Yii::$app->request->get('_u')]) ?>" class="btn btn-info pull-left">Prev</a>
 				</div>
 				<div class="col-md-4 text-center">
 					<input type="submit" name="complete" class="btn btn-info" value="Complete" />
