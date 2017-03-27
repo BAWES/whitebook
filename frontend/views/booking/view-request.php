@@ -56,12 +56,9 @@ use common\components\CFormatter;
             </thead>
             <tbody>
             <tr>
-                <td style="border-right: 1px solid #ddd;">
+                <td style="border-right: 1px solid #ddd;" colspan="2">
                     <?= Yii::t('frontend', 'Booking status') ?>:
                     <?= $booking->status_name ?>
-                </td>
-                <td>
-                    <?= Yii::t('frontend', 'Contact Email') ?>: <?= $vendor->vendor_public_email ?>
                 </td>
             </tr>
             </tbody>
