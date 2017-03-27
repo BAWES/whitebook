@@ -319,7 +319,15 @@ if (!empty($feature_group_sql_result)) {
                                         <?=\common\components\LangFormat::format($product_val['vendor_name'],$product_val['vendor_name_ar']); ?><br/>
                                         <?=\common\components\LangFormat::format($product_val['item_name'],$product_val['item_name_ar']); ?>
                                         <p>
-                                            <?= CFormatter::format($product_val['item_price_per_unit']) ?>
+                                            <?php
+                                            if (trim($product_val['item_base_price'])) {
+                                                echo CFormatter::format($product_val['item_base_price']);
+                                            } else if (trim($product_val['item_price_per_unit'])) {
+                                                echo CFormatter::format($product_val['item_price_per_unit']);
+                                            } else {
+                                                echo '<span class="small">' . Yii::t('app', 'Price upon request') . '<span>';
+                                            }
+                                            ?>
                                         </p>
                                     </div>
                                 </a>
