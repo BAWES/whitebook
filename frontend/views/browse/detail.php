@@ -905,7 +905,7 @@ if($model->images) {
 
                             $imgUrl = '';
 
-                            $baselink = 'https://placeholdit.imgix.net/~text?txtsize=20&txt=No%20Image&w=210&h=208';
+                            $baselink = Url::to("@web/images/item-default.png");
 
                             foreach ($similiar_item as $s) {
 
