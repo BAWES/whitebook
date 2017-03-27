@@ -80,6 +80,11 @@ class VendorDraftItemController extends Controller
 
         $model = VendorDraftItem::findOne($id);
 
+        if(!$model) 
+        {
+             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
         //check if have change price table 
         $is_price_table_changed = VendorDraftItem::is_price_table_changed($model->item_id);
 
@@ -139,6 +144,11 @@ class VendorDraftItemController extends Controller
     public function actionApprove($id){
 
         $draft = VendorDraftItem::findOne($id);
+
+        if(!$draft) 
+        {
+             throw new NotFoundHttpException('The requested page does not exist.');
+        }
 
         $attributes = $draft->attributes;
 
@@ -270,6 +280,11 @@ class VendorDraftItemController extends Controller
         $reason = Yii::$app->request->post('reason'); 
 
         $model = VendorDraftItem::findOne(['draft_item_id' => $draft_item_id]);
+
+        if(!$model) 
+        {
+             throw new NotFoundHttpException('The requested page does not exist.');
+        }
 
         $vendor = Vendor::findOne($model->vendor_id);
 
