@@ -401,7 +401,6 @@ class VendorItemController extends Controller
 
         if($model->load(Yii::$app->request->post()) && $model->save()) {
 
-
             //remove old price chart
             VendorDraftItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
 
