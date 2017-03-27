@@ -137,16 +137,20 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 					->textInput(['maxlength' => 128]); ?>
 
 				<?php
-	                $model->item_for_sale = ($model->item_for_sale == 'Yes') ? 1:0;
-	                echo $form->field($model, 'item_for_sale')->checkbox(['Yes' => 'Yes']); ?>
+                if (Yii::$app->request->get('_u')) {
+                    $model->item_for_sale = 'Yes';
+                    echo $form->field($model, 'item_for_sale')->hiddenInput()->label(false);
+                } else {
+                    $model->item_for_sale = ($model->item_for_sale == 'Yes') ? 1:0;
+                    echo $form->field($model, 'item_for_sale')->checkbox(['Yes' => 'Yes']);
+                }
+                ?>
 
 			</fieldset>
-
 			<hr />
-
 			<div class="row">
 				<div class="col-md-4">
-					<a href="<?= Url::to(['vendor-item/item-description', 'id' => $model->item_id]) ?>" class="btn btn-info pull-left">Prev</a>
+					<a href="<?= Url::to(['vendor-item/item-description', 'id' => $model->item_id,'_u'=>Yii::$app->request->get('_u')]) ?>" class="btn btn-info pull-left">Prev</a>
 				</div>
 				<div class="col-md-4 text-center">
 					<input type="submit" name="complete" class="btn btn-info" value="Complete" />

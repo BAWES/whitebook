@@ -286,8 +286,8 @@ if (!empty($feature_group_sql_result)) {
                                     <?= Html::img($imglink); ?>
 
                                     <?php if($product_val['item_for_sale'] == 'Yes') { ?>
-                                        <i class="fa fa-circle" aria-hidden="true"></i>
-                                        <span class="buy-text"><?=Yii::t('frontend','Buy');?></span>
+<!--                                        <i class="fa fa-circle" aria-hidden="true"></i>-->
+<!--                                        <span class="buy-text">--><?//=Yii::t('frontend','Buy');?><!--</span>-->
                                         <!--                            <img class="sale_ribbon" src="--><?//= Url::to('@web/images/product_sale_ribbon.png') ?><!--" />-->
                                     <?php } ?>
 
