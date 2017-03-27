@@ -124,7 +124,7 @@ $this->params['breadcrumbs'][] = 'Update';
 					]); ?>
 
 				<?= $form->field($model, 'item_minimum_quantity_to_order')
-						->label('Minimum quantity to order '.Html::tag('span', '*',['class'=>'required mandatory']))
+						->label('Included Quantity'.Html::tag('span', '*',['class'=>'required mandatory']))
 						->textInput(['maxlength' => 128, 'id' => 'vendoritem-item_minimum_quantity_to_order']); ?>
 
 				<?= $form->field($model, 'item_default_capacity')
