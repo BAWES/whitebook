@@ -133,7 +133,7 @@ class VendorDraftItem extends \yii\db\ActiveRecord
             'item_price_description_ar' => Yii::t('app', 'Price Description - Arabic'),
             'item_for_sale' => Yii::t('app', 'Item For Sale'),
             'sort' => Yii::t('app', 'Sort'),
-            'item_minimum_quantity_to_order' => Yii::t('app', 'Minimum quantity to order'),
+            'item_minimum_quantity_to_order' => Yii::t('app', 'Included Quantity'),
             'item_archived' => Yii::t('app', 'Item Archived'),
             'item_approved' => Yii::t('app', 'Item Approved'),
             'item_status' => Yii::t('app', 'Item Status'),

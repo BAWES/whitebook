@@ -289,8 +289,17 @@ class Booking extends \yii\db\ActiveRecord
 
         foreach ($items as $item) {
 
+            if ($item['item']['item_minimum_quantity_to_order'] > 0) {
+                $min_quantity_to_order = $item['item']['item_minimum_quantity_to_order'];
+            } else {
+                $min_quantity_to_order = 1;
+            }
+
+            $actual_item_quantity = $item['cart_quantity'] - $min_quantity_to_order;
+
+
             $total = $price_chart[$item['item_id']]['base_price']; // base price change
-            $total += ($price_chart[$item['item_id']]['unit_price'] * $item['cart_quantity']) + $price_chart[$item['item_id']]['menu_price'];
+            $total += ($price_chart[$item['item_id']]['unit_price'] * $actual_item_quantity) + $price_chart[$item['item_id']]['menu_price'];
             $booking = new Booking;
             $booking->vendor_id = $item['vendor_id'];
             $booking->customer_id = $customer_id;

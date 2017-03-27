@@ -122,7 +122,7 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 					]); ?>
 
 				<?= $form->field($model, 'item_minimum_quantity_to_order')
-					->label('Minimum quantity to order '.Html::tag('span', '*',['class'=>'required mandatory']))
+					->label('Included Quantity'.Html::tag('span', '*',['class'=>'required mandatory']))
 					->textInput(['maxlength' => 128]); ?>
 
 				<?= $form->field($model, 'item_default_capacity')

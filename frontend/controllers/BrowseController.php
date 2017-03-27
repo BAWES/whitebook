@@ -104,7 +104,7 @@ class BrowseController extends BaseController
         );
 
         $item_query = CategoryPath::find()
-            ->select('{{%vendor_item}}.item_status,{{%vendor_item}}.trash,{{%vendor_item}}.item_approved,{{%vendor_item}}.item_how_long_to_make, {{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar')
+            ->select('{{%vendor_item}}.item_status,{{%vendor_item}}.trash,{{%vendor_item}}.item_approved,{{%vendor_item}}.item_how_long_to_make, {{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor_item}}.item_base_price, {{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar')
             ->leftJoin(
                 '{{%vendor_item_to_category}}',
                 '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
@@ -680,13 +680,20 @@ class BrowseController extends BaseController
             ->orderBy('pricing_price_per_unit DESC')
             ->one();
 
+        if ($item->item_minimum_quantity_to_order > 0) {
+            $min_quantity_to_order = $item->item_minimum_quantity_to_order;
+        } else {
+            $min_quantity_to_order = 1;
+        }
+
+
         if ($price_chart) {
             $unit_price = $price_chart->pricing_price_per_unit;
         } else {
             $unit_price = $item->item_price_per_unit;
         }
 
-        $actual_item_quantity = Yii::$app->request->post('quantity');
+        $actual_item_quantity = Yii::$app->request->post('quantity') - $min_quantity_to_order;
 
         $total += $unit_price * $actual_item_quantity;
 

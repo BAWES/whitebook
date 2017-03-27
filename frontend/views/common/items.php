@@ -145,9 +145,14 @@ if (!empty($items->getModels())) {
                                     $value['item_name_ar']
                                 ); ?>
                         </h3>
-                        <p><?= (trim($value['item_price_per_unit'])) ?
-                                CFormatter::format($value['item_price_per_unit']) :
-                                '<span class="small">'.Yii::t('app','Price upon request').'<span>'
+                        <p><?php
+                            if ((trim($value['item_base_price']))) {
+                                echo CFormatter::format($value['item_base_price']);
+                            }else if(trim($value['item_price_per_unit'])) {
+                                echo CFormatter::format($value['item_price_per_unit']);
+                            } else {
+                                echo '<span class="small">' . Yii::t('app', 'Price upon request') . '<span>';
+                            }
                             ?></p>
                     </a>
                 </div>

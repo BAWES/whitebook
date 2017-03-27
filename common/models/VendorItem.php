@@ -147,7 +147,7 @@ class VendorItem extends \yii\db\ActiveRecord
             'item_price_description_ar' => 'Item Price Description - Arabic',
             'item_for_sale' => 'Shop - Available for sale',
             'item_how_long_to_make' => 'Notice Period',
-            'item_minimum_quantity_to_order' => 'Item Minimum Quantity to Order',
+            'item_minimum_quantity_to_order' => 'Included Quantity',
             'item_approved' => 'Item Approved',
             'created_by' => 'Created By',
             'modified_by' => 'Modified By',

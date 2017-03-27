@@ -62,7 +62,15 @@ use common\models\CustomerCartMenuItem;
                     $unit_price = $item['item_price_per_unit'];
                 }
 
-                $row_total += $unit_price * $item['cart_quantity'];
+                if ($item['item']['item_minimum_quantity_to_order'] > 0) {
+                    $min_quantity_to_order = $item['item']['item_minimum_quantity_to_order'];
+                } else {
+                    $min_quantity_to_order = 1;
+                }
+
+                $actual_item_quantity = $item['cart_quantity'] - $min_quantity_to_order;
+
+                $row_total += $unit_price * $actual_item_quantity;
 
                 $menu_items = CustomerCartMenuItem::find()
                     ->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
