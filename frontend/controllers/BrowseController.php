@@ -671,6 +671,10 @@ class BrowseController extends BaseController
 
         $item = VendorItem::findOne($item_id);
 
+        if (empty($item)) {
+           throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+        
         $total = ($item->item_base_price) ? $item->item_base_price : 0;
 
         $price_chart = VendorItemPricing::find()
@@ -685,7 +689,6 @@ class BrowseController extends BaseController
         } else {
             $min_quantity_to_order = 1;
         }
-
 
         if ($price_chart) {
             $unit_price = $price_chart->pricing_price_per_unit;
