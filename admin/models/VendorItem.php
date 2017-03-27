@@ -5,6 +5,10 @@ namespace admin\models;
 use Yii;
 use yii\helpers\ArrayHelper;
 use admin\models\Vendor;
+use yii\behaviors\SluggableBehavior;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
+use yii\db\Expression;
 
 class VendorItem extends \common\models\VendorItem
 {    
@@ -28,7 +32,7 @@ class VendorItem extends \common\models\VendorItem
             
             [['item_default_capacity', 'item_minimum_quantity_to_order'], 'integer', 'on' => ['ItemPrice']],
             
-            [['min_order_amount', 'item_price_per_unit'], 'number', 'on' => ['ItemPrice']],
+            [['min_order_amount', 'item_price_per_unit', 'item_base_price'], 'number', 'on' => ['ItemPrice']],
 
             [['minimum_increment', 'type_id'], 'integer', 'on' => ['ItemPrice']],
 
@@ -51,7 +55,7 @@ class VendorItem extends \common\models\VendorItem
             
             'MenuItems' => ['allow_special_request', 'have_female_service'],
 
-            'ItemPrice' => ['minimum_increment', 'quantity_label', 'item_for_sale', 'item_price_description', 'item_price_description_ar','item_default_capacity', 'item_minimum_quantity_to_order', 'item_price_per_unit', 'min_order_amount', 'type_id'],
+            'ItemPrice' => ['item_base_price','minimum_increment', 'quantity_label', 'item_for_sale', 'item_price_description', 'item_price_description_ar','item_default_capacity', 'item_minimum_quantity_to_order', 'item_price_per_unit', 'min_order_amount', 'type_id'],
 
             'ItemDescription' => ['set_up_time', 'set_up_time_ar', 'requirements','requirements_ar', 'max_time', 'max_time_ar', 'item_how_long_to_make', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'],
 
@@ -160,7 +164,26 @@ class VendorItem extends \common\models\VendorItem
     */
     public function behaviors()
     {
-        return parent::behaviors();
+        return [
+            [
+                'class' => SluggableBehavior::className(),
+                'slugAttribute' => 'slug',
+                'attribute' => 'item_name',
+                'immutable' => true,
+                'ensureUnique'=>true,
+            ],
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'modified_by',
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_datetime',
+                'updatedAtAttribute' => 'modified_datetime',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
     }
 
     public static function getVendorName($id)
