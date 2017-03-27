@@ -83,6 +83,14 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 						'maxlength' => 128
 					]); ?>
 
+                <?= $form->field($model, 'item_base_price',
+					['options' => [
+						'class' => 'single_price'
+					]])
+					->textInput([
+						'maxlength' => 128
+					]); ?>
+
 				<?= $form->field($model, 'minimum_increment'); ?>
 
 				<?= $form->field($model, 'min_order_amount'); ?>
