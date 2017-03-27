@@ -32,6 +32,7 @@ if (!empty($items->getModels())) {
         } else {
             $image = Url::to("@web/images/item-default.png");
         }
+        
         $item_url = Url::to(["browse/detail", 'slug' => $value['slug']]);
         ?>
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6 min-height-301 pull-left">
