@@ -671,6 +671,10 @@ class BrowseController extends BaseController
 
         $item = VendorItem::findOne($item_id);
 
+        if (empty($item)) {
+           throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+        
         $total = $item->item_price_per_unit * Yii::$app->request->post('quantity');
 
         $menu_items = Yii::$app->request->post('menu_item');
