@@ -146,9 +146,9 @@ if (!empty($items->getModels())) {
                                 ); ?>
                         </h3>
                         <p><?php
-                            if ((trim($value['item_base_price']))) {
+                            if (trim($value['item_base_price'])) {
                                 echo CFormatter::format($value['item_base_price']);
-                            }else if(trim($value['item_price_per_unit'])) {
+                            } else if (trim($value['item_price_per_unit'])) {
                                 echo CFormatter::format($value['item_price_per_unit']);
                             } else {
                                 echo '<span class="small">' . Yii::t('app', 'Price upon request') . '<span>';
