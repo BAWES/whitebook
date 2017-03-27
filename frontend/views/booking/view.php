@@ -77,22 +77,23 @@ $this->title = Yii::t('frontend', 'View Booking | Whitebook');
                                 <?= Yii::t('frontend', 'Payment Method') ?>: <?= $booking->payment_method ?>
                             </td>
                             <td>
+                                <?= Yii::t('frontend', 'Order status') ?>: <?=$booking->getStatusName();?>
+                            </td>
+                        </tr>
+                        <tr>
+                        
+                            <?php if($booking->transaction_id) { ?>
+                            <td>
                                 <?= Yii::t('frontend', 'Transaction ID') ?>: <?= $booking->transaction_id ?>
                             </td>
-                        </tr>
-                        <tr>
+                            <?php } ?>
+
+                            <?php if($booking->booking_note) { ?>
                             <td>
-                                <?= Yii::t('frontend', 'Order status') ?>: <?=$booking->getStatusName();?>
-                                <br />
+                                <?= Yii::t('frontend', 'Booking note') ?>: <?= $booking->booking_note ?>
                             </td>
-                            <td>
-                                <?= Yii::t('frontend', 'Contact Email') ?>: <?= $vendor->vendor_public_email ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <?= Yii::t('frontend', 'Booking note') ?>: <?= $booking->booking_note?>
-                            </td>
+                            <?php } ?>
+
                         </tr>
                     </tbody>
                 </table>
