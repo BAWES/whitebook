@@ -5,11 +5,10 @@ namespace admin\models;
 use Yii;
 use yii\helpers\ArrayHelper;
 use admin\models\Vendor;
+use yii\db\Expression;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
-use yii\db\Expression;
-
 class VendorItem extends \common\models\VendorItem
 {    
     public function rules()

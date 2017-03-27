@@ -82,8 +82,6 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 					->textInput([
 						'maxlength' => 128
 					]); ?>
-
-
                 <?= $form->field($model, 'item_base_price',
 					['options' => [
 						'class' => 'single_price'
