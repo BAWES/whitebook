@@ -96,6 +96,11 @@ class CustomerCart extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getArea()
+    {
+        return $this->hasOne(Location::className(), ['id' => 'area_id']);
+    }
+
     public function getItem()
     {
         return $this->hasOne(VendorItem::className(), ['item_id' => 'item_id']);
