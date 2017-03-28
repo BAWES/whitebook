@@ -145,8 +145,13 @@ class BookingController extends Controller
 
             $model = $this->findModel($id);
             $model->payment_method = Yii::$app->request->post('mode');
+            $model->transaction_id = '-';
             $model->booking_status = Booking::STATUS_ACCEPTED;
             $model->save(false);
+
+            // add payment entry for vendor 
+
+            Booking::addPayment($model);
 
             //Booking::sendBookingPaidEmails($id);
             
