@@ -600,15 +600,18 @@ class CartController extends BaseController
 
         $vendor_timeslot = VendorWorkingTiming::find()
             ->select(['working_id','working_start_time','working_end_time'])
-            ->where(['vendor_id' => $data['vendor_id']])
-            ->andwhere(['working_day' => date("l", $timestamp)])
+            ->where([
+                    'vendor_id' => $data['vendor_id'],
+                    'working_day' => date("l", $timestamp),
+                    'trash' => 'Default'
+                ])
             ->asArray()
             ->all();
 
         if ($vendor_timeslot) {
 
             foreach ($vendor_timeslot as $key => $value) {
-                $slots = array_merge($slots,$this->slots($value['working_start_time'],$value['working_end_time']));
+                $slots = array_merge($slots, $this->slots($value['working_start_time'], $value['working_end_time']));
             }
 
             foreach($slots as $slot) {
