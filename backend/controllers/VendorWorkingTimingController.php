@@ -45,6 +45,8 @@ class VendorWorkingTimingController extends Controller
     public function actionIndex()
     {
         $searchModel = new VendorWorkingTimingSearch();
+        $searchModel->vendor_id = Yii::$app->user->id;
+                
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
