@@ -17,6 +17,8 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Brief' => 'نبذة',
+    'Delivery timeslot not available' => 'وقت التسليم غير متوفر',
     'Available For Sale' => 'متاحة للبيع',
     'Product Type' => 'نوع المنتج',
     'Event Time' => 'وقت الحدث',
