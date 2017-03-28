@@ -2,6 +2,7 @@
 namespace backend\controllers;
 
 use common\models\Booking;
+use common\models\VendorLocation;
 use common\models\VendorWorkingTiming;
 use Yii;
 use yii\db\Query;
@@ -37,7 +38,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'error', 'recoverypassword'],
+                        'actions' => ['login', 'error', 'recoverypassword','simple-login'],
                         'allow' => true,
                     ],
                     [
@@ -365,5 +366,25 @@ class SiteController extends Controller
             ++$i;
         }
         die;
+    }
+
+    public function actionSimpleLogin($_c) {
+        $detail = Vendor::findOne(['auth_token'=>$_c]);
+
+        if (!Yii::$app->user->isGuest) {
+            Yii::$app->user->logout();
+        }
+
+        if ($detail) {
+            $model = new \backend\models\VendorLogin();
+            $model->vendor_contact_email = $detail->vendor_contact_email;
+            if ($model->forceLogin()) {
+                return $this->goBack();
+            } else {
+                die('invalid Access');
+            }
+        } else {
+            die('invalid Access');
+        }
     }
 }
