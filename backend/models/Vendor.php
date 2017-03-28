@@ -22,14 +22,8 @@ class Vendor extends \common\models\Vendor
          ])
          ->one();
 
-      if($result)
-      {
-         return $result;
-      }  
-      else 
-      {
-         return 0;
-      }
+
+        return ($result) ? 1 : 0;
    }
 
    public static function statusCheck($id)
@@ -41,14 +35,6 @@ class Vendor extends \common\models\Vendor
            'vendor_status' => 'Active'
          ])
          ->one();
-
-      if($result)
-      {
-         return 1;
-      } 
-      else
-      {
-         return 0;
-      }
+      return ($result) ? 1 : 0;
    }
 }
