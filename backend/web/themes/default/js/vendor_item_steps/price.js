@@ -11,7 +11,7 @@ $(function() {
 
     		if($('#vendoritem-item_default_capacity').val() == '') 
 	    	{
-				$error += '<p><i class="fa fa-exclamation"></i> Item default capacity field require.</p>';	    		
+				$error += '<p><i class="fa fa-exclamation"></i> Maximum quantity ordered per day field require.</p>';	    		
 	    	}	
 	    
 	    	if($('#vendoritem-item_how_long_to_make').val() == '') 
