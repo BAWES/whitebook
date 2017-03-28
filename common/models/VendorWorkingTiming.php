@@ -61,6 +61,7 @@ class VendorWorkingTiming extends \yii\db\ActiveRecord
 
         $timeslots = VendorWorkingTiming::findAll([
                 'working_day' => $this->working_day,
+                'vendor_id' => $this->vendor_id,
                 'trash' => 'Default'
             ]); 
 
@@ -80,6 +81,7 @@ class VendorWorkingTiming extends \yii\db\ActiveRecord
 
         $timeslots = VendorWorkingTiming::findAll([
                 'working_day' => $this->working_day,
+                'vendor_id' => $this->vendor_id,
                 'trash' => 'Default'
             ]); 
 

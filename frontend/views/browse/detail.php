@@ -561,7 +561,7 @@ if($model->images) {
                                             <p><?= nl2br($item_description); ?></p>
 
                                             <?php if($item_additional_info) { ?>
-                                                <h4><?= Yii::t('frontend', 'Additional Info') ?></h4>
+                                                <h4><?= Yii::t('frontend', 'Additional Information') ?></h4>
                                                 <p><?= nl2br($item_additional_info); ?></p>
                                             <?php } ?>
 
@@ -1036,11 +1036,13 @@ echo Html::hiddenInput('save-delivery-timeslot-url', Url::to(['cart/save-deliver
 echo Html::hiddenInput('txt-select', Yii::t('frontend', 'Select '), ['id' => 'txt-select']);
 echo Html::hiddenInput('txt-min', Yii::t('frontend', 'atleast {qty} '), ['id' => 'txt-min']);
 echo Html::hiddenInput('txt-max', Yii::t('frontend', ' upto {qty}'), ['id' => 'txt-max']);
+echo Html::hiddenInput('txt-timeslot-not-available', Yii::t('frontend', 'Delivery timeslot not available'), ['id' => 'txt-timeslot-not-available']);
 
 echo Html::hiddenInput('item_type_name', $item_type_name, ['id' => 'item_type_name']);
 echo Html::hiddenInput('capacity', $capacity, ['id' => 'capacity']);
 echo Html::hiddenInput('minimum_increment', $model->minimum_increment, ['id' => 'minimum_increment']);
 echo Html::hiddenInput('for_sale_validation', $model->item_for_sale, ['id' => 'for_sale_validation']);
+
 $this->registerJs("
     var deliver_date = '".$deliver_date."';
     var isGuest = ".(int)Yii::$app->user->isGuest.";
@@ -1133,4 +1135,4 @@ $this->registerCss("
     }
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.23', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.24', ['depends' => [\yii\web\JqueryAsset::className()]]);

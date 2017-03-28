@@ -366,7 +366,7 @@ function deliveryTimeSlot(date){
         {
             if (jQuery.trim(data) == 0) {
                 $('.timeslot_id_div').show();
-                $('.timeslot_id_div .text').html('Item is not available on selected date');
+                $('.timeslot_id_div .text').html($('#txt-timeslot-not-available').val());
                 $('.timeslot_id_select').hide();
                 jQuery('#timeslot_id').html('');
             } else {
