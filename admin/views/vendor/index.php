@@ -65,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                         'class' => 'yii\grid\ActionColumn',
                         'header'=>'Action',
-                        'template' => '{update} {password} {delete} {view} {link} {request}',
+                        'template' => '{update} {password} {delete}<br/>{view} {link} {request} {login}',
                         'buttons' => [            
                             'link' => function ($url, $model) {
                                 $url = Url::to(['vendor-item/index', 'VendorItemSearch[vendor_name]' => $model->vendor_name]);
@@ -77,6 +77,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 $url = Url::to(['vendor/password', 'id' => $model->vendor_id]);
                                 return  Html::a('<span class="fa fa-key fa-rotate-90"></span>', $url, [
                                     'title' => Yii::t('app', 'Change Password'), 'data-pjax'=>"0",
+                                ]);
+                            },
+                            'login' => function ($url, $model) {
+                                $url = Url::to(['vendor/login-request', 'id' => $model->vendor_id]);
+                                return  Html::a('<span class="fa fa-sign-in"></span>', $url, [
+                                    'title' => Yii::t('app', 'Change Password'), 'data-pjax'=>"0", 'target'=>"_blank",
                                 ]);
                             },
                         ],
