@@ -112,4 +112,54 @@ class VendorPayment extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Vendor::className(), ['vendor_id' => 'vendor_id']);
     }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) 
+        {
+            $vendor = Vendor::findOne($this->vendor_id);
+            
+            if($this->type == VendorPayment::TYPE_ORDER)
+            {
+                $vendor->vendor_payable += $this->amount;
+            }
+            else
+            {
+                $vendor->vendor_payable -= $this->amount;
+            }
+
+            $vendor->save();
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public function beforeDelete()
+    {
+        if (parent::beforeDelete()) 
+        {        
+            $vendor = Vendor::findOne($this->vendor_id);
+            
+            if($this->type == VendorPayment::TYPE_ORDER)
+            {
+                $vendor->vendor_payable -= $this->amount;
+            }
+            else
+            {
+                $vendor->vendor_payable += $this->amount;
+            }
+
+            $vendor->save();
+
+            return true;
+        } 
+        else 
+        {
+            return false;
+        }
+    }
 }

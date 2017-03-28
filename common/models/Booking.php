@@ -804,10 +804,10 @@ class Booking extends \yii\db\ActiveRecord
         $payment->type = VendorPayment::TYPE_ORDER;
         $payment->amount = $booking->total_vendor;
         $payment->description = 'Booking #'.$booking->booking_id.' got paid.';
-        $payment->save();
-
-        $vendor = Vendor::findOne($booking->vendor_id);
-        $vendor->vendor_payable += $booking->total_vendor;
-        $vendor->save();
+        
+        if(!$payment->save())
+        {
+            print_r($payment->getErrors());
+        }
     }
 }
