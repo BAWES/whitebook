@@ -53,8 +53,16 @@ class VendorPaymentController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+
+        $bookings = VendorPayment::find()
+            ->where(['transfer_id' => $model->payment_id])
+            //->innerJoin('{{%booking}}', '{{%booking}}.booking_id = {{%vendor_payment}}.booking_id');
+            ->all();
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'bookings' => $bookings
         ]);
     }
 
@@ -67,7 +75,18 @@ class VendorPaymentController extends Controller
     {
         $model = new VendorPayment();
 
+        $model->type = VendorPayment::TYPE_TRANSFER;
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            //mark selected booking as paid 
+
+            $bookings = Yii::$app->request->post('bookings');
+
+            foreach ($bookings as $key => $value) {
+                VendorPayment::updateAll(['transfer_id' => $model->payment_id], ['booking_id' => $value]);
+            }
+
             return $this->redirect(['index']);
         } else {
 
@@ -78,6 +97,28 @@ class VendorPaymentController extends Controller
                 'vendors' => ArrayHelper::map($vendors, 'vendor_id', 'vendor_name')
             ]);
         }
+    }
+
+    /**
+     * send unpaid booking list for a vendor 
+     * @param integer vendor_id 
+     * @return array 
+     */
+    public function actionUnpaid()
+    {
+        $unpaid_bookings = VendorPayment::find()
+            ->where([
+                    'type' => VendorPayment::TYPE_ORDER,
+                    'vendor_id' => Yii::$app->request->post('vendor_id')
+                ])
+            ->andWhere('transfer_id IS NULL')
+            ->all();
+
+        Yii::$app->response->format = 'json';
+
+        return [
+            'unpaid_bookings' => $unpaid_bookings
+        ];
     }
 
     /**
