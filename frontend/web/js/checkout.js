@@ -19,7 +19,8 @@ function login() {
 	$('html, body').animate({ scrollTop: 0 }, 'slow');
 }
 
-//load address selection form 
+//load address selection form
+// checkout/address
 function address() {
 
 	$('#ar-step-address').removeClass('text-success');
@@ -72,7 +73,7 @@ function save_guest_address() {
 				$('html, body').animate({ scrollTop: 0 }, 'slow');
 			} else {
 				// payment();
-                confirm();
+                confirmBox();
 			}
 		}
 	);
@@ -99,7 +100,7 @@ function save_address() {
 				$('html, body').animate({ scrollTop: 0 }, 'slow');
 			} else {
 				// payment();
-                confirm();
+                confirmBox();
 			}
 		}
 	);
@@ -141,13 +142,13 @@ function save_payment() {
 
 				$('html, body').animate({ scrollTop: 0 }, 'slow');
 			} else {
-				confirm();
+				confirmBox();
 			}
 		}
 	);	
 }
 
-function confirm() {
+function confirmBox() {
 
 	$('.checkout_message_wrapper').html('');
 	
@@ -274,3 +275,25 @@ $(function (){
 	});
 });
 
+
+$(document).delegate('.delete-address', 'click', function() {
+
+	if (confirm('Are you sure you want to delete this address?')) {
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr('href'), //url to be called
+            data: {id: $(this).parent().data('id')},
+            success: function (data) {
+                if ($.trim(data) == 1) {
+                    address();
+				} else {
+                	alert('error while deleting Address');
+                	return false;
+				}
+            }
+        });
+        return false;
+    } else {
+		return false;
+	}
+});

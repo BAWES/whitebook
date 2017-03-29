@@ -30,6 +30,7 @@ $customer_address_modal->area_id = Yii::$app->session->get('deliver-location');
 
                 foreach ($addresses as $address) { ?>
                         <div class="address_block pull-left" data-id="<?= $address['address_id'] ?>">
+                            <?=\yii\helpers\Html::a('<i class="fa fa-trash fa-1x pull-right"></i>',['checkout/remove-address'],['class'=>'delete-address color-black'])?>
                             <?php
 
                             if($address['address_name']) {
