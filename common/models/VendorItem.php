@@ -476,4 +476,50 @@ class VendorItem extends \yii\db\ActiveRecord
             ->setSubject('Vendor Updated Item #'.$id)
             ->send();
     }
+
+    public static function itemFinalPrice($item_id,$quantity,$menu_items = [])
+    {
+        $item = self::findOne($item_id);
+
+        if (empty($item)) {
+            return 0;
+        }
+
+        $total = ($item->item_base_price) ? $item->item_base_price : 0;
+
+        $price_chart = \common\models\VendorItemPricing::find()
+            ->where(['item_id' => $item['item_id'], 'trash' => 'Default'])
+            ->andWhere(['<=', 'range_from', $quantity])
+            ->andWhere(['>=', 'range_to', $quantity])
+            ->orderBy('pricing_price_per_unit DESC')
+            ->one();
+
+        if ($item->item_minimum_quantity_to_order > 0) {
+            $min_quantity_to_order = $item->item_minimum_quantity_to_order;
+        } else {
+            $min_quantity_to_order = 1;
+        }
+
+        if ($price_chart) {
+            $unit_price = $price_chart->pricing_price_per_unit;
+        } else {
+            $unit_price = $item->item_price_per_unit;
+        }
+
+        $actual_item_quantity = $quantity - $min_quantity_to_order;
+
+        $total += $unit_price * $actual_item_quantity;
+
+        if(!is_array($menu_items)) {
+            $menu_items = [];
+        }
+
+        foreach ($menu_items as $key => $value) {
+
+            $menu_item = VendorItemMenuItem::findOne($key);
+
+            $total += $menu_item->price * $value;
+        }
+        return $total;
+    }
 }

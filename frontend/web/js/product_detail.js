@@ -380,6 +380,8 @@ function deliveryTimeSlot(date){
     });
 }
 
+//validation-product-available
+
 function productAvailability(date){
     $('.timeslot_id_div .text').html('Please Wait...');
     jQuery.ajax({
@@ -399,7 +401,13 @@ function productAvailability(date){
 
             } else {
                 $('.button-signin button').html('ADD TO CART');
-                $('.button-signin button').attr('disabled',false);
+                if (json['price'] == 0) {
+                    $('.button-signin button').attr('disabled',true);
+                    $('.small.price_warning').show();
+                } else {
+                    $('.button-signin button').attr('disabled',false);
+                    $('.small.price_warning').hide();
+                }
 
                 deliveryTimeSlot(date);
 
@@ -522,9 +530,18 @@ $(document).delegate('.menu-items .checkbox input', 'click', function(e) {
     update_price();
 });
 
+
+//final-price
 function update_price() {
     $.post($('#final_price_url').val(), $('#form_product_option').serialize(), function(json) {
         $('.item-final-price').html(json.price);
+        if (json.price == 'KD 0') { // disable add to cart button in case 0 price
+            $('.button-signin button').attr('disabled',true);
+            $('.price_warning').show();
+        } else {
+            $('.button-signin button').attr('disabled',false);
+            $('.price_warning').hide();
+        }
     });
 }
 

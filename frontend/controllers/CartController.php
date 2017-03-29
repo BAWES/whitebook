@@ -546,6 +546,7 @@ class CartController extends BaseController
         }
 
         $json['capacity'] = $capacity;
+        $json['price'] = VendorItem::itemFinalPrice($data['item_id'],$data['quantity'],(isset($data['menu_item'])) ? $data['menu_item'] : []);
 
         return $json;
     }

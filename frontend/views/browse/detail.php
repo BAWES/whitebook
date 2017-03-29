@@ -315,29 +315,13 @@ if($model->images) {
                                         </a>
                                     </label>
 
-                                    <b class="font-27 item-final-price">
-
-
-                                        <?php
-                                        if($model['item_price_per_unit'] > 0) {
-
-                                            if ($model['item_base_price']) {
-                                                echo CFormatter::format($model['item_base_price']);
-                                            } else {
-                                                echo CFormatter::format($model['item_price_per_unit'] * $min_quantity_to_order);
-                                            }
-
-                                          } elseif ($menu) {
-
-                                            echo '<span class="small">'.Yii::t('frontend','Price on selection of menu items').'<span>';
-
-                                          } else {
-
-                                            echo '<span class="small">'.Yii::t('frontend','Price upon request').'<span>';
-
-                                          }
+                                    <b class="font-27 item-final-price"><?=CFormatter::format($model['item_base_price']); ?></b>
+                                    <?php
+                                        if ($menu) {
+                                            echo '<span class="small" style="color: brown;">'.Yii::t('frontend','Price on selection of menu items').'</span>';
+                                        }
+                                        echo '<br/><span class="small price_warning" style="font-weight: bold;font-size:13px; display:none; color: brown;">'.Yii::t('frontend','Price increase quantity to purchase this item').'</span>'; // price warning for 0 amount
                                           ?>
-                                    </b>
 
                                     <?php if($model['min_order_amount'] > 0) {
 
@@ -450,7 +434,8 @@ if($model->images) {
                                             } else { ?>
                                                 <div class="buy-btn">
                                                     <div class="button-signin">
-                                                        <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px;">
+                                                        <?php $disable = (!$model['item_base_price']) ? 'disabled="disabled"' : '';?>
+                                                        <button <?=$disable?> type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px;">
                                                             <?= Yii::t('frontend', 'Add To Cart') ?>
                                                         </button>&nbsp;&nbsp;&nbsp;
                                                     </div>

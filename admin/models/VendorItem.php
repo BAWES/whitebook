@@ -35,7 +35,7 @@ class VendorItem extends \common\models\VendorItem
 
             [['minimum_increment', 'type_id'], 'integer', 'on' => ['ItemPrice']],
 
-            [['type_id'], 'required', 'on' => ['ItemPrice']],
+            [['type_id','item_price_per_unit'], 'required', 'on' => ['ItemPrice']],
 
             //ItemDescription
             
