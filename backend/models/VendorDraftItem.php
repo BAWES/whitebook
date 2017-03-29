@@ -77,7 +77,7 @@ class VendorDraftItem extends \common\models\VendorDraftItem
 
             [['type_id', 'minimum_increment'], 'integer', 'on' => ['ItemPrice']],
 
-            [['type_id'], 'required', 'on' => ['ItemPrice']],
+            [['type_id','item_price_per_unit'], 'required', 'on' => ['ItemPrice']],
 
             //ItemDescription
 
