@@ -417,4 +417,18 @@ class CheckoutController extends BaseController
             return $this->redirect(Yii::$app->homeUrl);
         }
     }
+
+    public function actionRemoveAddress(){
+	    if (Yii::$app->request->isAjax) {
+	        if (Yii::$app->request->post('id')) {
+                if (CustomerAddressResponse::deleteAll('address_id=' . Yii::$app->request->post('id'))) {
+                    if (CustomerAddress::deleteAll('address_id=' . Yii::$app->request->post('id'))) {
+                        return 1;
+                    }
+                } else {
+                    return 0;
+                }
+            }
+        }
+    }
 }
