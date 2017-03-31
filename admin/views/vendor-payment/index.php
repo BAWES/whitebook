@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
+use common\models\VendorPayment;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\VendorPaymentSearch */
@@ -32,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             //'booking_id',
-            'description:ntext',
+            //'description:ntext',
             [
                 'attribute' => 'type',
                 'filter' => $searchModel::typeList(),
@@ -51,7 +53,24 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {delete}'
+                'template' => '{report} {view} {delete}',
+                'buttons' => [            
+                    'report' => function($url, $data) {
+
+                        if($data->type == VendorPayment::TYPE_ORDER)
+                            return; 
+
+                        //only for transfer 
+
+                        return HTML::a(
+                            '<i class="glyphicon glyphicon glyphicon-file"></i>', 
+                            Url::to(['vendor-payment/detail', 'id' => $data->payment_id]),
+                            [
+                                'title' => 'Report'
+                            ]
+                        );
+                    },
+                ]
             ],
         ],
     ]); ?>
