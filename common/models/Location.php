@@ -170,9 +170,15 @@ class Location extends \yii\db\ActiveRecord
     // Status Image title
     public function statusTitle($status)
     {
-        if($status == 'Active')
-            return 'Activate';
+        return ($status == 'Active') ? 'Activate' : 'Deactivate';
+    }
 
-        return 'Deactivate';
+    /**
+     * @inheritdoc
+     * @return LocationQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new \common\models\query\LocationQuery(get_called_class());
     }
 }

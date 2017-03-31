@@ -111,4 +111,13 @@ class VendorItemThemes extends \yii\db\ActiveRecord
 
         return $theme_name['theme_name'];
     }
+
+    /**
+     * @inheritdoc
+     * @return VendorItemThemesQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new \common\models\query\VendorItemThemesQuery(get_called_class());
+    }
 }
