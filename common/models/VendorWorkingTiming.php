@@ -66,9 +66,13 @@ class VendorWorkingTiming extends \yii\db\ActiveRecord
             ]); 
 
         foreach ($timeslots as $key => $value) {
-            
+
+            if($value->working_id == $this->working_id)
+                        continue;
+
             if($start_time > strtotime($value->working_start_time) && 
                 $start_time < strtotime($value->working_end_time)) {
+
                     $this->addError('working_start_time', 'Start time conflicting with '.date('h:i A', strtotime($value->working_start_time)).' - '.date('h:i A', strtotime($value->working_end_time)).'.');
             }
         }
@@ -87,6 +91,9 @@ class VendorWorkingTiming extends \yii\db\ActiveRecord
 
         foreach ($timeslots as $key => $value) {
             
+            if($value->working_id == $this->working_id)
+                        continue;
+
             if($end_time > strtotime($value->working_start_time) && 
                 $end_time < strtotime($value->working_end_time)) {
                     $this->addError('working_end_time', 'End time conflicting with '.date('h:i A', strtotime($value->working_start_time)).' - '.date('h:i A', strtotime($value->working_end_time)).'.');
