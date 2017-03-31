@@ -2,6 +2,7 @@
 
 namespace admin\controllers;
 
+use common\models\Booking;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -75,6 +76,7 @@ class VendorController extends Controller
     public function actionIndex()
     {
         $searchModel = new VendorSearch();
+        $searchModel->trash = 'Default';
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -459,44 +461,18 @@ class VendorController extends Controller
      */
     public function actionDelete($id)
     {
-        //Shouldn't be able to delete a vendor who has orders
-        $count = Suborder::find()
-            ->joinWith('order')
-            ->where(['{{%suborder}}.vendor_id' => $id])
-            ->andWhere(['!=', '{{%order}}.order_transaction_id', ''])
-            ->count();
-
-        if($count) {
-            Yii::$app->session->setFlash('danger', 'You can\'t delete a vendor who has orders!');
-            return $this->redirect(['vendor/index']);
+        $model = $this->findModel($id);
+        $model->trash = 'Deleted';
+        if ($model->save()) {
+            Yii::$app->session->setFlash('success', 'Vendor soft deleted successfully! You can undo any time you want to this vendor');
+            return $this->redirect(['index']);
+        } else if (!$model->vendor_contact_email){
+            Yii::$app->session->setFlash('danger', 'Vendor has incomplete profile which causing issue to soft delete Vendor. Please complete vendor profile to delete it again.');
+            return $this->redirect(['index']);
+        } else {
+            Yii::$app->session->setFlash('danger', 'Error while deleting vendor.');
+            return $this->redirect(['index']);
         }
-
-        $this->findModel($id)->delete();
-
-        //vendor items 
-        $sub_query = 'item_id IN (select item_id from {{%vendor_item}} where vendor_id="'.$id.'")';
-
-        VendorItemCapacityException::deleteAll($sub_query);
-        Image::deleteAll($sub_query);
-        VendorItemPricing::deleteAll($sub_query);
-        VendorItemThemes::deleteAll($sub_query);
-        VendorItemToCategory::deleteAll($sub_query);
-        CustomerCart::deleteAll($sub_query);
-        PriorityItem::deleteAll($sub_query);
-        EventItemlink::deleteAll($sub_query);
-        FeatureGroupItem::deleteAll($sub_query);
-
-        //vendor related data 
-        VendorCategory::deleteAll(['vendor_id' => $id]);
-        BlockedDate::deleteAll(['vendor_id' => $id]);
-        DeliveryTimeSlot::deleteAll(['vendor_id' => $id]);
-        VendorLocation::deleteAll(['vendor_id' => $id]);
-        VendorOrderAlertEmails::deleteAll(['vendor_id' => $id]);
-        VendorItem::deleteAll(['vendor_id' => $id]);
-
-        Yii::$app->session->setFlash('success', 'Vendor details deleted successfully!');
-
-        return $this->redirect(['index']);
     }
 
     /**
