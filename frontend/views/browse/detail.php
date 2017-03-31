@@ -928,8 +928,19 @@ if($model->images) {
                                                 <img src="<?php echo $baselink; ?>" alt="Slide show images" />
 
                                                 <div class="deals_listing_cont">
-                                                    <h3><?=LangFormat::format($s->item_name,$s->item_name_ar); ?></h3>
-                                                    <p><?=(trim($s['item_price_per_unit'])) ? CFormatter::format($s['item_price_per_unit']) : '<span class="small">'.Yii::t('app','Price upon request').'<span>'  ?></p>
+                                                    <h3>
+                                                        <?=LangFormat::format($s->item_name,$s->item_name_ar); ?>
+                                                    </h3>
+                                                    <p>
+                                                        <?php 
+
+                                                        if (trim($s['item_base_price'])) 
+                                                        {                                                     
+                                                            echo CFormatter::format($s['item_base_price']); 
+                                                        } else {
+                                                            echo '<span class="small">' . Yii::t('app', 'Price upon request') . '<span>';
+                                                        } ?>
+                                                    </p>
                                                 </div>
 
                                                 <?php if($s['item_how_long_to_make'] > 0) { ?>
