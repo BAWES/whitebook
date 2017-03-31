@@ -10,6 +10,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
+use kartik\mpdf\Pdf;
+use \mPDF;
 
 /**
  * VendorPaymentController implements the CRUD actions for VendorPayment model.
@@ -119,6 +122,47 @@ class VendorPaymentController extends Controller
         return [
             'unpaid_bookings' => $unpaid_bookings
         ];
+    }
+
+    /**
+     * Updates an existing VendorPayment model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionDetail($id) 
+    {
+        $this->layout = 'pdf';
+
+        $model = $this->findModel($id);
+
+        $bookings = VendorPayment::find()
+            ->select('{{%booking}}.booking_id, {{%booking}}.customer_name, {{%booking}}.customer_lastname, {{%booking}}.customer_mobile, {{%booking}}.total_with_delivery, {{%booking}}.commission_total')
+            ->innerJoin('{{%booking}}', '{{%booking}}.booking_id = {{%vendor_payment}}.booking_id')
+            ->where(['transfer_id' => $model->payment_id])
+            ->asArray()
+            ->all();
+
+        $orders_by_payment_methods = VendorPayment::find()
+            ->select('count({{%booking}}.booking_id) as total, sum({{%booking}}.total_with_delivery) as total_sale, {{%booking}}.payment_method')
+            ->innerJoin('{{%booking}}', '{{%booking}}.booking_id = {{%vendor_payment}}.booking_id')
+            ->where(['transfer_id' => $model->payment_id])
+            ->groupBy('payment_method')
+            ->asArray()
+            ->all();
+
+        $content = $this->render('detail_report', [
+            'model' => $model,
+            'bookings' => $bookings,
+            'orders_by_payment_methods' => $orders_by_payment_methods
+        ]);
+
+        $stylesheet = file_get_contents(Url::to('@web/themes/default/css/pdf.css', true));
+
+        $mpdf = new mPDF();
+        $mpdf->WriteHTML($stylesheet, 1);
+        $mpdf->WriteHTML($content);
+        $mpdf->Output();        
     }
 
     /**
