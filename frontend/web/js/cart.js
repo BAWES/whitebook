@@ -259,3 +259,5 @@ jQuery(document).delegate('#cart-form', 'submit', function(e) {
         e.preventDefault();
     }
 });*/
+
+

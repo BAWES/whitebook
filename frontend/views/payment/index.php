@@ -160,15 +160,17 @@ $this->title = Yii::t('frontend', 'Pay Now | Whitebook');
 
         <div class="row">
         	<?php if($cod) { ?>
-        	<div class="col-sm-6">
+        	<div class="col-sm-12">
         		<a href="<?= Url::to(['payment/cod']) ?>" class="btn btn-lg btn-primary btn-payment pull-right">
 		        	<?= Yii::t('frontend', 'Pay By Cash on Delivery') ?>
 		        </a>
         	</div>
         	<?php } ?>
-        	<?php if($tap) { ?>
-        	<div class="col-sm-6">
-        		<a href="<?= Url::to(['payment/tap']) ?>" class="btn btn-lg btn-primary btn-payment pull-left">
+        	<?php if($tap) {
+        	    $position = (Yii::$app->language =='en') ? 'float:right' : 'float:left';
+        	    ?>
+        	<div class="col-sm-12">
+        		<a href="<?= Url::to(['payment/tap']) ?>" class="btn btn-lg btn-primary btn-payment " style="<?=$position; ?>">
 		        	<?= Yii::t('frontend', 'Click here to pay') ?>
 		        </a>
         	</div>

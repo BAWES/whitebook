@@ -2,6 +2,8 @@
 
 namespace admin\controllers;
 
+use common\models\Booking;
+use common\models\VendorWorkingTiming;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -460,14 +462,10 @@ class VendorController extends Controller
     public function actionDelete($id)
     {
         //Shouldn't be able to delete a vendor who has orders
-        $count = Suborder::find()
-            ->joinWith('order')
-            ->where(['{{%suborder}}.vendor_id' => $id])
-            ->andWhere(['!=', '{{%order}}.order_transaction_id', ''])
-            ->count();
+        $count = Booking::find()->where(['vendor_id'=>$id])->exists();
 
         if($count) {
-            Yii::$app->session->setFlash('danger', 'You can\'t delete a vendor who has orders!');
+            Yii::$app->session->setFlash('danger', 'You can\'t delete a vendor who has Booking(s)!');
             return $this->redirect(['vendor/index']);
         }
 
@@ -489,7 +487,7 @@ class VendorController extends Controller
         //vendor related data 
         VendorCategory::deleteAll(['vendor_id' => $id]);
         BlockedDate::deleteAll(['vendor_id' => $id]);
-        DeliveryTimeSlot::deleteAll(['vendor_id' => $id]);
+        VendorWorkingTiming::deleteAll(['vendor_id' => $id]);
         VendorLocation::deleteAll(['vendor_id' => $id]);
         VendorOrderAlertEmails::deleteAll(['vendor_id' => $id]);
         VendorItem::deleteAll(['vendor_id' => $id]);
@@ -994,12 +992,15 @@ class VendorController extends Controller
 
     public function actionLoginRequest($id){
         $vendor = \common\models\Vendor::findOne($id);
-        if ($vendor) {
+        if ($vendor && $vendor->vendor_contact_email) {
             $vendor->auth_token = Yii::$app->getSecurity()->generateRandomString(50);
             $vendor->modified_datetime = date('Y-m-d H:i:s');
             if ($vendor->save()) {
                 return $this->redirect(Yii::$app->urlManagerVendor->createUrl(['site/simple-login','_c'=>$vendor->auth_token]));
             }
+        } else {
+            Yii::$app->session->setFlash('danger','No data found for vendor id : '.$id.' in database');
+            return $this->redirect(['vendor/index']);
         }
     }
 }
