@@ -145,7 +145,7 @@ class m161011_085531_add_foreign_key extends Migration
         //whitebook_suborder_item_purchase - suborder_id 
         $this->alterColumn ('{{%suborder_item_purchase}}', 'suborder_id', $this->integer(11) . ' UNSIGNED NULL');
 
-        $this->addForeignKey ('suborder_item_purchase_s_fk', '{{%suborder_item_purchase}}', 'suborder_id', '{{%suborder}}', 'suborder_id', 'SET NULL' , 'SET NULL');
+        $this->addForeignKey ('whitebook_suborder_item_purchase_s_fk', '{{%suborder_item_purchase}}', 'suborder_id', '{{%suborder}}', 'suborder_id', 'SET NULL' , 'SET NULL');
 
         //whitebook_suborder_item_purchase - timeslot 
         $this->alterColumn ('{{%suborder_item_purchase}}', 'timeslot_id', $this->integer(11) . ' UNSIGNED NULL');
@@ -156,19 +156,19 @@ class m161011_085531_add_foreign_key extends Migration
 
         $this->alterColumn ('{{%suborder_item_purchase}}', 'item_id', $this->integer(11) . ' UNSIGNED NULL');
 
-        $this->addForeignKey ('suborder_item_purchase_i_fk', '{{%suborder_item_purchase}}', 'item_id', '{{%vendor_item}}', 'item_id', 'SET NULL' , 'SET NULL');
+        $this->addForeignKey ('whitebook_suborder_item_purchase_i_fk', '{{%suborder_item_purchase}}', 'item_id', '{{%vendor_item}}', 'item_id', 'SET NULL' , 'SET NULL');
 
         //whitebook_suborder_item_purchase - area 
         $this->alterColumn ('{{%suborder_item_purchase}}', 'area_id', $this->integer(11) . ' UNSIGNED NULL');
 
         $this->alterColumn ('{{%location}}', 'id', $this->integer(11) . ' UNSIGNED');
 
-        $this->addForeignKey ('suborder_item_purchase_area_fk', '{{%suborder_item_purchase}}', 'area_id', '{{%location}}', 'id', 'SET NULL' , 'SET NULL');
+        $this->addForeignKey ('whitebook_suborder_item_purchase_area_fk', '{{%suborder_item_purchase}}', 'area_id', '{{%location}}', 'id', 'SET NULL' , 'SET NULL');
 
         //whitebook_suborder_item_purchase - address 
         $this->alterColumn ('{{%suborder_item_purchase}}', 'address_id', $this->integer(11) . ' UNSIGNED NULL');
 
-        $this->addForeignKey ('suborder_item_purchase_address_fk', '{{%suborder_item_purchase}}', 'address_id', '{{%customer_address}}', 'address_id', 'SET NULL' , 'SET NULL');
+        $this->addForeignKey ('whitebook_suborder_item_purchase_address_fk', '{{%suborder_item_purchase}}', 'address_id', '{{%customer_address}}', 'address_id', 'SET NULL' , 'SET NULL');
 
         $this->execute("SET foreign_key_checks = 1;");
     }
