@@ -320,7 +320,7 @@ if($model->images) {
                                         if ($model['item_base_price']) {
                                             echo CFormatter::format($model['item_base_price']);
                                         } else if (!$menu) {
-                                            echo '<span class="small" style="font-weight: bold;font-size:13px; color: brown;">'.Yii::t('frontend','Price base on selection').'</span>';
+                                            echo '<span class="font-27 small" style="font-weight: bold;">'.Yii::t('frontend','Price base on selection').'</span>';
                                         }
                                         ?>
                                     </b>
@@ -328,7 +328,7 @@ if($model->images) {
                                         if ($menu) {
                                             echo '<span class="small" style="font-weight: bold;font-size:13px; color: brown;">'.Yii::t('frontend','Price on selection of menu items').'</span>';
                                         }
-                                        echo '<br/><span class="small price_warning" style="font-weight: bold;font-size:13px; display:none; color: brown;">'.Yii::t('frontend','Price increase quantity to purchase this item').'</span>'; // price warning for 0 amount
+                                        echo '<br/><span class="small price_warning font-27" style="font-weight: bold; display:none;">'.Yii::t('frontend','Price base on selection').'</span>'; // price warning for 0 amount
                                           ?>
 
                                     <?php if($model['min_order_amount'] > 0) {

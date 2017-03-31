@@ -538,6 +538,7 @@ function update_price() {
         if (json.price == 'KD 0') { // disable add to cart button in case 0 price
             $('.button-signin button').attr('disabled',true);
             $('.price_warning').show();
+            $('.item-final-price').empty();
         } else {
             $('.button-signin button').attr('disabled',false);
             $('.price_warning').hide();
