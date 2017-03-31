@@ -3,9 +3,10 @@
 namespace admin\controllers;
 
 use Yii;
+use common\models\Vendor;
 use common\models\VendorPayment;
 use common\models\VendorPaymentSearch;
-use common\models\Vendor;
+use common\models\VendorOrderAlertEmails;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -90,7 +91,26 @@ class VendorPaymentController extends Controller
                 VendorPayment::updateAll(['transfer_id' => $model->payment_id], ['booking_id' => $value]);
             }
 
+            //send mail to vendor to notify payment transfer report available 
+
+            $emails = VendorOrderAlertEmails::find()
+                ->where(['vendor_id' => $model->vendor_id])
+                ->all();
+
+            $emails = ArrayHelper::getColumn($emails, 'email_address');
+        
+            Yii::$app->mailer->compose("vendor/payment-report",
+                [
+                    "model" => $model,
+                    "vendor" => $model->vendor
+                ])
+                ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->params['SITE_NAME']])
+                ->setTo($emails)
+                ->setSubject('Payment report available')
+                ->send();
+
             return $this->redirect(['index']);
+
         } else {
 
             $vendors = Vendor::find()->all();
