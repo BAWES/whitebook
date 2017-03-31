@@ -34,7 +34,7 @@ class VendorQuery extends \yii\db\ActiveQuery
 
     public function byVendorID($vendor_ids)
     {
-        return $this->where(['IN','vendor_id'=>$vendor_ids]);
+        return $this->andWhere(['IN','vendor_id'=>$vendor_ids]);
     }
 
 }

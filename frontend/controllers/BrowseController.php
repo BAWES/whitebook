@@ -278,13 +278,12 @@ class BrowseController extends BaseController
 
         $vendor = Vendor::find()
             ->select('{{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%vendor}}.slug')
-            ->byVendorID($vendor_ids)
+            ->where(['IN', '{{%vendor}}.vendor_id', $vendor_ids])
             ->asArray()
             ->all();
 
         $TopCategories = Category::find()
             ->where('(parent_category_id IS NULL or parent_category_id = 0) AND trash = "Default"')
-            ->defaultItems('(parent_category_id IS NULL or parent_category_id = 0) AND trash = "Default"')
             ->orderBy('sort')
             ->asArray()
             ->all();
