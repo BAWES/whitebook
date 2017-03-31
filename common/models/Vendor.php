@@ -364,5 +364,15 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
     public static function vendorManageBy($id){
         return self::findOne($id)->vendor_booking_managed_by;
     }
+
+
+    /**
+     * @inheritdoc
+     * @return VendorQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new \common\models\query\VendorQuery(get_called_class());
+    }
 }
 

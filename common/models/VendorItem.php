@@ -522,4 +522,13 @@ class VendorItem extends \yii\db\ActiveRecord
         }
         return $total;
     }
+
+    /**
+     * @inheritdoc
+     * @return VendorItemQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new \common\models\query\VendorItemQuery(get_called_class());
+    }
 }

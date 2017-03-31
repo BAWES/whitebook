@@ -53,4 +53,13 @@ class CategoryPath extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Category::className(), ['category_id' => 'category_id']);
     }
+
+    /**
+     * @inheritdoc
+     * @return BookingQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new \common\models\query\CategoryPathQuery(get_called_class());
+    }
 }

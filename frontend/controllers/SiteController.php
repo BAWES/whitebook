@@ -244,13 +244,13 @@ class SiteController extends BaseController
         
         $loadvendorid = \common\models\VendorItem::find()
             ->select(['vendor_id'])
-            ->Where(['category_id'=>$data['cat_id']])
+            ->byCategoryID($data['cat_id'])
             ->asArray()
             ->all();
         
         $loadvendor = \common\models\Vendor::find()
             ->select(['DISTINCT(vendor_id)','vendor_name'])
-            ->Where(['IN','vendor_id'=>$loadvendorid])
+            ->byVendorID($loadvendorid)
             ->asArray()
             ->all();
         
@@ -269,7 +269,7 @@ class SiteController extends BaseController
 
         $themes = \common\models\VendorItemThemes::find()
             ->select(['GROUP_CONCAT(DISTINCT(theme_id)) as theme_id'])
-            ->Where(['vendor_id'=>$data['v_id']])
+            ->byVendorID($data['v_id'])
             ->asArray()
             ->all();
         
@@ -277,7 +277,7 @@ class SiteController extends BaseController
         
         $loadthemes = Themes::find()
             ->select('theme_id, theme_name')
-            ->where(['theme_id' => $loadtheme_ids[0]['theme_id']])
+            ->byThemeID($loadtheme_ids[0]['theme_id'])
             ->asArray()
             ->all();
 
@@ -345,7 +345,7 @@ class SiteController extends BaseController
             $user_event_list = \common\models\Events::find()
     			->select(['event_name','event_id','event_date','event_type','slug'])
     			->innerJoin('{{%event_type}} AS et', '{{%events}}.event_type = et.type_name')
-    			->Where(['et.trash'=>'default'])
+    			->where(['et.trash'=>'default'])
     			->andWhere(['{{%events}}.customer_id'=>$customer_id])
     			->asArray()
     			->all();
@@ -356,7 +356,7 @@ class SiteController extends BaseController
         $user_event_list = \common\models\Events::find()
 			->select(['event_name','event_id','event_date','event_type','slug'])
 			->innerJoin('{{%event_type}} AS et', '{{%events}}.event_type = et.type_name')
-			->Where(['et.trash'=>'default'])
+			->where(['et.trash'=>'default'])
 			->andWhere(['{{%events}}.event_type'=>$event])
 			->andWhere(['{{%events}}.customer_id'=>$customer_id])
 			->asArray()
@@ -377,7 +377,7 @@ class SiteController extends BaseController
 
         $area = Location::find()
             ->select('id, location, location_ar')
-            ->where(['city_id' => $data['city_id']])
+            ->byCityID($data['city_id'])
             ->all();
 
         $options = '<option value="">'.Yii::t('frontend', 'Select').'</option>';
@@ -405,7 +405,7 @@ class SiteController extends BaseController
 
         $city = City::find()
             ->select('city_id, city_name, city_name_ar')
-            ->where(['country_id' => $data['country_id']])
+            ->byCountryID($data['country_id'])
             ->all();
         
         $options = '<option value="">'.Yii::t('frontend', 'Select').'</option>';
