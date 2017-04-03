@@ -17,9 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
    <div class="span12">
        <div class="grid simple">
 		   
-			
-        	<?php Pjax::begin(['enablePushState' => false]); ?>
-            <?= GridView::widget([
+			<?= GridView::widget([
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
                 'columns' => [
@@ -60,10 +58,25 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
 
         			],
+                    [
+                        'class' => 'yii\grid\ActionColumn',
+                        'template' => '{transfer}',
+                        'buttons' => [            
+                            'transfer' => function($url, $data) {
+                                return HTML::a(
+                                    '<i class="glyphicon glyphicon-export"></i>', 
+                                    Url::to(['vendor-payment/create', 'vendor_id' => $data->vendor_id]),
+                                    [
+                                        'title' => 'Transfer',
+                                        'target' => '_blank'
+                                    ]
+                                );
+                            },
+                        ]
+                    ],
                 ],
             ]); ?>
-            <?php Pjax::end(); ?>
-
+           
 		</div>
 	</div>
 </div>

@@ -115,6 +115,8 @@ class VendorPaymentController extends Controller
 
             $vendors = Vendor::find()->all();
 
+            $model->vendor_id = Yii::$app->request->get('vendor_id');
+
             return $this->render('create', [
                 'model' => $model,
                 'vendors' => ArrayHelper::map($vendors, 'vendor_id', 'vendor_name')
