@@ -112,7 +112,33 @@ use common\components\CFormatter;
                             echo '<div class="clearfix"></div> - <i class="cart_menu_item">Base Price : KD '.$item->item_base_price.'</i>';
                         }
 	                    
-	                    foreach ($item->bookingItemMenus as $key => $menu_item) { 
+	                    $menu_addon_items = $item->bookingItemAddons;
+
+                        $menu_option_items = $item->bookingItemOptions;
+
+                        if($menu_option_items)
+                        {
+                        	echo '<div class="clearfix"></div><b>Options</b>';
+                        }
+
+	                    foreach ($menu_option_items as $key => $menu_item) { 
+	                        echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];
+
+                            $menu_item_total = $menu_item['quantity'] * $menu_item['price'];
+
+                            if($menu_item_total) {
+                                echo ' = '.CFormatter::format($menu_item_total);    
+                            }
+                            
+                            echo '</i>';
+	                    } 
+
+	                    if($menu_addon_items)
+                        {
+                        	echo '<div class="clearfix"></div><b>Add-Ons</b>';
+                        }
+
+	                    foreach ($menu_addon_items as $key => $menu_item) { 
 	                        echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];
 
                             $menu_item_total = $menu_item['quantity'] * $menu_item['price'];

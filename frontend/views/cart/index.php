@@ -50,13 +50,22 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        	$sub_total = $delivery_charge = 0;
 
 	        	foreach ($items as $item) {
+                    
                     $row_total = ($item['item']['item_base_price']) ? $item['item']['item_base_price'] : 0;
-	        		//$menu_items = CustomerCartMenuItem::findAll(['cart_id' => $item['cart_id']]);
 	        		
-	        		$menu_items = CustomerCartMenuItem::find()
+	        		$menu_option_items = CustomerCartMenuItem::find()
+	    				->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_id, {{%vendor_item_menu_item}}.menu_id, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
+	    				->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')	    				
+	    				->innerJoin('{{%vendor_item_menu}}', '{{%vendor_item_menu}}.menu_id = {{%customer_cart_menu_item}}.menu_id')
+	    				->where(['cart_id' => $item['cart_id'], 'menu_type' => 'options'])
+	    				->asArray()
+	    				->all();
+
+	    			$menu_addon_items = CustomerCartMenuItem::find()
 	    				->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_id, {{%vendor_item_menu_item}}.menu_id, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
 	    				->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
-	    				->where(['cart_id' => $item['cart_id']])
+	    				->innerJoin('{{%vendor_item_menu}}', '{{%vendor_item_menu}}.menu_id = {{%customer_cart_menu_item}}.menu_id')
+	    				->where(['cart_id' => $item['cart_id'], 'menu_type' => 'addons'])
 	    				->asArray()
 	    				->all();
 
@@ -66,7 +75,9 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        			'delivery_date' => $item['cart_delivery_date'],
 	        			'area_id' => $item['area_id'],
 	        			'quantity' => $item['cart_quantity'],
-	        			'menu_item' => ArrayHelper::map($menu_items, 'menu_item_id', 'quantity')
+	        			'menu_item' => ArrayHelper::map(
+	        					array_merge($menu_option_items, $menu_addon_items), 'menu_item_id', 'quantity'
+	        				)
 	        		], true);
 
 					$delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
@@ -96,7 +107,11 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 
                     $row_total += $unit_price * $actual_item_quantity;
 
-	    			foreach ($menu_items as $key => $value) {
+	    			foreach ($menu_option_items as $key => $value) {
+	    				$row_total += $value['quantity'] * $value['price'];
+	    			}
+
+	    			foreach ($menu_addon_items as $key => $value) {
 	    				$row_total += $value['quantity'] * $value['price'];
 	    			}
 
@@ -128,11 +143,46 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 		        				<?= LangFormat::format($item['item_name'], $item['item_name_ar']); ?>
 		        			</a>
 
+	        				<span class="cart-edit" data-cart-id="<?=$item['cart_id']?>">[Edit]</span>
+
+		        			<br />
+
 		        			<?php 
 
 		        			$arr_menu_id = [];
 
-		        			foreach ($menu_items as $key => $menu_item) { 
+		        			if($menu_option_items)
+		        			{
+		        				echo '<b>'.Yii::t('frontend', 'Options').'</b>';
+		        			}
+
+		        			foreach ($menu_option_items as $key => $menu_item) { 
+
+		        				if(Yii::$app->language == 'en') {
+		        					echo '<i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];
+		        				}else{
+		        					echo '<i class="cart_menu_item">'.$menu_item['menu_item_name_ar'].' x '.$menu_item['quantity'];
+		        				}
+
+		        				$menu_item_total = $menu_item['quantity'] * $menu_item['price'];
+
+		        				if($menu_item_total) {
+		        					echo ' = '.CFormatter::format($menu_item_total);	
+		        				}
+		        				
+		        				echo '</i>';
+
+		        				//get distinct menu_id 
+
+		        				$arr_menu_id[$menu_item['menu_id']] = $menu_item['menu_id'];
+		        			} 
+
+		        			if($menu_addon_items)
+		        			{
+		        				echo '<b>'.Yii::t('frontend', 'Add-Ons').'</b><br />';
+		        			}
+
+		        			foreach ($menu_addon_items as $key => $menu_item) { 
 
 		        				if(Yii::$app->language == 'en') {
 		        					echo '<i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];
@@ -163,7 +213,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 
 		        			?>
 
-		        			<?php if($menu_items) { ?>
+		        			<?php if($menu_addon_items || $menu_option_items) { ?>
 			        			<div class="visible-xs visible-sm">	        				
 			        				 = <?= CFormatter::format($row_total); ?>
 			        			</div>
@@ -385,7 +435,7 @@ $this->registerJs("
 </div>
 <?php
 
-$this->registerJsFile('@web/js/cart.js?v=1.5', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/cart.js?v=1.6', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 echo Html::hiddenInput('txt-select', Yii::t('frontend', 'Select '), ['id' => 'txt-select']);
 echo Html::hiddenInput('txt-min', Yii::t('frontend', 'atleast {qty} '), ['id' => 'txt-min']);

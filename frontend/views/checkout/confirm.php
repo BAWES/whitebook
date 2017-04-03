@@ -72,14 +72,27 @@ use common\models\CustomerCartMenuItem;
 
                 $row_total += $unit_price * $actual_item_quantity;
 
-                $menu_items = CustomerCartMenuItem::find()
-                    ->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
+                $menu_option_items = CustomerCartMenuItem::find()
+                        ->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_id, {{%vendor_item_menu_item}}.menu_id, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
+                        ->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')                        
+                        ->innerJoin('{{%vendor_item_menu}}', '{{%vendor_item_menu}}.menu_id = {{%customer_cart_menu_item}}.menu_id')
+                        ->where(['cart_id' => $item['cart_id'], 'menu_type' => 'options'])
+                        ->asArray()
+                        ->all();
+
+                $menu_addon_items = CustomerCartMenuItem::find()
+                    ->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_id, {{%vendor_item_menu_item}}.menu_id, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
                     ->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
-                    ->where(['cart_id' => $item['cart_id']])
+                    ->innerJoin('{{%vendor_item_menu}}', '{{%vendor_item_menu}}.menu_id = {{%customer_cart_menu_item}}.menu_id')
+                    ->where(['cart_id' => $item['cart_id'], 'menu_type' => 'addons'])
                     ->asArray()
                     ->all();
 
-                foreach ($menu_items as $key => $value) {
+                foreach ($menu_addon_items as $key => $value) {
+                    $row_total += $value['quantity'] * $value['price'];
+                }
+
+                foreach ($menu_option_items as $key => $value) {
                     $row_total += $value['quantity'] * $value['price'];
                 }
 
@@ -116,9 +129,37 @@ use common\models\CustomerCartMenuItem;
                             <?= LangFormat::format($item['item_name'],$item['item_name_ar']) ?>
                         </a>
 
+                        <br />
+
                         <?php
 
-                            foreach ($menu_items as $key => $menu_item) {
+                            if($menu_option_items)
+                            {
+                                echo '<b>'.Yii::t('frontend', 'Options').'</b>';
+                            }
+
+                            foreach ($menu_option_items as $key => $menu_item) {
+                                if(Yii::$app->language == 'en') {
+                                    echo '<i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];
+                                }else{
+                                    echo '<i class="cart_menu_item">'.$menu_item['menu_item_name_ar'].' x '.$menu_item['quantity'];
+                                }
+
+                                $menu_item_total = $menu_item['quantity'] * $menu_item['price'];
+
+                                if($menu_item_total) {
+                                    echo ' = '.CFormatter::format($menu_item_total);
+                                }
+
+                                echo '</i>';
+                            }
+
+                            if($menu_addon_items)
+                            {
+                                echo '<b>'.Yii::t('frontend', 'Add-Ons').'</b><br />';
+                            }
+
+                            foreach ($menu_addon_items as $key => $menu_item) {
                                 if(Yii::$app->language == 'en') {
                                     echo '<i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];
                                 }else{
@@ -144,7 +185,7 @@ use common\models\CustomerCartMenuItem;
 
                             ?>
 
-                            <?php if($menu_items) { ?>
+                            <?php if($menu_option_items || $menu_addon_items) { ?>
                                 <div class="visible-xs visible-sm">
                                      = <?= CFormatter::format($row_total); ?>
                                 </div>

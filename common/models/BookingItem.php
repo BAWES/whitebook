@@ -104,6 +104,24 @@ class BookingItem extends \yii\db\ActiveRecord
         return $this->hasMany(BookingItemMenu::className(), ['booking_item_id' => 'booking_item_id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBookingItemOptions()
+    {
+        return $this->hasMany(BookingItemMenu::className(), ['booking_item_id' => 'booking_item_id'])
+            ->andWhere(['menu_type' => 'options']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBookingItemAddons()
+    {
+        return $this->hasMany(BookingItemMenu::className(), ['booking_item_id' => 'booking_item_id'])
+            ->andWhere(['menu_type' => 'addons']);
+    }
+
     public function getLocation()
     {
         return $this->hasOne(Location::className(), ['id' => 'area_id']);
