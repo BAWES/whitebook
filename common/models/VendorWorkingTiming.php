@@ -72,8 +72,7 @@ class VendorWorkingTiming extends \yii\db\ActiveRecord
 
             if($start_time > strtotime($value->working_start_time) && 
                 $start_time < strtotime($value->working_end_time)) {
-
-                    $this->addError('working_start_time', 'Start time conflicting with '.date('h:i A', strtotime($value->working_start_time)).' - '.date('h:i A', strtotime($value->working_end_time)).'.');
+                return $this->addError('working_start_time', 'You already have working time slot from '.date('h:i A', strtotime($value->working_start_time)).' - '.date('h:i A', strtotime($value->working_end_time)).'. on '.$value->working_day);
             }
         }
     }
@@ -96,7 +95,7 @@ class VendorWorkingTiming extends \yii\db\ActiveRecord
 
             if($end_time > strtotime($value->working_start_time) && 
                 $end_time < strtotime($value->working_end_time)) {
-                    $this->addError('working_end_time', 'End time conflicting with '.date('h:i A', strtotime($value->working_start_time)).' - '.date('h:i A', strtotime($value->working_end_time)).'.');
+                return $this->addError('working_end_time', 'You already have working time slot from '.date('h:i A', strtotime($value->working_start_time)).' - '.date('h:i A', strtotime($value->working_end_time)).'. on '.$value->working_day);
             }
         }
     }
