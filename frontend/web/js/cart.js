@@ -236,7 +236,7 @@ $('.btn-danger').click(function() {
     $('#cart-form').submit();
 });
 
-$('.fa-edit').click(function(){
+$('.fa-edit, .cart-edit').click(function(){
     $.ajax({
         url: update_cart_popup_url,
         type:'post',
