@@ -512,4 +512,13 @@ class CustomerCart extends \yii\db\ActiveRecord
     {
         return Booking::getPurchaseDeliveryAddress($address_id);
     }
+
+    /**
+     * @inheritdoc
+     * @return ImageQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\CustomerCartQuery(get_called_class());
+    }
 }

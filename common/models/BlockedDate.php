@@ -126,4 +126,9 @@ class BlockedDate extends \yii\db\ActiveRecord
 
         }
     }
+
+    public static function find()
+    {
+        return new query\BlockDateQuery(get_called_class());
+    }
 }

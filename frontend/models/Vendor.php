@@ -108,4 +108,14 @@ class Vendor extends \common\models\Vendor
 
         return ArrayHelper::map($vendor, 'vendor_id', 'vendor_id');
     }
+
+
+    /**
+     * @inheritdoc
+     * @return VendorQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new \common\models\query\VendorQuery(get_called_class());
+    }
 }

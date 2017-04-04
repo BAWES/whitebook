@@ -91,7 +91,7 @@ class VendorItemPricing extends \yii\db\ActiveRecord
     */
     public static function find()
     {
-        return new VendorItemPricingQuery(get_called_class());
+        return new query\VendorItemPricingQuery(get_called_class());
     }
 
     public static function loadpricevalues($item_id)
@@ -123,9 +123,7 @@ class VendorItemPricing extends \yii\db\ActiveRecord
     public static function checkprice($item_id,$type_id,$item_price_per_unit)
     {
         $model = VendorItemPricing::find()->where(['item_id'=>$item_id])->all();
-        if(empty($model))
-        {return 0; }
-        else
-        {return 1; }
+        return (empty($model)) ? 0 : 1;
     }
+
 }

@@ -134,4 +134,14 @@ class Image extends \yii\db\ActiveRecord
         $model = Image::find()->where(['image_id'=>$image_id,'module_type'=>'guides'])->all();
         return $model;
     }
+
+
+    /**
+     * @inheritdoc
+     * @return ImageQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new \common\models\query\ImageQuery(get_called_class());
+    }
 }

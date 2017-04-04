@@ -278,12 +278,13 @@ class BrowseController extends BaseController
 
         $vendor = Vendor::find()
             ->select('{{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%vendor}}.slug')
-            ->where(['IN', '{{%vendor}}.vendor_id', $vendor_ids])
+            ->byVendorID($vendor_ids)
             ->asArray()
             ->all();
 
         $TopCategories = Category::find()
-            ->where('(parent_category_id IS NULL or parent_category_id = 0) AND trash = "Default"')
+            ->allParents()
+            ->defaultCategories()
             ->orderBy('sort')
             ->asArray()
             ->all();
@@ -319,15 +320,9 @@ class BrowseController extends BaseController
     {
         $model = VendorItem::find()
                     ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
-                    ->where([
-                        '{{%vendor_item}}.slug' => $slug,
-                        '{{%vendor_item}}.trash' => 'Default',
-                        '{{%vendor_item}}.item_status' => 'Active',
-                        '{{%vendor_item}}.item_approved' => 'Yes',
-                        '{{%vendor}}.vendor_status' => 'Active',
-                        '{{%vendor}}.approve_status' => 'Yes',
-                        '{{%vendor}}.trash' => 'Default',
-                    ])
+                    ->bySlug($slug)->defaultItems()->activeItems()
+                    ->approvedItems()->byActiveVendor()->approvedVendor()
+                    ->defaultVendor()
                     ->one();
 
         if (empty($model)) {
@@ -360,7 +355,7 @@ class BrowseController extends BaseController
         }
 
         $output = \common\models\Image::find()->select(['image_path'])
-            ->where(['item_id' => $model['item_id']])
+            ->itemID($model['item_id'])
             ->orderby(['vendorimage_sort_order' => SORT_ASC])
             ->asArray()
             ->one();
@@ -417,22 +412,10 @@ class BrowseController extends BaseController
             $vendor_detail->vendor_website = 'http://'.$vendor_detail->vendor_website;
         }
 
-        $price_table = VendorItemPricing::find()
-            ->where([
-                'item_id' => $model->item_id,
-                'trash' => 'Default'
-            ])
-            ->all();
+        $price_table = VendorItemPricing::find()->byItemID($model->item_id)->defaultItem()->all();
 
-        $menu = VendorItemMenu::findAll([
-            'item_id' => $model->item_id,
-            'menu_type' => 'options'
-        ]);
-
-        $addons = VendorItemMenu::findAll([
-            'item_id' => $model->item_id,
-            'menu_type' => 'addons'
-        ]);
+        $menu = VendorItemMenu::find()->byItemID($model->item_id)->optionMenu()->all();
+        $addons = VendorItemMenu::find()->byItemID($model->item_id)->addonMenu()->all();
 
         $vendor_area = VendorLocation::findAll(['vendor_id' => $model->vendor_id]);
         $vendor_area_list =  \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'locationName','cityName' );
@@ -444,10 +427,10 @@ class BrowseController extends BaseController
         {
             $my_addresses =  \common\models\CustomerAddress::find()
                 ->select(['{{%location}}.id,{{%customer_address}}.address_id, {{%customer_address}}.address_name'])
-                ->leftJoin('{{%location}}', '{{%location}}.id = {{%customer_address}}.area_id')
-                ->where(['{{%customer_address}}.trash'=>'Default'])
-                ->andwhere(['{{%customer_address}}.customer_id' => Yii::$app->user->getId()])
-                ->andwhere(['{{%location}}.id' => $area_ids])
+                ->joinLocation()
+                ->byDefaultAddress()
+                ->byCustomer(Yii::$app->user->getId())
+                ->byLocation($area_ids)
                 ->groupby(['{{%location}}.id'])
                 ->asArray()
                 ->all();
@@ -574,7 +557,7 @@ class BrowseController extends BaseController
             } else {
                 $name = 'location_ar';
             }
-            $area = \common\models\Location::find()->where(['status'=>'Active', 'trash' => 'Default', 'city_id' => $_POST['city_id']])->orderBy('city_id')->all();
+            $area = \common\models\Location::find()->byCityID($_POST['city_id'])->activeLocations()->defaultLocations()->orderBy('city_id')->all();
             if ($area) {
                 echo \yii\helpers\Html::dropDownList('Location','',\yii\helpers\ArrayHelper::map($area ,'id',$name),['prompt'=>'Please Select Location','class'=>'selectpicker required trigger','id'=>'Location']);
             } else {
@@ -619,7 +602,7 @@ class BrowseController extends BaseController
         
         if ($item) {
             
-            $exist = \common\models\BlockedDate::findOne(['vendor_id' => $item->vendor_id, 'block_date' => date('Y-m-d', strtotime($selectedDate))]);
+            $exist = \common\models\BlockedDate::find()->byVendor($item->vendor_id)->byBlockedDate($selectedDate)->one();
 
             $date = date('d-m-Y', strtotime($selectedDate));
             
@@ -644,9 +627,9 @@ class BrowseController extends BaseController
         $total = ($item->item_base_price) ? $item->item_base_price : 0;
 
         $price_chart = VendorItemPricing::find()
-            ->where(['item_id' => $item['item_id'], 'trash' => 'Default'])
-            ->andWhere(['<=', 'range_from', Yii::$app->request->post('quantity')])
-            ->andWhere(['>=', 'range_to', Yii::$app->request->post('quantity')])
+            ->byItemID($item['item_id'])
+            ->defaultItem()
+            ->byQuantityRange(Yii::$app->request->post('quantity'))
             ->orderBy('pricing_price_per_unit DESC')
             ->one();
 

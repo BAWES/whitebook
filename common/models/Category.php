@@ -173,4 +173,14 @@ class Category extends \yii\db\ActiveRecord
 
         return $category;
     }
+
+
+    /**
+     * @inheritdoc
+     * @return VendorQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new \common\models\query\CategoryQuery(get_called_class());
+    }
 }
