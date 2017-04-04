@@ -3,11 +3,11 @@
 namespace common\models\query;
 use Yii;
 /**
- * This is the ActiveQuery class for [[Category]].
+ * This is the ActiveQuery class for [[Themes]].
  *
  * @see Booking
  */
-class CategoryQuery extends \yii\db\ActiveQuery
+class ImageQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +16,7 @@ class CategoryQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return Category[]|array
+     * @return Themes[]|array
      */
     public function all($db = null)
     {
@@ -25,21 +25,14 @@ class CategoryQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return Category|array|null
+     * @return Themes|array|null
      */
     public function one($db = null)
     {
         return parent::one($db);
     }
 
-    public function defaultCategories()
-    {
-        return $this->andWhere(['trash'=>"Default"]);
+    public function itemID($itemID){
+        return $this->andWhere(['item_id' => $itemID]);
     }
-
-    public function allParents()
-    {
-        return $this->andWhere('(parent_category_id IS NULL or parent_category_id = 0)');
-    }
-
 }

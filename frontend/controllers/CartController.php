@@ -87,25 +87,18 @@ class CartController extends BaseController
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
-        $menu = VendorItemMenu::findAll([
-            'item_id' => $model->item_id,
-            'menu_type' => 'options'
-        ]);
+        $menu = VendorItemMenu::find()->byItemID($model->item_id)->optionMenu()->all();
+        $addons = VendorItemMenu::find()->byItemID($model->item_id)->addonMenu()->all();
 
-        $addons = VendorItemMenu::findAll([
-            'item_id' => $model->item_id,
-            'menu_type' => 'addons'
-        ]);
+        //get timeslots
 
-        //get timeslots 
         $vendor_timeslot = VendorWorkingTiming::find()
-            ->select(['working_id','working_start_time','working_end_time'])
-            ->where([
-                'vendor_id' => $model->vendor_id,
-                'working_day' => date("l", strtotime($item->cart_delivery_date))
-            ])
+            ->byVendorID($model->vendor_id)
+            ->byWorkingDay(date("l", strtotime($item->cart_delivery_date)))
+            ->defaultTiming()
             ->asArray()
             ->all();
+
         $slots = [];
 
         if ($vendor_timeslot) {

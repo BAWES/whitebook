@@ -7,7 +7,7 @@ use Yii;
  *
  * @see Booking
  */
-class VendorQuery extends \yii\db\ActiveQuery
+class CustomerCartQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +16,7 @@ class VendorQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return Vendor[]|array
+     * @return CustomerCart[]|array
      */
     public function all($db = null)
     {
@@ -25,16 +25,11 @@ class VendorQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return Vendor|array|null
+     * @return CustomerCart|array|null
      */
     public function one($db = null)
     {
         return parent::one($db);
-    }
-
-    public function byVendorID($vendor_ids)
-    {
-        return $this->andWhere(['IN', '{{%vendor}}.vendor_id', $vendor_ids]);
     }
 
 }

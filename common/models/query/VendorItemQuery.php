@@ -34,6 +34,41 @@ class VendorItemQuery extends \yii\db\ActiveQuery
 
     public function byCategoryID($id)
     {
-        return $this->andWhere('category_id='.$id);
+        return $this->andWhere('{{%vendor_item}}.category_id='.$id);
+    }
+
+    public function bySlug($slug)
+    {
+        return $this->andWhere(['{{%vendor_item}}.slug' => $slug]);
+    }
+
+    public function defaultItems()
+    {
+        return $this->andWhere(['{{%vendor_item}}.trash' => 'Default']);
+    }
+
+    public function activeItems()
+    {
+        return $this->andWhere(['{{%vendor_item}}.item_status' => 'Active']);
+    }
+
+    public function approvedItems()
+    {
+        return $this->andWhere(['{{%vendor_item}}.item_approved' => 'Yes']);
+    }
+
+    public function byActiveVendor()
+    {
+        return $this->andWhere(['{{%vendor}}.vendor_status' => 'Active']);
+    }
+
+    public function approvedVendor()
+    {
+        return $this->andWhere(['{{%vendor}}.approve_status' => 'Yes']);
+    }
+
+    public function defaultVendor()
+    {
+        return $this->andWhere(['{{%vendor}}.trash' => 'Default']);
     }
 }

@@ -36,4 +36,12 @@ class LocationQuery extends \yii\db\ActiveQuery
     public function byCityID($id) {
         return $this->where(['city_id' => $id]);
     }
+
+    public function activeLocations() {
+        return $this->where(['status'=>'Active']);
+    }
+
+    public function defaultLocations() {
+        return $this->where(['trash' => 'Default']);
+    }
 }

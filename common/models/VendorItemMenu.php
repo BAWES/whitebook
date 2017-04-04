@@ -76,4 +76,9 @@ class VendorItemMenu extends \yii\db\ActiveRecord
     {
         return $this->hasMany(VendorItemMenuItem::className(), ['menu_id' => 'menu_id']);
     }
+
+    public static function find()
+    {
+        return new query\VendorItemMenuQuery(get_called_class());
+    }
 }

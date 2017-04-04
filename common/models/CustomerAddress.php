@@ -149,5 +149,14 @@ class CustomerAddress extends \yii\db\ActiveRecord
     public function getSuborderItemPurchases()
     {
         return $this->hasMany(SuborderItemPurchase::className(), ['address_id' => 'address_id']);
-    }    
+    }
+
+    /**
+     * @inheritdoc
+     * @return VendorQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\CustomerAddressQuery(get_called_class());
+    }
 }

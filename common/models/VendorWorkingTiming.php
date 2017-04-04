@@ -59,11 +59,10 @@ class VendorWorkingTiming extends \yii\db\ActiveRecord
         $start_time = strtotime($this->working_start_time);
         $end_time = strtotime($this->working_end_time);
 
-        $timeslots = VendorWorkingTiming::findAll([
-                'working_day' => $this->working_day,
-                'vendor_id' => $this->vendor_id,
-                'trash' => 'Default'
-            ]); 
+        $timeslots = VendorWorkingTiming::find()
+            ->byVendorID($this->vendor_id)
+            ->byWorkingDay($this->working_day)
+            ->defaultTiming();
 
         foreach ($timeslots as $key => $value) {
 
@@ -82,12 +81,11 @@ class VendorWorkingTiming extends \yii\db\ActiveRecord
         $start_time = strtotime($this->working_start_time);
         $end_time = strtotime($this->working_end_time);
 
-        $timeslots = VendorWorkingTiming::findAll([
-                'working_day' => $this->working_day,
-                'vendor_id' => $this->vendor_id,
-                'trash' => 'Default'
-            ]); 
-
+        $timeslots = VendorWorkingTiming::find()
+            ->byVendorID($this->vendor_id)
+            ->byWorkingDay($this->working_day)
+            ->defaultTiming();
+        
         foreach ($timeslots as $key => $value) {
             
             if($value->working_id == $this->working_id)
