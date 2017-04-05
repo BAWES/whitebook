@@ -221,9 +221,13 @@ class CartController extends BaseController
 
         $data = Yii::$app->request->post();
 
-        Yii::$app->session->set('deliver-location', $data['area_id']);
-        Yii::$app->session->set('deliver-date', $data['delivery_date']);
-        Yii::$app->session->set('event_time', $data['time_slot']);
+        $area_id = empty($data['area_id'])?'':$data['area_id'];
+        $time_slot = empty($data['time_slot'])?'':$data['time_slot'];
+        $delivery_date = empty($data['delivery_date'])?'':date('Y-m-d', strtotime($data['delivery_date']));
+
+        Yii::$app->session->set('deliver-location', $area_id);
+        Yii::$app->session->set('deliver-date', $delivery_date);
+        Yii::$app->session->set('event_time', $time_slot);
 
         //remove menu item with 0 quantity 
 
@@ -244,9 +248,9 @@ class CartController extends BaseController
             $query = CustomerCart::find()
                 ->where([
                     'item_id' => $data['item_id'],
-                    'area_id'   => isset($data['area_id'])?$data['area_id']:'',
-                    'time_slot' => isset($data['time_slot'])?$data['time_slot']:'',
-                    'cart_delivery_date' => date('Y-m-d', strtotime($data['delivery_date'])),
+                    'area_id'   => $area_id,
+                    'time_slot' => $time_slot,
+                    'cart_delivery_date' => $delivery_date,
                 ]);
             
             if(!empty($data['female_service'])){
