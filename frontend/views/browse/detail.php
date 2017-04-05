@@ -600,7 +600,7 @@ if($model->images) {
                                                                     ]);
                                                                 }
 
-                                                                if($value->min_quantity && $value->max_quantity) {
+                                                                /*if($value->min_quantity && $value->max_quantity) {
                                                                     echo ' , ';
                                                                 }
 
@@ -608,7 +608,7 @@ if($model->images) {
                                                                     echo Yii::t('frontend', ' upto {qty}', [
                                                                         'qty' => $value->max_quantity * $quantity
                                                                     ]);
-                                                                }
+                                                                }*/
 
                                                                 ?>
                                                             </span>
