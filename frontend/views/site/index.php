@@ -218,8 +218,7 @@ if (!empty($feature_group_sql_result)) {
                             if (
                                 $product_val['item_approved'] == 'Yes' &&
                                 $product_val['trash'] == 'Default' &&
-                                $product_val['item_status'] == 'Active' &&
-                                $product_val['item_for_sale'] == 'Yes'
+                                $product_val['item_status'] == 'Active'
                             ) {
                                 $AvailableStock = true;
                             } else {
@@ -284,12 +283,6 @@ if (!empty($feature_group_sql_result)) {
                                 <a href="<?= $item_url ?>" class='index_redirect' data-hr='<?= $item_url; ?>'>
 
                                     <?= Html::img($imglink); ?>
-
-                                    <?php /*if($product_val['item_for_sale'] == 'Yes') { ?>
-                                        <i class="fa fa-circle" aria-hidden="true"></i>
-                                        <span class="buy-text"><?=Yii::t('frontend','Buy');?></span>
-                                        <img class="sale_ribbon" src="<?= Url::to('@web/images/product_sale_ribbon.png') ?>" />
-                                    <?php }*/ ?>
 
                                     <?php if($product_val['item_how_long_to_make'] > 0) { ?>
                                     <div class="callout-container" style="bottom: 10px;">
