@@ -285,11 +285,11 @@ if (!empty($feature_group_sql_result)) {
 
                                     <?= Html::img($imglink); ?>
 
-                                    <?php if($product_val['item_for_sale'] == 'Yes') { ?>
+                                    <?php /*if($product_val['item_for_sale'] == 'Yes') { ?>
                                         <i class="fa fa-circle" aria-hidden="true"></i>
                                         <span class="buy-text"><?=Yii::t('frontend','Buy');?></span>
                                         <!--                            <img class="sale_ribbon" src="--><?//= Url::to('@web/images/product_sale_ribbon.png') ?><!--" />-->
-                                    <?php } ?>
+                                    <?php }*/ ?>
 
                                     <?php if($product_val['item_how_long_to_make'] > 0) { ?>
                                     <div class="callout-container" style="bottom: 10px;">

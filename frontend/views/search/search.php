@@ -7,11 +7,11 @@ $search = ($search != '') ? $search : 'All';
 
 <!-- coniner start -->
 <section id="inner_pages_white_back">
-	<div id="event_slider_wrapper">
+	<?php /* ?><div id="event_slider_wrapper">
 		<div class="container paddng0">
 			<?=$this->render('/product/events_slider.php'); ?>
 		</div>
-	</div>
+	</div><?php */ ?>
 	<div class="container paddng0">
 		<div class="breadcrumb_common">
 			<div class="bs-example">
