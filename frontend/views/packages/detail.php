@@ -108,7 +108,7 @@ use common\components\CFormatter;
 			$items = VendorItemToPackage::find()
 			    ->select(['{{%vendor}}.vendor_name', '{{%vendor}}.vendor_name_ar', '{{%vendor_item}}.item_id', 
 			    	'{{%vendor_item}}.item_price_per_unit', '{{%vendor_item}}.item_name', 
-			    	'{{%vendor_item}}.item_name_ar', '{{%vendor_item}}.item_for_sale', '{{%vendor_item}}.slug', 
+			    	'{{%vendor_item}}.item_name_ar', '{{%vendor_item}}.slug', 
 			    	'{{%vendor_item}}.item_id', '{{%vendor_item}}.item_how_long_to_make'
 			    ])
 			    ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%vendor_item_to_package}}.item_id')
@@ -225,11 +225,10 @@ use common\components\CFormatter;
                                     </div>
                                     <?php } ?>
 
-		                            <?php if($value['item_for_sale'] == 'Yes') { ?>
-		                                <i class="fa fa-circle" aria-hidden="true"></i>
-		                                <span class="buy-text"><?=Yii::t('frontend','Buy');?></span>
-		                                <!--                            <img class="sale_ribbon" src="--><?//= Url::to('@web/images/product_sale_ribbon.png') ?><!--" />-->
-		                            <?php } ?>
+	                                <i class="fa fa-circle" aria-hidden="true"></i>
+	                                <span class="buy-text"><?=Yii::t('frontend','Buy');?></span>
+	                                <!--                            <img class="sale_ribbon" src="--><?//= Url::to('@web/images/product_sale_ribbon.png') ?><!--" />-->
+	                                
 		                        </a>
 		                    </div>
 		                    <div class="events_descrip">

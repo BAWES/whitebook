@@ -26,7 +26,6 @@ use common\models\VendorItemToPackage;
 * @property integer $item_default_capacity
 * @property string $item_price_per_unit
 * @property string $item_price_description
-* @property string $item_for_sale
 * @property string $item_base_price
 * @property integer $item_how_long_to_make
 * @property integer $item_minimum_quantity_to_order
@@ -107,7 +106,7 @@ class VendorItem extends \yii\db\ActiveRecord
             
             [['minimum_increment', 'type_id', 'vendor_id', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
             
-            [['item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_price_description','item_price_description_ar', 'item_for_sale', 'item_approved', 'trash', 'quantity_label','slug'], 'string'],
+            [['item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_price_description','item_price_description_ar', 'item_approved', 'trash', 'quantity_label','slug'], 'string'],
             
             [['item_price_per_unit', 'min_order_amount','item_base_price'], 'number'],
             
@@ -120,7 +119,7 @@ class VendorItem extends \yii\db\ActiveRecord
             [['image_path'],'image', 'extensions' => 'png,jpg,jpeg','maxFiles'=>20],
 
             // set scenario for vendor item add functionality
-            [['type_id', 'item_description','item_description_ar', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order','item_name', 'item_name_ar', 'item_for_sale', 'item_price_per_unit'], 'required', 'on'=>'VendorItemAdd'],
+            [['type_id', 'item_description','item_description_ar', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order','item_name', 'item_name_ar', 'item_price_per_unit'], 'required', 'on'=>'VendorItemAdd'],
         ];
     }
 
@@ -145,7 +144,6 @@ class VendorItem extends \yii\db\ActiveRecord
             'item_base_price' => 'Base Price',
             'item_price_description' => 'Item Price Description',
             'item_price_description_ar' => 'Item Price Description - Arabic',
-            'item_for_sale' => 'Shop - Available for sale',
             'item_how_long_to_make' => 'Notice Period',
             'item_minimum_quantity_to_order' => 'Included Quantity',
             'item_approved' => 'Item Approved',
@@ -316,7 +314,7 @@ class VendorItem extends \yii\db\ActiveRecord
     public static function loadvendoritem()
     {
         $item= VendorItem::find()
-            ->where(['trash' =>'Default','item_for_sale' =>'Yes'])
+            ->where(['trash' =>'Default'])
             ->all();
         
         return ArrayHelper::map($item,'item_id','item_name');

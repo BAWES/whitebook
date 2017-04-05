@@ -62,7 +62,6 @@ class Website extends Model {
     public static function vendor_item_details($id) {
         return $vendor = VendorItem::find()
             ->where([
-                'item_for_sale' => 'yes',
                 'item_approved' => "yes",
                 'item_status' => "active", 
                 'vendor_id' => $id

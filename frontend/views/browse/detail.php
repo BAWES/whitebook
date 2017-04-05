@@ -111,7 +111,7 @@ if($model->images) {
             </div>
         </div>
 
-        <?php if ($AvailableStock && ($model->item_for_sale == 'Yes')) { ?>
+        <?php if ($AvailableStock) { ?>
         <form id="form_product_option" method="POST" class="form center-block margin-top-0">
 
         <input id="item_id" name="item_id" value="<?= $model->item_id ?>" type="hidden" />
@@ -681,7 +681,7 @@ if($model->images) {
                                                 <?php } ?>
                                              </div><!-- END .menu-item-detail -->
 
-                                            <?php if ($AvailableStock && ($model->item_for_sale == 'Yes')) { ?>
+                                            <?php if ($AvailableStock) { ?>
 
                                                 <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px; margin-top: 10px; max-width: 240px;">
                                                         <?= Yii::t('frontend', 'Add To Cart') ?>
@@ -800,7 +800,7 @@ if($model->images) {
                                                 <?php } ?>
                                              </div><!-- END .menu-item-detail -->
 
-                                            <?php if ($AvailableStock && ($model->item_for_sale == 'Yes')) { ?>
+                                            <?php if ($AvailableStock) { ?>
 
                                                 <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px; margin-top: 10px; max-width: 240px;">
                                                         <?= Yii::t('frontend', 'Add To Cart') ?>
@@ -905,8 +905,7 @@ if($model->images) {
                                 if (
                                     $s->item_approved == 'Yes' &&
                                     $s->trash == 'Default' &&
-                                    $s->item_status == 'Active' &&
-                                    $s->item_for_sale == 'Yes'
+                                    $s->item_status == 'Active'
                                 ) {
                                     $AvailableStock = true;
                                 } else {
@@ -1045,7 +1044,6 @@ echo Html::hiddenInput('txt-timeslot-not-available', Yii::t('frontend', 'Deliver
 echo Html::hiddenInput('item_type_name', $item_type_name, ['id' => 'item_type_name']);
 echo Html::hiddenInput('capacity', $capacity, ['id' => 'capacity']);
 echo Html::hiddenInput('minimum_increment', $model->minimum_increment, ['id' => 'minimum_increment']);
-echo Html::hiddenInput('for_sale_validation', $model->item_for_sale, ['id' => 'for_sale_validation']);
 
 $this->registerJs("
     var deliver_date = '".$deliver_date."';

@@ -14,8 +14,7 @@ if (!empty($items->getModels())) {
         if (
             $value['item_approved'] == 'Yes' &&
             $value['trash'] == 'Default' &&
-            $value['item_status'] == 'Active' &&
-            $value['item_for_sale'] == 'Yes'
+            $value['item_status'] == 'Active'
         ) {
             $AvailableStock = true;
         } else {
@@ -110,11 +109,7 @@ if (!empty($items->getModels())) {
                     </div>
                         <a href="<?= $item_url ?>" class="" >
                             <?= Html::img($image, ['class'=>'item-img']); ?>
-                            <?php if($value['item_for_sale'] == 'Yes') { ?>
-<!--                                <i class="fa fa-circle" aria-hidden="true"></i>-->
-<!--                                <span class="buy-text">--><?//=Yii::t('frontend','Buy');?><!--</span>-->
-                            <?php } ?>
-   
+                            
                             <?php if($value['item_how_long_to_make'] > 0) { ?>
                             <div class="callout-container">
                                 <span class="callout light">

@@ -159,10 +159,6 @@ $this->params['breadcrumbs'][] = $model->item_name;
                             'value' => strip_tags($model->item_price_description_ar),
                         ],
                         [
-                            'label' => $vendor_item->item_for_sale != $model->item_for_sale ? 'ITEM FOR SALE *' : 'ITEM FOR SALE',
-                            'value' => strip_tags($model->item_for_sale),
-                        ],
-                        [
                             'label' => $vendor_item->quantity_label != $model->quantity_label ? 'Quantity Label *' : 'Quantity Label',
                             'value' => $model->quantity_label,
                         ],

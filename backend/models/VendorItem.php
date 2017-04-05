@@ -115,21 +115,15 @@ class VendorItem extends \common\models\VendorItem
     {
         $errors = VendorItem::validate_item_description($data);
 
-        if (!empty($data['item_for_sale'])){
-            $item_for_sale = $data['item_for_sale'];
-        } else {
-            $item_for_sale = false;
-        }
-
-        if($item_for_sale && !$data['item_default_capacity']) {
+        if(!$data['item_default_capacity']) {
             $errors['item_default_capacity'] = 'Item default capacity cannot be blank.';
         }
 
-        if($item_for_sale && !$data['item_how_long_to_make']) {
+        if(!$data['item_how_long_to_make']) {
             $errors['item_how_long_to_make'] = 'No of days delivery cannot be blank.';
         }
 
-        if($item_for_sale && !$data['item_minimum_quantity_to_order']) {
+        if(!$data['item_minimum_quantity_to_order']) {
             $errors['item_minimum_quantity_to_order'] = 'Item minimum quantity to order cannot be blank.';
         }
 

@@ -136,16 +136,6 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 					->label('Maximum quantity ordered per day '.Html::tag('span', '*',['class'=>'required mandatory']))
 					->textInput(['maxlength' => 128]); ?>
 
-				<?php
-                if (Yii::$app->request->get('_u')) {
-                    $model->item_for_sale = 'Yes';
-                    echo $form->field($model, 'item_for_sale')->hiddenInput()->label(false);
-                } else {
-                    $model->item_for_sale = ($model->item_for_sale == 'Yes') ? 1:0;
-                    echo $form->field($model, 'item_for_sale')->checkbox(['Yes' => 'Yes']);
-                }
-                ?>
-
 			</fieldset>
 			<hr />
 			<div class="row">
@@ -175,7 +165,7 @@ $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depe
 
 $this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.21", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_steps/price.js?v=1.2", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_steps/price.js?v=1.3", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	input#question{  margin: 10px 5px 10px 0px;  float: left;  width: 45%;}

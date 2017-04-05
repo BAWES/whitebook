@@ -8,7 +8,6 @@ var guideimagedata = $('#guideimagedata').val();
 var img1  = $('#img1').val();
 var action1 = $('#action1').val();
 var isNewRecord = $('#isNewRecord').val();
-var item_for_sale = $('#item_for_sale').val();
 var item_status = $('#item_status').val();
 var item_id = $('#item_id').val();
 
@@ -219,60 +218,6 @@ $(document).on('ready', function() {
 	$(".file-preview-initial > img").each(function(){
 		$(this).parent().attr('data-key',$(this).attr('data-key'));
 	});
-});
-
-if(isNewRecord > 0) {
-    $('#vendoritem-item_for_sale').prop('checked', true);
-} else {
-	if(item_for_sale=='Yes') {
-		 $('#vendoritem-item_for_sale').prop('checked', true);
-	} else { 
-		$('#vendoritem-item_for_sale').prop('checked', false);
-	}
-	
-	if(item_status=='Active') {
-		$('#vendoritem-item_status').prop('checked', true);
-	} else { 
-		$('#vendoritem-item_status').prop('checked', false);
-	}
-} 
-
-$(function(){
-	$('.custom_description').hide();
-	$('.custom_description_ar').hide();
-	$('.mandatory').show();
-
-	$('#vendoritem-item_for_sale').on('change',function()
-	{
-		if($(this).val() == 'Yes')
-		{
-			$('.custom_description').hide();
-			$('.custom_description_ar').hide();
-			$('.guide_image').hide();
-			$('.mandatory').show();
-		} else {
-			$('.mandatory').hide();
-			$('.custom_description').show();
-			$('.custom_description_ar').show();
-			$('.guide_image').show();
-		}
-	});
-
-	if(isNewRecord > 0) {
-		if($('#vendoritem-item_for_sale').prop('checked') == true){
-			$('.custom_description').hide();
-			$('.custom_description_ar').hide();
-			$('.guide_image').hide();
-			$('.mandatory').show();
-		}
-		else
-		{
-			$('.custom_description').show();
-			$('.custom_description_ar').show();
-			$('.guide_image').show();
-			$('.mandatory').hide();
-		}
-	} 
 });
 
 // single question view

@@ -57,7 +57,6 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="tab-pane" id="3" >
                 <table class="table table-striped table-bordered detail-view">
                     <tbody>
-                        <tr><th>Item for sale</th><td><?= $model->item_for_sale?'Yes':'No'; ?></td></tr>
                         <tr><th>Item Default Capacity</th><td><?= $model->item_default_capacity; ?></td></tr>
                         <tr><th>No of days delivery</th><td><?= $model->item_how_long_to_make ?></td></tr>
                         <tr><th>Included Quantity</th><td><?= $model->item_minimum_quantity_to_order ?></td></tr>

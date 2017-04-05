@@ -41,10 +41,6 @@ function cmp($a, $b)
 	    <li><a href="#6" id="tab_6">Approval </a></li>
 	    <li><a href="#7" id="tab_7">Images</a></li>
 	    <li><a href="#8" id="tab_8">Other</a></li>
-	   
-	    <?php if($model->item_for_sale =='Yes') {?>
-	    	<li><a href="#9" id="tab_9"> Questions </a></li>
-	    <?php } ?>
 	</ul>
 
 	<div class="tab-content">
@@ -220,10 +216,6 @@ function cmp($a, $b)
 		<div class="tab-pane clearfix" id="3">
 			<input type="hidden" id="test" value="0" name="tests">
 			
-			<?php
-                $model->item_for_sale = ($model->item_for_sale == 'Yes') ? 1:0;
-                echo $form->field($model, 'item_for_sale')->checkbox(['Yes' => 'Yes']); ?>
-
 			<?= $form->field($model, 'item_default_capacity')
 				->label('Item Default Capacity '.Html::tag('span', '*',['class'=>'required mandatory']))
 				->textInput(['maxlength' => 128]); ?>
@@ -870,7 +862,6 @@ echo Html::hiddenInput('deletequestionoptions_url',Url::to(['/vendor-item-questi
 echo Html::hiddenInput('salesguideimage_url',Url::to(['/vendor-item/salesguideimage']),['id'=>'salesguideimage_url']);
 echo Html::hiddenInput('request_create',$request->get('create'), ['id'=>'request_create']);
 echo Html::hiddenInput('isNewRecord',$isNewRecord, ['id'=>'isNewRecord']);
-echo Html::hiddenInput('item_for_sale',$model->item_for_sale, ['id'=>'item_for_sale']);
 echo Html::hiddenInput('item_status',$model->item_status, ['id'=>'item_status']);
 echo Html::hiddenInput('item_id',$item_id, ['id'=>'item_id']);
 echo Html::hiddenInput('item_name_check',Url::to(['/vendor-item/itemnamecheck']), ['id'=>'item_name_check']);;
@@ -917,7 +908,7 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-multiselect/dist/js
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.20", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.21", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	input#question{  margin: 10px 5px 10px 0px;  float: left;  width: 45%;}

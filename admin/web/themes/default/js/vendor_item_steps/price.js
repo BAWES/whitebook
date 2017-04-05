@@ -5,18 +5,15 @@ $(function() {
 
 		$error = '';
 
-	    if ($('#vendoritem-item_for_sale').prop('checked') == true)
-	    {
-    		if($('#vendoritem-item_default_capacity').val() == '') 
-	    	{
-				$error += '<p><i class="fa fa-exclamation"></i> Maximum quantity ordered per day field require.</p>';	    		
-	    	}
-    	
-	    	if($('#vendoritem-item_minimum_quantity_to_order').val() == '') 
-	    	{
-				$error += '<p><i class="fa fa-exclamation"></i> Minimum Quantity to Order field require.</p>';	    		
-	    	}
-	    }
+		if($('#vendoritem-item_default_capacity').val() == '') 
+    	{
+			$error += '<p><i class="fa fa-exclamation"></i> Maximum quantity ordered per day field require.</p>';	    		
+    	}
+	
+    	if($('#vendoritem-item_minimum_quantity_to_order').val() == '') 
+    	{
+			$error += '<p><i class="fa fa-exclamation"></i> Minimum Quantity to Order field require.</p>';	    		
+    	}
 
 	    if($error) {
 
