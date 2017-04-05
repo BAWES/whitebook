@@ -169,28 +169,19 @@ if($model->images) {
                             </label>
                             <b class="font-27">
                                 <p class="item-final-price">
-
-                                    <?php if($model['item_price_per_unit'] > 0) {
-
-                                        if ($model['item_base_price']) {
-                                            echo CFormatter::format($model['item_base_price']);
-                                        } else {
-                                            echo CFormatter::format($model['item_price_per_unit'] * $min_quantity_to_order);
-                                        }
-
-                                          } elseif ($menu) {
-
-
-                                            echo '<span class="small">'.Yii::t('frontend','Price on selection of menu items').'<span>';
-
-                                          } else {
-
-                                            echo '<span class="small">'.Yii::t('frontend','Price upon request').'<span>';
-
-                                          } ?>
+                                    <i class="fa fa-spinner fa-spin"></i>
                                 </p>
                             </b>
 
+                            <?php
+                            
+                            if ($menu) {
+                                echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; color: brown; display: none;">'.Yii::t('frontend','Price on selection of menu items').'</span>';
+                            }else{
+                                echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; color: brown; display: none;">'.Yii::t('frontend','Price base on selection').'</span>'; // price warning for 0 amount
+                            }
+
+                            ?>
                             <?php
 
                             $pricing = VendorItemPricing::find()
@@ -316,20 +307,17 @@ if($model->images) {
                                     </label>
 
                                     <b class="font-27 item-final-price">
-                                        <?php
-                                        if ($model['item_base_price']) {
-                                            echo CFormatter::format($model['item_base_price']);
-                                        } else if (!$menu) {
-                                            echo '<span class="font-27 small" style="font-weight: bold;">'.Yii::t('frontend','Price base on selection').'</span>';
-                                        }
-                                        ?>
+                                        <i class="fa fa-spinner fa-spin"></i>
                                     </b>
                                     <?php
-                                        if ($menu) {
-                                            echo '<span class="small" style="font-weight: bold;font-size:13px; color: brown;">'.Yii::t('frontend','Price on selection of menu items').'</span>';
-                                        }
-                                        echo '<br/><span class="small price_warning font-27" style="font-weight: bold; display:none;">'.Yii::t('frontend','Price base on selection').'</span>'; // price warning for 0 amount
-                                          ?>
+                                    
+                                    if ($menu) {
+                                        echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; color: brown; display: none;">'.Yii::t('frontend','Price on selection of menu items').'</span>';
+                                    }else{
+                                        echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; color: brown; display: none;">'.Yii::t('frontend','Price base on selection').'</span>'; // price warning for 0 amount
+                                    }
+
+                                    ?>
 
                                     <?php if($model['min_order_amount'] > 0) {
 
@@ -1137,4 +1125,4 @@ $this->registerCss("
     }
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.24', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.25', ['depends' => [\yii\web\JqueryAsset::className()]]);

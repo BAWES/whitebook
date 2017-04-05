@@ -691,3 +691,8 @@ $(document).delegate('.lnk-price-chart', 'click', function() {
         $('.lnk-price-chart .fa-plus-square-o').removeClass('fa-plus-square-o').addClass('fa-minus-square-o');
     }
 });
+
+
+$(function(){
+    update_price();
+})
