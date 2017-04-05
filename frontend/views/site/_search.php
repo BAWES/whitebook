@@ -108,22 +108,22 @@ $themes = \common\models\Themes::find()->where(['!=', 'theme_status', 'Deactive'
                     <option value="" class="label"><?= Yii::t('frontend', 'Event Time') ?></option>
                     <optgroup label="am">                        
                         <?php foreach ($arr_time as $key => $value) {
-                            if($value.' am' == $event_time) 
+                            if($value.' AM' == $event_time) 
                                 $selected = 'selected'; 
                             else
                                 $selected = ''; ?>
-                            <option value="<?= $value ?> am" data-content="<?= $value ?> <span>am</span>" <?= $selected ?>> 
+                            <option value="<?= $value ?> AM" data-content="<?= $value ?> <span>am</span>" <?= $selected ?>> 
                                 <?= $value ?>
                             </option>
                         <?php } ?>
                     </optgroup>
                     <optgroup label="pm">                        
                         <?php foreach ($arr_time as $key => $value) { 
-                            if($value.' pm' == $event_time) 
+                            if($value.' PM' == $event_time) 
                                 $selected = 'selected'; 
                             else
                                 $selected = ''; ?>
-                            <option value="<?= $value ?> pm" <?= $selected ?> data-content="<?= $value ?> <span>pm</span>">
+                            <option value="<?= $value ?> PM" <?= $selected ?> data-content="<?= $value ?> <span>pm</span>">
                                 <?= $value ?>
                             </option>
                         <?php } ?>
