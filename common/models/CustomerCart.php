@@ -433,7 +433,9 @@ class CustomerCart extends \yii\db\ActiveRecord
                 {{%vendor_item}}.slug,
                 {{%vendor_item}}.vendor_id,
                 {{%vendor_item}}.item_name,
-                {{%vendor_item}}.item_name_ar'
+                {{%vendor_item}}.item_name_ar,
+                {{%vendor_item}}.have_female_service,
+                {{%vendor_item}}.allow_special_request'
             )
             ->joinWith('item')
             ->joinWith('image')
