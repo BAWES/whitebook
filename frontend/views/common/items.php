@@ -109,7 +109,7 @@ if (!empty($items->getModels())) {
                     </div>
                         <a href="<?= $item_url ?>" class="" >
                             <?= Html::img($image, ['class'=>'item-img']); ?>
-                            
+
                             <?php if($value['item_how_long_to_make'] > 0) { ?>
                             <div class="callout-container">
                                 <span class="callout light">

@@ -225,10 +225,12 @@ use common\components\CFormatter;
                                     </div>
                                     <?php } ?>
 
-	                                <i class="fa fa-circle" aria-hidden="true"></i>
-	                                <span class="buy-text"><?=Yii::t('frontend','Buy');?></span>
-	                                <!--                            <img class="sale_ribbon" src="--><?//= Url::to('@web/images/product_sale_ribbon.png') ?><!--" />-->
-	                                
+		                            <?php /*if($value['item_for_sale'] == 'Yes') { ?>
+		                                <i class="fa fa-circle" aria-hidden="true"></i>
+		                                <span class="buy-text"><?=Yii::t('frontend','Buy');?></span>
+		                                <!--                            <img class="sale_ribbon" src="--><?//= Url::to('@web/images/product_sale_ribbon.png') ?><!--" />-->
+		                            <?php }*/ ?>
+
 		                        </a>
 		                    </div>
 		                    <div class="events_descrip">
