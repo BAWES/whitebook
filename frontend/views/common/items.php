@@ -110,10 +110,10 @@ if (!empty($items->getModels())) {
                     </div>
                         <a href="<?= $item_url ?>" class="" >
                             <?= Html::img($image, ['class'=>'item-img']); ?>
-                            <?php if($value['item_for_sale'] == 'Yes') { ?>
+                            <?php /*if($value['item_for_sale'] == 'Yes') { ?>
                                 <i class="fa fa-circle" aria-hidden="true"></i>
                                 <span class="buy-text"><?=Yii::t('frontend','Buy');?></span>
-                            <?php } ?>
+                            <?php }*/ ?>
    
                             <?php if($value['item_how_long_to_make'] > 0) { ?>
                             <div class="callout-container">
