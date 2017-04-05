@@ -63,22 +63,22 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
                         <option value="" class="label"><?= Yii::t('frontend', 'Event Time') ?></option>
                         <optgroup label="am">                        
                             <?php foreach ($arr_time as $key => $value) {
-                                if($value.' am' == $event_time) 
+                                if($value.' AM' == $event_time) 
                                     $selected = 'selected'; 
                                 else
                                     $selected = ''; ?>
-                                <option value="<?= $value ?> am" data-content="<?= $value ?> <span>am</span>" <?= $selected ?>> 
+                                <option value="<?= $value ?> AM" data-content="<?= $value ?> <span>am</span>" <?= $selected ?>> 
                                     <?= $value ?>
                                 </option>
                             <?php } ?>
                         </optgroup>
                         <optgroup label="pm">                        
                             <?php foreach ($arr_time as $key => $value) { 
-                                if($value.' pm' == $event_time) 
+                                if($value.' PM' == $event_time) 
                                     $selected = 'selected'; 
                                 else
                                     $selected = ''; ?>
-                                <option value="<?= $value ?> pm" <?= $selected ?> data-content="<?= $value ?> <span>pm</span>">
+                                <option value="<?= $value ?> PM" <?= $selected ?> data-content="<?= $value ?> <span>pm</span>">
                                     <?= $value ?>
                                 </option>
                             <?php } ?>

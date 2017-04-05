@@ -649,7 +649,8 @@ class CartController extends BaseController
         $string = $data['sel_date'];
         $timestamp = strtotime($string);
         $slots = [];
-        $deliver_timeslot = Yii::$app->session->get('deliver-timeslot');
+
+        $event_time = Yii::$app->session->get('event_time');
 
         Yii::$app->session->set('deliver-date', $data['sel_date']);
 
@@ -670,7 +671,13 @@ class CartController extends BaseController
             }
 
             foreach($slots as $slot) {
-                echo '<option value="' . $slot . '" >' . $slot . '</option>';
+                
+                if($slot == $event_time) 
+                    $selected = 'selected'; 
+                else
+                    $selected = '';
+
+                echo '<option value="' . $slot . '" '.$selected.'>' . $slot . '</option>';
             }
 
         } else {
@@ -690,7 +697,7 @@ class CartController extends BaseController
 
         $deliver_timeslot = Yii::$app->request->post('deliver-timeslot');
 
-        Yii::$app->session->set('deliver-timeslot', $deliver_timeslot);
+        Yii::$app->session->set('event_time', $deliver_timeslot);
     }
 
     /*
