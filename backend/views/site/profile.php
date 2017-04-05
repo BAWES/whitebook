@@ -95,8 +95,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
 					</div>
 
-					<div class="form-group" style="clear:both;"><?= $form->field($model, 'vendor_contact_address',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
+					<?= $form->field($model, 'vendor_contact_address')->textArea() ?>
+
 					<div class="form-group" style="clear:both;"><?= $form->field($model, 'vendor_contact_address_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
+					
 					<div class="clearfix">
 						<div class="col-md-6"><?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success submit_btn' : 'btn btn-primary submit_btn','style'=>'float:right;']) ?></div>
 						<div class="col-md-6"><div class="form-group" style="height: 10px;"><input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next"></div></div>
@@ -360,7 +362,7 @@ $this->registerJsFile("@web/themes/default/plugins/bootstrap-datetimepicker/js/b
 
 $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js');
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerJsFile('@web/themes/default/js/profile.js?v=1.5', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/themes/default/js/profile.js?v=1.6', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerJs('
 
