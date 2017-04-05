@@ -62,7 +62,7 @@ class VendorWorkingTiming extends \yii\db\ActiveRecord
         $timeslots = VendorWorkingTiming::find()
             ->byVendorID($this->vendor_id)
             ->byWorkingDay($this->working_day)
-            ->defaultTiming();
+            ->defaultTiming()->all();
 
         foreach ($timeslots as $key => $value) {
 
@@ -84,7 +84,7 @@ class VendorWorkingTiming extends \yii\db\ActiveRecord
         $timeslots = VendorWorkingTiming::find()
             ->byVendorID($this->vendor_id)
             ->byWorkingDay($this->working_day)
-            ->defaultTiming();
+            ->defaultTiming()->all();
         
         foreach ($timeslots as $key => $value) {
             
@@ -96,5 +96,14 @@ class VendorWorkingTiming extends \yii\db\ActiveRecord
                 return $this->addError('working_end_time', 'You already have working time slot from '.date('h:i A', strtotime($value->working_start_time)).' - '.date('h:i A', strtotime($value->working_end_time)).'. on '.$value->working_day);
             }
         }
+    }
+
+    /**
+     * @inheritdoc
+     * @return BookingQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\VendorWorkingTimingQuery(get_called_class());
     }
 }
