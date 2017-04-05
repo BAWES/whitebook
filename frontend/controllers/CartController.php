@@ -518,6 +518,22 @@ class CartController extends BaseController
             $capacity = $item->item_default_capacity;
         }
 
+
+        $query = CustomerCart::find();
+        $query->where([
+            'item_id' => $data['item_id'],
+            'cart_delivery_date' => date('Y-m-d', strtotime($data['delivery_date'])),
+            'cart_valid' => 'yes',
+            'trash' => 'Default'
+        ]);
+        if (Yii::$app->user->getId()) {
+            $query->andWhere(['customer_id'=>Yii::$app->user->getId()]);
+        } else {
+            $query->andWhere(['cart_session_id'=>Customer::currentUser()]);
+        }
+
+        $in_cart = $query->sum('cart_quantity');
+
         //2) get no of item purchased for selected date
         $purchased_result = \common\models\Booking::totalPurchasedItem($data['item_id'],$data['delivery_date']);
         if ($purchased_result) {
@@ -526,7 +542,7 @@ class CartController extends BaseController
             $purchased = 0;
         }
 
-        if ($purchased > $capacity) 
+        if (($purchased+$in_cart) >= $capacity)
         {
             $json['error'] = Yii::t('frontend', 'Item is not available on selected date');
 

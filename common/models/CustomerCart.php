@@ -120,9 +120,7 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         $errors = [];
 
-        $item = VendorItem::find()->where([
-            'item_id' => $data['item_id']
-        ])->one();
+        $item = VendorItem::findOne($data['item_id']);
 
         if(!$item) {
             $errors['warning'] = [
