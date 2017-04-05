@@ -72,17 +72,6 @@ $('.onevalid1').click(function() {
 		$('.field-vendordraft-vendor_contact_number').find('.help-block').html('Contact number cannot be blank.');
 		c1=false;
   	}
-
-    if($('#vendordraft-vendor_contact_address').val()=='')
-	{
-		$('.field-vendordraft-vendor_contact_address').addClass('has-error');
-		$('.field-vendordraft-vendor_contact_address').find('.help-block').html('Contact address cannot be blank.');
-		c1=false;
-  	} else {
-  		$('.field-vendordraft-vendor_contact_address').removeClass('has-error');
-		$('.field-vendordraft-vendor_contact_address').addClass('has-success');
-		c1=true;
-  	}
 	  
 	if(c1==false)
 	{
