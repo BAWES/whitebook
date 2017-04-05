@@ -42,7 +42,7 @@ class VendorWorkingTimingQuery extends \yii\db\ActiveQuery
         return $this->andWhere(['working_day'=>$id]);
     }
 
-    public function defaultTiming($id)
+    public function defaultTiming()
     {
         return $this->andWhere(['trash' => 'Default']);
     }
