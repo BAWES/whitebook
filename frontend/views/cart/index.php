@@ -13,6 +13,15 @@ use yii\helpers\ArrayHelper;
 
 $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook'); 
 
+$session = $session = Yii::$app->session;
+$deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
+$deliver_date  = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
+$event_time  = ($session->has('event_time')) ? $session->get('event_time') : '';
+
+$arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00',
+          '05:30', '06:00', '06:30', '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30',
+          '11:00', '11:30'];
+
 ?>
 
 <section id="inner_pages_white_back">
@@ -25,12 +34,74 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 
         <form method="post" action="<?= Url::to(['cart/update']) ?>" id="cart-form">
 
+        <div class="row delivery-info-wrapper">
+            <div class="col-md-4">
+                <div class="form-group margin-left-0">
+                    <label><?=Yii::t('frontend', 'Area'); ?></label>
+                    <div class="select_boxes">
+                        <?php
+                            echo Html::dropDownList('area_id', $deliver_location,
+                            $vendor_area,
+                            ['data-height'=>"100px",'data-live-search'=>"true",'id'=>"area_id", 'class'=>"selectpicker", 'data-size'=>"10", 'data-style'=>"btn-primary"]);
+                        ?>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label><?=Yii::t('frontend', 'Delivery Date'); ?></label>
+                    <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" class="input-append date">
+                        <input value="<?= $deliver_date ?>" readonly="true" name="delivery_date" class="date-picker-box form-control required"  placeholder="<?php echo Yii::t('frontend', 'Date'); ?>" >
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4" id="event-time">
+                <div class="form-group">
+                    <label><?=Yii::t('frontend', 'Event Time'); ?></label>
+                    <select id="event_time" name="event_time" class="selectpicker" data-live-search="false" data-size="10" data-placeholder="">
+                        <option value="" class="label"><?= Yii::t('frontend', 'Event Time') ?></option>
+                        <optgroup label="am">                        
+                            <?php foreach ($arr_time as $key => $value) {
+                                if($value.' am' == $event_time) 
+                                    $selected = 'selected'; 
+                                else
+                                    $selected = ''; ?>
+                                <option value="<?= $value ?> am" data-content="<?= $value ?> <span>am</span>" <?= $selected ?>> 
+                                    <?= $value ?>
+                                </option>
+                            <?php } ?>
+                        </optgroup>
+                        <optgroup label="pm">                        
+                            <?php foreach ($arr_time as $key => $value) { 
+                                if($value.' pm' == $event_time) 
+                                    $selected = 'selected'; 
+                                else
+                                    $selected = ''; ?>
+                                <option value="<?= $value ?> pm" <?= $selected ?> data-content="<?= $value ?> <span>pm</span>">
+                                    <?= $value ?>
+                                </option>
+                            <?php } ?>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row text-center">
+            
+            <button name="btn_checkout" value="1" class="btn btn-primary btn-lg btn-checkout">
+                <?= Yii::t('frontend', 'Proceed to Checkout') ?>
+            </button>
+        </div>
+
+        <hr />
+
         <table class="table table-bordered cart-table">
 	        <thead>
 	        	<tr>
 	        		<td align="center"><?= Yii::t('frontend', 'Image') ?></th>
 	        		<td align="left"><?= Yii::t('frontend', 'Item Name') ?></th>
-	        		<td align="left"><?= Yii::t('frontend', 'Delivery') ?></th>
 	        		<td aligh="center" class="text-center">
 	        			<span class="visible-md visible-lg">
 	        				<?= Yii::t('frontend', 'Quantity') ?>
@@ -238,71 +309,44 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 		        						}     
 			        				} //foreach errors 
 		        				}//if menu have error   
-		        			} ?>
-		        		</td>
-		        		<td class="position-relative">
-		        			<?php
+		        			} 
 
-		        			if(isset($delivery_area->location)) {
+                            if(isset($errors['area_id'])) { 
+                                foreach($errors['area_id'] as $key => $error) { 
 
-								$delivery_charge += $delivery_area->delivery_price;
-								
-								echo LangFormat::format($delivery_area->location->location,$delivery_area->location->location_ar).' <br />';
+                                    if(is_array($error)) {
+                                        foreach ($error as $value) {
+                                            echo '<span class="label label-danger">' . $value . '</span>';
+                                        }   
+                                    } else {
+                                        echo '<span class="label label-danger">' . $error . '</span>';
+                                    }     
+                                } 
+                            }
 
-								echo LangFormat::format($delivery_area->location->city->city_name,$delivery_area->location->city->city_name_ar).' <br />';
-		        				?>
-	        				
-	        					<?= $item['cart_delivery_date'] ?><br />
-								
-								<?= $item['time_slot']; ?>
+                            if(isset($errors['cart_delivery_date'])) {                            
+                                foreach($errors['cart_delivery_date'] as $key => $error) {
+                                    if(is_array($error)) {
+                                        foreach ($error as $value) {
+                                            echo '<span class="label label-danger">' . $value . '</span>';
+                                        }   
+                                    } else {
+                                        echo '<span class="label label-danger">' . $error . '</span>';
+                                    }     
+                                } 
+                            } 
 
-								<i title="Change Date and time" class="fa fa-edit" data-cart-id="<?=$item['cart_id']?>"></i>
-
-		        			<?php } else { ?>
-		        				<span class="label label-danger">
-		        					<?= Yii::t('frontend', 'We cannot delivery this item!'); ?>
-		        				</span>
-		        			<?php } ?>	
-
-		        			<div class="clearfix"></div>
-		        			<?php 
-
-		        			if(isset($errors['area_id'])) { 
-		        				foreach($errors['area_id'] as $key => $error) { 
-
-			        				if(is_array($error)) {
-	        							foreach ($error as $value) {
-	        								echo '<span class="label label-danger">' . $value . '</span>';
-	        							}	
-	        						} else {
-	        							echo '<span class="label label-danger">' . $error . '</span>';
-	        						}     
-		        				} 
-		        			} ?>
-
-		        			<?php if(isset($errors['cart_delivery_date'])) { 	        				
-		        				foreach($errors['cart_delivery_date'] as $key => $error) {
-			        				if(is_array($error)) {
-	        							foreach ($error as $value) {
-	        								echo '<span class="label label-danger">' . $value . '</span>';
-	        							}	
-	        						} else {
-	        							echo '<span class="label label-danger">' . $error . '</span>';
-	        						}     
-		        				} 
-		        			} ?>
-
-		        			<?php if(isset($errors['time_slot'])) { 	        				
-		        				foreach($errors['time_slot'] as $key => $error) {
-			        				if(is_array($error)) {
-	        							foreach ($error as $value) {
-	        								echo '<span class="label label-danger">' . $value . '</span>';
-	        							}	
-	        						} else {
-	        							echo '<span class="label label-danger">' . $error . '</span>';
-	        						}     
-		        				} 
-		        			} ?>
+                            if(isset($errors['time_slot'])) {                             
+                                foreach($errors['time_slot'] as $key => $error) {
+                                    if(is_array($error)) {
+                                        foreach ($error as $value) {
+                                            echo '<span class="label label-danger">' . $value . '</span>';
+                                        }   
+                                    } else {
+                                        echo '<span class="label label-danger">' . $error . '</span>';
+                                    }     
+                                } 
+                            } ?>
 		        		</td>
 		        		<td align="center">
 			        		<div class="input-group btn-block max-width-150-px">
@@ -341,9 +385,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        </tbody>        	
         </table>
 
-        <button name="btn_checkout" value="1" class="btn btn-primary pull-right btn-checkout">
-        	<?= Yii::t('frontend', 'Proceed to Checkout') ?>
-        </button>
+        
 
         <a href="<?= Url::to(['browse/list', 'slug' => 'all']) ?>" class="btn btn-primary pull-right btn-checkout">
         	<?= Yii::t('frontend', 'Continue Shopping') ?>

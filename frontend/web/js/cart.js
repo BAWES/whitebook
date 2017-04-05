@@ -187,6 +187,13 @@ $(document).delegate('.menu-items .checkbox input', 'click', function(e) {
 });
 
 $(function() {
+
+    $('.delivery-info-wrapper input[name="delivery_date"]').datepicker({
+        format: 'dd-mm-yyyy',
+        startDate:'today',
+        autoclose:true
+    });
+
     $('#update-cart-modal').on('shown.bs.modal', function() {
         $('#delivery_date3').datepicker({
             format: 'dd-mm-yyyy',

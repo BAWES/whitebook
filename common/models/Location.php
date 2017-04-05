@@ -68,8 +68,16 @@ class Location extends \yii\db\ActiveRecord
         return $this->hasOne(City::className(), ['city_id' => 'city_id']);
     }
 
-    public function getCityName() {
-        return $this->city->city_name;
+    public function getCityName() 
+    {
+        if(Yii::$app->language == 'en')
+        {
+            return $this->city->city_name;
+        }    
+        else
+        {
+            return $this->city->city_name_ar;
+        }
     }
  
     /**

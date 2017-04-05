@@ -10,6 +10,7 @@ use yii\helpers\ArrayHelper;
 use frontend\models\Vendor;
 use common\models\VendorItem;
 use common\models\City;
+use common\models\Location;
 use common\models\ItemType;
 use common\models\Customer;
 use common\models\CustomerCart;
@@ -64,8 +65,20 @@ class CartController extends BaseController
 
         $items = CustomerCart::items();
 
+        $vendor_area = Location::findAll(['trash' => 'Default']);
+
+        if(Yii::$app->language == 'en')
+        {
+            $vendor_area =  \yii\helpers\ArrayHelper::map($vendor_area, 'id', 'location', 'cityName' );    
+        }
+        else
+        {
+            $vendor_area =  \yii\helpers\ArrayHelper::map($vendor_area, 'id', 'location_ar', 'cityName' );
+        }
+
         return $this->render('index', [
-            'items' => $items
+            'items' => $items,
+            'vendor_area' => $vendor_area
         ]);
     }
 
@@ -140,10 +153,11 @@ class CartController extends BaseController
             $cart = CustomerCart::findOne($data['cart_id']);
             
             if ($cart) {
-                $cart->cart_delivery_date = $data['delivery_date'];
-                $cart->time_slot =   $data['time_slot'];
-                $cart->cart_quantity =  $data['quantity'];
-                $cart->cart_delivery_date = date('Y-m-d', strtotime($data['delivery_date']));
+
+                //$cart->cart_delivery_date = $data['delivery_date'];
+                //$cart->time_slot =   $data['time_slot'];
+                //$cart->cart_delivery_date = date('Y-m-d', strtotime($data['delivery_date']));
+                //$cart->cart_quantity =  $data['quantity'];
                 $cart->modified_datetime  = date('Y-d-m h:i:s');
 
                 if(!empty($data['female_service'])) {
@@ -558,6 +572,12 @@ class CartController extends BaseController
     public function actionUpdate() {
         $quantity = Yii::$app->request->post('quantity');
 
+        //save delivery info in session 
+
+        Yii::$app->session->set('deliver-location', Yii::$app->request->post('area_id'));
+        Yii::$app->session->set('deliver-date', Yii::$app->request->post('delivery_date'));
+        Yii::$app->session->set('event_time', Yii::$app->request->post('event_time'));
+
         foreach ($quantity as $key => $value) {
 
             $cart = CustomerCart::findOne($key);
@@ -565,20 +585,54 @@ class CartController extends BaseController
             if(!$cart) 
                 continue;
 
+            $cart->area_id = Yii::$app->request->post('area_id');
+            $cart->time_slot = Yii::$app->request->post('event_time');
+            $cart->cart_delivery_date = Yii::$app->request->post('delivery_date');
+
             if ($value > 0) {
                 $cart->cart_quantity = $value;
                 $cart->update();
             } else {
                 $cart->delete();
-            }            
+            }     
+
+            //validate items 
+
+            $menu_items = CustomerCartMenuItem::find()
+                ->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_id, {{%vendor_item_menu_item}}.menu_id, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
+                ->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
+                ->innerJoin('{{%vendor_item_menu}}', '{{%vendor_item_menu}}.menu_id = {{%customer_cart_menu_item}}.menu_id')
+                ->where(['cart_id' => $cart['cart_id']])
+                ->asArray()
+                ->all();
+
+            $errors = CustomerCart::validate_item([
+                'item_id' => $cart['item_id'],
+                'time_slot' => $cart['time_slot'],
+                'delivery_date' => $cart['cart_delivery_date'],
+                'area_id' => $cart['area_id'],
+                'quantity' => $cart['cart_quantity'],
+                'menu_item' => ArrayHelper::map(
+                        $menu_items, 'menu_item_id', 'quantity'
+                    )
+            ], true);
+       
+            // if not valid return to index 
+
+            if($errors) 
+            {
+                return $this->redirect(['index']);
+            }
         }
 
         //from checkout button 
+
         $btn_checkout = Yii::$app->request->post('btn_checkout');
 
         if($btn_checkout) {
             return $this->redirect(['checkout/index']);
         }
+
         return $this->redirect(['index']);
     }
 
