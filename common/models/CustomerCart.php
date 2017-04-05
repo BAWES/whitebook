@@ -11,7 +11,8 @@ use common\models\VendorItem;
 use common\models\VendorItemMenu;
 use common\models\VendorItemMenuItem;
 use common\components\CFormatter;
- 
+use common\models\VendorWorkingTiming;
+
 /**
  * This is the model class for table "whitebook_customer_cart".
  *
@@ -112,6 +113,10 @@ class CustomerCart extends \yii\db\ActiveRecord
     }
 
     public function validate_item($data, $valid_for_cart_item = false) {
+
+        $data['area_id'] = Yii::$app->session->get('deliver-location');
+        $data['delivery_date'] = Yii::$app->session->get('deliver-date');
+        $data['time_slot'] = Yii::$app->session->get('event_time');
 
         $errors = [];
 
@@ -214,6 +219,36 @@ class CustomerCart extends \yii\db\ActiveRecord
         if (empty($data['time_slot']))
         {
             $errors['time_slot'][] = Yii::t('frontend', 'Select Delivery time!');
+        }
+
+        //check if time available 
+
+        if(!empty($data['time_slot']) && !empty($data['delivery_date'])) 
+        {
+            $vendor_timeslot = VendorWorkingTiming::find()
+                ->where([
+                        'vendor_id' => $item->vendor_id,
+                        'working_day' => date("l", strtotime($data['delivery_date'])),
+                        'trash' => 'Default'
+                    ])
+                ->all();
+
+            $time = strtotime($data['time_slot']);
+
+            $time_available = false; 
+
+            foreach ($vendor_timeslot as $key => $value) {
+                $start_time = strtotime($value->working_start_time);
+                $end_time = strtotime($value->working_end_time);
+
+                if($time >= $start_time && $time <= $end_time) {
+                    $time_available = true;
+                }
+            }
+
+            if(!$time_available) {
+                $errors['time_slot'][] = Yii::t('frontend', 'Delivery time not available!');
+            }
         }
 
         // delivery datetime < current time + notice period hours 

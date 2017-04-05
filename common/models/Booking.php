@@ -212,7 +212,11 @@ class Booking extends \yii\db\ActiveRecord
      * Add new bookings on checkout confirm 
      */ 
     public function checkoutConfirm()
-    {        
+    {   
+        $area_id = Yii::$app->session->get('deliver-location');
+        $cart_delivery_date = date('Y-m-d', strtotime(Yii::$app->session->get('deliver-date')));
+        $time_slot = Yii::$app->session->get('event_time');
+
         //default commision
 
         $default_commision = Siteinfo::info('commission');
@@ -316,13 +320,14 @@ class Booking extends \yii\db\ActiveRecord
             $booking_item->item_id = $item['item_id'];
             $booking_item->item_name = $item['item_name'];
             $booking_item->item_name_ar = $item['item_name_ar'];
-            $booking_item->timeslot = $item['time_slot'];
-            $booking_item->area_id = $item['area_id'];
+
+            $booking_item->timeslot = $time_slot;
+            $booking_item->area_id = $area_id;
+            $booking_item->delivery_date = $cart_delivery_date;
             
             $booking_item->address_id = $address_id;
             $booking_item->delivery_address = $address;
             
-            $booking_item->delivery_date = $item['cart_delivery_date'];
             $booking_item->item_base_price = ($price_chart[$item['item_id']]['base_price']) ? $price_chart[$item['item_id']]['base_price'] : 0.000;
             $booking_item->price = $price_chart[$item['item_id']]['unit_price'];
             $booking_item->quantity = $item['cart_quantity'];
@@ -330,7 +335,8 @@ class Booking extends \yii\db\ActiveRecord
             //$booking_item->total = ($price_chart[$item['item_id']]['unit_price'] * $item['cart_quantity']) + $price_chart[$item['item_id']]['menu_price'];
             $booking_item->female_service = $item['female_service'];
             $booking_item->special_request = $item['special_request'];
-            $booking_item->save();
+            
+            $booking_item->save(false);
 
             //save menu item
             $menu_items = CustomerCartMenuItem::find()
