@@ -135,11 +135,11 @@ $this->title = Yii::t('frontend', 'View Booking | Whitebook');
                                 }
 
                                 if($item['female_service']) {
-                                    echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.Yii::t('frontend', 'Female service').'</i>';
+                                    echo '<div class="clearfix"></div><i class="cart_menu_item"> - '.Yii::t('frontend', 'Female service').'</i>';
                                 }
 
                                 if($item['special_request']) {
-                                    echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.$item['special_request'].'</i>';
+                                    echo '<div class="clearfix"></div><i class="cart_menu_item"> - '.$item['special_request'].'</i>';
                                 }
 
                                 ?>
