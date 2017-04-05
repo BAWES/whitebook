@@ -5,25 +5,22 @@ $(function() {
 
 		$error = '';
 
-	    if ($('#vendoritem-item_for_sale').val() == 'Yes')
-	    {
-	    	$type = $('#vendoritem-type_id option:selected').html();
+    	$type = $('#vendoritem-type_id option:selected').html();
 
-    		if($('#vendoritem-item_default_capacity').val() == '') 
-	    	{
-				$error += '<p><i class="fa fa-exclamation"></i> Maximum quantity ordered per day field require.</p>';	    		
-	    	}	
-	    
-	    	if($('#vendoritem-item_how_long_to_make').val() == '') 
-	    	{
-				$error += '<p><i class="fa fa-exclamation"></i> No of days delivery field require.</p>';	    		
-	    	}
+		if($('#vendoritem-item_default_capacity').val() == '') 
+    	{
+			$error += '<p><i class="fa fa-exclamation"></i> Maximum quantity ordered per day field require.</p>';	    		
+    	}	
+    
+    	if($('#vendoritem-item_how_long_to_make').val() == '') 
+    	{
+			$error += '<p><i class="fa fa-exclamation"></i> No of days delivery field require.</p>';	    		
+    	}
 
-	    	if($('#vendoritem-item_minimum_quantity_to_order').val() == '') 
-	    	{
-				$error += '<p><i class="fa fa-exclamation"></i> Item Minimum Quantity to Order field require.</p>';	    		
-	    	}
-	    }
+    	if($('#vendoritem-item_minimum_quantity_to_order').val() == '') 
+    	{
+			$error += '<p><i class="fa fa-exclamation"></i> Item Minimum Quantity to Order field require.</p>';	    		
+    	}
 
 	    if($error) {
 

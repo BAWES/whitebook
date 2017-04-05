@@ -311,10 +311,6 @@ class SiteController extends BaseController
             $wishlist_query->andWhere(['{{%vendor_item}}.vendor_id' => $data['v_id']]);
         }
     
-        if (!empty($data['a_id'])) {
-            $wishlist_query->andWhere(['{{%vendor_item}}.item_for_sale' => $data['a_id']]);
-        }
-
         if (!empty($data['t_id'])) {
             $wishlist_query->andWhere('FIND_IN_SET ("'.$data['t_id'].'", {{%vendor_item_theme}}.theme_id)');
         }

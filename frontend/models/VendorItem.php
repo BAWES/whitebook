@@ -17,7 +17,7 @@ class VendorItem extends \common\models\VendorItem
             ->where(['like', 'item_name',$name])
             ->orWhere(['like', 'category_name', $name])
             ->orWhere(['like', 'vendor_name', $name])
-            ->andwhere(['whitebook_vendor_item.trash' =>'Default','whitebook_category.trash' =>'Default','item_for_sale' =>'Yes','item_status'=>'Active'])
+            ->andwhere(['whitebook_vendor_item.trash' =>'Default','whitebook_category.trash' =>'Default','item_status'=>'Active'])
             ->distinct()
             ->asArray()
             ->all();

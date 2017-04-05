@@ -239,10 +239,6 @@ class SubCategory extends \yii\db\ActiveRecord
             $subQuery->andWhere('{{%vendor_item}}.item_price_per_unit IS NULL OR {{%vendor_item}}.item_price_per_unit between '.$arr_min_max[0].' and '.$arr_min_max[1]);
         }
 
-        if (isset($data['for_sale']) && $data['for_sale'] != '') {
-            $subQuery->andWhere(['{{%vendor_item}}.item_for_sale' => 'Yes']);
-        }
-
         if (!empty($data['vendor'])) 
         {
             if(is_array($data['vendor']))

@@ -221,6 +221,10 @@ class CartController extends BaseController
 
         $data = Yii::$app->request->post();
 
+        Yii::$app->session->set('deliver-location', $data['area_id']);
+        Yii::$app->session->set('deliver-date', $data['delivery_date']);
+        Yii::$app->session->set('event_time', $data['time_slot']);
+
         //remove menu item with 0 quantity 
 
         if(empty($data['menu_item'])) {
@@ -433,8 +437,7 @@ class CartController extends BaseController
         }
 
         $item = VendorItem::find()->where([
-            'item_id' => $data['item_id'],
-            'item_for_sale' => 'Yes'
+            'item_id' => $data['item_id']
         ])->one();
 
         if (!$item) {

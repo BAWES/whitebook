@@ -336,8 +336,7 @@ class BrowseController extends BaseController
         if (
             $model->item_approved == 'Yes' &&
             $model->trash == 'Default' &&
-            $model->item_status == 'Active' &&
-            $model->item_for_sale == 'Yes'
+            $model->item_status == 'Active'
         ) {
             $AvailableStock = true;
         } else {

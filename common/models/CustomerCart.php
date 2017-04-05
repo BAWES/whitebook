@@ -121,8 +121,7 @@ class CustomerCart extends \yii\db\ActiveRecord
         $errors = [];
 
         $item = VendorItem::find()->where([
-            'item_id' => $data['item_id'], 
-            'item_for_sale' => 'Yes'
+            'item_id' => $data['item_id']
         ])->one();
 
         if(!$item) {
@@ -444,7 +443,6 @@ class CustomerCart extends \yii\db\ActiveRecord
                 '{{%customer_cart}}.cart_valid' => 'yes',
                 '{{%customer_cart}}.trash' => 'Default',
                 '{{%vendor_item}}.trash' => 'Default',
-                '{{%vendor_item}}.item_for_sale' => 'Yes',
                 '{{%vendor_item}}.item_status' => 'Active',
                 '{{%vendor_item}}.item_approved' => 'Yes',
             ]);
@@ -470,7 +468,6 @@ class CustomerCart extends \yii\db\ActiveRecord
                 '{{%customer_cart}}.cart_valid' => 'yes',
                 '{{%customer_cart}}.trash' => 'Default',
                 '{{%vendor_item}}.trash' => 'Default',
-                '{{%vendor_item}}.item_for_sale' => 'Yes',
                 '{{%vendor_item}}.item_status' => 'Active',
                 '{{%vendor_item}}.item_approved' => 'Yes',
             ]);

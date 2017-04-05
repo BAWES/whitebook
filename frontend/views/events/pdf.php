@@ -66,7 +66,6 @@ $this->title = Yii::t('frontend', 'Event Detail');
                 ->where([
                     '{{%vendor_item}}.item_status' => 'Active',
                     '{{%vendor_item}}.trash' => 'Default',
-                    '{{%vendor_item}}.item_for_sale' => 'Yes',
                     '{{%vendor_item_to_category}}.category_id' => $value1['category_id'],
                     '{{%vendor_item}}.type_id' => 2,
                     '{{%event_item_link}}.trash' => 'Default',

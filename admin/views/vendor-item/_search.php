@@ -87,16 +87,7 @@ $group_options = ArrayHelper::map(
             <?= $form->field($model, 'type_id')->dropDownList(
                     $type_options,           
                     ['prompt' => 'All']    
-                ); ?>
-
-            <?= $form->field($model, 'item_for_sale')->dropDownList(
-                [
-                    'Yes',
-                    'No'
-                ],           
-                ['prompt' => 'All']    
-            ); ?> 
-            
+                ); ?>            
         </div>
         
     </div>

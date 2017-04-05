@@ -164,7 +164,6 @@ class PriorityItemController extends Controller
 
         $priority = VendorItem::find()->select(['item_id','item_name'])
         ->where(['item_status' => 'Active'])
-        ->andwhere(['item_for_sale' => 'yes'])
         ->andwhere(['!=', 'trash', 'Deleted'])
         ->all();
         $priorityitem = ArrayHelper::map($priority, 'item_id', 'item_name');
@@ -280,7 +279,6 @@ class PriorityItemController extends Controller
         }
         $itemlist = VendorItem::find()->select(['item_id','item_name'])
             ->where(['item_status' => 'Active'])
-            ->andWhere(['item_for_sale' => 'yes'])
             ->andWhere(['category_id' => $data['id2']])
             ->andWhere(['subcategory_id' => $data['id3']])
             ->andWhere(['child_category' => $data['id4']])
