@@ -214,7 +214,16 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 		        				<?= LangFormat::format($item['item_name'], $item['item_name_ar']); ?>
 		        			</a>
 
-	        				<span class="cart-edit" data-cart-id="<?=$item['cart_id']?>">[Edit]</span>
+		        			<?php if(
+		        					$menu_option_items || 
+		        					$menu_addon_items || 
+		        					$item['have_female_service'] || 
+		        					$item['allow_special_request']
+		        				  ) { ?>
+	        				<span class="cart-edit" data-cart-id="<?=$item['cart_id']?>" style="cursor: pointer;">
+	        					[<?= Yii::t('frontend', 'Edit') ?>]
+	        				</span>
+	        				<?php } ?>
 
 		        			<br />
 
