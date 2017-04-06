@@ -181,6 +181,11 @@ class VendorPaymentController extends Controller
 
         $stylesheet = file_get_contents(Url::to('@web/themes/default/css/pdf.css', true));
 
+        $prefix = Yii::getAlias('@runtime/mpdf') . DIRECTORY_SEPARATOR;
+        
+        definePath('_MPDF_TEMP_PATH', "{$prefix}tmp");
+        definePath('_MPDF_TTFONTDATAPATH', "{$prefix}ttfontdata");
+
         $mpdf = new mPDF();
         $mpdf->WriteHTML($stylesheet, 1);
         $mpdf->WriteHTML($content);
