@@ -83,9 +83,13 @@ $this->params['breadcrumbs'][] = 'Update';
 				<label>Notice Period</label>		       	
 				<div class="input-group">
 					<span class="input-group-btn">
-			        	<select name="notice_period_type" style="width: auto; min-height: 37px;">
+			        	<select name="VendorDraftItem[notice_period_type]" style="width: auto; min-height: 37px;">
 			        		<option>Hour</option>
+			        		<?php if($model->notice_period_type == 'Day') { ?>
+			        		<option selected>Day</option>
+			        		<?php } else { ?>
 			        		<option>Day</option>
+			        		<?php } ?>
 			        	</select>
 			        </span>		 
 			        <input type="text" class="form-control" value="<?= $model->item_how_long_to_make ?>" name="VendorDraftItem[item_how_long_to_make]" />		       	    	 

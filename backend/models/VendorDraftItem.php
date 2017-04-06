@@ -80,7 +80,7 @@ class VendorDraftItem extends \common\models\VendorDraftItem
 
             //ItemDescription
 
-            [['set_up_time', 'set_up_time_ar', 'max_time', 'max_time_ar', 'requirements','requirements_ar', 'item_how_long_to_make', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'], 'string', 'on' => ['ItemDescription']],
+            [['set_up_time', 'set_up_time_ar', 'max_time', 'max_time_ar', 'requirements','requirements_ar', 'item_how_long_to_make', 'notice_period_type', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'], 'string', 'on' => ['ItemDescription']],
 
             //ItemInfo
 
@@ -96,7 +96,7 @@ class VendorDraftItem extends \common\models\VendorDraftItem
 
         $scenarios['ItemPrice'] = ['type_id','minimum_increment', 'min_order_amount', 'quantity_label', 'item_default_capacity', 'item_minimum_quantity_to_order', 'item_price_per_unit', 'item_base_price', 'item_price_description', 'item_price_description_ar', 'item_customization_description', 'item_customization_description_ar'];
 
-        $scenarios['ItemDescription'] = ['set_up_time', 'set_up_time_ar', 'max_time', 'max_time_ar', 'requirements', 'requirements_ar', 'item_how_long_to_make', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'];
+        $scenarios['ItemDescription'] = ['set_up_time', 'set_up_time_ar', 'max_time', 'max_time_ar', 'requirements', 'requirements_ar', 'item_how_long_to_make', 'notice_period_type', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'];
 
         $scenarios['ItemInfo'] = ['item_name', 'item_name_ar', 'item_status'];
 

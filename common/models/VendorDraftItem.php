@@ -96,7 +96,7 @@ class VendorDraftItem extends \yii\db\ActiveRecord
 
             [['minimum_increment', 'item_id', 'type_id', 'vendor_id', 'item_default_capacity', 'sort', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by', 'is_ready'], 'integer'],
             
-            [['item_name_ar', 'priority', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar', 'item_customization_description', 'item_customization_description_ar', 'item_price_description', 'item_price_description_ar', 'item_archived', 'item_approved', 'item_status', 'trash', 'set_up_time', 'max_time', 'requirements', 'requirements_ar', 'max_time_ar', 'set_up_time_ar'], 'string'],
+            [['notice_period_type', 'item_name_ar', 'priority', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar', 'item_customization_description', 'item_customization_description_ar', 'item_price_description', 'item_price_description_ar', 'item_archived', 'item_approved', 'item_status', 'trash', 'set_up_time', 'max_time', 'requirements', 'requirements_ar', 'max_time_ar', 'set_up_time_ar'], 'string'],
 
             [['item_price_per_unit', 'item_base_price', 'item_amount_in_stock', 'have_female_service', 'allow_special_request', 'min_order_amount'], 'number'],
             
@@ -146,6 +146,7 @@ class VendorDraftItem extends \yii\db\ActiveRecord
             'modified_datetime' => Yii::t('app', 'Modified Datetime'),
             'trash' => Yii::t('app', 'Trash'),
             'slug' => Yii::t('app', 'Slug'),
+            'notice_period_type' => 'Notice Period Type',
             'max_time' => Yii::t('app', 'Duration'),
             'max_time_ar' => Yii::t('app', 'Duration - Arabic'),
             'set_up_time' => Yii::t('app', 'Setup Time'),

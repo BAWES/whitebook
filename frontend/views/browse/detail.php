@@ -272,10 +272,10 @@ else
                             <span class="callout light">
                                 <?php
 
-                                if($model['item_how_long_to_make'] % 24 == 0)
+                                if($model['notice_period_type'] == 'Day')
                                 {
                                     echo Yii::t('frontend', 'Notice: {count} day(s)', [
-                                        'count' => $model['item_how_long_to_make']/24
+                                        'count' => $model['item_how_long_to_make']
                                     ]);
                                 }
                                 else
@@ -472,7 +472,7 @@ else
 
                                 <div class="clearfix"></div>
 
-                                <?php if($AvailableStock && ($item_type_name == 'Product' || $capacity > 1)) { ?>
+                                <?php if($AvailableStock && $capacity > 1 && $item_type_name != 'Package') { ?>
                                 <div class="qty_box">
                                     <div class="quantity-lbl">
                                         <label>
@@ -985,10 +985,10 @@ else
                                                     <span class="callout light">
                                                         <?php
 
-                                                        if($s['item_how_long_to_make'] % 24 == 0)
+                                                        if($s['notice_period_type'] == 'Day')
                                                         {
                                                             echo Yii::t('frontend', 'Notice: {count} day(s)', [
-                                                                'count' => $s['item_how_long_to_make']/24
+                                                                'count' => $s['item_how_long_to_make']
                                                             ]);
                                                         }
                                                         else
@@ -1070,6 +1070,7 @@ else
 
 <?php
 
+echo Html::hiddenInput('notice_period_type', $model['notice_period_type'], ['id' => 'notice_period_type']);
 echo Html::hiddenInput('item_how_long_to_make', $model['item_how_long_to_make'], ['id' => 'item_how_long_to_make']);
 echo Html::hiddenInput('final_price_url', Url::to(['browse/final-price']), ['id' => 'final_price_url']);
 echo Html::hiddenInput('save-delivery-timeslot-url', Url::to(['cart/save-delivery-timeslot']), ['id' => 'save-delivery-timeslot-url']);
@@ -1175,4 +1176,4 @@ $this->registerCss("
     }
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.26', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.27', ['depends' => [\yii\web\JqueryAsset::className()]]);

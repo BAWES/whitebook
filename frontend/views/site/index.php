@@ -289,10 +289,10 @@ if (!empty($feature_group_sql_result)) {
                                         <span class="callout light">
                                             <?php
 
-                                            if($product_val['item_how_long_to_make'] % 24 == 0)
+                                            if($product_val['notice_period_type'] == 'Day')
                                             {
                                                 echo Yii::t('frontend', 'Notice: {count} day(s)', [
-                                                    'count' => $product_val['item_how_long_to_make']/24
+                                                    'count' => $product_val['item_how_long_to_make']
                                                 ]);
                                             }
                                             else
