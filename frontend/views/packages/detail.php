@@ -109,7 +109,7 @@ use common\components\CFormatter;
 			    ->select(['{{%vendor}}.vendor_name', '{{%vendor}}.vendor_name_ar', '{{%vendor_item}}.item_id', 
 			    	'{{%vendor_item}}.item_price_per_unit', '{{%vendor_item}}.item_name', 
 			    	'{{%vendor_item}}.item_name_ar', '{{%vendor_item}}.slug', 
-			    	'{{%vendor_item}}.item_id', '{{%vendor_item}}.item_how_long_to_make'
+			    	'{{%vendor_item}}.item_id', '{{%vendor_item}}.item_how_long_to_make, {{%vendor_item}}.notice_period_type'
 			    ])
 			    ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%vendor_item_to_package}}.item_id')
 			    ->leftJoin(
@@ -209,10 +209,10 @@ use common\components\CFormatter;
                                         <span class="callout light">
                                             <?php 
 
-                                            if($value['item_how_long_to_make'] % 24 == 0) 
+                                            if($value['notice_period_type'] == 'Day') 
                                             { 
                                                 echo Yii::t('frontend', 'Notice: {count} days', [
-                                                    'count' => $value['item_how_long_to_make']/24
+                                                    'count' => $value['item_how_long_to_make']
                                                 ]); 
                                             }
                                             else

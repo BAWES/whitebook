@@ -250,15 +250,35 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         // delivery datetime < current time + notice period hours 
 
-        $min_delivery_time = strtotime('+'.$item->item_how_long_to_make.' hours');
-
-        if(strtotime($data['delivery_date']) < $min_delivery_time)
+        if($item->notice_period_type == 'Hour' && !empty($data['time_slot'])) 
         {
-            $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item notice period {count} hour(s)!', [
-                    'count' => $item->item_how_long_to_make
-                ]);
+            $min_delivery_time = strtotime('+'.$item->item_how_long_to_make.' hours');
+            $delivery_time = strtotime($data['delivery_date'].' '.$data['time_slot']);
+            
+            if($delivery_time < $min_delivery_time)
+            {
+                $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item notice period {count} hour(s)!', [
+                        'count' => $item->item_how_long_to_make
+                    ]);
+            }
         }
-   
+
+
+        if($item->notice_period_type == 'Day' && !empty($data['delivery_date']))
+        {
+            //compare timestamp of date 
+
+            $min_delivery_time = strtotime(date('Y-m-d', strtotime('+'.$item->item_how_long_to_make.' days')));
+            $delivery_time = strtotime(date('Y-m-d', strtotime($data['delivery_date'])));
+
+            if($delivery_time < $min_delivery_time)
+            {
+                $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item notice period {count} day(s)!', [
+                        'count' => $item->item_how_long_to_make
+                    ]);
+            }
+        }
+
         //-------------- Start Item Capacity -----------------//
         //default capacity is how many of it they can process per day
 

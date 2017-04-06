@@ -460,17 +460,32 @@ class CartController extends BaseController
             $item_type_name = 'Product';
         }
 
-        // get date after x day then convert it to unix time 
-        
-        $min_delivery_time = strtotime(date('d-m-Y', strtotime('+'.$item->item_how_long_to_make.' hours')));
-
-        if(strtotime($data['delivery_date']) < $min_delivery_time) 
+        if($item->notice_period_type == 'Hour' && !empty($data['time_slot'])) 
         {
-            $json['error'] = Yii::t('frontend', 'Item notice period {count} hour(s)!', [
-                    'count' => $item->item_how_long_to_make
-                ]);
+            $min_delivery_time = strtotime('+'.$item->item_how_long_to_make.' hours');
+            $delivery_time = strtotime($data['delivery_date'].' '.$data['time_slot']);
+            
+            if($delivery_time < $min_delivery_time)
+            {
+                $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item notice period {count} hour(s)!', [
+                        'count' => $item->item_how_long_to_make
+                    ]);
+            }
+        }
 
-            return $json;
+        if($item->notice_period_type == 'Day' && !empty($data['delivery_date']))
+        {
+            //compare timestamp of date 
+
+            $min_delivery_time = strtotime(date('Y-m-d', strtotime('+'.$item->item_how_long_to_make.' days')));
+            $delivery_time = strtotime(date('Y-m-d', strtotime($data['delivery_date'])));
+
+            if($delivery_time < $min_delivery_time)
+            {
+                $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item notice period {count} day(s)!', [
+                        'count' => $item->item_how_long_to_make
+                    ]);
+            }
         }
 
         $vendor_id = $item->vendor_id;

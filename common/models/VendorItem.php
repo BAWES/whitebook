@@ -106,7 +106,7 @@ class VendorItem extends \yii\db\ActiveRecord
             
             [['minimum_increment', 'type_id', 'vendor_id', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
             
-            [['item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_price_description','item_price_description_ar', 'item_approved', 'trash', 'quantity_label','slug'], 'string'],
+            [['notice_period_type', 'item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_price_description','item_price_description_ar', 'item_approved', 'trash', 'quantity_label','slug'], 'string'],
             
             [['item_price_per_unit', 'min_order_amount','item_base_price'], 'number'],
             
@@ -119,7 +119,7 @@ class VendorItem extends \yii\db\ActiveRecord
             [['image_path'],'image', 'extensions' => 'png,jpg,jpeg','maxFiles'=>20],
 
             // set scenario for vendor item add functionality
-            [['type_id', 'item_description','item_description_ar', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order','item_name', 'item_name_ar', 'item_price_per_unit'], 'required', 'on'=>'VendorItemAdd'],
+            [['type_id', 'notice_period_type', 'item_description','item_description_ar', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order','item_name', 'item_name_ar', 'item_price_per_unit'], 'required', 'on'=>'VendorItemAdd'],
         ];
     }
 
@@ -145,6 +145,7 @@ class VendorItem extends \yii\db\ActiveRecord
             'item_price_description' => 'Item Price Description',
             'item_price_description_ar' => 'Item Price Description - Arabic',
             'item_how_long_to_make' => 'Notice Period',
+            'notice_period_type' => 'Notice Period Type',
             'item_minimum_quantity_to_order' => 'Included Quantity',
             'item_approved' => 'Item Approved',
             'created_by' => 'Created By',

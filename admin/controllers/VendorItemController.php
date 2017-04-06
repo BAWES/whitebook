@@ -336,14 +336,7 @@ class VendorItemController extends Controller
         $model->scenario = 'ItemDescription';
 
         if($model->load(Yii::$app->request->post()) && $model->save()) {
-            
-            $notice_period_type = Yii::$app->request->post('notice_period_type');
-
-            if($notice_period_type == 'Day') {
-                $model->item_how_long_to_make *= 24;
-                $model->save(false);
-            }
-            
+                    
             $complete = Yii::$app->request->post('complete');
 
             if($complete) {

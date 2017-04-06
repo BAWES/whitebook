@@ -1,11 +1,21 @@
 
     jQuery(document).ready(function () {
 
+        $notice_period_type = $('#notice_period_type').val()
+
         $notice_period = parseInt($('#item_how_long_to_make').val());
 
-        $start_date = new Date();
-        $start_date.setHours($start_date.getHours() + $notice_period);
-
+        if($notice_period_type == 'Hour')
+        {
+            $start_date = new Date();
+            $start_date.setHours($start_date.getHours() + $notice_period);    
+        }
+        else
+        {
+            $start_date = new Date();
+            $start_date.setDate($start_date.getDate() + $notice_period);   
+        }
+        
         $('#item_delivery_date').datepicker({
             format: 'dd-mm-yyyy',
             startDate: $start_date,
@@ -317,7 +327,14 @@ jQuery(document).delegate('#form_product_option', 'submit', function(e) {
                     $('a[href="#collapse-options"]').trigger('click');
                 }
 
-                $('html, body').animate({ scrollTop: $('#form_product_option .error p').offset().top - 300 }, 'slow');
+                if($('#form_product_option .error p').length > 0)
+                {
+                    $('html, body').animate({ scrollTop: $('#form_product_option .error p').offset().top - 300 }, 'slow');
+                }
+                else
+                {
+                    $('html, body').animate({ scrollTop: $('#form_product_option').offset().top - 300 }, 'slow');        
+                }
             }
         }
     );
