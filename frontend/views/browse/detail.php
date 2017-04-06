@@ -5,6 +5,8 @@ use yii\widgets\Breadcrumbs;
 use yii\web\view;
 use common\models\VendorItemPricing;
 use common\models\VendorItemMenuItem;
+use common\models\CustomerCart;
+use common\models\CustomerCartMenuItem;
 use common\components\LangFormat;
 use common\components\CFormatter;
 
@@ -63,6 +65,22 @@ if($model->images) {
     $image = 'https://placeholdit.imgix.net/~text?txtsize=33&txt=530x530&w=530&h=550';
 }
 
+$cart_id = Yii::$app->request->get('cart_id');
+
+$cart = CustomerCart::findOne($cart_id);
+
+if($cart)
+{
+    $quantity = $cart->cart_quantity;
+    $txt_cart_btn = Yii::t('frontend', 'Update Cart');
+    $cart_url = Yii::$app->urlManager->createAbsoluteUrl('cart/update-cart-item');   
+}
+else
+{
+    $txt_cart_btn = Yii::t('frontend', 'Add To Cart');
+    $cart_url = Yii::$app->urlManager->createAbsoluteUrl('cart/add');
+}
+
 ?>
 
 <script type="application/ld+json">
@@ -115,7 +133,8 @@ if($model->images) {
         <form id="form_product_option" method="POST" class="form center-block margin-top-0">
 
         <input id="item_id" name="item_id" value="<?= $model->item_id ?>" type="hidden" />
-
+        <input id="cart_id" name="cart_id" value="<?= $cart->cart_id ?>" type="hidden" />
+      
         <div class="col-md-12 filter-bar ">
             <div class="col-md-3 padding-right-0 area-filter">
                 <div class="form-group margin-left-0">
@@ -432,7 +451,7 @@ if($model->images) {
                                                     <div class="button-signin">
                                                         <?php $disable = (!$model['item_base_price']) ? 'disabled="disabled"' : '';?>
                                                         <button <?=$disable?> type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px;">
-                                                            <?= Yii::t('frontend', 'Add To Cart') ?>
+                                                            <?= $txt_cart_btn ?>
                                                         </button>&nbsp;&nbsp;&nbsp;
                                                     </div>
                                                 </div>
@@ -576,6 +595,7 @@ if($model->images) {
                                                             </span>
 
                                                             <?php if($value->min_quantity || $value->max_quantity) { ?>
+                                                            
                                                             <span class="menu-hint" data-max-quantity="<?= $value->max_quantity ?>" data-min-quantity="<?= $value->min_quantity ?>" data-txt-min="<?= Yii::t('frontend', 'atleast {qty} '); ?>" data-txt-max="<?= Yii::t('frontend', 'upto {qty} '); ?>">
 
                                                                 <?php
@@ -610,10 +630,23 @@ if($model->images) {
 
                                                         $menu_items = VendorItemMenuItem::findAll(['menu_id' => $value->menu_id]);
 
-                                                        foreach ($menu_items as $menu_item) { ?>
+                                                        foreach ($menu_items as $menu_item) { 
+
+                                                            if($cart) 
+                                                            {
+                                                                $cart_menu_item = CustomerCartMenuItem::findOne([
+                                                                    'menu_item_id' => $menu_item->menu_item_id,
+                                                                    'cart_id' => $cart->cart_id
+                                                                ]);    
+                                                            }
+                                                            else
+                                                            {
+                                                                $cart_menu_item = null;
+                                                            }
+
+                                                            ?>
 
                                                             <li>
-
 
                                                                 <?php if($value->quantity_type == 'selection') { ?>
 
@@ -621,7 +654,7 @@ if($model->images) {
 
                                                                 <span class="menu-item-qty-box">
                                                                     <i class="fa fa-minus"></i>
-                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="0" readonly />
+                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="<?= isset($cart_menu_item)?$cart_menu_item->quantity:0 ?>" readonly />
                                                                     <i class="fa fa-plus"></i>
                                                                 </span>
 
@@ -638,7 +671,7 @@ if($model->images) {
                                                                 <?php } else { ?>
 
                                                                 <div class="checkbox checkbox-inline">
-                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" id="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="1" type="checkbox" />
+                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" id="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="1" type="checkbox" <?php if(!empty($cart_menu_item)) echo 'checked'; ?> />
 
                                                                     <label for="menu_item[<?= $menu_item->menu_item_id ?>]">
                                                                         <?php if(Yii::$app->language == 'en') {
@@ -672,7 +705,7 @@ if($model->images) {
                                             <?php if ($AvailableStock) { ?>
 
                                                 <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px; margin-top: 10px; max-width: 240px;">
-                                                        <?= Yii::t('frontend', 'Add To Cart') ?>
+                                                        <?= $txt_cart_btn ?>
                                                 </button>
 
                                             <?php } ?><!-- END available in stock and for sale -->
@@ -715,7 +748,7 @@ if($model->images) {
 
                                                                 if($value->min_quantity) {
                                                                     echo Yii::t('frontend', 'Minimum {qty}', [
-                                                                        'qty' => $value->min_quantity
+                                                                        'qty' => $value->min_quantity * $quantity
                                                                     ]);
                                                                 }
 
@@ -725,7 +758,7 @@ if($model->images) {
 
                                                                 if($value->max_quantity) {
                                                                     echo Yii::t('frontend', 'Maximum {qty}', [
-                                                                        'qty' => $value->max_quantity
+                                                                        'qty' => $value->max_quantity * $quantity
                                                                     ]);
                                                                 }
 
@@ -741,14 +774,28 @@ if($model->images) {
 
                                                         $menu_items = VendorItemMenuItem::findAll(['menu_id' => $value->menu_id]);
 
-                                                        foreach ($menu_items as $menu_item) { ?>
+                                                        foreach ($menu_items as $menu_item) { 
+
+                                                            if($cart)
+                                                            {
+                                                                $cart_menu_item = CustomerCartMenuItem::findOne([
+                                                                    'menu_item_id' => $menu_item->menu_item_id,
+                                                                    'cart_id' => $cart->cart_id
+                                                                ]);
+                                                            }
+                                                            else
+                                                            {
+                                                                $cart_menu_item = null;   
+                                                            }
+                                                            
+                                                            ?>
 
                                                             <li>
                                                                 <!-- qty box -->
 
                                                                 <span class="menu-item-qty-box">
                                                                     <i class="fa fa-minus"></i>
-                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="0" readonly />
+                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="<?= $cart_menu_item?$cart_menu_item->quantity:0 ?>" readonly />
                                                                     <i class="fa fa-plus"></i>
                                                                 </span>
 
@@ -791,7 +838,7 @@ if($model->images) {
                                             <?php if ($AvailableStock) { ?>
 
                                                 <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px; margin-top: 10px; max-width: 240px;">
-                                                        <?= Yii::t('frontend', 'Add To Cart') ?>
+                                                        <?= $txt_cart_btn ?>
                                                 </button>
 
                                             <?php } ?><!-- END available in stock and for sale -->
@@ -815,7 +862,7 @@ if($model->images) {
 
                                             <br />
 
-                                            <textarea name="special_request" class="form-control"></textarea>
+                                            <textarea name="special_request" class="form-control"><?= $cart?$cart->special_request:'' ?></textarea>
                                           </div>
                                         </div>
                                     </div>
@@ -833,7 +880,7 @@ if($model->images) {
                                         <div id="collapse-female" class="panel-collapse collapse in">
                                           <div class="panel-body">
                                             <div class="form-group checkbox" style="margin-left: 0px;">
-                                                <input type="checkbox" name="female_service" value="1" id="chk_female_service" />
+                                                <input type="checkbox" name="female_service" value="1" id="chk_female_service" <?php if(!empty($cart->female_service)) echo 'checked'; ?> />
                                                 <label for="chk_female_service">
                                                     <?= Yii::t('frontend', 'Include Female Service') ?>
                                                 </label>
@@ -1038,7 +1085,7 @@ $this->registerJs("
     var isGuest = ".(int)Yii::$app->user->isGuest.";
     var vendor_id = '".$model['vendor_id']."';
     var customer_id = '".Yii::$app->user->id."';
-    var addtobasket_url = '".Yii::$app->urlManager->createAbsoluteUrl('cart/add')."';
+    var addtobasket_url = '".$cart_url."';
     var getdeliverytimeslot_url = '".Url::toRoute('cart/get-delivery-timeslot')."';
     var area_option_url = '".Url::toRoute('site/area')."';
     var availablity = '".Url::toRoute('browse/product-available')."';
