@@ -11,7 +11,8 @@ use common\models\VendorItem;
 use common\models\VendorItemMenu;
 use common\models\VendorItemMenuItem;
 use common\components\CFormatter;
- 
+use common\models\VendorWorkingTiming;
+
 /**
  * This is the model class for table "whitebook_customer_cart".
  *
@@ -113,12 +114,13 @@ class CustomerCart extends \yii\db\ActiveRecord
 
     public function validate_item($data, $valid_for_cart_item = false) {
 
+        $data['area_id'] = Yii::$app->session->get('deliver-location');
+        $data['delivery_date'] = Yii::$app->session->get('deliver-date');
+        $data['time_slot'] = Yii::$app->session->get('event_time');
+
         $errors = [];
 
-        $item = VendorItem::find()->where([
-            'item_id' => $data['item_id'], 
-            'item_for_sale' => 'Yes'
-        ])->one();
+        $item = VendorItem::findOne($data['item_id']);
 
         if(!$item) {
             $errors['warning'] = [
@@ -216,17 +218,67 @@ class CustomerCart extends \yii\db\ActiveRecord
             $errors['time_slot'][] = Yii::t('frontend', 'Select Delivery time!');
         }
 
+        //check if time available 
+
+        if(!empty($data['time_slot']) && !empty($data['delivery_date'])) 
+        {
+            $vendor_timeslot = VendorWorkingTiming::find()
+                ->where([
+                        'vendor_id' => $item->vendor_id,
+                        'working_day' => date("l", strtotime($data['delivery_date'])),
+                        'trash' => 'Default'
+                    ])
+                ->all();
+
+            $time = strtotime($data['time_slot']);
+
+            $time_available = false; 
+
+            foreach ($vendor_timeslot as $key => $value) {
+                $start_time = strtotime($value->working_start_time);
+                $end_time = strtotime($value->working_end_time);
+
+                if($time >= $start_time && $time <= $end_time) {
+                    $time_available = true;
+                }
+            }
+
+            if(!$time_available) {
+                $errors['time_slot'][] = Yii::t('frontend', 'Delivery time not available!');
+            }
+        }
+
         // delivery datetime < current time + notice period hours 
 
-        $min_delivery_time = strtotime('+'.$item->item_how_long_to_make.' hours');
-
-        if(strtotime($data['delivery_date']) < $min_delivery_time)
+        if($item->notice_period_type == 'Hour' && !empty($data['time_slot'])) 
         {
-            $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item notice period {count} hour(s)!', [
-                    'count' => $item->item_how_long_to_make
-                ]);
+            $min_delivery_time = strtotime('+'.$item->item_how_long_to_make.' hours');
+            $delivery_time = strtotime($data['delivery_date'].' '.$data['time_slot']);
+            
+            if($delivery_time < $min_delivery_time)
+            {
+                $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item notice period {count} hour(s)!', [
+                        'count' => $item->item_how_long_to_make
+                    ]);
+            }
         }
-   
+
+
+        if($item->notice_period_type == 'Day' && !empty($data['delivery_date']))
+        {
+            //compare timestamp of date 
+
+            $min_delivery_time = strtotime(date('Y-m-d', strtotime('+'.$item->item_how_long_to_make.' days')));
+            $delivery_time = strtotime(date('Y-m-d', strtotime($data['delivery_date'])));
+
+            if($delivery_time < $min_delivery_time)
+            {
+                $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item notice period {count} day(s)!', [
+                        'count' => $item->item_how_long_to_make
+                    ]);
+            }
+        }
+
         //-------------- Start Item Capacity -----------------//
         //default capacity is how many of it they can process per day
 
@@ -307,7 +359,28 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         //item total 
 
-        $total = $item->item_price_per_unit * $data['quantity'];
+        $price_chart = VendorItemPricing::find()
+            ->where(['item_id' => $item['item_id'], 'trash' => 'Default'])
+            ->andWhere(['<=', 'range_from', $data['quantity']])
+            ->andWhere(['>=', 'range_to', $data['quantity']])
+            ->orderBy('pricing_price_per_unit DESC')
+            ->one();
+
+        if ($price_chart) {
+            $unit_price = $price_chart->pricing_price_per_unit;
+        } else {
+            $unit_price = $item['item_price_per_unit'];
+        }
+
+        if ($item['item_minimum_quantity_to_order'] > 0) {
+            $min_quantity_to_order = $item['item_minimum_quantity_to_order'];
+        } else {
+            $min_quantity_to_order = 1;
+        }
+
+        $actual_item_quantity = $data['quantity'] - $min_quantity_to_order;
+
+        $total = $item->item_base_price + ($unit_price * $actual_item_quantity);
 
         //get quantity ordered per menu 
 
@@ -329,7 +402,7 @@ class CustomerCart extends \yii\db\ActiveRecord
                 $menu_qty_ordered[$mi->menu_id] = $value;
             }
 
-            $total += $mi->price * $value * $data['quantity'];
+            $total += $mi->price * $value;// * $data['quantity'];
         }
 
         //item menu 
@@ -340,8 +413,8 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         foreach ($item_menues as $key => $menu) {
 
-            $max = $menu->max_quantity * $data['quantity']; 
-            $min = $menu->min_quantity * $data['quantity'];
+            $max = $menu->max_quantity; 
+            $min = $menu->min_quantity;
 
             if(isset($menu_qty_ordered[$menu->menu_id])) {
                 $qty_ordered = $menu_qty_ordered[$menu->menu_id];
@@ -401,7 +474,9 @@ class CustomerCart extends \yii\db\ActiveRecord
                 {{%vendor_item}}.slug,
                 {{%vendor_item}}.vendor_id,
                 {{%vendor_item}}.item_name,
-                {{%vendor_item}}.item_name_ar'
+                {{%vendor_item}}.item_name_ar,
+                {{%vendor_item}}.have_female_service,
+                {{%vendor_item}}.allow_special_request'
             )
             ->joinWith('item')
             ->joinWith('image')
@@ -409,7 +484,6 @@ class CustomerCart extends \yii\db\ActiveRecord
                 '{{%customer_cart}}.cart_valid' => 'yes',
                 '{{%customer_cart}}.trash' => 'Default',
                 '{{%vendor_item}}.trash' => 'Default',
-                '{{%vendor_item}}.item_for_sale' => 'Yes',
                 '{{%vendor_item}}.item_status' => 'Active',
                 '{{%vendor_item}}.item_approved' => 'Yes',
             ]);
@@ -435,7 +509,6 @@ class CustomerCart extends \yii\db\ActiveRecord
                 '{{%customer_cart}}.cart_valid' => 'yes',
                 '{{%customer_cart}}.trash' => 'Default',
                 '{{%vendor_item}}.trash' => 'Default',
-                '{{%vendor_item}}.item_for_sale' => 'Yes',
                 '{{%vendor_item}}.item_status' => 'Active',
                 '{{%vendor_item}}.item_approved' => 'Yes',
             ]);
@@ -511,5 +584,14 @@ class CustomerCart extends \yii\db\ActiveRecord
     public static function getAddressData($address_id) 
     {
         return Booking::getPurchaseDeliveryAddress($address_id);
+    }
+
+    /**
+     * @inheritdoc
+     * @return ImageQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\CustomerCartQuery(get_called_class());
     }
 }

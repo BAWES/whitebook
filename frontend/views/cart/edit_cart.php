@@ -17,60 +17,23 @@ $deliver_date = $item->cart_delivery_date;
 	<input type="hidden" id="area_id" name="area_id" value="<?= $item->area_id; ?>" />
 	<input type="hidden" id="cart_id" name="cart_id" value="<?= $item->cart_id; ?>" />
 
-	<div class="col-md-12 padding-left-0">
-		<div class="form-group">
-			<label><?=Yii::t('frontend', 'Delivery Date'); ?></label>
-			<div data-date-format="dd-mm-yyyy" data-date="12-02-2012" class="input-append date position-relative" id="delivery_date_wrapper">
-				<input value="<?= $item->cart_delivery_date ?>" readonly="true" name="delivery_date" id="delivery_date3" class="date-picker-box form-control required"  placeholder="<?php echo Yii::t('frontend', 'Date'); ?>" >
-				<i class="fa fa-calendar" aria-hidden="true"></i>
-			</div>
-			<span class="error cart_delivery_date"></span>
-		</div>
-	</div>
-
-	<div class="col-md-12 padding-left-0 timeslot_id_div <?php if($vendor_timeslot) { echo 'hidden'; }; ?>">
-		<div class="form-group">
-			<label><?=Yii::t('frontend', 'Delivery Time'); ?></label>
-			<div class="text padding-top-12"><?=Yii::t('frontend','Please Select Delivery Date');?></div>
-		</div>
-	</div>
-
-	<div class="col-md-12 padding-left-0 timeslot_id_select <?php if(!$vendor_timeslot) { echo 'hidden'; }; ?>">
-		<div class="form-group">
-			<label><?=Yii::t('frontend', 'Delivery Time'); ?></label>
-			<select name="time_slot" id="timeslot_id" class="selectpicker" data-size="10" data-style="">
-               <?php foreach ($vendor_timeslot as $key => $value) {
-                    echo '<option value="' . $value . '" >' . $value . '</option>';
-                    } ?>         
-            </select>
-			<span class="error time_slot"></span>
-		</div>
-	</div>
-	<div class="col-md-12 padding-left-0 timeslot_id_select <?php if(!$vendor_timeslot) { echo 'hidden'; }; ?>">
-		<div class="form-group">
-			<label><?=Yii::t('frontend', 'Quantity'); ?></label>
-			<input value="<?= $item->cart_quantity ?>" name="quantity" id="quantity" class="date-picker-box form-control required"  placeholder="<?php echo Yii::t('frontend', 'Date'); ?>" >
-			<span class="error cart_quantity"></span>
-		</div>
-	</div>
-
     <div class="col-md-12" id="accordion">
 
         <?php if($menu) { ?>
         <div class="panel panel-default">
             <div class="panel-heading">
-              <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse-options" aria-expanded="false">
+              <h3 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse-options" aria-expanded="true">
                     <?= Yii::t('frontend', 'Options') ?>
                 </a>
-              </h4>
+              </h3>
             </div>
-            <div id="collapse-options" class="panel-collapse collapse">
+            <div id="collapse-options" class="panel-collapse collapse in" aria-expanded="true">
               <div class="panel-body">                                            
                  <div class="menu-item-detail">
                     <?php foreach ($menu as $key => $value) { ?>
                         <div class="menu-detail">    
-                            <h3 class="menu-title">
+                            <h4 class="menu-title">
 
                                 <span class="title">
                                     <?php if(Yii::$app->language == 'en') { 
@@ -106,7 +69,7 @@ $deliver_date = $item->cart_delivery_date;
                                     ?>
                                 </span>                                        
                                 <?php } ?>
-                            </h3>
+                            </h4>
 
                             <span class="error menu_<?= $value->menu_id ?>"></span>
 
@@ -186,18 +149,18 @@ $deliver_date = $item->cart_delivery_date;
         <?php if($addons) { ?>
         <div class="panel panel-default">
             <div class="panel-heading">
-              <h4 class="panel-title">
+              <h3 class="panel-title">
                 <a data-toggle="collapse" data-parent="#accordion" aria-expanded="false" href="#collapse-addons">
                     <?= Yii::t('frontend', 'Addons') ?>
                 </a>
-              </h4>
+              </h3>
             </div>
-            <div id="collapse-addons" class="panel-collapse collapse">
+            <div id="collapse-addons" class="panel-collapse collapse in" aria-expanded="true">
               <div class="panel-body">                                            
                  <div class="menu-item-detail">
                     <?php foreach ($addons as $key => $value) { ?>
                         <div class="menu-detail">    
-                            <h3 class="menu-title">
+                            <h4 class="menu-title">
 
                                 <span class="title">
                                     <?php if(Yii::$app->language == 'en') { 
@@ -233,7 +196,7 @@ $deliver_date = $item->cart_delivery_date;
                                     ?>
                                 </span>                                        
                                 <?php } ?>
-                            </h3>
+                            </h4>
 
                             <span class="error menu_<?= $value->menu_id ?>"></span>
 

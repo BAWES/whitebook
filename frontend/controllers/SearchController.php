@@ -47,28 +47,14 @@ class SearchController extends BaseController
         $data = Yii::$app->request->get();
 
         $items_query = CategoryPath::find()
-            ->select('{{%vendor_item}}.item_base_price,{{%vendor_item}}.item_status,{{%vendor_item}}.trash,{{%vendor_item}}.item_approved,{{%vendor_item}}.item_how_long_to_make, {{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar')
-            ->leftJoin(
-                '{{%vendor_item_to_category}}',
-                '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
-            )
-            ->leftJoin(
-                '{{%vendor_item}}',
-                '{{%vendor_item}}.item_id = {{%vendor_item_to_category}}.item_id'
-            )
-            ->leftJoin(
-                '{{%priority_item}}',
-                '{{%priority_item}}.item_id = {{%vendor_item}}.item_id'
-            )
-            ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
-            ->where([
-                '{{%vendor_item}}.trash' => 'Default',
-                '{{%vendor_item}}.item_approved' => 'Yes',
-                '{{%vendor_item}}.item_status' => 'Active',
-                '{{%vendor}}.vendor_status' => 'Active',
-                '{{%vendor}}.approve_status' => 'Yes',
-                '{{%vendor}}.trash' => 'Default',
-            ]);
+            ->selectedFields()
+            ->categoryJoin()
+            ->itemJoin()
+            ->priorityItemJoin()
+            ->vendorJoin()
+            ->defaultItems()
+            ->approvedItems()
+            ->activeItems();
 
         //vendor filter
         if (isset($data['vendor'])  && $data['vendor']) {

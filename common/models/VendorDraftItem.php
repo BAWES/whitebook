@@ -28,7 +28,6 @@ use Yii;
  * @property string $item_customization_description_ar
  * @property string $item_price_description
  * @property string $item_price_description_ar
- * @property string $item_for_sale
  * @property string $item_base_price
  * @property integer $sort
  * @property integer $item_how_long_to_make
@@ -97,13 +96,18 @@ class VendorDraftItem extends \yii\db\ActiveRecord
 
             [['minimum_increment', 'item_id', 'type_id', 'vendor_id', 'item_default_capacity', 'sort', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by', 'is_ready'], 'integer'],
             
-            [['item_name_ar', 'priority', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar', 'item_customization_description', 'item_customization_description_ar', 'item_price_description', 'item_price_description_ar', 'item_for_sale', 'item_archived', 'item_approved', 'item_status', 'trash'], 'string'],
+            [['notice_period_type', 'item_name_ar', 'priority', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar', 'item_customization_description', 'item_customization_description_ar', 'item_price_description', 'item_price_description_ar', 'item_archived', 'item_approved', 'item_status', 'trash', 'set_up_time', 'max_time', 'requirements', 'requirements_ar', 'max_time_ar', 'set_up_time_ar'], 'string'],
 
-            [['item_price_per_unit','item_base_price'], 'number'],
+            [['item_price_per_unit', 'item_base_price', 'item_amount_in_stock', 'have_female_service', 'allow_special_request', 'min_order_amount'], 'number'],
+            
             [['created_datetime', 'modified_datetime'], 'safe'],
-            [['item_name'], 'string', 'max' => 128],
+            
+            [['item_name', 'quantity_label'], 'string', 'max' => 128],
+            
             [['slug'], 'string', 'max' => 255],
+
             [['vendor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Vendor::className(), 'targetAttribute' => ['vendor_id' => 'vendor_id']],
+            
             [['type_id'], 'exist', 'skipOnError' => true, 'targetClass' => ItemType::className(), 'targetAttribute' => ['type_id' => 'type_id']],
         ];
     }
@@ -131,9 +135,8 @@ class VendorDraftItem extends \yii\db\ActiveRecord
             'item_customization_description_ar' => Yii::t('app', 'Item Customization Description - Arabic'),
             'item_price_description' => Yii::t('app', 'Price Description'),
             'item_price_description_ar' => Yii::t('app', 'Price Description - Arabic'),
-            'item_for_sale' => Yii::t('app', 'Item For Sale'),
             'sort' => Yii::t('app', 'Sort'),
-            'item_minimum_quantity_to_order' => Yii::t('app', 'Minimum quantity to order'),
+            'item_minimum_quantity_to_order' => Yii::t('app', 'Included Quantity'),
             'item_archived' => Yii::t('app', 'Item Archived'),
             'item_approved' => Yii::t('app', 'Item Approved'),
             'item_status' => Yii::t('app', 'Item Status'),
@@ -143,6 +146,7 @@ class VendorDraftItem extends \yii\db\ActiveRecord
             'modified_datetime' => Yii::t('app', 'Modified Datetime'),
             'trash' => Yii::t('app', 'Trash'),
             'slug' => Yii::t('app', 'Slug'),
+            'notice_period_type' => 'Notice Period Type',
             'max_time' => Yii::t('app', 'Duration'),
             'max_time_ar' => Yii::t('app', 'Duration - Arabic'),
             'set_up_time' => Yii::t('app', 'Setup Time'),

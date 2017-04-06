@@ -15,7 +15,8 @@ class CategoryModel extends Model
 			->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item}}.category_id')
 			->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
 			
-			->Where(['{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_approved' => 'yes','{{%vendor_item}}.item_archived' => 'no','{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_for_sale' => 'Yes','{{%image}}.module_type' => 'vendor_item',
+			->Where(['{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_approved' => 'yes','{{%vendor_item}}.item_archived' => 'no','{{%vendor_item}}.item_status' => 'Active',
+				'{{%image}}.module_type' => 'vendor_item',
 				'{{%vendor}}.vendor_Status' => 'Active',
 				'{{%category}}.trash' => 'Default',
 				'{{%category}}.approve_status' => 'yes',

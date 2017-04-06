@@ -27,19 +27,19 @@ class VendorItem extends \common\models\VendorItem
 
             [['quantity_label'], 'string', 'max' => 256, 'on' => ['ItemPrice']],
 
-            [['item_for_sale', 'item_price_description','item_price_description_ar'], 'string', 'on' => ['ItemPrice']],
+            [['item_price_description','item_price_description_ar'], 'string', 'on' => ['ItemPrice']],
             
             [['item_default_capacity', 'item_minimum_quantity_to_order'], 'integer', 'on' => ['ItemPrice']],
             
-            [['min_order_amount', 'item_price_per_unit','item_base_price'], 'number', 'on' => ['ItemPrice']],
+            [['min_order_amount', 'item_price_per_unit', 'item_base_price'], 'number', 'on' => ['ItemPrice']],
 
             [['minimum_increment', 'type_id'], 'integer', 'on' => ['ItemPrice']],
 
-            [['type_id'], 'required', 'on' => ['ItemPrice']],
+            [['type_id','item_price_per_unit'], 'required', 'on' => ['ItemPrice']],
 
             //ItemDescription
             
-            [['set_up_time', 'set_up_time_ar', 'requirements','requirements_ar', 'max_time', 'max_time_ar', 'item_how_long_to_make', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'], 'string', 'on' => ['ItemDescription']],
+            [['set_up_time', 'set_up_time_ar', 'requirements','requirements_ar', 'max_time', 'max_time_ar', 'item_how_long_to_make', 'notice_period_type', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'], 'string', 'on' => ['ItemDescription']],
 
             //ItemInfo
             
@@ -54,9 +54,9 @@ class VendorItem extends \common\models\VendorItem
             
             'MenuItems' => ['allow_special_request', 'have_female_service'],
 
-            'ItemPrice' => ['item_base_price','minimum_increment', 'quantity_label', 'item_for_sale', 'item_price_description', 'item_price_description_ar','item_default_capacity', 'item_minimum_quantity_to_order', 'item_price_per_unit', 'min_order_amount', 'type_id'],
+            'ItemPrice' => ['item_base_price','minimum_increment', 'quantity_label', 'item_price_description', 'item_price_description_ar','item_default_capacity', 'item_minimum_quantity_to_order', 'item_price_per_unit', 'min_order_amount', 'type_id'],
 
-            'ItemDescription' => ['set_up_time', 'set_up_time_ar', 'requirements','requirements_ar', 'max_time', 'max_time_ar', 'item_how_long_to_make', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'],
+            'ItemDescription' => ['set_up_time', 'set_up_time_ar', 'requirements','requirements_ar', 'max_time', 'max_time_ar', 'item_how_long_to_make', 'notice_period_type', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'],
 
             'ItemInfo' => ['vendor_id', 'item_name', 'item_name_ar']
         ];
@@ -199,7 +199,7 @@ class VendorItem extends \common\models\VendorItem
         $item = VendorItem::find()
             ->select(['item_id','item_name'])
             ->where(['=', 'item_id',$id])
-            ->andwhere(['trash' =>'Default','item_for_sale' =>'Yes'])
+            ->andwhere(['trash' =>'Default'])
             ->all();
 
         return ArrayHelper::map($item, 'item_id', 'item_name');
@@ -210,7 +210,6 @@ class VendorItem extends \common\models\VendorItem
         $item = VendorItem::find()
             ->where([
                 'trash' => 'Default',
-                'item_for_sale' => 'Yes',
                 'subcategory_id' => $subcategory
             ])
             ->all();

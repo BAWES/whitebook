@@ -2645,3 +2645,39 @@ span.small {
     background-color: black;
     border-color: black;
 }
+
+.color-black{color:#000000!important;}
+
+.filter-bar .fa-calendar {
+    position: absolute;
+    right: 8px;
+    top: 12px;
+    font-size: 15px;
+    color: #e6e6e6;
+}
+
+.delivery-info-wrapper input[name="delivery_date"] {
+    border-radius: 0;
+    height: 42px;
+    background-color: #EEEEEE !important;
+    border-color: #C2C2C2 !important;
+    box-shadow: none !important;
+}
+
+.delivery-info-wrapper .input-append {
+    position: relative;
+}
+
+.delivery-info-wrapper button.dropdown-toggle {
+    background: #EEEEEE;
+    color: black;
+    border-radius: 0px;
+    height: 42px;
+    border-color: #C2C2C2;
+}
+
+.delivery-info-wrapper .fa {
+    border-color: #C2C2C2;
+    color: #C2C2C2;
+    line-height: 23px;
+}

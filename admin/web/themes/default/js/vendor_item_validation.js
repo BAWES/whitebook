@@ -8,7 +8,6 @@ var deletequestionoptions_url = $('#deletequestionoptions_url').val();
 var salesguideimage_url = $('#salesguideimage_url').val();
 var request_create = $('#request_create').val();
 var isNewRecord = $('#isNewRecord').val();
-var item_for_sale = $('#item_for_sale').val();
 var item_status = $('#item_status').val();
 var item_id = $('#item_id').val();
 var item_name_check = $('#item_name_check').val();
@@ -85,30 +84,8 @@ $(function(){
 
 	$('.custom_description').hide();
 	$('.custom_description_ar').hide();
-	if (item_for_sale == 0) {
-		$('.guide_image').show();
-	} else {
-		$('.guide_image').hide();
-	}
+	
 	$('.mandatory').show();
-
-	$('#vendoritem-item_for_sale').click(function()
-	{
-		if($(this).is(':checked'))
-		{
-			$('.custom_description').hide();
-			$('.custom_description_ar').hide();
-			$('.guide_image').hide();
-			$('.mandatory').show();
-		}
-		else
-		{
-			$('.mandatory').hide();
-			$('.custom_description').show();
-			$('.custom_description_ar').show();
-			$('.guide_image').show();
-		}
-	});
 
 	if(!isNewRecord) {
 		if($("#vendoritem-item_for_sale").prop('checked') == true){

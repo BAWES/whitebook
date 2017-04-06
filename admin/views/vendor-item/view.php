@@ -107,9 +107,7 @@ $this->params['breadcrumbs'][] = $model->item_name;
                         [
                             'label' =>'Item price description - Arabic',
                             'value' => strip_tags($model->item_price_description_ar),
-                        ],
-                        'item_for_sale',
-                        
+                        ],                        
                         'quantity_label',
                         'set_up_time',
                         'set_up_time_ar',

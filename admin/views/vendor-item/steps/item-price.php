@@ -82,7 +82,6 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 					->textInput([
 						'maxlength' => 128
 					]); ?>
-
                 <?= $form->field($model, 'item_base_price',
 					['options' => [
 						'class' => 'single_price'
@@ -130,24 +129,18 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 					]); ?>
 
 				<?= $form->field($model, 'item_minimum_quantity_to_order')
-					->label('Minimum quantity to order '.Html::tag('span', '*',['class'=>'required mandatory']))
+					->label('Included Quantity'.Html::tag('span', '*',['class'=>'required mandatory']))
 					->textInput(['maxlength' => 128]); ?>
 
 				<?= $form->field($model, 'item_default_capacity')
 					->label('Maximum quantity ordered per day '.Html::tag('span', '*',['class'=>'required mandatory']))
 					->textInput(['maxlength' => 128]); ?>
 
-				<?php
-	                $model->item_for_sale = ($model->item_for_sale == 'Yes') ? 1:0;
-	                echo $form->field($model, 'item_for_sale')->checkbox(['Yes' => 'Yes']); ?>
-
 			</fieldset>
-
 			<hr />
-
 			<div class="row">
 				<div class="col-md-4">
-					<a href="<?= Url::to(['vendor-item/item-description', 'id' => $model->item_id]) ?>" class="btn btn-info pull-left">Prev</a>
+					<a href="<?= Url::to(['vendor-item/item-description', 'id' => $model->item_id,'_u'=>Yii::$app->request->get('_u')]) ?>" class="btn btn-info pull-left">Prev</a>
 				</div>
 				<div class="col-md-4 text-center">
 					<input type="submit" name="complete" class="btn btn-info" value="Complete" />
@@ -172,7 +165,7 @@ $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depe
 
 $this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.21", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_steps/price.js?v=1.2", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_steps/price.js?v=1.3", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerCss("
 	input#question{  margin: 10px 5px 10px 0px;  float: left;  width: 45%;}

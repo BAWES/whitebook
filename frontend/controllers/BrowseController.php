@@ -4,8 +4,7 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\helpers\Url;
-use yii\db\Expression;
-use yii\helpers\VarDumper;
+use \common\models\City;
 use yii\helpers\ArrayHelper;
 use yii\data\ArrayDataProvider;
 use frontend\models\VendorItem;
@@ -45,7 +44,7 @@ class BrowseController extends BaseController
         \Yii::$app->view->title = 'The White Book | Categories';
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
-        $city = \common\models\City::findAll(['trash'=>'Default']);
+        $city = City::findAll(['trash'=>'Default']);
         return $this->render('categories',['city'=>$city]);
     }
 
@@ -104,57 +103,42 @@ class BrowseController extends BaseController
         );
 
         $item_query = CategoryPath::find()
-            ->select('{{%vendor_item}}.item_base_price,{{%vendor_item}}.item_status,{{%vendor_item}}.trash,{{%vendor_item}}.item_approved,{{%vendor_item}}.item_how_long_to_make, {{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar')
-            ->leftJoin(
-                '{{%vendor_item_to_category}}',
-                '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
-            )
-            ->leftJoin(
-                '{{%vendor_item}}',
-                '{{%vendor_item}}.item_id = {{%vendor_item_to_category}}.item_id'
-            )
-            ->leftJoin(
-                '{{%priority_item}}',
-                '{{%priority_item}}.item_id = {{%vendor_item}}.item_id'
-            )
-            ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
-            ->where([
-                '{{%vendor_item}}.trash' => 'Default',
-                '{{%vendor_item}}.item_approved' => 'Yes',
-                '{{%vendor_item}}.item_status' => 'Active',
-            ]);
+            ->selectedFields()
+            ->categoryJoin()
+            ->itemJoin()
+            ->priorityItemJoin()
+            ->vendorJoin()
+            ->defaultItems()
+            ->approvedItems()
+            ->activeItems();
 
         if (isset($data['for_sale']) && $data['for_sale'] != '') {
-            $item_query->andWhere(['{{%vendor_item}}.item_for_sale' => 'Yes']);
+            $item_query->saleItems();
         }
 
-        $item_query->andWhere(['in', '{{%vendor_item}}.vendor_id', $ActiveVendors]);
+
+        $item_query->byVendorIDs($ActiveVendors);
 
         //price filter
         if (isset($data['price']) && $data['price'] != '') {
 
             $price_condition = [];
-
             $arr_min_max = explode('-', $data['price']);
-
-            $price_condition[] = '{{%vendor_item}}.item_price_per_unit IS NULL';
-            $price_condition[] = '{{%vendor_item}}.item_price_per_unit between '.$arr_min_max[0].' and '.$arr_min_max[1];
-
-            $item_query->andWhere(implode(' OR ', $price_condition));
+            $item_query->byPrice($arr_min_max[0],$arr_min_max[1]);
         }
 
         //theme filter
         if (!empty($data['themes'][0])) {
 
-            $item_query->leftJoin('{{%vendor_item_theme}}', '{{%vendor_item}}.item_id = {{%vendor_item_theme}}.item_id');
-            $item_query->leftJoin('{{%theme}}', '{{%theme}}.theme_id = {{%vendor_item_theme}}.theme_id');
-            $item_query->andWhere(['IN', '{{%theme}}.slug', $data['themes']]);
+            $item_query->itemThemeJoin();
+            $item_query->themeJoin();
+            $item_query->byThemeSlug($data['themes']);
 
         }//if themes
 
         //event time 
         if($session->has('event_time')) {
-            $item_query->leftJoin('{{%vendor_working_timing}}', '{{%vendor_working_timing}}.vendor_id = {{%vendor}}.vendor_id');
+            $item_query->workingTimeJoin();
         }
 
         //category filter
@@ -172,9 +156,7 @@ class BrowseController extends BaseController
 
         if($cats)
         {
-            $q = "{{%category_path}}.path_id IN ('".$cats."')";
-
-            $item_query->andWhere($q);
+            $item_query->byCategoryIDs($cats);
         }
         
         if ($session->has('deliver-location')) {
@@ -189,12 +171,12 @@ class BrowseController extends BaseController
                 $location = CustomerAddress::findOne($address_id)->area_id;
             }
 
-            $item_query->andWhere('EXISTS (SELECT 1 FROM {{%vendor_location}} WHERE {{%vendor_location}}.area_id="'.$location.'" AND {{%vendor_item}}.vendor_id = {{%vendor_location}}.vendor_id)');
+            $item_query->byDeliveryLocation($location);
         }
 
         if ($session->has('deliver-date')) {
             $date = date('Y-m-d', strtotime($session->get('deliver-date')));
-            $item_query->andWhere("{{%vendor}}.vendor_id NOT IN(SELECT vendor_id FROM `whitebook_vendor_blocked_date` where block_date = '".$date."')");
+            $item_query->byDeliveryDate($date);
         }
 
         if (!empty($session->get('event_time'))) {
@@ -208,26 +190,12 @@ class BrowseController extends BaseController
 
             $event_time = date('H:i:s', strtotime($session->get('event_time')));
             
-            $item_query->andWhere("'".$event_time."' >= {{%vendor_working_timing}}.working_start_time AND '".$event_time."' < {{%vendor_working_timing}}.working_end_time AND working_day='".$working_day."day'");
+            $item_query->byEventTime($event_time,$working_day);
         }
-
-        $expression = new Expression(
-            "CASE 
-                WHEN
-                    `whitebook_priority_item`.priority_level IS NULL 
-                    OR whitebook_priority_item.status = 'Inactive' 
-                    OR whitebook_priority_item.trash = 'Deleted' 
-                    OR DATE(whitebook_priority_item.priority_start_date) > DATE(NOW()) 
-                    OR DATE(whitebook_priority_item.priority_end_date) < DATE(NOW()) 
-                THEN 2 
-                WHEN `whitebook_priority_item`.priority_level = 'Normal' THEN 1 
-                WHEN `whitebook_priority_item`.priority_level = 'Super' THEN 0 
-                ELSE 2 
-            END, {{%vendor_item}}.sort");
 
         $item_query_result = $item_query
             ->groupBy('{{%vendor_item}}.item_id')
-            ->orderBy($expression)
+            ->orderByExpression()
             ->asArray()
             ->all();
 
@@ -293,15 +261,13 @@ class BrowseController extends BaseController
             $q = VendorItemThemes::find()
                 ->select(['{{%vendor_item_theme}}.theme_id'])
                 ->joinWith('themeDetail')
-                ->where("{{%vendor_item_theme}}.trash='default' and {{%vendor_item_theme}}.item_id IN(".implode(',', array_keys($item_ids)).")")
+                ->defaultItemThemes()
+                ->byItemIDs(implode(',', array_keys($item_ids)))
                 ->groupBy('{{%vendor_item_theme}}.theme_id');
             
-            if(Yii::$app->language == 'en')
-            {
+            if (Yii::$app->language == 'en') {
                 $q->orderBy('theme_name');
-            }
-            else
-            {
+            } else {
                 $q->orderBy('theme_name_ar');
             }
 
@@ -312,12 +278,13 @@ class BrowseController extends BaseController
 
         $vendor = Vendor::find()
             ->select('{{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%vendor}}.slug')
-            ->where(['IN', '{{%vendor}}.vendor_id', $vendor_ids])
+            ->byVendorID($vendor_ids)
             ->asArray()
             ->all();
 
         $TopCategories = Category::find()
-            ->where('(parent_category_id IS NULL or parent_category_id = 0) AND trash = "Default"')
+            ->allParents()
+            ->defaultCategories()
             ->orderBy('sort')
             ->asArray()
             ->all();
@@ -353,15 +320,9 @@ class BrowseController extends BaseController
     {
         $model = VendorItem::find()
                     ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
-                    ->where([
-                        '{{%vendor_item}}.slug' => $slug,
-                        '{{%vendor_item}}.trash' => 'Default',
-                        '{{%vendor_item}}.item_status' => 'Active',
-                        '{{%vendor_item}}.item_approved' => 'Yes',
-                        '{{%vendor}}.vendor_status' => 'Active',
-                        '{{%vendor}}.approve_status' => 'Yes',
-                        '{{%vendor}}.trash' => 'Default',
-                    ])
+                    ->bySlug($slug)->defaultItems()->activeItems()
+                    ->approvedItems()->byActiveVendor()->approvedVendor()
+                    ->defaultVendor()
                     ->one();
 
         if (empty($model)) {
@@ -375,8 +336,7 @@ class BrowseController extends BaseController
         if (
             $model->item_approved == 'Yes' &&
             $model->trash == 'Default' &&
-            $model->item_status == 'Active' &&
-            $model->item_for_sale == 'Yes'
+            $model->item_status == 'Active'
         ) {
             $AvailableStock = true;
         } else {
@@ -394,7 +354,7 @@ class BrowseController extends BaseController
         }
 
         $output = \common\models\Image::find()->select(['image_path'])
-            ->where(['item_id' => $model['item_id']])
+            ->itemID($model['item_id'])
             ->orderby(['vendorimage_sort_order' => SORT_ASC])
             ->asArray()
             ->one();
@@ -451,22 +411,10 @@ class BrowseController extends BaseController
             $vendor_detail->vendor_website = 'http://'.$vendor_detail->vendor_website;
         }
 
-        $price_table = VendorItemPricing::find()
-            ->where([
-                'item_id' => $model->item_id,
-                'trash' => 'Default'
-            ])
-            ->all();
+        $price_table = VendorItemPricing::find()->byItemID($model->item_id)->defaultItem()->all();
 
-        $menu = VendorItemMenu::findAll([
-            'item_id' => $model->item_id,
-            'menu_type' => 'options'
-        ]);
-
-        $addons = VendorItemMenu::findAll([
-            'item_id' => $model->item_id,
-            'menu_type' => 'addons'
-        ]);
+        $menu = VendorItemMenu::find()->byItemID($model->item_id)->optionMenu()->all();
+        $addons = VendorItemMenu::find()->byItemID($model->item_id)->addonMenu()->all();
 
         $vendor_area = VendorLocation::findAll(['vendor_id' => $model->vendor_id]);
         $vendor_area_list =  \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'locationName','cityName' );
@@ -478,10 +426,10 @@ class BrowseController extends BaseController
         {
             $my_addresses =  \common\models\CustomerAddress::find()
                 ->select(['{{%location}}.id,{{%customer_address}}.address_id, {{%customer_address}}.address_name'])
-                ->leftJoin('{{%location}}', '{{%location}}.id = {{%customer_address}}.area_id')
-                ->where(['{{%customer_address}}.trash'=>'Default'])
-                ->andwhere(['{{%customer_address}}.customer_id' => Yii::$app->user->getId()])
-                ->andwhere(['{{%location}}.id' => $area_ids])
+                ->joinLocation()
+                ->byDefaultAddress()
+                ->byCustomer(Yii::$app->user->getId())
+                ->byLocation($area_ids)
                 ->groupby(['{{%location}}.id'])
                 ->asArray()
                 ->all();
@@ -608,7 +556,7 @@ class BrowseController extends BaseController
             } else {
                 $name = 'location_ar';
             }
-            $area = \common\models\Location::find()->where(['status'=>'Active', 'trash' => 'Default', 'city_id' => $_POST['city_id']])->orderBy('city_id')->all();
+            $area = \common\models\Location::find()->byCityID($_POST['city_id'])->activeLocations()->defaultLocations()->orderBy('city_id')->all();
             if ($area) {
                 echo \yii\helpers\Html::dropDownList('Location','',\yii\helpers\ArrayHelper::map($area ,'id',$name),['prompt'=>'Please Select Location','class'=>'selectpicker required trigger','id'=>'Location']);
             } else {
@@ -653,7 +601,7 @@ class BrowseController extends BaseController
         
         if ($item) {
             
-            $exist = \common\models\BlockedDate::findOne(['vendor_id' => $item->vendor_id, 'block_date' => date('Y-m-d', strtotime($selectedDate))]);
+            $exist = \common\models\BlockedDate::find()->byVendor($item->vendor_id)->byBlockedDate($selectedDate)->one();
 
             $date = date('d-m-Y', strtotime($selectedDate));
             
@@ -675,7 +623,30 @@ class BrowseController extends BaseController
            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
         
-        $total = $item->item_price_per_unit * Yii::$app->request->post('quantity');
+        $total = ($item->item_base_price) ? $item->item_base_price : 0;
+
+        $price_chart = VendorItemPricing::find()
+            ->byItemID($item['item_id'])
+            ->defaultItem()
+            ->byQuantityRange(Yii::$app->request->post('quantity'))
+            ->orderBy('pricing_price_per_unit DESC')
+            ->one();
+
+        if ($item->item_minimum_quantity_to_order > 0) {
+            $min_quantity_to_order = $item->item_minimum_quantity_to_order;
+        } else {
+            $min_quantity_to_order = 1;
+        }
+
+        if ($price_chart) {
+            $unit_price = $price_chart->pricing_price_per_unit;
+        } else {
+            $unit_price = $item->item_price_per_unit;
+        }
+
+        $actual_item_quantity = Yii::$app->request->post('quantity') - $min_quantity_to_order;
+
+        $total += $unit_price * $actual_item_quantity;
 
         $menu_items = Yii::$app->request->post('menu_item');
 

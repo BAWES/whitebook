@@ -13,6 +13,15 @@ use yii\helpers\ArrayHelper;
 
 $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook'); 
 
+$session = $session = Yii::$app->session;
+$deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
+$deliver_date  = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
+$event_time  = ($session->has('event_time')) ? $session->get('event_time') : '';
+
+$arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00',
+          '05:30', '06:00', '06:30', '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30',
+          '11:00', '11:30'];
+
 ?>
 
 <section id="inner_pages_white_back">
@@ -25,12 +34,74 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 
         <form method="post" action="<?= Url::to(['cart/update']) ?>" id="cart-form">
 
+        <div class="row delivery-info-wrapper">
+            <div class="col-md-4">
+                <div class="form-group margin-left-0">
+                    <label><?=Yii::t('frontend', 'Area'); ?></label>
+                    <div class="select_boxes">
+                        <?php
+                            echo Html::dropDownList('area_id', $deliver_location,
+                            $vendor_area,
+                            ['data-height'=>"100px",'data-live-search'=>"true",'id'=>"area_id", 'class'=>"selectpicker", 'data-size'=>"10", 'data-style'=>"btn-primary"]);
+                        ?>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label><?=Yii::t('frontend', 'Delivery Date'); ?></label>
+                    <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" class="input-append date">
+                        <input value="<?= $deliver_date ?>" readonly="true" name="delivery_date" class="date-picker-box form-control required"  placeholder="<?php echo Yii::t('frontend', 'Date'); ?>" >
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4" id="event-time">
+                <div class="form-group">
+                    <label><?=Yii::t('frontend', 'Event Time'); ?></label>
+                    <select id="event_time" name="event_time" class="selectpicker" data-live-search="false" data-size="10" data-placeholder="">
+                        <option value="" class="label"><?= Yii::t('frontend', 'Event Time') ?></option>
+                        <optgroup label="am">                        
+                            <?php foreach ($arr_time as $key => $value) {
+                                if($value.' AM' == $event_time) 
+                                    $selected = 'selected'; 
+                                else
+                                    $selected = ''; ?>
+                                <option value="<?= $value ?> AM" data-content="<?= $value ?> <span>am</span>" <?= $selected ?>> 
+                                    <?= $value ?>
+                                </option>
+                            <?php } ?>
+                        </optgroup>
+                        <optgroup label="pm">                        
+                            <?php foreach ($arr_time as $key => $value) { 
+                                if($value.' PM' == $event_time) 
+                                    $selected = 'selected'; 
+                                else
+                                    $selected = ''; ?>
+                                <option value="<?= $value ?> PM" <?= $selected ?> data-content="<?= $value ?> <span>pm</span>">
+                                    <?= $value ?>
+                                </option>
+                            <?php } ?>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row text-center">
+            
+            <button name="btn_checkout" value="1" class="btn btn-primary btn-lg btn-checkout">
+                <?= Yii::t('frontend', 'Proceed to Checkout') ?>
+            </button>
+        </div>
+
+        <hr />
+
         <table class="table table-bordered cart-table">
 	        <thead>
 	        	<tr>
 	        		<td align="center"><?= Yii::t('frontend', 'Image') ?></th>
 	        		<td align="left"><?= Yii::t('frontend', 'Item Name') ?></th>
-	        		<td align="left"><?= Yii::t('frontend', 'Delivery') ?></th>
 	        		<td aligh="center" class="text-center">
 	        			<span class="visible-md visible-lg">
 	        				<?= Yii::t('frontend', 'Quantity') ?>
@@ -40,6 +111,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        			</span>
 	        		</th>
 	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Unit Price') ?></th>
+	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Base Price') ?></th>
 	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Total') ?></th>
 	        	</tr>
 	        </thead>
@@ -47,15 +119,24 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        	<?php
 	        	
 	        	$sub_total = $delivery_charge = 0;
-	        	
-	        	foreach ($items as $item) {
 
-	        		//$menu_items = CustomerCartMenuItem::findAll(['cart_id' => $item['cart_id']]);
+	        	foreach ($items as $item) {
+                    
+                    $row_total = ($item['item']['item_base_price']) ? $item['item']['item_base_price'] : 0;
 	        		
-	        		$menu_items = CustomerCartMenuItem::find()
+	        		$menu_option_items = CustomerCartMenuItem::find()
+	    				->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_id, {{%vendor_item_menu_item}}.menu_id, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
+	    				->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')	    				
+	    				->innerJoin('{{%vendor_item_menu}}', '{{%vendor_item_menu}}.menu_id = {{%customer_cart_menu_item}}.menu_id')
+	    				->where(['cart_id' => $item['cart_id'], 'menu_type' => 'options'])
+	    				->asArray()
+	    				->all();
+
+	    			$menu_addon_items = CustomerCartMenuItem::find()
 	    				->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_id, {{%vendor_item_menu_item}}.menu_id, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
 	    				->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
-	    				->where(['cart_id' => $item['cart_id']])
+	    				->innerJoin('{{%vendor_item_menu}}', '{{%vendor_item_menu}}.menu_id = {{%customer_cart_menu_item}}.menu_id')
+	    				->where(['cart_id' => $item['cart_id'], 'menu_type' => 'addons'])
 	    				->asArray()
 	    				->all();
 
@@ -65,7 +146,9 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        			'delivery_date' => $item['cart_delivery_date'],
 	        			'area_id' => $item['area_id'],
 	        			'quantity' => $item['cart_quantity'],
-	        			'menu_item' => ArrayHelper::map($menu_items, 'menu_item_id', 'quantity')
+	        			'menu_item' => ArrayHelper::map(
+	        					array_merge($menu_option_items, $menu_addon_items), 'menu_item_id', 'quantity'
+	        				)
 	        		], true);
 
 					$delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
@@ -78,20 +161,32 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 						->orderBy('pricing_price_per_unit DESC')
 						->one();
 
-					if($price_chart) {
+					if ($price_chart) {
 						$unit_price = $price_chart->pricing_price_per_unit;
-					}else{
-						$unit_price = $item['item_price_per_unit'];
+					} else {
+					    $unit_price = $item['item_price_per_unit'];
 					}
 
-	    			$row_total = $unit_price * $item['cart_quantity'];
+                    if ($item['item']['item_minimum_quantity_to_order'] > 0) {
+                        $min_quantity_to_order = $item['item']['item_minimum_quantity_to_order'];
+                    } else {
+                        $min_quantity_to_order = 1;
+                    }
 
-	    			foreach ($menu_items as $key => $value) {
+                    $actual_item_quantity = $item['cart_quantity'] - $min_quantity_to_order;
+
+                    $row_total += $unit_price * $actual_item_quantity;
+
+	    			foreach ($menu_option_items as $key => $value) {
 	    				$row_total += $value['quantity'] * $value['price'];
 	    			}
 
-	    			$sub_total += $row_total;
-		        	
+	    			foreach ($menu_addon_items as $key => $value) {
+	    				$row_total += $value['quantity'] * $value['price'];
+	    			}
+
+	    			$sub_total += $row_total; // not in use
+
 		        	?>
 		        	<tr>
 		        		<td align="center">
@@ -118,11 +213,54 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 		        				<?= LangFormat::format($item['item_name'], $item['item_name_ar']); ?>
 		        			</a>
 
+		        			<?php if(
+		        					$menu_option_items || 
+		        					$menu_addon_items || 
+		        					$item['have_female_service'] || 
+		        					$item['allow_special_request']
+		        				  ) { ?>
+	        				<a href="<?= Url::to(["browse/detail", 'slug' => $item['slug'], 'cart_id' => $item['cart_id']]) ?>" style="cursor: pointer;">[<?= Yii::t('frontend', 'Edit') ?>]
+	        				</a>
+	        				<?php } ?>
+
+		        			<br />
+
 		        			<?php 
 
 		        			$arr_menu_id = [];
 
-		        			foreach ($menu_items as $key => $menu_item) { 
+		        			if($menu_option_items)
+		        			{
+		        				echo '<b>'.Yii::t('frontend', 'Options').'</b>';
+		        			}
+
+		        			foreach ($menu_option_items as $key => $menu_item) { 
+
+		        				if(Yii::$app->language == 'en') {
+		        					echo '<i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];
+		        				}else{
+		        					echo '<i class="cart_menu_item">'.$menu_item['menu_item_name_ar'].' x '.$menu_item['quantity'];
+		        				}
+
+		        				$menu_item_total = $menu_item['quantity'] * $menu_item['price'];
+
+		        				if($menu_item_total) {
+		        					echo ' = '.CFormatter::format($menu_item_total);	
+		        				}
+		        				
+		        				echo '</i>';
+
+		        				//get distinct menu_id 
+
+		        				$arr_menu_id[$menu_item['menu_id']] = $menu_item['menu_id'];
+		        			} 
+
+		        			if($menu_addon_items)
+		        			{
+		        				echo '<b>'.Yii::t('frontend', 'Add-Ons').'</b><br />';
+		        			}
+
+		        			foreach ($menu_addon_items as $key => $menu_item) { 
 
 		        				if(Yii::$app->language == 'en') {
 		        					echo '<i class="cart_menu_item">'.$menu_item['menu_item_name'].' x '.$menu_item['quantity'];
@@ -153,7 +291,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 
 		        			?>
 
-		        			<?php if($menu_items) { ?>
+		        			<?php if($menu_addon_items || $menu_option_items) { ?>
 			        			<div class="visible-xs visible-sm">	        				
 			        				 = <?= CFormatter::format($row_total); ?>
 			        			</div>
@@ -178,71 +316,44 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 		        						}     
 			        				} //foreach errors 
 		        				}//if menu have error   
-		        			} ?>
-		        		</td>
-		        		<td class="position-relative">
-		        			<?php
+		        			} 
 
-		        			if(isset($delivery_area->location)) {
+                            if(isset($errors['area_id'])) { 
+                                foreach($errors['area_id'] as $key => $error) { 
 
-								$delivery_charge += $delivery_area->delivery_price;
-								
-								echo LangFormat::format($delivery_area->location->location,$delivery_area->location->location_ar).' <br />';
+                                    if(is_array($error)) {
+                                        foreach ($error as $value) {
+                                            echo '<span class="label label-danger">' . $value . '</span>';
+                                        }   
+                                    } else {
+                                        echo '<span class="label label-danger">' . $error . '</span>';
+                                    }     
+                                } 
+                            }
 
-								echo LangFormat::format($delivery_area->location->city->city_name,$delivery_area->location->city->city_name_ar).' <br />';
-		        				?>
-	        				
-	        					<?= $item['cart_delivery_date'] ?><br />
-								
-								<?= $item['time_slot']; ?>
+                            if(isset($errors['cart_delivery_date'])) {                            
+                                foreach($errors['cart_delivery_date'] as $key => $error) {
+                                    if(is_array($error)) {
+                                        foreach ($error as $value) {
+                                            echo '<span class="label label-danger">' . $value . '</span>';
+                                        }   
+                                    } else {
+                                        echo '<span class="label label-danger">' . $error . '</span>';
+                                    }     
+                                } 
+                            } 
 
-								<i title="Change Date and time" class="fa fa-edit" data-cart-id="<?=$item['cart_id']?>"></i>
-
-		        			<?php } else { ?>
-		        				<span class="label label-danger">
-		        					<?= Yii::t('frontend', 'We cannot delivery this item!'); ?>
-		        				</span>
-		        			<?php } ?>	
-
-		        			<div class="clearfix"></div>
-		        			<?php 
-
-		        			if(isset($errors['area_id'])) { 
-		        				foreach($errors['area_id'] as $key => $error) { 
-
-			        				if(is_array($error)) {
-	        							foreach ($error as $value) {
-	        								echo '<span class="label label-danger">' . $value . '</span>';
-	        							}	
-	        						} else {
-	        							echo '<span class="label label-danger">' . $error . '</span>';
-	        						}     
-		        				} 
-		        			} ?>
-
-		        			<?php if(isset($errors['cart_delivery_date'])) { 	        				
-		        				foreach($errors['cart_delivery_date'] as $key => $error) {
-			        				if(is_array($error)) {
-	        							foreach ($error as $value) {
-	        								echo '<span class="label label-danger">' . $value . '</span>';
-	        							}	
-	        						} else {
-	        							echo '<span class="label label-danger">' . $error . '</span>';
-	        						}     
-		        				} 
-		        			} ?>
-
-		        			<?php if(isset($errors['time_slot'])) { 	        				
-		        				foreach($errors['time_slot'] as $key => $error) {
-			        				if(is_array($error)) {
-	        							foreach ($error as $value) {
-	        								echo '<span class="label label-danger">' . $value . '</span>';
-	        							}	
-	        						} else {
-	        							echo '<span class="label label-danger">' . $error . '</span>';
-	        						}     
-		        				} 
-		        			} ?>
+                            if(isset($errors['time_slot'])) {                             
+                                foreach($errors['time_slot'] as $key => $error) {
+                                    if(is_array($error)) {
+                                        foreach ($error as $value) {
+                                            echo '<span class="label label-danger">' . $value . '</span>';
+                                        }   
+                                    } else {
+                                        echo '<span class="label label-danger">' . $error . '</span>';
+                                    }     
+                                } 
+                            } ?>
 		        		</td>
 		        		<td align="center">
 			        		<div class="input-group btn-block max-width-150-px">
@@ -263,8 +374,15 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 		        				} 
 		        			} ?>
 	                    </td>
+
+                        <td align="right" class="visible-md visible-lg">
+                            <?= CFormatter::format($unit_price)  ?>
+                        </td>
 		        		<td align="right" class="visible-md visible-lg">
-		        			<?= CFormatter::format($unit_price)  ?>
+		        			<?=($item['item']['item_base_price']) ?
+                                CFormatter::format($item['item']['item_base_price']) :
+                                    Yii::t('frontend','Price based <br/>on selection');
+                            ?>
 		        		</td>
 		        		<td align="right" class="visible-md visible-lg">
 		        			<?= CFormatter::format($row_total)  ?>
@@ -274,9 +392,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        </tbody>        	
         </table>
 
-        <button name="btn_checkout" value="1" class="btn btn-primary pull-right btn-checkout">
-        	<?= Yii::t('frontend', 'Proceed to Checkout') ?>
-        </button>
+        
 
         <a href="<?= Url::to(['browse/list', 'slug' => 'all']) ?>" class="btn btn-primary pull-right btn-checkout">
         	<?= Yii::t('frontend', 'Continue Shopping') ?>
@@ -368,7 +484,7 @@ $this->registerJs("
 </div>
 <?php
 
-$this->registerJsFile('@web/js/cart.js?v=1.5', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/cart.js?v=1.6', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 echo Html::hiddenInput('txt-select', Yii::t('frontend', 'Select '), ['id' => 'txt-select']);
 echo Html::hiddenInput('txt-min', Yii::t('frontend', 'atleast {qty} '), ['id' => 'txt-min']);

@@ -212,7 +212,11 @@ class Booking extends \yii\db\ActiveRecord
      * Add new bookings on checkout confirm 
      */ 
     public function checkoutConfirm()
-    {        
+    {   
+        $area_id = Yii::$app->session->get('deliver-location');
+        $cart_delivery_date = date('Y-m-d', strtotime(Yii::$app->session->get('deliver-date')));
+        $time_slot = Yii::$app->session->get('event_time');
+
         //default commision
 
         $default_commision = Siteinfo::info('commission');
@@ -224,9 +228,9 @@ class Booking extends \yii\db\ActiveRecord
         $price_chart = array();
 
         //check if quantity fall in price chart
-
+        $BasePrice = '';
         foreach ($items as $key => $item) {
-
+            $BasePrice = false;
             $price_chart[$item['item_id']] = [];
 
             $price = VendorItemPricing::find()
@@ -236,11 +240,13 @@ class Booking extends \yii\db\ActiveRecord
                 ->orderBy('pricing_price_per_unit DESC')
                 ->one();
 
-            if($price) {
+            if ($price) {
                 $price_chart[$item['item_id']]['unit_price'] = $price->pricing_price_per_unit;
-            }else{
+            } else{
                 $price_chart[$item['item_id']]['unit_price'] = $item['item_price_per_unit'];
             }
+
+            $price_chart[$item['item_id']]['base_price'] = ($item['item']['item_base_price']) ? $item['item']['item_base_price'] : 0.0;
 
             $menu_items = CustomerCartMenuItem::find()
                 ->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
@@ -287,6 +293,17 @@ class Booking extends \yii\db\ActiveRecord
 
         foreach ($items as $item) {
 
+            if ($item['item']['item_minimum_quantity_to_order'] > 0) {
+                $min_quantity_to_order = $item['item']['item_minimum_quantity_to_order'];
+            } else {
+                $min_quantity_to_order = 1;
+            }
+
+            $actual_item_quantity = $item['cart_quantity'] - $min_quantity_to_order;
+
+
+            $total = $price_chart[$item['item_id']]['base_price']; // base price change
+            $total += ($price_chart[$item['item_id']]['unit_price'] * $actual_item_quantity) + $price_chart[$item['item_id']]['menu_price'];
             $booking = new Booking;
             $booking->vendor_id = $item['vendor_id'];
             $booking->customer_id = $customer_id;
@@ -303,19 +320,23 @@ class Booking extends \yii\db\ActiveRecord
             $booking_item->item_id = $item['item_id'];
             $booking_item->item_name = $item['item_name'];
             $booking_item->item_name_ar = $item['item_name_ar'];
-            $booking_item->timeslot = $item['time_slot'];
-            $booking_item->area_id = $item['area_id'];
+
+            $booking_item->timeslot = $time_slot;
+            $booking_item->area_id = $area_id;
+            $booking_item->delivery_date = $cart_delivery_date;
             
             $booking_item->address_id = $address_id;
             $booking_item->delivery_address = $address;
             
-            $booking_item->delivery_date = $item['cart_delivery_date'];
+            $booking_item->item_base_price = ($price_chart[$item['item_id']]['base_price']) ? $price_chart[$item['item_id']]['base_price'] : 0.000;
             $booking_item->price = $price_chart[$item['item_id']]['unit_price'];
             $booking_item->quantity = $item['cart_quantity'];
-            $booking_item->total = ($price_chart[$item['item_id']]['unit_price'] * $item['cart_quantity']) + $price_chart[$item['item_id']]['menu_price'];
+            $booking_item->total = $total;
+            //$booking_item->total = ($price_chart[$item['item_id']]['unit_price'] * $item['cart_quantity']) + $price_chart[$item['item_id']]['menu_price'];
             $booking_item->female_service = $item['female_service'];
             $booking_item->special_request = $item['special_request'];
-            $booking_item->save();
+            
+            $booking_item->save(false);
 
             //save menu item
             $menu_items = CustomerCartMenuItem::find()
@@ -789,10 +810,19 @@ class Booking extends \yii\db\ActiveRecord
         $payment->type = VendorPayment::TYPE_ORDER;
         $payment->amount = $booking->total_vendor;
         $payment->description = 'Booking #'.$booking->booking_id.' got paid.';
-        $payment->save();
+        
+        if(!$payment->save())
+        {
+            print_r($payment->getErrors());
+        }
+    }
 
-        $vendor = Vendor::findOne($booking->vendor_id);
-        $vendor->vendor_payable += $booking->total_vendor;
-        $vendor->save();
+    /**
+     * @inheritdoc
+     * @return BookingQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new \common\models\query\BookingQuery(get_called_class());
     }
 }

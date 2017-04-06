@@ -159,10 +159,6 @@ $this->params['breadcrumbs'][] = $model->item_name;
                             'value' => strip_tags($model->item_price_description_ar),
                         ],
                         [
-                            'label' => $vendor_item->item_for_sale != $model->item_for_sale ? 'ITEM FOR SALE *' : 'ITEM FOR SALE',
-                            'value' => strip_tags($model->item_for_sale),
-                        ],
-                        [
                             'label' => $vendor_item->quantity_label != $model->quantity_label ? 'Quantity Label *' : 'Quantity Label',
                             'value' => $model->quantity_label,
                         ],
@@ -209,7 +205,7 @@ $this->params['breadcrumbs'][] = $model->item_name;
                             'value' => strip_tags($model->item_how_long_to_make),
                         ],
                         [
-                            'label' => $vendor_item->item_minimum_quantity_to_order != $model->item_minimum_quantity_to_order ? 'ITEM MINIMUM QUANTITY TO ORDER *' : 'ITEM MINIMUM QUANTITY TO ORDER',
+                            'label' => ($vendor_item->item_minimum_quantity_to_order != $model->item_minimum_quantity_to_order) ? 'Included Quantity *' : 'Included Quantity',
                             'value' => strip_tags($model->item_minimum_quantity_to_order),
                         ],
                         [

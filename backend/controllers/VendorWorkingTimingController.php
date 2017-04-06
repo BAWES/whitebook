@@ -79,7 +79,7 @@ class VendorWorkingTimingController extends Controller
         $model->trash = 'Default';
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            
+            Yii::$app->session->setFlash('success','Working Time created successfully');
             $model->working_start_time = date('H:i:s',strtotime($model->working_start_time));
             $model->working_end_time = date('H:i:s',strtotime($model->working_end_time));
             
@@ -103,8 +103,15 @@ class VendorWorkingTimingController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->working_id]);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
+            $model->working_start_time = date('H:i:s',strtotime($model->working_start_time));
+            $model->working_end_time = date('H:i:s',strtotime($model->working_end_time));
+
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success','Working Time updated successfully');
+                return $this->redirect(['index']);
+            }
         } else {
             return $this->render('update', [
                 'model' => $model,

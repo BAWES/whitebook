@@ -187,6 +187,13 @@ $(document).delegate('.menu-items .checkbox input', 'click', function(e) {
 });
 
 $(function() {
+
+    $('.delivery-info-wrapper input[name="delivery_date"]').datepicker({
+        format: 'dd-mm-yyyy',
+        startDate:'today',
+        autoclose:true
+    });
+
     $('#update-cart-modal').on('shown.bs.modal', function() {
         $('#delivery_date3').datepicker({
             format: 'dd-mm-yyyy',
@@ -236,7 +243,7 @@ $('.btn-danger').click(function() {
     $('#cart-form').submit();
 });
 
-$('.fa-edit').click(function(){
+$('.fa-edit, .cart-edit').click(function(){
     $.ajax({
         url: update_cart_popup_url,
         type:'post',
@@ -259,3 +266,5 @@ jQuery(document).delegate('#cart-form', 'submit', function(e) {
         e.preventDefault();
     }
 });*/
+
+

@@ -215,10 +215,7 @@ function cmp($a, $b)
 			<div class="tab-pane clearfix" id="3">
 
 				<input type="hidden" id="test" value="0" name="tests" />
-				
-				<?= $form->field($model, 'item_for_sale')->dropDownList(['Yes'=>'Yes', 'No'=>'No'], 
-						['id' => 'vendoritem-item_for_sale']) ?>
-				
+								
 				<?= $form->field($model, 'item_default_capacity')
 						->label('Item Default Capacity '.Html::tag('span', '*',['class'=>'required mandatory']))
 						->textInput(['maxlength' => 128, 'id' => 'vendoritem-item_default_capacity']); ?>
@@ -423,7 +420,6 @@ $this->registerCss("
 ");
 
 echo Html::hiddenInput('isNewRecord',$model->isNewRecord,['id'=>'isNewRecord']);
-echo Html::hiddenInput('item_for_sale',$model->item_for_sale,['id'=>'item_for_sale']);
 echo Html::hiddenInput('item_status',$model->item_status,['id'=>'item_status']);
 echo Html::hiddenInput('item_id',Yii::$app->request->get('id'),['id'=>'item_id']);
 echo Html::hiddenInput('load_sub_category_url',Url::to(['/priorityitem/loadsubcategory']),['id'=>'load_sub_category_url']);
@@ -454,4 +450,4 @@ $this->registerJsFile('@web/themes/default/plugins/ckeditor/ckeditor.js', ['depe
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.16', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/themes/default/js/vendor_item_validation.js?v=1.17', ['depends' => [\yii\web\JqueryAsset::className()]]);

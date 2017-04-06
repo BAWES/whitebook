@@ -1681,7 +1681,6 @@ function filter(){
         theme_name = '',
         price_val = '',
         vendor_name = '',
-        for_sale = '',
         url_path = '',
         url = window.location.href;
 
@@ -1697,12 +1696,6 @@ function filter(){
 
     if (($('input[name=themes]').length)>0) {
         var theme_name = $('input[name=themes]:checked').map(function () {
-            return this.value;
-        }).get();
-    }
-
-    if (($('input[name=for_sale]').length)>0) {
-        var for_sale = $('input[name=for_sale]:checked').map(function () {
             return this.value;
         }).get();
     }
@@ -1752,11 +1745,6 @@ function filter(){
     //    url_path += '&slug='+slug;
     //    ajax_data.slug = slug;
     //}
-
-    if (for_sale != '') {
-        url_path += '&for_sale='+for_sale;
-        ajax_data.for_sale = for_sale;
-    }
 
     if (search != '') {
         url_path += '&search=' + search;

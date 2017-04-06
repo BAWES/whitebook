@@ -68,8 +68,16 @@ class Location extends \yii\db\ActiveRecord
         return $this->hasOne(City::className(), ['city_id' => 'city_id']);
     }
 
-    public function getCityName() {
-        return $this->city->city_name;
+    public function getCityName() 
+    {
+        if(Yii::$app->language == 'en')
+        {
+            return $this->city->city_name;
+        }    
+        else
+        {
+            return $this->city->city_name_ar;
+        }
     }
  
     /**
@@ -170,9 +178,15 @@ class Location extends \yii\db\ActiveRecord
     // Status Image title
     public function statusTitle($status)
     {
-        if($status == 'Active')
-            return 'Activate';
+        return ($status == 'Active') ? 'Activate' : 'Deactivate';
+    }
 
-        return 'Deactivate';
+    /**
+     * @inheritdoc
+     * @return LocationQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new \common\models\query\LocationQuery(get_called_class());
     }
 }

@@ -23,17 +23,27 @@ foreach ($items as $key => $value) {
                     echo Html::img($path,['class'=>'item-img']);
 
                     ?>
-                    <?php /*if($value['item_for_sale'] == 'Yes') { ?>
-                        <i class="fa fa-circle" aria-hidden="true"></i>
-                        <span class="buy-text"><?=Yii::t('frontend','Buy');?></span>
-                        <!--                            <img class="sale_ribbon" src="--><?//= Url::to('@web/images/product_sale_ribbon.png') ?><!--" />-->
-                    <?php }*/ ?>
+                   
+                    <!-- 
+                    <i class="fa fa-circle" aria-hidden="true"></i>
+                    <span class="buy-text"><?=Yii::t('frontend','Buy');?></span>
+                    -->
+
                 </a>
             </div>
             <div class="events_descrip">
                 <a href="<?= $item_url ?>"><?= \common\components\LangFormat::format( $value['vendor_name'], $value['vendor_name_ar']) ?>
                     <h3><?= \common\components\LangFormat::format( $value['item_name'], $value['item_name_ar'])?></h3>
-                    <p><?= CFormatter::format($value['item_price_per_unit'])  ?></p>
+                    <p>
+                        <?php
+                        if (trim($value['item_base_price'])) {
+                            echo CFormatter::format($value['item_base_price']);
+                        //} else if (trim($value['item_price_per_unit'])) {
+                        //    echo CFormatter::format($value['item_price_per_unit']);
+                        } else {
+                            echo '<span class="small">' . Yii::t('app', 'Price upon request') . '<span>';
+                        } ?>
+                    </p>
                 </a>
             </div>
         </div>

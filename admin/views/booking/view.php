@@ -204,10 +204,13 @@ $this->registerJs("
         jQuery(this).html('Sending Mail...');
         jQuery(this).attr('disabled', 'disabled');
         jQuery.post('".Url::to(["booking/booking-payment"])."', jQuery('#payment_method_form').serialize(), function(data){
-            jQuery('#payment_method_modal').modal('hide');
+            
+            location = location;
+            
+            /*jQuery('#payment_method_modal').modal('hide');
             jQuery('.'+data).html(jQuery('#mode').val());
             jQuery('.save_payment').html('Submit');
-            jQuery('.save_payment').removeAttr('disabled');
+            jQuery('.save_payment').removeAttr('disabled');*/
         });
     });
 ", View::POS_READY);

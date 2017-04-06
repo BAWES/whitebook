@@ -5,6 +5,8 @@ use yii\widgets\Breadcrumbs;
 use yii\web\view;
 use common\models\VendorItemPricing;
 use common\models\VendorItemMenuItem;
+use common\models\CustomerCart;
+use common\models\CustomerCartMenuItem;
 use common\components\LangFormat;
 use common\components\CFormatter;
 
@@ -63,6 +65,22 @@ if($model->images) {
     $image = 'https://placeholdit.imgix.net/~text?txtsize=33&txt=530x530&w=530&h=550';
 }
 
+$cart_id = Yii::$app->request->get('cart_id');
+
+$cart = CustomerCart::findOne($cart_id);
+
+if($cart)
+{
+    $quantity = $cart->cart_quantity;
+    $txt_cart_btn = Yii::t('frontend', 'Update Cart');
+    $cart_url = Yii::$app->urlManager->createAbsoluteUrl('cart/update-cart-item');   
+}
+else
+{
+    $txt_cart_btn = Yii::t('frontend', 'Add To Cart');
+    $cart_url = Yii::$app->urlManager->createAbsoluteUrl('cart/add');
+}
+
 ?>
 
 <script type="application/ld+json">
@@ -111,10 +129,14 @@ if($model->images) {
             </div>
         </div>
 
-        <?php if ($AvailableStock && ($model->item_for_sale == 'Yes')) { ?>
+        <?php if ($AvailableStock) { ?>
         <form id="form_product_option" method="POST" class="form center-block margin-top-0">
 
         <input id="item_id" name="item_id" value="<?= $model->item_id ?>" type="hidden" />
+
+        <?php if($cart) { ?>
+        <input id="cart_id" name="cart_id" value="<?= $cart->cart_id ?>" type="hidden" />
+        <?php } ?>
 
         <div class="col-md-12 filter-bar ">
             <div class="col-md-3 padding-right-0 area-filter">
@@ -169,23 +191,19 @@ if($model->images) {
                             </label>
                             <b class="font-27">
                                 <p class="item-final-price">
-
-                                    <?php if($model['item_price_per_unit'] > 0) {
-
-                                            echo CFormatter::format($model['item_price_per_unit'] * $min_quantity_to_order);
-
-                                          } elseif ($menu) {
-
-                                            echo '<span class="small">'.Yii::t('frontend','Price on selection of menu items').'<span>';
-
-                                          } else {
-
-                                            echo '<span class="small">'.Yii::t('frontend','Price upon request').'<span>';
-
-                                          } ?>
+                                    <i class="fa fa-spinner fa-spin"></i>
                                 </p>
                             </b>
 
+                            <?php
+                            
+                            if ($menu) {
+                                echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; color: brown; display: none;">'.Yii::t('frontend','Price on selection of menu items').'</span>';
+                            }else{
+                                echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; color: brown; display: none;">'.Yii::t('frontend','Price base on selection').'</span>'; // price warning for 0 amount
+                            }
+
+                            ?>
                             <?php
 
                             $pricing = VendorItemPricing::find()
@@ -212,7 +230,7 @@ if($model->images) {
                                         <tbody>
                                             <?php foreach ($pricing as $key => $value) { ?>
                                             <tr>
-                                                <td><?= $value['range_to'] ?>+</td>
+                                                <td><?= $value['range_from'] ?>+</td>
                                                 <td>
                                                     <?= CFormatter::format($value['pricing_price_per_unit']) ?>
                                                 </td>
@@ -254,10 +272,10 @@ if($model->images) {
                             <span class="callout light">
                                 <?php
 
-                                if($model['item_how_long_to_make'] % 24 == 0)
+                                if($model['notice_period_type'] == 'Day')
                                 {
                                     echo Yii::t('frontend', 'Notice: {count} day(s)', [
-                                        'count' => $model['item_how_long_to_make']/24
+                                        'count' => $model['item_how_long_to_make']
                                     ]);
                                 }
                                 else
@@ -311,23 +329,17 @@ if($model->images) {
                                     </label>
 
                                     <b class="font-27 item-final-price">
-
-
-                                        <?php if($model['item_price_per_unit'] > 0) {
-
-                                            echo CFormatter::format($model['item_price_per_unit'] * $min_quantity_to_order);
-
-                                          } elseif ($menu) {
-
-                                            echo '<span class="small">'.Yii::t('frontend','Price on selection of menu items').'<span>';
-
-                                          } else {
-
-                                            echo '<span class="small">'.Yii::t('frontend','Price upon request').'<span>';
-
-                                          }
-                                          ?>
+                                        <i class="fa fa-spinner fa-spin"></i>
                                     </b>
+                                    <?php
+                                    
+                                    if ($menu) {
+                                        echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; color: brown; display: none;">'.Yii::t('frontend','Price on selection of menu items').'</span>';
+                                    }else{
+                                        echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; color: brown; display: none;">'.Yii::t('frontend','Price base on selection').'</span>'; // price warning for 0 amount
+                                    }
+
+                                    ?>
 
                                     <?php if($model['min_order_amount'] > 0) {
 
@@ -369,7 +381,7 @@ if($model->images) {
                                                 <tbody>
                                                     <?php foreach ($pricing as $key => $value) { ?>
                                                     <tr>
-                                                        <td><?= $value['range_to'] ?>+</td>
+                                                        <td><?= $value['range_from'] ?>+</td>
                                                         <td>
                                                             <?= CFormatter::format($value['pricing_price_per_unit']) ?>
                                                         </td>
@@ -440,8 +452,9 @@ if($model->images) {
                                             } else { ?>
                                                 <div class="buy-btn">
                                                     <div class="button-signin">
-                                                        <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px;">
-                                                            <?= Yii::t('frontend', 'Add To Cart') ?>
+                                                        <?php $disable = (!$model['item_base_price']) ? 'disabled="disabled"' : '';?>
+                                                        <button <?=$disable?> type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px;">
+                                                            <?= $txt_cart_btn ?>
                                                         </button>&nbsp;&nbsp;&nbsp;
                                                     </div>
                                                 </div>
@@ -459,7 +472,7 @@ if($model->images) {
 
                                 <div class="clearfix"></div>
 
-                                <?php if($AvailableStock && ($item_type_name == 'Product' || $capacity > 1)) { ?>
+                                <?php if($AvailableStock && $capacity > 1 && $item_type_name != 'Package') { ?>
                                 <div class="qty_box">
                                     <div class="quantity-lbl">
                                         <label>
@@ -551,7 +564,7 @@ if($model->images) {
                                             <p><?= nl2br($item_description); ?></p>
 
                                             <?php if($item_additional_info) { ?>
-                                                <h4><?= Yii::t('frontend', 'Additional Info') ?></h4>
+                                                <h4><?= Yii::t('frontend', 'Additional Information') ?></h4>
                                                 <p><?= nl2br($item_additional_info); ?></p>
                                             <?php } ?>
 
@@ -585,6 +598,7 @@ if($model->images) {
                                                             </span>
 
                                                             <?php if($value->min_quantity || $value->max_quantity) { ?>
+                                                            
                                                             <span class="menu-hint" data-max-quantity="<?= $value->max_quantity ?>" data-min-quantity="<?= $value->min_quantity ?>" data-txt-min="<?= Yii::t('frontend', 'atleast {qty} '); ?>" data-txt-max="<?= Yii::t('frontend', 'upto {qty} '); ?>">
 
                                                                 <?php
@@ -593,7 +607,7 @@ if($model->images) {
 
                                                                 if($value->min_quantity) {
                                                                     echo Yii::t('frontend', 'atleast {qty} ', [
-                                                                        'qty' => $value->min_quantity * $quantity
+                                                                        'qty' => $value->min_quantity
                                                                     ]);
                                                                 }
 
@@ -603,7 +617,7 @@ if($model->images) {
 
                                                                 if($value->max_quantity) {
                                                                     echo Yii::t('frontend', ' upto {qty}', [
-                                                                        'qty' => $value->max_quantity * $quantity
+                                                                        'qty' => $value->max_quantity
                                                                     ]);
                                                                 }*/
 
@@ -619,10 +633,23 @@ if($model->images) {
 
                                                         $menu_items = VendorItemMenuItem::findAll(['menu_id' => $value->menu_id]);
 
-                                                        foreach ($menu_items as $menu_item) { ?>
+                                                        foreach ($menu_items as $menu_item) { 
+
+                                                            if($cart) 
+                                                            {
+                                                                $cart_menu_item = CustomerCartMenuItem::findOne([
+                                                                    'menu_item_id' => $menu_item->menu_item_id,
+                                                                    'cart_id' => $cart->cart_id
+                                                                ]);    
+                                                            }
+                                                            else
+                                                            {
+                                                                $cart_menu_item = null;
+                                                            }
+
+                                                            ?>
 
                                                             <li>
-
 
                                                                 <?php if($value->quantity_type == 'selection') { ?>
 
@@ -630,7 +657,7 @@ if($model->images) {
 
                                                                 <span class="menu-item-qty-box">
                                                                     <i class="fa fa-minus"></i>
-                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="0" readonly />
+                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="<?= isset($cart_menu_item)?$cart_menu_item->quantity:0 ?>" readonly />
                                                                     <i class="fa fa-plus"></i>
                                                                 </span>
 
@@ -647,7 +674,7 @@ if($model->images) {
                                                                 <?php } else { ?>
 
                                                                 <div class="checkbox checkbox-inline">
-                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" id="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="1" type="checkbox" />
+                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" id="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="1" type="checkbox" <?php if(!empty($cart_menu_item)) echo 'checked'; ?> />
 
                                                                     <label for="menu_item[<?= $menu_item->menu_item_id ?>]">
                                                                         <?php if(Yii::$app->language == 'en') {
@@ -678,10 +705,10 @@ if($model->images) {
                                                 <?php } ?>
                                              </div><!-- END .menu-item-detail -->
 
-                                            <?php if ($AvailableStock && ($model->item_for_sale == 'Yes')) { ?>
+                                            <?php if ($AvailableStock) { ?>
 
                                                 <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px; margin-top: 10px; max-width: 240px;">
-                                                        <?= Yii::t('frontend', 'Add To Cart') ?>
+                                                        <?= $txt_cart_btn ?>
                                                 </button>
 
                                             <?php } ?><!-- END available in stock and for sale -->
@@ -750,14 +777,28 @@ if($model->images) {
 
                                                         $menu_items = VendorItemMenuItem::findAll(['menu_id' => $value->menu_id]);
 
-                                                        foreach ($menu_items as $menu_item) { ?>
+                                                        foreach ($menu_items as $menu_item) { 
+
+                                                            if($cart)
+                                                            {
+                                                                $cart_menu_item = CustomerCartMenuItem::findOne([
+                                                                    'menu_item_id' => $menu_item->menu_item_id,
+                                                                    'cart_id' => $cart->cart_id
+                                                                ]);
+                                                            }
+                                                            else
+                                                            {
+                                                                $cart_menu_item = null;   
+                                                            }
+                                                            
+                                                            ?>
 
                                                             <li>
                                                                 <!-- qty box -->
 
                                                                 <span class="menu-item-qty-box">
                                                                     <i class="fa fa-minus"></i>
-                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="0" readonly />
+                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="<?= $cart_menu_item?$cart_menu_item->quantity:0 ?>" readonly />
                                                                     <i class="fa fa-plus"></i>
                                                                 </span>
 
@@ -797,10 +838,10 @@ if($model->images) {
                                                 <?php } ?>
                                              </div><!-- END .menu-item-detail -->
 
-                                            <?php if ($AvailableStock && ($model->item_for_sale == 'Yes')) { ?>
+                                            <?php if ($AvailableStock) { ?>
 
                                                 <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px; margin-top: 10px; max-width: 240px;">
-                                                        <?= Yii::t('frontend', 'Add To Cart') ?>
+                                                        <?= $txt_cart_btn ?>
                                                 </button>
 
                                             <?php } ?><!-- END available in stock and for sale -->
@@ -824,7 +865,7 @@ if($model->images) {
 
                                             <br />
 
-                                            <textarea name="special_request" class="form-control"></textarea>
+                                            <textarea name="special_request" class="form-control"><?= $cart?$cart->special_request:'' ?></textarea>
                                           </div>
                                         </div>
                                     </div>
@@ -842,7 +883,7 @@ if($model->images) {
                                         <div id="collapse-female" class="panel-collapse collapse in">
                                           <div class="panel-body">
                                             <div class="form-group checkbox" style="margin-left: 0px;">
-                                                <input type="checkbox" name="female_service" value="1" id="chk_female_service" />
+                                                <input type="checkbox" name="female_service" value="1" id="chk_female_service" <?php if(!empty($cart->female_service)) echo 'checked'; ?> />
                                                 <label for="chk_female_service">
                                                     <?= Yii::t('frontend', 'Include Female Service') ?>
                                                 </label>
@@ -902,8 +943,7 @@ if($model->images) {
                                 if (
                                     $s->item_approved == 'Yes' &&
                                     $s->trash == 'Default' &&
-                                    $s->item_status == 'Active' &&
-                                    $s->item_for_sale == 'Yes'
+                                    $s->item_status == 'Active'
                                 ) {
                                     $AvailableStock = true;
                                 } else {
@@ -925,8 +965,19 @@ if($model->images) {
                                                 <img src="<?php echo $baselink; ?>" alt="Slide show images" />
 
                                                 <div class="deals_listing_cont">
-                                                    <h3><?=LangFormat::format($s->item_name,$s->item_name_ar); ?></h3>
-                                                    <p><?=(trim($s['item_price_per_unit'])) ? CFormatter::format($s['item_price_per_unit']) : '<span class="small">'.Yii::t('app','Price upon request').'<span>'  ?></p>
+                                                    <h3>
+                                                        <?=LangFormat::format($s->item_name,$s->item_name_ar); ?>
+                                                    </h3>
+                                                    <p>
+                                                        <?php 
+
+                                                        if (trim($s['item_base_price'])) 
+                                                        {                                                     
+                                                            echo CFormatter::format($s['item_base_price']); 
+                                                        } else {
+                                                            echo '<span class="small">' . Yii::t('app', 'Price upon request') . '<span>';
+                                                        } ?>
+                                                    </p>
                                                 </div>
 
                                                 <?php if($s['item_how_long_to_make'] > 0) { ?>
@@ -934,10 +985,10 @@ if($model->images) {
                                                     <span class="callout light">
                                                         <?php
 
-                                                        if($s['item_how_long_to_make'] % 24 == 0)
+                                                        if($s['notice_period_type'] == 'Day')
                                                         {
                                                             echo Yii::t('frontend', 'Notice: {count} day(s)', [
-                                                                'count' => $s['item_how_long_to_make']/24
+                                                                'count' => $s['item_how_long_to_make']
                                                             ]);
                                                         }
                                                         else
@@ -1019,6 +1070,7 @@ if($model->images) {
 
 <?php
 
+echo Html::hiddenInput('notice_period_type', $model['notice_period_type'], ['id' => 'notice_period_type']);
 echo Html::hiddenInput('item_how_long_to_make', $model['item_how_long_to_make'], ['id' => 'item_how_long_to_make']);
 echo Html::hiddenInput('final_price_url', Url::to(['browse/final-price']), ['id' => 'final_price_url']);
 echo Html::hiddenInput('save-delivery-timeslot-url', Url::to(['cart/save-delivery-timeslot']), ['id' => 'save-delivery-timeslot-url']);
@@ -1026,17 +1078,18 @@ echo Html::hiddenInput('save-delivery-timeslot-url', Url::to(['cart/save-deliver
 echo Html::hiddenInput('txt-select', Yii::t('frontend', 'Select '), ['id' => 'txt-select']);
 echo Html::hiddenInput('txt-min', Yii::t('frontend', 'atleast {qty} '), ['id' => 'txt-min']);
 echo Html::hiddenInput('txt-max', Yii::t('frontend', ' upto {qty}'), ['id' => 'txt-max']);
+echo Html::hiddenInput('txt-timeslot-not-available', Yii::t('frontend', 'Delivery timeslot not available'), ['id' => 'txt-timeslot-not-available']);
 
 echo Html::hiddenInput('item_type_name', $item_type_name, ['id' => 'item_type_name']);
 echo Html::hiddenInput('capacity', $capacity, ['id' => 'capacity']);
 echo Html::hiddenInput('minimum_increment', $model->minimum_increment, ['id' => 'minimum_increment']);
-echo Html::hiddenInput('for_sale_validation', $model->item_for_sale, ['id' => 'for_sale_validation']);
+
 $this->registerJs("
     var deliver_date = '".$deliver_date."';
     var isGuest = ".(int)Yii::$app->user->isGuest.";
     var vendor_id = '".$model['vendor_id']."';
     var customer_id = '".Yii::$app->user->id."';
-    var addtobasket_url = '".Yii::$app->urlManager->createAbsoluteUrl('cart/add')."';
+    var addtobasket_url = '".$cart_url."';
     var getdeliverytimeslot_url = '".Url::toRoute('cart/get-delivery-timeslot')."';
     var area_option_url = '".Url::toRoute('site/area')."';
     var availablity = '".Url::toRoute('browse/product-available')."';
@@ -1123,4 +1176,4 @@ $this->registerCss("
     }
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.23', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.27', ['depends' => [\yii\web\JqueryAsset::className()]]);

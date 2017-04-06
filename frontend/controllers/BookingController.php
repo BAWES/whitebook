@@ -19,9 +19,7 @@ class BookingController extends BaseController
 	        return $this->redirect(['/site/index']);
 	    }
 
-        $query = Booking::find()
-            ->where(['customer_id'=>Yii::$app->user->getId()])
-            ->orderBy('created_datetime DESC');
+        $query = Booking::find()->createdByCurrentUser()->orderByDate();
 
 		// create a pagination object with the total count
 		$pagination = new Pagination(['totalCount' => $query->count()]);
@@ -45,22 +43,9 @@ class BookingController extends BaseController
 
 		$booking_token = Yii::$app->request->get('booking_token');
 
-		$booking = Booking::find()
-			->where([
-				'booking_token' => $booking_token
-			])
-			->one();
+		$booking = Booking::find()->byBookingToken($booking_token)->one();
 
-		if($booking) 
-		{
-			return $this->render('view', [
-				'booking' => $booking,
-			]);
-		}
-		else
-		{
-			return $this->render('track');
-		}	
+        return ($booking) ? $this->render('view', ['booking' => $booking]) : $this->render('track');
 	}
 
 	public function actionMail() {

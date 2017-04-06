@@ -38,6 +38,7 @@ $this->title = Yii::t('frontend', 'Pay Now | Whitebook');
 	        			</span>
 	        		</th>
 	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Unit Price') ?></th>
+	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Base Price') ?></th>
 	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Total') ?></th>
 	        	</tr>
 	        </thead>
@@ -141,7 +142,13 @@ $this->title = Yii::t('frontend', 'Pay Now | Whitebook');
 		        		<?= $item['quantity'] ?>
                     </td>
 	        		<td align="right" class="visible-md visible-lg">
-	        			<?= CFormatter::format($item['price'])  ?>
+                        <?= CFormatter::format($item['price'])  ?>
+	        		</td>
+                    <td align="right" class="visible-md visible-lg">
+                        <?=($item['item_base_price'] != '0.000') ?
+                            CFormatter::format($item['item_base_price']) :
+                            Yii::t('frontend','Price based <br/>on selection');
+                        ?>
 	        		</td>
 	        		<td align="right" class="visible-md visible-lg">
 	        			<?= CFormatter::format($item['total'])  ?>
@@ -153,15 +160,17 @@ $this->title = Yii::t('frontend', 'Pay Now | Whitebook');
 
         <div class="row">
         	<?php if($cod) { ?>
-        	<div class="col-sm-6">
+        	<div class="col-sm-12">
         		<a href="<?= Url::to(['payment/cod']) ?>" class="btn btn-lg btn-primary btn-payment pull-right">
 		        	<?= Yii::t('frontend', 'Pay By Cash on Delivery') ?>
 		        </a>
         	</div>
         	<?php } ?>
-        	<?php if($tap) { ?>
-        	<div class="col-sm-6">
-        		<a href="<?= Url::to(['payment/tap']) ?>" class="btn btn-lg btn-primary btn-payment pull-left">
+        	<?php if($tap) {
+        	    $position = (Yii::$app->language =='en') ? 'float:right' : 'float:left';
+        	    ?>
+        	<div class="col-sm-12">
+        		<a href="<?= Url::to(['payment/tap']) ?>" class="btn btn-lg btn-primary btn-payment " style="<?=$position; ?>">
 		        	<?= Yii::t('frontend', 'Click here to pay') ?>
 		        </a>
         	</div>

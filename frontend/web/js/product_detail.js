@@ -1,11 +1,21 @@
 
     jQuery(document).ready(function () {
 
+        $notice_period_type = $('#notice_period_type').val()
+
         $notice_period = parseInt($('#item_how_long_to_make').val());
 
-        $start_date = new Date();
-        $start_date.setHours($start_date.getHours() + $notice_period);
-
+        if($notice_period_type == 'Hour')
+        {
+            $start_date = new Date();
+            $start_date.setHours($start_date.getHours() + $notice_period);    
+        }
+        else
+        {
+            $start_date = new Date();
+            $start_date.setDate($start_date.getDate() + $notice_period);   
+        }
+        
         $('#item_delivery_date').datepicker({
             format: 'dd-mm-yyyy',
             startDate: $start_date,
@@ -317,7 +327,14 @@ jQuery(document).delegate('#form_product_option', 'submit', function(e) {
                     $('a[href="#collapse-options"]').trigger('click');
                 }
 
-                $('html, body').animate({ scrollTop: $('#form_product_option .error p').offset().top - 300 }, 'slow');
+                if($('#form_product_option .error p').length > 0)
+                {
+                    $('html, body').animate({ scrollTop: $('#form_product_option .error p').offset().top - 300 }, 'slow');
+                }
+                else
+                {
+                    $('html, body').animate({ scrollTop: $('#form_product_option').offset().top - 300 }, 'slow');        
+                }
             }
         }
     );
@@ -366,7 +383,7 @@ function deliveryTimeSlot(date){
         {
             if (jQuery.trim(data) == 0) {
                 $('.timeslot_id_div').show();
-                $('.timeslot_id_div .text').html('Item is not available on selected date');
+                $('.timeslot_id_div .text').html($('#txt-timeslot-not-available').val());
                 $('.timeslot_id_select').hide();
                 jQuery('#timeslot_id').html('');
             } else {
@@ -379,6 +396,8 @@ function deliveryTimeSlot(date){
         }
     });
 }
+
+//validation-product-available
 
 function productAvailability(date){
     $('.timeslot_id_div .text').html('Please Wait...');
@@ -399,7 +418,13 @@ function productAvailability(date){
 
             } else {
                 $('.button-signin button').html('ADD TO CART');
-                $('.button-signin button').attr('disabled',false);
+                if (json['price'] == 0) {
+                    $('.button-signin button').attr('disabled',true);
+                    $('.small.price_warning').show();
+                } else {
+                    $('.button-signin button').attr('disabled',false);
+                    $('.small.price_warning').hide();
+                }
 
                 deliveryTimeSlot(date);
 
@@ -426,7 +451,7 @@ function productAvailability(date){
 }
 
 // pre set value for Delivery date on product detail page
-if (deliver_date && $('#for_sale_validation').val() == 'Yes') {
+if (deliver_date) {
     productAvailability(jQuery('#item_delivery_date').val());
 }
 
@@ -468,7 +493,7 @@ $(document).delegate('.menu-item-qty-box .fa-plus', 'click', function() {
 
     //max quantity for menu 
 
-    $max = $(this).parents('.menu-items').attr('data-max-quantity') * $qty;
+    $max = $(this).parents('.menu-items').attr('data-max-quantity');
 
     $qty_input = $(this).parent().find('input');
 
@@ -503,7 +528,7 @@ $(document).delegate('.menu-items .checkbox input', 'click', function(e) {
 
     //max quantity for menu 
 
-    $max = $(this).parents('.menu-items').attr('data-max-quantity') * $qty;
+    $max = $(this).parents('.menu-items').attr('data-max-quantity');
 
     //get total qty in menu
 
@@ -522,9 +547,19 @@ $(document).delegate('.menu-items .checkbox input', 'click', function(e) {
     update_price();
 });
 
+
+//final-price
 function update_price() {
     $.post($('#final_price_url').val(), $('#form_product_option').serialize(), function(json) {
         $('.item-final-price').html(json.price);
+        if (json.price == 'KD 0') { // disable add to cart button in case 0 price
+            $('.button-signin button').attr('disabled',true);
+            $('.price_warning').show();
+            $('.item-final-price').empty();
+        } else {
+            $('.button-signin button').attr('disabled',false);
+            $('.price_warning').hide();
+        }
     });
 }
 
@@ -609,7 +644,7 @@ function update_option_menu_title_hint() {
         $html = $('#txt-select').val();
 
         if($min > 0) {
-            $html += $('#txt-min').val().replace('{qty}', $min * $qty);
+            $html += $('#txt-min').val().replace('{qty}', $min);//* $qty
         }
         
         if($min > 0 && $max > 0) { 
@@ -617,7 +652,7 @@ function update_option_menu_title_hint() {
         }
 
         if($max > 0) {
-            $html += $('#txt-max').val().replace('{qty}', $max * $qty);
+            $html += $('#txt-max').val().replace('{qty}', $max);// * $qty
         }
 
         $(this).html($html);
@@ -628,7 +663,7 @@ function update_option_menu_item_qty() {
 
     $.each($('#collapse-options ul.menu-items'), function() {
 
-        $max = $(this).attr('data-max-quantity') * $('input[name="quantity"]').val();
+        $max = $(this).attr('data-max-quantity');// * $('input[name="quantity"]').val();
 
         $total = 0;
 
@@ -673,3 +708,8 @@ $(document).delegate('.lnk-price-chart', 'click', function() {
         $('.lnk-price-chart .fa-plus-square-o').removeClass('fa-plus-square-o').addClass('fa-minus-square-o');
     }
 });
+
+
+$(function(){
+    update_price();
+})

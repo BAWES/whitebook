@@ -37,16 +37,16 @@ $this->params['breadcrumbs'][] = $this->title;
 		    		<div class="image-editor">
 				        <input type="file" class="cropit-image-input">
 				        <p style="color: red;">
-				    		Minimum image dimension : 565px x 565px
+				    		Minimum image dimension : 450px x 450px
 				    	</p>
-				        <div class="cropit-preview" style="width: 565px; height: 565px;">
+				        <div class="cropit-preview" style="width: 450px; height: 450px;">
 				        	<?php
 
 				        	if($model->vendor_logo_path) {
 					        	$src = Yii::getAlias('@vendor_logo') . '/' . $model->vendor_logo_path;
 					        }else{
 					        	$src = 'https://placeholdit.imgix.net/~text?txtsize=20&txt=Drag%20and%20Drop%20Image%20Here
-					        	&w=565&h=565';
+					        	&w=450&h=450';
 					        } ?>
 
 				        	<img class="cropit-preview-image" alt="" src="<?= $src ?>" style="transform-origin: left top 0px; will-change: transform;" />
@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				        <div class="image-size-label">
 				          Resize image
 				        </div>
-				        <input type="range" class="cropit-image-zoom-input" style="width: 565px;">
+				        <input type="range" class="cropit-image-zoom-input" style="width: 450px;">
 				        <input type="hidden" name="image" />
 				    </div>
 
@@ -95,8 +95,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
 					</div>
 
-					<div class="form-group" style="clear:both;"><?= $form->field($model, 'vendor_contact_address',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
+					<?= $form->field($model, 'vendor_contact_address')->textArea() ?>
+
 					<div class="form-group" style="clear:both;"><?= $form->field($model, 'vendor_contact_address_ar',[  'template' => "{label}<div class='controls'>{input}</div> {hint} {error}"])->textArea() ?></div>
+					
 					<div class="clearfix">
 						<div class="col-md-6"><?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success submit_btn' : 'btn btn-primary submit_btn','style'=>'float:right;']) ?></div>
 						<div class="col-md-6"><div class="form-group" style="height: 10px;"><input type="button" name="btnPrevious" class="btnNext btn btn-info" value="Next"></div></div>

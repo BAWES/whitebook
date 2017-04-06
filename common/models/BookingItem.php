@@ -18,6 +18,7 @@ use Yii;
  * @property string $delivery_address
  * @property string $delivery_date
  * @property string $price
+ * @property string $item_base_price
  * @property integer $quantity
  * @property string $total
  * @property integer $female_service
@@ -46,7 +47,7 @@ class BookingItem extends \yii\db\ActiveRecord
             [['booking_id', 'item_id', 'area_id', 'address_id', 'quantity', 'female_service'], 'integer'],
             [['delivery_address', 'special_request'], 'string'],
             [['delivery_date'], 'safe'],
-            [['price', 'total'], 'number'],
+            [['price', 'total','item_base_price'], 'number'],
             [['item_name', 'item_name_ar'], 'string', 'max' => 128],
             [['timeslot'], 'string', 'max' => 100],
             [['booking_id'], 'exist', 'skipOnError' => true, 'targetClass' => Booking::className(), 'targetAttribute' => ['booking_id' => 'booking_id']],
@@ -71,6 +72,7 @@ class BookingItem extends \yii\db\ActiveRecord
             'delivery_address' => Yii::t('frontend', 'Delivery Address'),
             'delivery_date' => Yii::t('frontend', 'Delivery Date'),
             'price' => Yii::t('frontend', 'Price'),
+            'item_base_price' => Yii::t('frontend', 'Item Base Price'),
             'quantity' => Yii::t('frontend', 'Quantity'),
             'total' => Yii::t('frontend', 'Total'),
             'female_service' => Yii::t('frontend', 'Female Service'),
@@ -100,6 +102,24 @@ class BookingItem extends \yii\db\ActiveRecord
     public function getBookingItemMenus()
     {
         return $this->hasMany(BookingItemMenu::className(), ['booking_item_id' => 'booking_item_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBookingItemOptions()
+    {
+        return $this->hasMany(BookingItemMenu::className(), ['booking_item_id' => 'booking_item_id'])
+            ->andWhere(['menu_type' => 'options']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBookingItemAddons()
+    {
+        return $this->hasMany(BookingItemMenu::className(), ['booking_item_id' => 'booking_item_id'])
+            ->andWhere(['menu_type' => 'addons']);
     }
 
     public function getLocation()

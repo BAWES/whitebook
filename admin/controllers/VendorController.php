@@ -989,5 +989,19 @@ class VendorController extends Controller
             'image_url' => Yii::getAlias("@s3/vendor_logo/") . $image_name . $image_extension,
             'image' => $image_name . $image_extension
         ];
-    }    
+    }
+
+    public function actionLoginRequest($id){
+        $vendor = \common\models\Vendor::findOne($id);
+        if ($vendor && $vendor->vendor_contact_email) {
+            $vendor->auth_token = Yii::$app->getSecurity()->generateRandomString(50);
+            $vendor->modified_datetime = date('Y-m-d H:i:s');
+            if ($vendor->save()) {
+                return $this->redirect(Yii::$app->urlManagerVendor->createUrl(['site/simple-login','_c'=>$vendor->auth_token]));
+            }
+        } else {
+            Yii::$app->session->setFlash('danger','No data found for vendor id : '.$id.' in database');
+            return $this->redirect(['vendor/index']);
+        }
+    }
 }

@@ -9,6 +9,7 @@ use yii\bootstrap\Alert;
 use yii\helpers\Url;
 
 AppAsset::register($this);
+
 $this->beginPage();
 ?>
 <!DOCTYPE html>
@@ -16,10 +17,12 @@ $this->beginPage();
 <head>
     <?php $this->head(); ?>
 </head>
-<body style="background: #fff;">
+<body style="background: #fff;" class="container">
     <?php $this->beginBody() ?>
 
     <?= $content ?>
+
+    <?php $this->endBody() ?>
 </body>
 </html>
 <?php $this->endPage() ?>

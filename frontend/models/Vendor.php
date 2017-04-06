@@ -37,7 +37,7 @@ class Vendor extends \common\models\Vendor
     	$vendor = Vendor::find()
             ->select('{{%vendor}}.vendor_id')
             ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
-            ->where(['{{%vendor}}.vendor_status' => 'Active','{{%vendor}}.trash' => 'Default','{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_for_sale' => 'Yes','{{%vendor_item}}.item_approved' => 'Yes'])
+            ->where(['{{%vendor}}.vendor_status' => 'Active','{{%vendor}}.trash' => 'Default','{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_status' => 'Active', '{{%vendor_item}}.item_approved' => 'Yes'])
             ->distinct()
             ->asArray()
             ->all();
@@ -53,7 +53,7 @@ class Vendor extends \common\models\Vendor
         return Vendor::find()
             ->select('{{%vendor}}.vendor_id,{{%vendor}}.vendor_name,{{%vendor}}.vendor_name_ar,{{%vendor}}.slug')
             ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
-            ->where(['{{%vendor}}.vendor_status' => 'Active','{{%vendor}}.trash' => 'Default','{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_status' => 'Active','{{%vendor_item}}.item_for_sale' => 'Yes','{{%vendor_item}}.item_approved' => 'Yes'])
+            ->where(['{{%vendor}}.vendor_status' => 'Active','{{%vendor}}.trash' => 'Default','{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_status' => 'Active', '{{%vendor_item}}.item_approved' => 'Yes'])
             ->all();
     }
 
@@ -107,5 +107,15 @@ class Vendor extends \common\models\Vendor
             ->all();
 
         return ArrayHelper::map($vendor, 'vendor_id', 'vendor_id');
+    }
+
+
+    /**
+     * @inheritdoc
+     * @return VendorQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new \common\models\query\VendorQuery(get_called_class());
     }
 }

@@ -160,7 +160,7 @@ class VendorItemController extends Controller
     *
     * @return mixed
     */
-    public function actionCreate()
+    public function actionCreate($_u = null)
     {
         $model = new VendorItem();
 
@@ -185,7 +185,7 @@ class VendorItemController extends Controller
                 $vic->save();
             }
 
-            return $this->redirect(['vendor-item/item-description', 'id' => $model->item_id]);
+            return $this->redirect(['vendor-item/item-description', 'id' => $model->item_id,'_u'=>$_u]);
 
         }//if model-load 
 
@@ -329,21 +329,14 @@ class VendorItemController extends Controller
     *
     * @return json
     */
-    public function actionItemDescription($id) 
+    public function actionItemDescription($id, $_u = null)
     {
         $model = $this->findModel($id);
 
         $model->scenario = 'ItemDescription';
 
         if($model->load(Yii::$app->request->post()) && $model->save()) {
-            
-            $notice_period_type = Yii::$app->request->post('notice_period_type');
-
-            if($notice_period_type == 'Day') {
-                $model->item_how_long_to_make *= 24;
-                $model->save(false);
-            }
-            
+                    
             $complete = Yii::$app->request->post('complete');
 
             if($complete) {
@@ -355,7 +348,7 @@ class VendorItemController extends Controller
                 return $this->redirect(['index']);    
             }            
 
-            return $this->redirect(['vendor-item/item-price', 'id' => $id]);
+            return $this->redirect(['vendor-item/item-price', 'id' => $id,'_u'=>$_u]);
         }
 
         return $this->render('steps/item-description', [
@@ -368,7 +361,7 @@ class VendorItemController extends Controller
     *
     * @return json
     */
-    public function actionItemPrice($id) 
+    public function actionItemPrice($id, $_u = null)
     {
         $model = $this->findModel($id);
 
@@ -405,7 +398,7 @@ class VendorItemController extends Controller
                 return $this->redirect(['index']);    
             }            
 
-            return $this->redirect(['vendor-item/menu-items', 'id' => $id]);
+            return $this->redirect(['vendor-item/menu-items', 'id' => $id,'_u'=>$_u]);
         }
 
         $itemType = ArrayHelper::map(ItemType::findAll(['trash' => 'Default']), 'type_id', 'type_name');
@@ -422,7 +415,7 @@ class VendorItemController extends Controller
     *
     * @return json
     */
-    public function actionMenuItems($id) 
+    public function actionMenuItems($id, $_u = null)
     {
         $model = $this->findModel($id);
 
@@ -504,7 +497,7 @@ class VendorItemController extends Controller
                 return $this->redirect(['index']);    
             }            
 
-            return $this->redirect(['vendor-item/addon-menu-items', 'id' => $id]);
+            return $this->redirect(['vendor-item/addon-menu-items', 'id' => $id,'_u'=>$_u]);
         }
 
         $arr_menu = VendorItemMenu::findAll([
@@ -523,7 +516,7 @@ class VendorItemController extends Controller
     *
     * @return json
     */
-    public function actionAddonMenuItems($id) 
+    public function actionAddonMenuItems($id, $_u = null)
     {
         $model = $this->findModel($id);
 
@@ -603,7 +596,7 @@ class VendorItemController extends Controller
                 return $this->redirect(['index']);    
             }            
 
-            return $this->redirect(['vendor-item/item-approval', 'id' => $id]);
+            return $this->redirect(['vendor-item/item-approval', 'id' => $id,'_u'=>$_u]);
         }
 
         $arr_addon_menu = VendorItemMenu::findAll([
@@ -622,7 +615,7 @@ class VendorItemController extends Controller
     *
     * @return json
     */
-    public function actionItemApproval($id) 
+    public function actionItemApproval($id, $_u = null)
     {
         $model = $this->findModel($id);
     
@@ -641,7 +634,7 @@ class VendorItemController extends Controller
                 return $this->redirect(['index']);    
             }            
 
-            return $this->redirect(['vendor-item/item-images', 'id' => $id]);
+            return $this->redirect(['vendor-item/item-images', 'id' => $id,'_u'=>$_u]);
         }
 
         return $this->render('steps/approval', [
@@ -654,7 +647,7 @@ class VendorItemController extends Controller
     *
     * @return json
     */
-    public function actionItemImages($id) 
+    public function actionItemImages($id, $_u = null)
     {
         $model = $this->findModel($id);
 
@@ -716,7 +709,7 @@ class VendorItemController extends Controller
                 return $this->redirect(['index']);    
             }            
 
-            return $this->redirect(['vendor-item/item-themes-groups', 'id' => $id]);
+            return $this->redirect(['vendor-item/item-themes-groups', 'id' => $id,'_u'=>$_u]);
         }
 
         return $this->render('steps/images', [
@@ -729,7 +722,7 @@ class VendorItemController extends Controller
     *
     * @return json
     */
-    public function actionItemThemesGroups($id) 
+    public function actionItemThemesGroups($id, $_u = null)
     {
         $model = $this->findModel($id);
 

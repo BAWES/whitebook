@@ -76,7 +76,7 @@ class VendorLogin extends Model
 			$session = Yii::$app->session;
 			$session->open();
 			$session['language'] = 'en-US';	
-			$session['email'] = $this->vendor_contact_email;	
+			$session['email'] = $this->vendor_contact_email;
 			$session['type'] = 'Vendor'; 	
 			$this->_user = Vendor::findByUsername($this->vendor_contact_email);  				
         }
@@ -90,5 +90,22 @@ class VendorLogin extends Model
             'vendor_contact_email' => 'Email',
             'vendor_password' => 'Password',            
         ];
+    }
+
+    public function forceLogin() {
+
+        if ($this->vendor_contact_email) {
+            $model = Vendor::findOne(['vendor_contact_email'=>$this->vendor_contact_email]);
+            $model->auth_token = null;
+            $session = Yii::$app->session;
+            $session->open();
+            $session['language'] = 'en-US';
+            $session['email'] = $this->vendor_contact_email;
+            $session['type'] = 'Vendor';
+            $this->_user = $model;
+            $model->save();
+            Yii::$app->session->setFlash('success','Admin you are login as '.$model->vendor_name.' successfully');
+            return Yii::$app->user->login($this->_user, $this->rememberMe ? 3600 * 24 * 30 : 0);
+        }
     }
 }
