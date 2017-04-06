@@ -372,8 +372,8 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         foreach ($item_menues as $key => $menu) {
 
-            $max = $menu->max_quantity * $data['quantity']; 
-            $min = $menu->min_quantity * $data['quantity'];
+            $max = $menu->max_quantity; 
+            $min = $menu->min_quantity;
 
             if(isset($menu_qty_ordered[$menu->menu_id])) {
                 $qty_ordered = $menu_qty_ordered[$menu->menu_id];
