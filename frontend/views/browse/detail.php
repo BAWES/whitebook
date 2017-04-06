@@ -133,8 +133,11 @@ else
         <form id="form_product_option" method="POST" class="form center-block margin-top-0">
 
         <input id="item_id" name="item_id" value="<?= $model->item_id ?>" type="hidden" />
+
+        <?php if($cart) { ?>
         <input id="cart_id" name="cart_id" value="<?= $cart->cart_id ?>" type="hidden" />
-      
+        <?php } ?>
+
         <div class="col-md-12 filter-bar ">
             <div class="col-md-3 padding-right-0 area-filter">
                 <div class="form-group margin-left-0">
@@ -604,7 +607,7 @@ else
 
                                                                 if($value->min_quantity) {
                                                                     echo Yii::t('frontend', 'atleast {qty} ', [
-                                                                        'qty' => $value->min_quantity * $quantity
+                                                                        'qty' => $value->min_quantity
                                                                     ]);
                                                                 }
 
@@ -614,7 +617,7 @@ else
 
                                                                 if($value->max_quantity) {
                                                                     echo Yii::t('frontend', ' upto {qty}', [
-                                                                        'qty' => $value->max_quantity * $quantity
+                                                                        'qty' => $value->max_quantity
                                                                     ]);
                                                                 }*/
 
@@ -748,7 +751,7 @@ else
 
                                                                 if($value->min_quantity) {
                                                                     echo Yii::t('frontend', 'Minimum {qty}', [
-                                                                        'qty' => $value->min_quantity * $quantity
+                                                                        'qty' => $value->min_quantity
                                                                     ]);
                                                                 }
 
@@ -758,7 +761,7 @@ else
 
                                                                 if($value->max_quantity) {
                                                                     echo Yii::t('frontend', 'Maximum {qty}', [
-                                                                        'qty' => $value->max_quantity * $quantity
+                                                                        'qty' => $value->max_quantity
                                                                     ]);
                                                                 }
 
@@ -1172,4 +1175,4 @@ $this->registerCss("
     }
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.25', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.26', ['depends' => [\yii\web\JqueryAsset::className()]]);

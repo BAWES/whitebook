@@ -476,7 +476,7 @@ $(document).delegate('.menu-item-qty-box .fa-plus', 'click', function() {
 
     //max quantity for menu 
 
-    $max = $(this).parents('.menu-items').attr('data-max-quantity') * $qty;
+    $max = $(this).parents('.menu-items').attr('data-max-quantity');
 
     $qty_input = $(this).parent().find('input');
 
@@ -511,7 +511,7 @@ $(document).delegate('.menu-items .checkbox input', 'click', function(e) {
 
     //max quantity for menu 
 
-    $max = $(this).parents('.menu-items').attr('data-max-quantity') * $qty;
+    $max = $(this).parents('.menu-items').attr('data-max-quantity');
 
     //get total qty in menu
 
@@ -627,7 +627,7 @@ function update_option_menu_title_hint() {
         $html = $('#txt-select').val();
 
         if($min > 0) {
-            $html += $('#txt-min').val().replace('{qty}', $min * $qty);
+            $html += $('#txt-min').val().replace('{qty}', $min);//* $qty
         }
         
         if($min > 0 && $max > 0) { 
@@ -635,7 +635,7 @@ function update_option_menu_title_hint() {
         }
 
         if($max > 0) {
-            $html += $('#txt-max').val().replace('{qty}', $max * $qty);
+            $html += $('#txt-max').val().replace('{qty}', $max);// * $qty
         }
 
         $(this).html($html);
@@ -646,7 +646,7 @@ function update_option_menu_item_qty() {
 
     $.each($('#collapse-options ul.menu-items'), function() {
 
-        $max = $(this).attr('data-max-quantity') * $('input[name="quantity"]').val();
+        $max = $(this).attr('data-max-quantity');// * $('input[name="quantity"]').val();
 
         $total = 0;
 
