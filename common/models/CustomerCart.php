@@ -359,7 +359,28 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         //item total 
 
-        $total = $item->item_price_per_unit * $data['quantity'];
+        $price_chart = VendorItemPricing::find()
+            ->where(['item_id' => $item['item_id'], 'trash' => 'Default'])
+            ->andWhere(['<=', 'range_from', $data['quantity']])
+            ->andWhere(['>=', 'range_to', $data['quantity']])
+            ->orderBy('pricing_price_per_unit DESC')
+            ->one();
+
+        if ($price_chart) {
+            $unit_price = $price_chart->pricing_price_per_unit;
+        } else {
+            $unit_price = $item['item_price_per_unit'];
+        }
+
+        if ($item['item_minimum_quantity_to_order'] > 0) {
+            $min_quantity_to_order = $item['item_minimum_quantity_to_order'];
+        } else {
+            $min_quantity_to_order = 1;
+        }
+
+        $actual_item_quantity = $data['quantity'] - $min_quantity_to_order;
+
+        $total = $item->item_base_price + ($unit_price * $actual_item_quantity);
 
         //get quantity ordered per menu 
 
@@ -381,7 +402,7 @@ class CustomerCart extends \yii\db\ActiveRecord
                 $menu_qty_ordered[$mi->menu_id] = $value;
             }
 
-            $total += $mi->price * $value * $data['quantity'];
+            $total += $mi->price * $value;// * $data['quantity'];
         }
 
         //item menu 
