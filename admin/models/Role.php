@@ -120,7 +120,7 @@ class Role extends \yii\db\ActiveRecord
             'payment-gateway' => ['index', 'view', 'create', 'update', 'delete'],
             'priority-item' => ['index', 'view', 'create', 'update', 'delete', 'loadcategory', 'loadsubcategory', 'loadchildcategory', 'loaditems', 'loaddatetime', 'checkprioritydate', 'checkitem', 'status', 'blockpriority'],
             'priority-log' => ['index', 'view', 'create', 'update', 'delete'],
-            'report' => ['commission', 'package'],
+            'report' => ['commission', 'package', 'booking', 'booking-report'],
             'role' => ['index', 'view', 'create', 'update', 'delete'],
             'site-info' => ['index', 'view', 'create', 'update', 'delete'],
             'slide' => ['index', 'view', 'create', 'update', 'delete', 'Sort_slide', 'status', 'block'],
