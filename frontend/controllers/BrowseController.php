@@ -566,53 +566,6 @@ class BrowseController extends BaseController
         }
     }
 
-    /*
-     *  function use for ajax call and
-     *  return product availbility on the base of
-     *  area and date
-     */
-    public function actionProductAvailable()
-    {
-        if (!Yii::$app->request->isAjax) {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-        }
-
-        $data = Yii::$app->request->post();
-
-        $AreaName = '';
-        
-        $location = Location::findOne($data['area_id']);
-        
-        if ($location) {
-            if (Yii::$app->language == "en") {
-                $AreaName = $location->location;
-            } else {
-                $AreaName = $location->location_ar;
-            }
-        }
-
-        if ($data['delivery_date'] == '') {
-            $selectedDate = date('Y-m-d');
-        } else {
-            $selectedDate = $data['delivery_date'];
-        }
-
-        $item = VendorItem::findOne($data['item_id']);
-        
-        if ($item) {
-            
-            $exist = \common\models\BlockedDate::find()->byVendor($item->vendor_id)->byBlockedDate($selectedDate)->one();
-
-            $date = date('d-m-Y', strtotime($selectedDate));
-            
-            if ($exist) {
-                echo "<i class='fa fa-warning' style='color: Red; font-size: 19px;' aria-hidden='true'></i> Item Not Available for on this date '$date' for this location '$AreaName' ";
-            } else {
-                echo "<i class='fa fa-check-circle' style='color: Green; font-size: 19px;' aria-hidden='true'></i> Item Available on this date '$date' for this location '$AreaName' ";
-            }
-        }
-    }
-
     public function actionFinalPrice() 
     {
         $item_id = Yii::$app->request->post('item_id');
