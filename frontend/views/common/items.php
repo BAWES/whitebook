@@ -110,12 +110,12 @@ if (!empty($items->getModels())) {
                         <a href="<?= $item_url ?>" class="" >
                             <?= Html::img($image, ['class'=>'item-img']); ?>
 
-                            <?php if($value['item_how_long_to_make'] > 0) { ?>
+                            <?php if (isset($value['item_how_long_to_make']) && $value['item_how_long_to_make'] > 0) { ?>
                             <div class="callout-container">
                                 <span class="callout light">
                                     <?php 
 
-                                    if($value['notice_period_type'] == 'Day') 
+                                    if(isset($value['notice_period_type']) && $value['notice_period_type'] == 'Day')
                                     { 
                                         echo Yii::t('frontend', 'Notice: {count} day(s)', [
                                             'count' => $value['item_how_long_to_make']

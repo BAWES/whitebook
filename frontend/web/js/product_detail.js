@@ -323,6 +323,10 @@ jQuery(document).delegate('#form_product_option', 'submit', function(e) {
                     });
                 });
 
+                if (data.errors && data.errors.cart_quantity_remain) {
+                    $('.quantity_remain').html("Only "+data.errors.cart_quantity_remain+" item available in stock");
+                }
+
                 if($('#collapse-options').length > 0 && !$('#collapse-options').hasClass('in')) {
                     $('a[href="#collapse-options"]').trigger('click');
                 }
@@ -412,17 +416,17 @@ function productAvailability(date){
                 $('.timeslot_id_div .text').html(json['error']);
                 $('.timeslot_id_select').hide();
                 $('#timeslot_id').html('');
-                $('.button-signin button').html('Out of stock');
-                $('.button-signin button').attr('disabled',true);
+                $('.buy_events .button-signin button').html('Out of stock');
+                $('.buy_events .button-signin button').attr('disabled',true);
                 return false;
 
             } else {
-                $('.button-signin button').html('ADD TO CART');
+                $('.buy_events .button-signin button').html('ADD TO CART');
                 if (json['price'] == 0) {
-                    $('.button-signin button').attr('disabled',true);
+                    $('.buy_events .button-signin button').attr('disabled',true);
                     $('.small.price_warning').show();
                 } else {
-                    $('.button-signin button').attr('disabled',false);
+                    $('.buy_events .button-signin button').attr('disabled',false);
                     $('.small.price_warning').hide();
                 }
 
@@ -553,11 +557,11 @@ function update_price() {
     $.post($('#final_price_url').val(), $('#form_product_option').serialize(), function(json) {
         $('.item-final-price').html(json.price);
         if (json.price == 'KD 0') { // disable add to cart button in case 0 price
-            $('.button-signin button').attr('disabled',true);
+            $('.buy_events .button-signin button').attr('disabled',true);
             $('.price_warning').show();
             $('.item-final-price').empty();
         } else {
-            $('.button-signin button').attr('disabled',false);
+            $('.buy_events .button-signin button').attr('disabled',false);
             $('.price_warning').hide();
         }
     });
