@@ -372,7 +372,7 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public static function find()
     {
-        return new \common\models\query\VendorQuery(get_called_class());
+        return new query\VendorQuery(get_called_class());
     }
 }
 

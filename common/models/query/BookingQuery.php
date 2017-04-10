@@ -38,7 +38,7 @@ class BookingQuery extends \yii\db\ActiveQuery
     }
 
     // create by current record
-    public function createdByCurrentUser() {
+    public function currentUser() {
         return $this->andWhere('customer_id='.Yii::$app->user->getId());
     }
 
@@ -47,7 +47,7 @@ class BookingQuery extends \yii\db\ActiveQuery
         return $this->orderBy('created_datetime DESC');
     }
 
-    public function byBookingToken($booking_token) {
+    public function token($booking_token) {
         return $this->where("booking_token='$booking_token'");
     }
 }

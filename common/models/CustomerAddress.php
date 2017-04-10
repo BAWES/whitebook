@@ -153,7 +153,7 @@ class CustomerAddress extends \yii\db\ActiveRecord
 
     /**
      * @inheritdoc
-     * @return VendorQuery the active query used by this AR class.
+     * @return query\CustomerAddressQuery the active query used by this AR class.
      */
     public static function find()
     {

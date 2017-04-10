@@ -819,10 +819,10 @@ class Booking extends \yii\db\ActiveRecord
 
     /**
      * @inheritdoc
-     * @return BookingQuery the active query used by this AR class.
+     * @return query\BookingQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new \common\models\query\BookingQuery(get_called_class());
+        return new query\BookingQuery(get_called_class());
     }
 }

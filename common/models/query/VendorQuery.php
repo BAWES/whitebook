@@ -32,7 +32,7 @@ class VendorQuery extends \yii\db\ActiveQuery
         return parent::one($db);
     }
 
-    public function byVendorID($vendor_ids)
+    public function vendorIDs($vendor_ids)
     {
         return $this->andWhere(['IN', '{{%vendor}}.vendor_id', $vendor_ids]);
     }

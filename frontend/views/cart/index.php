@@ -126,17 +126,19 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 	        		
 	        		$menu_option_items = CustomerCartMenuItem::find()
 	    				->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_id, {{%vendor_item_menu_item}}.menu_id, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
-	    				->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')	    				
-	    				->innerJoin('{{%vendor_item_menu}}', '{{%vendor_item_menu}}.menu_id = {{%customer_cart_menu_item}}.menu_id')
-	    				->where(['cart_id' => $item['cart_id'], 'menu_type' => 'options'])
+                        ->joinVendorItemMenuItem()
+                        ->joinVendorItemMenu()
+                        ->cartID($item['cart_id'])
+                        ->where(['menu_type' => 'options'])
 	    				->asArray()
 	    				->all();
 
 	    			$menu_addon_items = CustomerCartMenuItem::find()
 	    				->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_id, {{%vendor_item_menu_item}}.menu_id, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
-	    				->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
-	    				->innerJoin('{{%vendor_item_menu}}', '{{%vendor_item_menu}}.menu_id = {{%customer_cart_menu_item}}.menu_id')
-	    				->where(['cart_id' => $item['cart_id'], 'menu_type' => 'addons'])
+                        ->joinVendorItemMenuItem()
+                        ->joinVendorItemMenu()
+                        ->cartID($item['cart_id'])
+	    				->where(['menu_type' => 'addons'])
 	    				->asArray()
 	    				->all();
 
@@ -155,9 +157,9 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 
 					//check quantity fall in price chart 
 					$price_chart = VendorItemPricing::find()
-						->where(['item_id' => $item['item_id'], 'trash' => 'Default'])
-						->andWhere(['<=', 'range_from', $item['cart_quantity']])
-						->andWhere(['>=', 'range_to', $item['cart_quantity']])
+                        ->item($item['item_id'])
+                        ->defaultItem()
+                        ->quantityRange($item['cart_quantity'])
 						->orderBy('pricing_price_per_unit DESC')
 						->one();
 
@@ -193,7 +195,7 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 		        			<?php
 
 		        			$image_row = Image::find()->select(['image_path'])
-	                                ->where(['item_id' => $item['item_id']])
+	                                ->item($item['item_id'])
 	                                ->orderby(['vendorimage_sort_order' => SORT_ASC])
 	                                ->asArray()
 	                                ->one();

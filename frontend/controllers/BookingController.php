@@ -19,7 +19,7 @@ class BookingController extends BaseController
 	        return $this->redirect(['/site/index']);
 	    }
 
-        $query = Booking::find()->createdByCurrentUser()->orderByDate();
+        $query = Booking::find()->currentUser()->orderByDate();
 
 		// create a pagination object with the total count
 		$pagination = new Pagination(['totalCount' => $query->count()]);
@@ -43,7 +43,7 @@ class BookingController extends BaseController
 
 		$booking_token = Yii::$app->request->get('booking_token');
 
-		$booking = Booking::find()->byBookingToken($booking_token)->one();
+		$booking = Booking::find()->token($booking_token)->one();
 
         return ($booking) ? $this->render('view', ['booking' => $booking]) : $this->render('track');
 	}

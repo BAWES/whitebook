@@ -28,12 +28,12 @@ class BlockDateQuery extends \yii\db\ActiveQuery
         return parent::one($db);
     }
 
-    public function byVendor($vendor_id)
+    public function vendor($vendor_id)
     {
         return $this->andWhere(['vendor_id' => $vendor_id]);
     }
 
-    public function byBlockedDate($selectedDate)
+    public function blockedDate($selectedDate)
     {
         return $this->andWhere(['block_date' => date('Y-m-d', strtotime($selectedDate))]);
     }
