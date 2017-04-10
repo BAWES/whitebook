@@ -114,7 +114,7 @@ class VendorItemThemes extends \yii\db\ActiveRecord
 
     /**
      * @inheritdoc
-     * @return VendorItemThemesQuery the active query used by this AR class.
+     * @return query\VendorItemThemesQuery the active query used by this AR class.
      */
     public static function find()
     {

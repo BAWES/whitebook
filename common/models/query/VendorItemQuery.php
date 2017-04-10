@@ -71,4 +71,10 @@ class VendorItemQuery extends \yii\db\ActiveQuery
     {
         return $this->andWhere(['{{%vendor}}.trash' => 'Default']);
     }
+
+    public function category($id)
+    {
+        return $this->andWhere('{{%vendor_item}}.category_id='.$id);
+    }
+
 }

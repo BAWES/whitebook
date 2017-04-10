@@ -3,11 +3,11 @@
 namespace common\models\query;
 use Yii;
 /**
- * This is the ActiveQuery class for [[Themes]].
+ * This is the ActiveQuery class for [[PackageQuery]].
  *
  * @see Booking
  */
-class ThemesQuery extends \yii\db\ActiveQuery
+class PackageQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +16,7 @@ class ThemesQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return Themes[]|array
+     * @return PackageQuery[]|array
      */
     public function all($db = null)
     {
@@ -25,15 +25,19 @@ class ThemesQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return Themes|array|null
+     * @return PackageQuery|array|null
      */
     public function one($db = null)
     {
         return parent::one($db);
     }
 
-
-    public function theme($id) {
-        return $this->andWhere(['theme_id' => $id]);
+    public function active() {
+        return $this->andWhere(['status' => 1]);
     }
+
+    public function package($id) {
+        return $this->andWhere(['package_id' => $id]);
+    }
+
 }

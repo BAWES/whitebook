@@ -3,11 +3,11 @@
 namespace common\models\query;
 use Yii;
 /**
- * This is the ActiveQuery class for [[Themes]].
+ * This is the ActiveQuery class for [[PaymentGatewayQuery]].
  *
  * @see Booking
  */
-class ThemesQuery extends \yii\db\ActiveQuery
+class PaymentGatewayQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +16,7 @@ class ThemesQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return Themes[]|array
+     * @return PaymentGatewayQuery[]|array
      */
     public function all($db = null)
     {
@@ -25,15 +25,18 @@ class ThemesQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return Themes|array|null
+     * @return PaymentGatewayQuery|array|null
      */
     public function one($db = null)
     {
         return parent::one($db);
     }
 
+    public function active() {
+        return $this->andWhere(['status' => 1]);
+    }
 
-    public function theme($id) {
-        return $this->andWhere(['theme_id' => $id]);
+    public function getaway($code) {
+        return $this->andWhere(['code' => $code]);
     }
 }

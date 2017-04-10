@@ -79,5 +79,9 @@ class CustomerCartQuery extends \yii\db\ActiveQuery
         return $this->andWhere(['trash' => 'Default']);
     }
 
+    public function sessionUser() {
+        return $this->andWhere(['cart_session_id'=>\common\models\Customer::currentUser()]);
+    }
+
 
 }

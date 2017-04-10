@@ -28,6 +28,10 @@ class SearchController extends BaseController
         ];
     }
 
+    /**
+     * @param $search
+     * @return string
+     */
     public function actionIndex($search)
     {
         if($search == 'all') {
@@ -53,12 +57,12 @@ class SearchController extends BaseController
             ->priorityItemJoin()
             ->vendorJoin()
             ->defaultItems()
-            ->approvedItems()
-            ->activeItems();
+            ->approved()
+            ->active();
 
         //vendor filter
         if (isset($data['vendor'])  && $data['vendor']) {
-            $items_query->andWhere(['in', '{{%vendor}}.slug', $data['vendor']]);
+            $items_query->vendorSlug($data['vendor']);
         }
 
         //price filter
@@ -77,33 +81,20 @@ class SearchController extends BaseController
         //theme filter
         if (isset($data['themes']) && $data['themes'] != '') {
 
-            $items_query->leftJoin('{{%vendor_item_theme}}', '{{%vendor_item}}.item_id = {{%vendor_item_theme}}.item_id');
-            $items_query->leftJoin('{{%theme}}', '{{%theme}}.theme_id = {{%vendor_item_theme}}.theme_id');
-            $items_query->andWhere(['IN', '{{%theme}}.slug', $data['themes']]);
+
+            $items_query->itemThemeJoin();
+            $items_query->themeJoin();
+            $items_query->themeSlug($data['themes']);
         }
 
         //if search query given
         if ($search != 'All') {
-            $items_query->andWhere(['like','{{%vendor_item}}.item_name', $search]);
+            $items_query->likeItemName($search);
         }
-
-        $expression = new Expression(
-            "CASE 
-                WHEN
-                    `whitebook_priority_item`.priority_level IS NULL 
-                    OR whitebook_priority_item.status = 'Inactive' 
-                    OR whitebook_priority_item.trash = 'Deleted' 
-                    OR DATE(whitebook_priority_item.priority_start_date) > DATE(NOW()) 
-                    OR DATE(whitebook_priority_item.priority_end_date) < DATE(NOW()) 
-                THEN 2 
-                WHEN `whitebook_priority_item`.priority_level = 'Normal' THEN 1 
-                WHEN `whitebook_priority_item`.priority_level = 'Super' THEN 0 
-                ELSE 2 
-            END, {{%vendor_item}}.sort");
 
         $item_query_result = $items_query
             ->groupBy('{{%vendor_item}}.item_id')
-            ->orderBy($expression)
+            ->orderByExpression()
             ->asArray()
             ->all();
 
@@ -192,12 +183,10 @@ class SearchController extends BaseController
 
         $vendorSearchData = Vendor::find()
             ->select(['vendor_name','vendor_name_ar','vendor_logo_path','slug'])
-            ->where(['like', 'vendor_name', $search])
-            ->andWhere([
-                '{{%vendor}}.trash' => 'Default',
-                '{{%vendor}}.approve_status' => 'Yes',
-                '{{%vendor}}.vendor_status' => 'Active'
-            ])
+            ->vendorName($search)
+            ->defaultVendor()
+            ->approved()
+            ->active()
             ->limit(10)
             ->all();
 
@@ -246,14 +235,12 @@ class SearchController extends BaseController
                 ->select(['{{%vendor_item}}.item_name', '{{%vendor_item}}.slug'])
                 ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
                 ->where(['like', '{{%vendor_item}}.item_name', $request->post('search')])
-                ->andWhere([
-                    '{{%vendor_item}}.trash' => 'Default',
-                    '{{%vendor_item}}.item_approved' => 'Yes',
-                    '{{%vendor_item}}.item_status' => 'Active',
-                    '{{%vendor}}.vendor_status' => 'Active',
-                    '{{%vendor}}.approve_status' => 'Yes',
-                    '{{%vendor}}.trash' => 'Default'
-                ])
+                ->defaultItems()
+                ->approved()
+                ->active()
+                ->activeVendor()
+                ->approvedVendor()
+                ->defaultVendor()
                 ->limit(10)
                 ->asArray()
                 ->all();
@@ -263,11 +250,9 @@ class SearchController extends BaseController
             $vendorSearchData = Vendor::find()
                 ->select(['vendor_name','slug'])
                 ->where(['like', 'vendor_name', $request->post('search')])
-                ->andWhere([
-                    '{{%vendor}}.trash' => 'Default',
-                    '{{%vendor}}.approve_status' => 'Yes',
-                    '{{%vendor}}.vendor_status' => 'Active'
-                ])
+                ->approved()
+                ->active()
+                ->defaultVendor()
                 ->limit(10)
                 ->asArray()
                 ->all();

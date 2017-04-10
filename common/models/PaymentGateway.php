@@ -57,4 +57,14 @@ class PaymentGateway extends \yii\db\ActiveRecord
             'status' => 'Status',
         ];
     }
+
+
+    /**
+     * @inheritdoc
+     * @return query\PaymentGatewayQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\PaymentGatewayQuery(get_called_class());
+    }
 }

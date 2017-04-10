@@ -79,4 +79,14 @@ class Package extends \yii\db\ActiveRecord
             'status' => Yii::t('app', 'Status')
         ];
     }
+
+
+    /**
+     * @inheritdoc
+     * @return query\PackageQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\PackageQuery(get_called_class());
+    }
 }

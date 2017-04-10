@@ -33,7 +33,7 @@ class CityQuery extends \yii\db\ActiveQuery
         return parent::one($db);
     }
 
-    public function byCountryID($id) {
+    public function country($id) {
         return $this->where(['country_id' => $id]);
     }
 }

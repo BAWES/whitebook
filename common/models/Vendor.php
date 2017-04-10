@@ -368,7 +368,7 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
 
     /**
      * @inheritdoc
-     * @return VendorQuery the active query used by this AR class.
+     * @return query\VendorQuery the active query used by this AR class.
      */
     public static function find()
     {
