@@ -5818,3 +5818,7 @@ button.close {
 .table {
   color: brown !important;
 }
+
+.nobreak {
+  page-break-inside:avoid;
+}
