@@ -161,4 +161,20 @@ class CategoryPathQuery extends \yii\db\ActiveQuery
     public function likeItemName($search) {
         return $this->andWhere(['like','{{%vendor_item}}.item_name', $search]);
     }
+
+    public function activeVendor() {
+        return $this->andWhere(['{{%vendor}}.vendor_status' => 'Active']);
+    }
+
+    public function approvedVendor() {
+        return $this->andWhere(['{{%vendor}}.approve_status' => 'Yes']);
+    }
+
+    public function defaultVendor() {
+        return $this->andWhere(['{{%vendor}}.trash' => 'Default']);
+    }
+
+    public function vendorItems($ids) {
+        return $this->andWhere(['{{%vendor_item}}.item_id' => $ids]);
+    }
 }
