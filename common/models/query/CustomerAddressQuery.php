@@ -36,6 +36,10 @@ class CustomerAddressQuery extends \yii\db\ActiveQuery
         return $this->leftJoin('{{%location}}', '{{%location}}.id = {{%customer_address}}.area_id');
     }
 
+    public function joinCity() {
+        return $this->leftJoin('{{%city}}', '{{%city}}.city_id = {{%customer_address}}.city_id');
+    }
+
     public function defaultAddress()
     {
         return $this->andWhere(['{{%customer_address}}.trash'=>'Default']);
@@ -49,5 +53,13 @@ class CustomerAddressQuery extends \yii\db\ActiveQuery
     public function location($area_ids)
     {
         return $this->andWhere(['{{%location}}.id' => $area_ids]);
+    }
+
+    public function addressType($id) {
+        return $this->andWhere(['address_type_id' => $id]);
+    }
+
+    public function customerID($id) {
+        return $this->andWhere('customer_id = :customer_id', [':customer_id' => $id]);
     }
 }

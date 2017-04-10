@@ -46,4 +46,14 @@ class CustomerAddressResponse extends \yii\db\ActiveRecord
             'response_text' => 'Response Text',
         ];
     }
+
+
+    /**
+     * @inheritdoc
+     * @return query\CustomerAddressResponseQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\CustomerAddressResponseQuery(get_called_class());
+    }
 }

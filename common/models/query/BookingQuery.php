@@ -62,4 +62,8 @@ class BookingQuery extends \yii\db\ActiveQuery
     public function activeBooking() {
         return $this->andWhere(['booking_status'=>1]);
     }
+
+    public function inactiveBooking() {
+        return $this->andWhere(['booking_status'=>0]);
+    }
 }

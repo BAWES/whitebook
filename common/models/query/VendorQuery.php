@@ -80,4 +80,8 @@ class VendorQuery extends \yii\db\ActiveQuery
         return $this->andWhere(['auth_token'=>$token]);
     }
 
+    public function vendor($id){
+        return $this->andWhere(['vendor_id' => $id]);
+    }
+
 }
