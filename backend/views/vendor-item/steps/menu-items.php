@@ -121,11 +121,12 @@ $this->params['breadcrumbs'][] = 'Update';
 					<table class="table table-bordered">
 						<thead>
 							<tr>
-								<th colspan="5" class="heading">Menu Items</th>
+								<th colspan="6" class="heading">Menu Items</th>
 							</tr>
 							<tr>
 								<th>Name</th>
 								<th>Name - Ar</th>
+								<th>Price</th>
 								<th>Hint</th>
 								<th>Hint - Ar</th>
 								<th></th>
@@ -150,6 +151,9 @@ $this->params['breadcrumbs'][] = 'Update';
 									<input placeholder="Name - Arabic" name="menu_item[<?= $menu_count ?>][menu_item_name_ar]" value="<?= $menu_item->menu_item_name_ar ?>" class="form-control txt_menu_item_name_ar" />
 								</td>
 								<td>
+									<input placeholder="Hint" name="menu_item[<?= $menu_count ?>][price]" value="<?= $menu_item->price ?>" class="form-control txt_price" />
+								</td>
+								<td>
 									<input placeholder="Hint" name="menu_item[<?= $menu_count ?>][hint]" value="<?= $menu_item->hint ?>" class="form-control txt_hint" />
 								</td>
 								<td>
@@ -165,7 +169,7 @@ $this->params['breadcrumbs'][] = 'Update';
 						</tbody>
 						<tfoot>
 							<tr>
-								<td colspan="5">
+								<td colspan="6">
 									<button type="button" class="btn btn-primary btn-add-menu-item">
 										<i class="fa fa-plus"></i> Add Item
 									</button>
@@ -211,6 +215,6 @@ echo Html::hiddenInput('menu_count', $menu_count, ['id' => 'menu_count']);
 echo Html::hiddenInput('isNewRecord', 0, ['id'=>'isNewRecord']);
 echo Html::hiddenInput('item_id', $model->item_id, ['id'=>'item_id']);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.23", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.24", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_steps/menu.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_steps/menu.js?v=1.1", ['depends' => [\yii\web\JqueryAsset::className()]]);
