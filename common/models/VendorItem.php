@@ -104,7 +104,7 @@ class VendorItem extends \yii\db\ActiveRecord
         return [
             [['type_id', 'vendor_id', 'item_name', 'item_name_ar'], 'required'],
             
-            [['minimum_increment', 'type_id', 'vendor_id', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
+            [['minimum_increment', 'hide_price_chart', 'type_id', 'vendor_id', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
             
             [['notice_period_type', 'item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_price_description','item_price_description_ar', 'item_approved', 'trash', 'quantity_label','slug'], 'string'],
             
@@ -119,7 +119,7 @@ class VendorItem extends \yii\db\ActiveRecord
             [['image_path'],'image', 'extensions' => 'png,jpg,jpeg','maxFiles'=>20],
 
             // set scenario for vendor item add functionality
-            [['type_id', 'notice_period_type', 'item_description','item_description_ar', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order','item_name', 'item_name_ar', 'item_price_per_unit'], 'required', 'on'=>'VendorItemAdd'],
+            [['type_id', 'hide_price_chart', 'notice_period_type', 'item_description','item_description_ar', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order','item_name', 'item_name_ar', 'item_price_per_unit'], 'required', 'on'=>'VendorItemAdd'],
         ];
     }
 
@@ -146,6 +146,7 @@ class VendorItem extends \yii\db\ActiveRecord
             'item_price_description_ar' => 'Item Price Description - Arabic',
             'item_how_long_to_make' => 'Notice Period',
             'notice_period_type' => 'Notice Period Type',
+            'hide_price_chart' => 'Hide price chart from customer',
             'item_minimum_quantity_to_order' => 'Included Quantity',
             'item_approved' => 'Item Approved',
             'created_by' => 'Created By',

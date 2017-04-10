@@ -79,6 +79,8 @@ $this->params['breadcrumbs'][] = 'Update';
 						'id' => 'vendoritem-item_price_description_ar'
 					]) ?>
 
+				<?= $form->field($model, 'hide_price_chart')->checkbox(); ?>
+
 				<?php if($model->isNewRecord) { ?>
 					<div class="form-group multiple_price" style="padding: 5px;  font-size: 14px;">
 						<div class="multi_pricing">Price Chart </div>

@@ -97,6 +97,8 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 				<?= $form->field($model, 'item_price_description')->textarea(['maxlength' => 128]); ?>
 
 				<?= $form->field($model, 'item_price_description_ar')->textarea(['maxlength' => 128]); ?>
+				
+				<?= $form->field($model, 'hide_price_chart')->checkbox(); ?>
 
 				<div class="form-group multiple_price" style="padding: 5px;  font-size: 14px;"><div class="multi_pricing">Price Chart </div>
 

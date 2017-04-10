@@ -210,7 +210,7 @@ else
                                 ->where(['item_id'=> $model->item_id])
                                 ->all();
 
-                            if($pricing) { ?>
+                            if($pricing && !$model->hide_price_chart) { ?>
 
                                 <a class="lnk-price-chart">
                                     <i class="fa fa-plus-square-o"></i>
@@ -361,7 +361,7 @@ else
                                         ->where(['item_id'=> $model->item_id])
                                         ->all();
 
-                                    if($pricing) { ?>
+                                    if($pricing && !$model->hide_price_chart) { ?>
 
                                         <a class="lnk-price-chart">
                                             <i class="fa fa-plus-square-o"></i>
