@@ -313,6 +313,7 @@ class CustomerCart extends \yii\db\ActiveRecord
             $errors['cart_quantity'][] = [
                 Yii::t('frontend', 'Item is Out of stock')
             ];
+            $errors['cart_quantity_remain']= ($purchased + $in_cart) - $capacity;
 //            $errors['cart_quantity'][] = [
 //                Yii::t('frontend', 'Max item available for selected date is "{no_of_available}".', [
 //                   'no_of_available' => $no_of_available
@@ -325,7 +326,7 @@ class CustomerCart extends \yii\db\ActiveRecord
         if(!$valid_for_cart_item && ($data['quantity'] + $purchased + $in_cart) > $capacity) {
 
             $no_of_available = $capacity - $purchased - $in_cart;
-
+            $errors['cart_quantity_remain'] = $no_of_available;
 //            $errors['cart_quantity'][] = [
 //                Yii::t('frontend', 'Max item available for selected date is "{no_of_available}".', [
 //                   'no_of_available' => $no_of_available
