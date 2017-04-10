@@ -56,4 +56,14 @@ class Wishlist extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Customer::className(), ['customer_id' => 'customer_id']);
     }
+
+
+    /**
+     * @inheritdoc
+     * @return \common\models\query\WishlistQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new \common\models\query\WishlistQuery(get_called_class());
+    }
 }

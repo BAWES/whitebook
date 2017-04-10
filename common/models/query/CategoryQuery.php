@@ -42,4 +42,12 @@ class CategoryQuery extends \yii\db\ActiveQuery
         return $this->andWhere('(parent_category_id IS NULL or parent_category_id = 0)');
     }
 
+    public function orderByExpression() {
+        return $this->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'));
+    }
+
+    public function nonEmptySlug() {
+        return $this->andWhere(['!=', 'slug', '']);
+    }
+
 }

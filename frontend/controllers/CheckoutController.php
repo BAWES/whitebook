@@ -32,7 +32,7 @@ class CheckoutController extends BaseController
 		//validate cart
 		foreach (CustomerCart::items() as $item) {
             
-            $menu_items = CustomerCartMenuItem::findAll(['cart_id' => $item['cart_id']]);
+            $menu_items = CustomerCartMenuItem::find()->cartID($item['cart_id'])->all();
 
     		$errors = CustomerCart::validate_item([
     			'item_id' => $item['item_id'],
@@ -97,9 +97,9 @@ class CheckoutController extends BaseController
 
 		foreach ($items as $item) {
             
-            $menu_items = CustomerCartMenuItem::findAll(['cart_id' => $item['cart_id']]);
+            $menu_items = CustomerCartMenuItem::find()->cartID($item['cart_id'])->all();
 
-			$error = CustomerCart::validate_item([
+            $error = CustomerCart::validate_item([
     			'item_id' => $item['item_id'],
                 'time_slot' => $item['time_slot'],
     			'delivery_date' => $item['cart_delivery_date'],
@@ -154,8 +154,7 @@ class CheckoutController extends BaseController
 
         //get are id from cart_id 
         $cart_item = CustomerCart::find()
-            //->where(['cart_id' => Yii::$app->request->post()])
-            ->where(['customer_id' => Yii::$app->user->getId()])
+            ->customer(Yii::$app->user->getId())
             ->one();
 
         $customer_address->area_id = $cart_item->area_id;
@@ -209,7 +208,7 @@ class CheckoutController extends BaseController
         
         //get are id from cart_id 
         $cart_item = CustomerCart::find()
-            ->where(['{{%customer_cart}}.cart_session_id'=>Customer::currentUser()])
+            ->sessionUser()
             ->one();
 
         $customer_address->area_id = $cart_item->area_id;
@@ -290,7 +289,7 @@ class CheckoutController extends BaseController
 
 		foreach ($items as $item) {
             
-            $menu_items = CustomerCartMenuItem::findAll(['cart_id' => $item['cart_id']]);
+            $menu_items = CustomerCartMenuItem::find()->cartID($item['cart_id'])->all();
 
 			$error = CustomerCart::validate_item([
     			'item_id' => $item['item_id'],
@@ -308,7 +307,7 @@ class CheckoutController extends BaseController
 		}
 
         $payment_gateway = PaymentGateway::find()
-            ->where(['status' => 1])
+            ->active()
             ->all();
 
 		return $this->renderPartial('payment', [
@@ -343,8 +342,7 @@ class CheckoutController extends BaseController
 		$items = CustomerCart::items();
 		
 		foreach ($items as $item) {
-
-            $menu_items = CustomerCartMenuItem::findAll(['cart_id' => $item['cart_id']]);
+            $menu_items = CustomerCartMenuItem::find()->cartID($item['cart_id'])->all();
 
 			$error = CustomerCart::validate_item([
     			'item_id' => $item['item_id'],

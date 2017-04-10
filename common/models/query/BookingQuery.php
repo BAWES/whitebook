@@ -48,6 +48,6 @@ class BookingQuery extends \yii\db\ActiveQuery
     }
 
     public function token($booking_token) {
-        return $this->where("booking_token='$booking_token'");
+        return $this->where(["booking_token"=>$booking_token]);
     }
 }

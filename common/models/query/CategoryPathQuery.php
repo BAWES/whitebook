@@ -102,9 +102,11 @@ class CategoryPathQuery extends \yii\db\ActiveQuery
         return $this->andWhere(['IN', '{{%theme}}.slug', $themes]);
     }
 
-    public function price($MinPrice, $MaxPrice)
+    public function price($MinPrice, $MaxPrice, $null = true)
     {
-        $price_condition[] = '{{%vendor_item}}.item_price_per_unit IS NULL';
+        if ($null) {
+            $price_condition[] = '{{%vendor_item}}.item_price_per_unit IS NULL';
+        }
         $price_condition[] = '{{%vendor_item}}.item_price_per_unit between '.$MinPrice.' and '.$MaxPrice;
         return $this->andWhere(implode(' OR ', $price_condition));
     }
@@ -146,5 +148,17 @@ class CategoryPathQuery extends \yii\db\ActiveQuery
             END, {{%vendor_item}}.sort");
 
         return $this->orderBy($expression);
+    }
+
+    public function vendor($id) {
+        return $this->andWhere(['{{%vendor_item}}.vendor_id' => $id]);
+    }
+
+    public function vendorSlug($slug) {
+        return $this->andWhere(['IN', '{{%vendor}}.slug', $slug]);
+    }
+
+    public function likeItemName($search) {
+        return $this->andWhere(['like','{{%vendor_item}}.item_name', $search]);
     }
 }

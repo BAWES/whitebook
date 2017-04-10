@@ -22,7 +22,7 @@ class PackagesController extends BaseController
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => 'Event Packages in The White Book - Event Planning Platform']);
 
     	$packages = Package::find()
-    		->where(['status' => 1])
+    		->active()
     		->all();
 
     	return $this->render('index', [
@@ -43,8 +43,9 @@ class PackagesController extends BaseController
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => $package->package_description]);
 
         $categories = \frontend\models\Category::find()
-            ->where('(parent_category_id IS NULL or parent_category_id = 0) AND trash = "Default"')
-            ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
+            ->allParents()
+            ->defaultCategories()
+            ->orderByExpression()
             ->all();
 
         if(Yii::$app->user->isGuest) 
@@ -105,7 +106,7 @@ class PackagesController extends BaseController
         }
 
         $items = VendorItemToPackage::find()
-                ->where(['package_id' => $package->package_id])
+                ->package($package->package_id)
                 ->all();
 
         foreach ($items as $key => $value) {
@@ -139,10 +140,8 @@ class PackagesController extends BaseController
         $request = Yii::$app->request;
 
         $package = Package::find()
-            ->where([
-                'package_id' => $request->post('package_id'),
-                'status' => 1
-            ])
+            ->active()
+            ->package($request->post('package_id'))
             ->one();
 
         if (!$package) 
@@ -197,7 +196,7 @@ class PackagesController extends BaseController
         //add package items to event 
 
         $items = VendorItemToPackage::find()
-                ->where(['package_id' => $package->package_id])
+                ->package($package->package_id)
                 ->all();
 
         foreach ($items as $key => $value) {

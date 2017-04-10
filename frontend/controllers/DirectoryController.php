@@ -45,18 +45,18 @@ class DirectoryController extends BaseController
         $today = date('Y-m-d H:i:s');
 
         $query = Vendor::find()
-            ->andWhere(['{{%vendor}}.trash'=>'Default'])
-            ->andWhere(['{{%vendor}}.approve_status'=>'Yes'])
-            ->andWhere(['{{%vendor}}.vendor_status'=>'Active']);
+            ->defaultVendor()
+            ->active()
+            ->approved();
 
             # for filteration
             if (Yii::$app->request->isAjax) {
                 $category_id = Yii::$app->request->post('slug');
                 if ($category_id != 'All') {
-                    $query->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id');
-                    $query->leftJoin('{{%vendor_item_to_category}}', '{{%vendor_item}}.item_id = {{%vendor_item_to_category}}.item_id');
-                    $query->leftJoin('{{%category_path}}', '{{%category_path}}.category_id = {{%vendor_item_to_category}}.category_id');
-                    $query->andWhere(['{{%category_path}}.path_id' => $category_id]);
+                    $query->joinVendorItem();
+                    $query->joinVendorToCategory();
+                    $query->joinCategoryPath();
+                    $query->categoryPathID($category_id);
                 }
             }
 
@@ -128,10 +128,10 @@ class DirectoryController extends BaseController
             ->priorityItemJoin()
             ->vendorJoin()
             ->defaultItems()
-            ->approvedItems()
-            ->activeItems();
+            ->approved()
+            ->active();
 
-        $item_query->andWhere(['{{%vendor_item}}.vendor_id' => $vendor_details->vendor_id]);
+        $item_query->vendor($vendor_details->vendor_id);
 
         //price filter
         if (isset($data['price']) && $data['price'] != '') {
@@ -139,19 +139,15 @@ class DirectoryController extends BaseController
             $price_condition = [];
 
             $arr_min_max = explode('-', $data['price']);
-
-            $price_condition[] = '{{%vendor_item}}.item_price_per_unit IS NULL';
-            $price_condition[] = '{{%vendor_item}}.item_price_per_unit between '.$arr_min_max[0].' and '.$arr_min_max[1];
-
-            $item_query->andWhere(implode(' OR ', $price_condition));
+            $item_query->price($arr_min_max[0], $arr_min_max[1]);
         }
 
         //theme filter
         if (isset($data['themes']) && count($data['themes'])>0) {
             
-            $item_query->leftJoin('{{%vendor_item_theme}}', '{{%vendor_item}}.item_id = {{%vendor_item_theme}}.item_id');
-            $item_query->leftJoin('{{%theme}}', '{{%theme}}.theme_id = {{%vendor_item_theme}}.theme_id');
-            $item_query->andWhere(['IN', '{{%theme}}.slug', $data['themes']]);
+            $item_query->itemThemeJoin();
+            $item_query->themeJoin();
+            $item_query->themeSlug($data['themes']);
         }
 
         $cats = '';
@@ -174,26 +170,13 @@ class DirectoryController extends BaseController
 
         if($cats)
         {   
-            $item_query->andWhere("{{%category_path}}.path_id IN ('".$cats."')");
+            $item_query->categoryIDs($cats);
         }
 
-        $expression = new Expression(
-            "CASE 
-                WHEN
-                    `whitebook_priority_item`.priority_level IS NULL 
-                    OR whitebook_priority_item.status = 'Inactive' 
-                    OR whitebook_priority_item.trash = 'Deleted' 
-                    OR DATE(whitebook_priority_item.priority_start_date) > DATE(NOW()) 
-                    OR DATE(whitebook_priority_item.priority_end_date) < DATE(NOW()) 
-                THEN 2 
-                WHEN `whitebook_priority_item`.priority_level = 'Normal' THEN 1 
-                WHEN `whitebook_priority_item`.priority_level = 'Super' THEN 0 
-                ELSE 2 
-            END, {{%vendor_item}}.sort");
+        $item_query->orderByExpression();
 
         $vendor_items = $item_query
             ->groupBy('{{%vendor_item}}.item_id')
-            ->orderBy($expression)
             ->asArray()
             ->all();
 
@@ -276,11 +259,12 @@ class DirectoryController extends BaseController
             Yii::t('frontend', 'Friday'),
             Yii::t('frontend', 'Saturday'),
         );
-        $working_days = ArrayHelper::map(VendorWorkingTiming::findAll(['vendor_id'=>$vendor_details->vendor_id]),'working_day','working_day');
+        $working_days = ArrayHelper::map(VendorWorkingTiming::find()->vendor($vendor_details->vendor_id)->all(),'working_day','working_day');
         $txt_day_off = implode(', ',array_diff($replace,$working_days));
 
         $TopCategories = Category::find()
-            ->where('(parent_category_id IS NULL or parent_category_id = 0) AND trash = "Default"')
+            ->allParents()
+            ->defaultCategories()
             ->orderBy('sort')
             ->asArray()
             ->all();

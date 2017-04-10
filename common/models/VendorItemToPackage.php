@@ -63,4 +63,14 @@ class VendorItemToPackage extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Package::className(), ['package_id' => 'package_id']);
     }
+
+
+    /**
+     * @inheritdoc
+     * @return query\VendorItemToPackageQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\VendorItemToPackageQuery(get_called_class());
+    }
 }
