@@ -51,4 +51,8 @@ class VendorItemThemesQuery extends \yii\db\ActiveQuery
     {
         return $this->andWhere("{{%vendor_item_theme}}.item_id IN(".$ids.")");
     }
+
+    public function theme($ID) {
+        return $this->andWhere(['theme_id' => $ID]);
+    }
 }

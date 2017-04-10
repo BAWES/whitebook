@@ -50,4 +50,18 @@ class CategoryQuery extends \yii\db\ActiveQuery
         return $this->andWhere(['!=', 'slug', '']);
     }
 
+    public function slug($slug) {
+        return $this->andWhere(['slug' => $slug]);
+    }
+
+    public function topLevel() {
+        return $this->andWhere([
+            '{{%category_path}}.level' => 0
+        ]);
+    }
+
+    public function joinCategoryPath() {
+        return $this->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id');
+    }
+
 }
