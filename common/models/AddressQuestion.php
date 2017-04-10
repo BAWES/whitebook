@@ -121,4 +121,14 @@ class AddressQuestion extends \yii\db\ActiveRecord
         
         return($ques);
     }
+
+
+    /**
+     * @inheritdoc
+     * @return query\AddressQuestionQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\AddressQuestionQuery(get_called_class());
+    }
 }

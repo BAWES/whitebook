@@ -56,4 +56,14 @@ class VendorItemToCategory extends \yii\db\ActiveRecord
                    ->where(['category_id' => $category_id])
                    ->count();
     }
+
+
+    /**
+     * @inheritdoc
+     * @return query\VendorItemToCategoryQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\VendorItemToCategoryQuery(get_called_class());
+    }
 }

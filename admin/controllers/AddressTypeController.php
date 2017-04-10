@@ -154,7 +154,7 @@ class AddressTypeController extends Controller
         AddressQuestion::deleteAll(['address_type_id' => $id]);
 
         //delete all address question response for this type
-        $addresses = CustomerAddress::findAll(['address_type_id' => $id]);
+        $addresses = CustomerAddress::find()->addressType($id)->all();
 
         foreach ($addresses as $key => $value) {
             CustomerAddressResponse::deleteAll(['address_id' => $value->address_id]);

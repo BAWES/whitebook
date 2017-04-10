@@ -162,8 +162,8 @@ class CategoryController extends Controller
 
             $max_sort = Category::find()
                 ->select('MAX(category_id) as sort')
-                ->where(['trash' => 'Default'])
-                ->andWhere(['category_level' =>0])
+                ->defaultCategories()
+                ->topLevelCategory()
                 ->asArray()
                 ->one();
 
@@ -175,7 +175,7 @@ class CategoryController extends Controller
             $level = 0;
 
             $paths = CategoryPath::find()
-                ->where(['category_id' => $model->parent_category_id])
+                ->category($model->parent_category_id)
                 ->orderBy('level ASC')
                 ->all();
 
@@ -254,7 +254,7 @@ class CategoryController extends Controller
             $level = 0;
 
             $paths = CategoryPath::find()
-                    ->where(['category_id' => $model->parent_category_id])
+                    ->category($model->parent_category_id)
                     ->orderBy('level ASC')
                     ->all();
 
@@ -311,7 +311,7 @@ class CategoryController extends Controller
         }
 
         //check assing to items
-        $vendor_item = VendorItemToCategory::find()->where(['category_id' => $id])->count();
+        $vendor_item = VendorItemToCategory::find()->category($id)->count();
 
         if ($vendor_item) {
             Yii::$app->session->setFlash('danger', 'Sorry, This category mapped with item.');
@@ -401,7 +401,7 @@ class CategoryController extends Controller
 
         $vendor = Vendor::find()
             ->select('category_id')
-            ->where(['vendor_id' => $data['vendor_id']])
+            ->vendor($data['vendor_id'])
             ->all();
         
         $vendor_id = $vendor[0]['category_id'];
@@ -410,7 +410,7 @@ class CategoryController extends Controller
         
         $categories  = Category::find()
             ->select(['category_id', 'category_name'])
-            ->where(['category_id' => $vendor_imp])
+            ->category($vendor_imp)
             ->all();
 
         echo  '<option value="">Select</option>';
@@ -429,8 +429,8 @@ class CategoryController extends Controller
 
         $subcategory = Category::find()->select('category_id,category_name')
             ->where(['parent_category_id' => $data['id']])
-            ->andwhere(['!=', 'trash', 'Deleted'])
-            ->andwhere(['!=', 'parent_category_id', 'null'])
+            ->defaultCategories()
+            ->notNullCategory()
             ->all();
 
         echo  '<option value="">Select...</option>';

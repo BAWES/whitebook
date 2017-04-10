@@ -60,8 +60,20 @@ class CategoryQuery extends \yii\db\ActiveQuery
         ]);
     }
 
+    public function topLevelCategory() {
+        return $this->andWhere(['category_level' =>0]);
+    }
+
     public function joinCategoryPath() {
         return $this->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id');
+    }
+
+    public function category($id) {
+        return $this->andWhere(['category_id' => $id]);
+    }
+
+    public function notNullCategory() {
+        return $this->andwhere(['!=', 'parent_category_id', 'null']);
     }
 
 }
