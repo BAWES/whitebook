@@ -114,7 +114,7 @@ class ReportController extends Controller
         $vendor_id = Yii::$app->request->get('vendor_id'); 
 
         $query = Booking::find()
-            ->innerJoin('{{%vendor_payment}}', '{{%vendor_payment}}.booking_id = {{%booking}}.booking_id');
+            ->leftJoin('{{%vendor_payment}}', '{{%vendor_payment}}.booking_id = {{%booking}}.booking_id');
 
         $implode = [];
 

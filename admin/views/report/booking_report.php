@@ -1,6 +1,9 @@
 <?php 
 
 use yii\helpers\Url;
+use common\models\Booking;
+
+$status = Booking::statusList();
 
 ?>
 
@@ -20,9 +23,12 @@ use yii\helpers\Url;
 <table class="table table-hover">
 	<thead>
 		<tr>
+			<th>Date/Time</th>
 			<th>Booking ID</th> 
 			<th>Customer</th> 
 			<th>Mobile</th> 
+			<th>Payment</th>
+			<th>Status</th>
 			<th>Amount</th> 
 			<th>Whitebook Charges </th>
 		</tr>
@@ -30,9 +36,12 @@ use yii\helpers\Url;
 	<tbody>
 		<?php foreach ($bookings as $key => $value) { ?>
 		<tr>
+			<td><?= date('d/m/y H:i:s', strtotime($value['created_datetime'])) ?></td>
 			<td><?= $value['booking_id'] ?></td>
 			<td><?= $value['customer_name'].' '.$value['customer_lastname'] ?></td>
 			<td><?= $value['customer_mobile'] ?></td>
+			<td><?= $value['payment_method'] ?></td>
+			<td><?= $status[$value['booking_status']] ?></td>
 			<td><?= $value['total_with_delivery'] ?></td>
 			<td><?= $value['commission_total'] ?></td>
 		</tr>
@@ -41,7 +50,6 @@ use yii\helpers\Url;
 </table>
 
 <div class="row">
-
 	<div class="col-print-6">
 
 		<div class="summary-box">
@@ -69,25 +77,29 @@ use yii\helpers\Url;
 		</div>
 	</div>
 
-	<div class="col-print-6 summary-box">
-		<h4>Sales Detail </h4>
+	<div class="col-print-6">
 
-		<?php 
+		<div class="summary-box">
 
-		$total_sale = 0; 
-		
-		foreach ($orders_by_payment_methods as $key => $value) { 
+			<h4>Sales Detail </h4>
 
-			$total_sale += $value['total_sale'];
+			<?php 
 
-			?>
-			<b>Total <?= $value['payment_method'] ?> Sale :</b> <?= $value['total_sale'] ?>
+			$total_sale = 0; 
+			
+			foreach ($orders_by_payment_methods as $key => $value) { 
 
-			<div class="clearfix"></div>
-		<?php } ?>
+				$total_sale += $value['total_sale'];
 
-		<hr />
+				?>
+				<b>Total <?= $value['payment_method'] ?> Sale :</b> <?= $value['total_sale'] ?>
 
-		<b>Total Sale :</b> <?= $total_sale ?>
+				<div class="clearfix"></div>
+			<?php } ?>
+
+			<hr />
+
+			<b>Total Sale :</b> <?= $total_sale ?>
+		</div>
 	</div>
 </div>
