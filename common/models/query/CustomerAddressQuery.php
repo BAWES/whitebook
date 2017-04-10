@@ -3,7 +3,7 @@
 namespace common\models\query;
 use Yii;
 /**
- * This is the ActiveQuery class for [[Vendor]].
+ * This is the ActiveQuery class for [[CustomerAddress]].
  *
  * @see Booking
  */
@@ -16,7 +16,7 @@ class CustomerAddressQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return Vendor[]|array
+     * @return CustomerAddress[]|array
      */
     public function all($db = null)
     {
@@ -25,7 +25,7 @@ class CustomerAddressQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return Vendor|array|null
+     * @return CustomerAddress|array|null
      */
     public function one($db = null)
     {
@@ -36,17 +36,17 @@ class CustomerAddressQuery extends \yii\db\ActiveQuery
         return $this->leftJoin('{{%location}}', '{{%location}}.id = {{%customer_address}}.area_id');
     }
 
-    public function byDefaultAddress()
+    public function defaultAddress()
     {
         return $this->andWhere(['{{%customer_address}}.trash'=>'Default']);
     }
 
-    public function byCustomer($ID)
+    public function customer($ID)
     {
         return $this->andWhere(['{{%customer_address}}.customer_id' => $ID]);
     }
 
-    public function byLocation($area_ids)
+    public function location($area_ids)
     {
         return $this->andWhere(['{{%location}}.id' => $area_ids]);
     }

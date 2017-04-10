@@ -100,7 +100,7 @@ class VendorWorkingTiming extends \yii\db\ActiveRecord
 
     /**
      * @inheritdoc
-     * @return BookingQuery the active query used by this AR class.
+     * @return query\VendorWorkingTimingQuery the active query used by this AR class.
      */
     public static function find()
     {

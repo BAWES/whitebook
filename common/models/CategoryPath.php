@@ -60,6 +60,6 @@ class CategoryPath extends \yii\db\ActiveRecord
      */
     public static function find()
     {
-        return new \common\models\query\CategoryPathQuery(get_called_class());
+        return new query\CategoryPathQuery(get_called_class());
     }
 }

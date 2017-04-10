@@ -42,7 +42,7 @@ class VendorItemThemesQuery extends \yii\db\ActiveQuery
         return $this->andWhere("{{%vendor_item_theme}}.trash='default'");
     }
 
-    public function byItemIDs($ids)
+    public function itemIDs($ids)
     {
         return $this->andWhere("{{%vendor_item_theme}}.item_id IN(".$ids.")");
     }

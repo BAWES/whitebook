@@ -37,7 +37,7 @@ class VendorItemQuery extends \yii\db\ActiveQuery
         return $this->andWhere('{{%vendor_item}}.category_id='.$id);
     }
 
-    public function bySlug($slug)
+    public function slug($slug)
     {
         return $this->andWhere(['{{%vendor_item}}.slug' => $slug]);
     }
@@ -47,17 +47,17 @@ class VendorItemQuery extends \yii\db\ActiveQuery
         return $this->andWhere(['{{%vendor_item}}.trash' => 'Default']);
     }
 
-    public function activeItems()
+    public function active()
     {
         return $this->andWhere(['{{%vendor_item}}.item_status' => 'Active']);
     }
 
-    public function approvedItems()
+    public function approved()
     {
         return $this->andWhere(['{{%vendor_item}}.item_approved' => 'Yes']);
     }
 
-    public function byActiveVendor()
+    public function activeVendor()
     {
         return $this->andWhere(['{{%vendor}}.vendor_status' => 'Active']);
     }

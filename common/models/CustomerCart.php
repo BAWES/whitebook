@@ -589,7 +589,7 @@ class CustomerCart extends \yii\db\ActiveRecord
 
     /**
      * @inheritdoc
-     * @return ImageQuery the active query used by this AR class.
+     * @return query\CustomerCartQuery the active query used by this AR class.
      */
     public static function find()
     {

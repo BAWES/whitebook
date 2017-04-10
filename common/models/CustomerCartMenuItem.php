@@ -77,4 +77,13 @@ class CustomerCartMenuItem extends \yii\db\ActiveRecord
     {
         return $this->hasOne(VendorItemMenuItem::className(), ['menu_item_id' => 'menu_item_id']);
     }
+
+    /**
+     * @inheritdoc
+     * @return query\CustomerCartMenuItemQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\CustomerCartMenuItemQuery(get_called_class());
+    }
 }

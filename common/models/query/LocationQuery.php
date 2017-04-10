@@ -33,11 +33,11 @@ class LocationQuery extends \yii\db\ActiveQuery
         return parent::one($db);
     }
 
-    public function byCityID($id) {
+    public function city($id) {
         return $this->where(['city_id' => $id]);
     }
 
-    public function activeLocations() {
+    public function active() {
         return $this->where(['status'=>'Active']);
     }
 

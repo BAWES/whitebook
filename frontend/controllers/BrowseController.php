@@ -109,22 +109,22 @@ class BrowseController extends BaseController
             ->priorityItemJoin()
             ->vendorJoin()
             ->defaultItems()
-            ->approvedItems()
-            ->activeItems();
+            ->approved()
+            ->active();
 
         if (isset($data['for_sale']) && $data['for_sale'] != '') {
-            $item_query->saleItems();
+            $item_query->sale();
         }
 
 
-        $item_query->byVendorIDs($ActiveVendors);
+        $item_query->vendorIDs($ActiveVendors);
 
         //price filter
         if (isset($data['price']) && $data['price'] != '') {
 
             $price_condition = [];
             $arr_min_max = explode('-', $data['price']);
-            $item_query->byPrice($arr_min_max[0],$arr_min_max[1]);
+            $item_query->price($arr_min_max[0],$arr_min_max[1]);
         }
 
         //theme filter
@@ -132,7 +132,7 @@ class BrowseController extends BaseController
 
             $item_query->itemThemeJoin();
             $item_query->themeJoin();
-            $item_query->byThemeSlug($data['themes']);
+            $item_query->themeSlug($data['themes']);
 
         }//if themes
 
@@ -156,7 +156,7 @@ class BrowseController extends BaseController
 
         if($cats)
         {
-            $item_query->byCategoryIDs($cats);
+            $item_query->categoryIDs($cats);
         }
         
         if ($session->has('deliver-location')) {
@@ -171,12 +171,12 @@ class BrowseController extends BaseController
                 $location = CustomerAddress::findOne($address_id)->area_id;
             }
 
-            $item_query->byDeliveryLocation($location);
+            $item_query->deliveryLocation($location);
         }
 
         if ($session->has('deliver-date')) {
             $date = date('Y-m-d', strtotime($session->get('deliver-date')));
-            $item_query->byDeliveryDate($date);
+            $item_query->deliveryDate($date);
         }
 
         if (!empty($session->get('event_time'))) {
@@ -190,7 +190,7 @@ class BrowseController extends BaseController
 
             $event_time = date('H:i:s', strtotime($session->get('event_time')));
             
-            $item_query->byEventTime($event_time,$working_day);
+            $item_query->eventTime($event_time,$working_day);
         }
 
         $item_query_result = $item_query
@@ -262,7 +262,7 @@ class BrowseController extends BaseController
                 ->select(['{{%vendor_item_theme}}.theme_id'])
                 ->joinWith('themeDetail')
                 ->defaultItemThemes()
-                ->byItemIDs(implode(',', array_keys($item_ids)))
+                ->itemIDs(implode(',', array_keys($item_ids)))
                 ->groupBy('{{%vendor_item_theme}}.theme_id');
             
             if (Yii::$app->language == 'en') {
@@ -278,7 +278,7 @@ class BrowseController extends BaseController
 
         $vendor = Vendor::find()
             ->select('{{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%vendor}}.slug')
-            ->byVendorID($vendor_ids)
+            ->vendorIDs($vendor_ids)
             ->asArray()
             ->all();
 
@@ -320,8 +320,8 @@ class BrowseController extends BaseController
     {
         $model = VendorItem::find()
                     ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
-                    ->bySlug($slug)->defaultItems()->activeItems()
-                    ->approvedItems()->byActiveVendor()->approvedVendor()
+                    ->slug($slug)->defaultItems()->active()
+                    ->approved()->activeVendor()->approvedVendor()
                     ->defaultVendor()
                     ->one();
 
@@ -354,7 +354,7 @@ class BrowseController extends BaseController
         }
 
         $output = \common\models\Image::find()->select(['image_path'])
-            ->itemID($model['item_id'])
+            ->item($model['item_id'])
             ->orderby(['vendorimage_sort_order' => SORT_ASC])
             ->asArray()
             ->one();
@@ -411,10 +411,10 @@ class BrowseController extends BaseController
             $vendor_detail->vendor_website = 'http://'.$vendor_detail->vendor_website;
         }
 
-        $price_table = VendorItemPricing::find()->byItemID($model->item_id)->defaultItem()->all();
+        $price_table = VendorItemPricing::find()->item($model->item_id)->defaultItem()->all();
 
-        $menu = VendorItemMenu::find()->byItemID($model->item_id)->optionMenu()->all();
-        $addons = VendorItemMenu::find()->byItemID($model->item_id)->addonMenu()->all();
+        $menu = VendorItemMenu::find()->item($model->item_id)->menu('options')->all();
+        $addons = VendorItemMenu::find()->item($model->item_id)->menu('addons')->all();
 
         $vendor_area = VendorLocation::findAll(['vendor_id' => $model->vendor_id]);
         $vendor_area_list =  \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'locationName','cityName' );
@@ -427,9 +427,9 @@ class BrowseController extends BaseController
             $my_addresses =  \common\models\CustomerAddress::find()
                 ->select(['{{%location}}.id,{{%customer_address}}.address_id, {{%customer_address}}.address_name'])
                 ->joinLocation()
-                ->byDefaultAddress()
-                ->byCustomer(Yii::$app->user->getId())
-                ->byLocation($area_ids)
+                ->defaultAddress()
+                ->customer(Yii::$app->user->getId())
+                ->location($area_ids)
                 ->groupby(['{{%location}}.id'])
                 ->asArray()
                 ->all();
@@ -556,7 +556,7 @@ class BrowseController extends BaseController
             } else {
                 $name = 'location_ar';
             }
-            $area = \common\models\Location::find()->byCityID($_POST['city_id'])->activeLocations()->defaultLocations()->orderBy('city_id')->all();
+            $area = \common\models\Location::find()->city($_POST['city_id'])->active()->defaultLocations()->orderBy('city_id')->all();
             if ($area) {
                 echo \yii\helpers\Html::dropDownList('Location','',\yii\helpers\ArrayHelper::map($area ,'id',$name),['prompt'=>'Please Select Location','class'=>'selectpicker required trigger','id'=>'Location']);
             } else {
@@ -579,9 +579,9 @@ class BrowseController extends BaseController
         $total = ($item->item_base_price) ? $item->item_base_price : 0;
 
         $price_chart = VendorItemPricing::find()
-            ->byItemID($item['item_id'])
+            ->item($item['item_id'])
             ->defaultItem()
-            ->byQuantityRange(Yii::$app->request->post('quantity'))
+            ->quantityRange(Yii::$app->request->post('quantity'))
             ->orderBy('pricing_price_per_unit DESC')
             ->one();
 

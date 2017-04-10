@@ -28,7 +28,7 @@ class VendorItemPricingQuery extends \yii\db\ActiveQuery
         return parent::one($db);
     }
 
-    public function byItemID($ID) {
+    public function item($ID) {
         return $this->andWhere(['item_id' => $ID]);
     }
 
@@ -36,7 +36,7 @@ class VendorItemPricingQuery extends \yii\db\ActiveQuery
         return $this->andWhere(['trash' => 'Default']);
     }
 
-    public function byQuantityRange($quantity) {
+    public function quantityRange($quantity) {
         return $this->andWhere(['<=', 'range_from', $quantity])->andWhere(['>=', 'range_to', $quantity]);
     }
 }

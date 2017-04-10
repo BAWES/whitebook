@@ -65,7 +65,7 @@ class CartController extends BaseController
 
         $items = CustomerCart::items();
 
-        $vendor_area = Location::findAll(['trash' => 'Default']);
+        $vendor_area = Location::find()->defaultLocations()->all();
 
         if(Yii::$app->language == 'en')
         {
@@ -100,14 +100,14 @@ class CartController extends BaseController
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
-        $menu = VendorItemMenu::find()->byItemID($model->item_id)->optionMenu()->all();
-        $addons = VendorItemMenu::find()->byItemID($model->item_id)->addonMenu()->all();
+        $menu = VendorItemMenu::find()->item($model->item_id)->menu('options')->all();
+        $addons = VendorItemMenu::find()->item($model->item_id)->menu('addons')->all();
 
         //get timeslots
 
         $vendor_timeslot = VendorWorkingTiming::find()
-            ->byVendorID($model->vendor_id)
-            ->byWorkingDay(date("l", strtotime($item->cart_delivery_date)))
+            ->vendor($model->vendor_id)
+            ->workingDay(date("l", strtotime($item->cart_delivery_date)))
             ->defaultTiming()
             ->asArray()
             ->all();
@@ -246,33 +246,27 @@ class CartController extends BaseController
         if($this->validate_item($data)) {
             
             $query = CustomerCart::find()
-                ->where([
-                    'item_id' => $data['item_id'],
-                    'area_id'   => $area_id,
-                    'time_slot' => $time_slot,
-                    'cart_delivery_date' => $delivery_date,
-                ]);
-            
+                ->item($data['item_id'])
+                ->area($area_id)
+                ->timeSlot($time_slot)
+                ->deliveryDate($delivery_date);
+
+
             if(!empty($data['female_service'])){
-                $query->andWhere(['female_service' => $data['female_service']]);
+                $query->femaleService($data['female_service']);
             }
 
-            if(!empty($data['special_request'])){
-                $query->andWhere(['special_request' => $data['special_request']]);
+            if (!empty($data['special_request'])) {
+                $query->request($data['special_request']);
             }
-
-            if (Yii::$app->user->getId()) {
-                $query->andWhere(['customer_id'=>Yii::$app->user->getId()]);
-            } else {
-                $query->andWhere(['cart_session_id'=>Customer::currentUser()]);
-            }
+                $query->user();
 
             $cart = $query->one();
 
             //if available in cart check if have exact menu and quantity combo 
 
             if($cart) {
-                $cart_menu_items = CustomerCartMenuItem::findAll(['cart_id' => $cart->cart_id]);
+                $cart_menu_items = CustomerCartMenuItem::find()->cartID($cart->cart_id)->all();
                     
                 $arr_cart_menu_items = ArrayHelper::map($cart_menu_items, 'menu_item_id', 'quantity');
 
@@ -440,9 +434,7 @@ class CartController extends BaseController
             return $json;
         }
 
-        $item = VendorItem::find()->where([
-            'item_id' => $data['item_id']
-        ])->one();
+        $item = VendorItem::findOne($data['item_id']);
 
         if (!$item) {
             $json['error'] = Yii::t('frontend', 'Item not available for sell!');
@@ -506,11 +498,11 @@ class CartController extends BaseController
 
             //check timeslot available on selected date 
 
-            $timeslot = VendorWorkingTiming::findOne([
-                    'trash' => 'Default',
-                    'vendor_id' => $item->vendor_id,
-                    'working_day' => date('l', strtotime($delivery_date))
-                ]);
+            $timeslot = VendorWorkingTiming::find()
+                ->defaultTiming()
+                ->vendor($item->vendor_id)
+                ->workingDay(date('l', strtotime($delivery_date)))
+                ->one();
 
             if(!$timeslot)
             {
@@ -558,11 +550,11 @@ class CartController extends BaseController
             //default capacity is how many of it they can process per day
 
             //1) get capacity exception for selected date
-            
-            $capacity_exception = \common\models\VendorItemCapacityException::findOne([
-                'item_id' => $data['item_id'],
-                'exception_date' => $delivery_date
-            ]);
+
+            $capacity_exception = \common\models\VendorItemCapacityException::find()
+                ->item($data['item_id'])
+                ->exceptionDate($delivery_date)
+                ->one();
 
             if ($capacity_exception && $capacity_exception->exception_capacity) {
                 $capacity = $capacity_exception->exception_capacity;
@@ -571,18 +563,12 @@ class CartController extends BaseController
             }
 
             $query = CustomerCart::find()
-                ->where([
-                    'item_id' => $data['item_id'],
-                    'cart_delivery_date' => date('Y-m-d', strtotime($data['delivery_date'])),
-                    'cart_valid' => 'yes',
-                    'trash' => 'Default'
-                ]);
+                ->item($data['item_id'])
+                ->deliveryDate(date('Y-m-d', strtotime($data['delivery_date'])))
+                ->valid()
+                ->defaultCart();
 
-            if (Yii::$app->user->getId()) {
-                $query->andWhere(['customer_id'=>Yii::$app->user->getId()]);
-            } else {
-                $query->andWhere(['cart_session_id'=>Customer::currentUser()]);
-            }
+                $query->user();
 
             $in_cart = $query->sum('cart_quantity');
 
@@ -606,10 +592,10 @@ class CartController extends BaseController
             //-------------- END Item Capacity -----------------//
 
             //current date should not in blocked date
-            $block_date = \common\models\BlockedDate::findOne([
-                'vendor_id' => $vendor_id,
-                'block_date' => $delivery_date
-            ]);
+            $block_date = \common\models\BlockedDate::find()
+                ->vendor($vendor_id)
+                ->blockedDate($delivery_date)
+                ->one();
 
             if ($block_date) 
             {
@@ -687,9 +673,9 @@ class CartController extends BaseController
 
             $menu_items = CustomerCartMenuItem::find()
                 ->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_id, {{%vendor_item_menu_item}}.menu_id, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
-                ->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
-                ->innerJoin('{{%vendor_item_menu}}', '{{%vendor_item_menu}}.menu_id = {{%customer_cart_menu_item}}.menu_id')
-                ->where(['cart_id' => $cart['cart_id']])
+                ->joinVendorItemMenuItem()
+                ->joinVendorItemMenu()
+                ->cartID($cart['cart_id'])
                 ->asArray()
                 ->all();
 
@@ -743,11 +729,9 @@ class CartController extends BaseController
 
         $vendor_timeslot = VendorWorkingTiming::find()
             ->select(['working_id','working_start_time','working_end_time'])
-            ->where([
-                    'vendor_id' => $data['vendor_id'],
-                    'working_day' => date("l", $timestamp),
-                    'trash' => 'Default'
-                ])
+            ->vendor($data['vendor_id'])
+            ->workingDay(date("l", $timestamp))
+            ->defaultTiming()
             ->asArray()
             ->all();
 

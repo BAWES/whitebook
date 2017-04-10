@@ -118,6 +118,6 @@ class VendorItemThemes extends \yii\db\ActiveRecord
      */
     public static function find()
     {
-        return new \common\models\query\VendorItemThemesQuery(get_called_class());
+        return new query\VendorItemThemesQuery(get_called_class());
     }
 }

@@ -77,49 +77,54 @@ class CategoryPathQuery extends \yii\db\ActiveQuery
         return $this->andWhere(['{{%vendor_item}}.trash' => 'Default']);
     }
 
-    public function approvedItems()
+    public function approved()
     {
         return $this->andWhere(['{{%vendor_item}}.item_approved' => 'Yes']);
     }
 
-    public function activeItems()
+    public function active()
     {
         return $this->andWhere(['{{%vendor_item}}.item_status' => 'Active']);
     }
 
-    public function byVendorIDs($ActiveVendors)
+    public function sale()
+    {
+        return $this->andWhere(['{{%vendor_item}}.item_for_sale' => 'Yes']);
+    }
+
+    public function vendorIDs($ActiveVendors)
     {
         return $this->andWhere(['in', '{{%vendor_item}}.vendor_id', $ActiveVendors]);
     }
 
-    public function byThemeSlug($themes)
+    public function themeSlug($themes)
     {
         return $this->andWhere(['IN', '{{%theme}}.slug', $themes]);
     }
 
-    public function byPrice($MinPrice, $MaxPrice)
+    public function price($MinPrice, $MaxPrice)
     {
         $price_condition[] = '{{%vendor_item}}.item_price_per_unit IS NULL';
         $price_condition[] = '{{%vendor_item}}.item_price_per_unit between '.$MinPrice.' and '.$MaxPrice;
         return $this->andWhere(implode(' OR ', $price_condition));
     }
 
-    public function byCategoryIDs($cats)
+    public function categoryIDs($cats)
     {
         return $this->andWhere("{{%category_path}}.path_id IN ('" . $cats . "')");
     }
 
-    public function byDeliveryLocation($location)
+    public function deliveryLocation($location)
     {
         return $this->andWhere('EXISTS (SELECT 1 FROM {{%vendor_location}} WHERE {{%vendor_location}}.area_id="' . $location . '" AND {{%vendor_item}}.vendor_id = {{%vendor_location}}.vendor_id)');
     }
 
-    public function byDeliveryDate($date)
+    public function deliveryDate($date)
     {
         return $this->andWhere("{{%vendor}}.vendor_id NOT IN(SELECT vendor_id FROM `whitebook_vendor_blocked_date` where block_date = '" . $date . "')");
     }
 
-    public function byEventTime($event_time,$working_day)
+    public function eventTime($event_time,$working_day)
     {
         return $this->andWhere("'" . $event_time . "' >= {{%vendor_working_timing}}.working_start_time AND '" . $event_time . "' < {{%vendor_working_timing}}.working_end_time AND working_day='" . $working_day . "day'");
     }
