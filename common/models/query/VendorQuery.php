@@ -72,4 +72,12 @@ class VendorQuery extends \yii\db\ActiveQuery
         return $this->andWhere(['like', 'vendor_name', $search]);
     }
 
+    public function vendorByEmail($email) {
+        return $this->andWhere(['vendor_contact_email'=>$email]);
+    }
+
+    public function authToken($token) {
+        return $this->andWhere(['auth_token'=>$token]);
+    }
+
 }

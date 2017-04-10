@@ -1,13 +1,14 @@
 <?php
 
 namespace common\models\query;
+use yii\db\Expression;
 use Yii;
 /**
- * This is the ActiveQuery class for [[ImageQuery]].
+ * This is the ActiveQuery class for [[PriorityItem]].
  *
  * @see Booking
  */
-class ImageQuery extends \yii\db\ActiveQuery
+class PriorityItemQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +17,7 @@ class ImageQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return ImageQuery[]|array
+     * @return PriorityItem[]|array
      */
     public function all($db = null)
     {
@@ -25,14 +26,14 @@ class ImageQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return ImageQuery|array|null
+     * @return PriorityItem|array|null
      */
     public function one($db = null)
     {
         return parent::one($db);
     }
 
-    public function item($itemID){
-        return $this->andWhere('item_id = :id', [':id' => $itemID]);
+    public function item($id) {
+        return $this->andWhere(new Expression('FIND_IN_SET(:item_id, item_id)'))->addParams([':item_id' => $id]);
     }
 }

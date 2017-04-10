@@ -98,20 +98,17 @@ class VendorItemController extends Controller
     {
         $dataProvider1 = PriorityItem::find()
             ->select(['priority_level','priority_start_date','priority_end_date'])
-            ->where(new Expression('FIND_IN_SET(:item_id, item_id)'))
-            ->addParams([':item_id' => $id])
+            ->item($id)
             ->all();
 
         //check item in draft 
 
-        $model = VendorDraftItem::find()
-            ->where(['item_id' => $id])
-            ->one();
+        $model = VendorDraftItem::find()->item($id)->one();
 
         if($model) {
             
             $imagedata = VendorDraftImage::find()
-                ->where('item_id = :id', [':id' => $model->item_id])
+                ->item($model->item_id)
                 ->orderby(['vendorimage_sort_order' => SORT_ASC])
                 ->all();
 
@@ -119,27 +116,17 @@ class VendorItemController extends Controller
 
             $categories = VendorDraftItemToCategory::find()
                 ->with('category')
-                ->Where(['item_id' => $model->item_id])
+                ->item($model->item_id)
                 ->all();
 
-            $arr_menu = VendorDraftItemMenu::findAll([
-                'item_id' => $id,
-                'menu_type' => 'options'
-            ]);
-
-            $arr_addon_menu = VendorDraftItemMenu::findAll([
-                'item_id' => $id,
-                'menu_type' => 'addons'
-            ]);
+            $arr_menu = VendorDraftItemMenu::find()->menu('options')->item($id)->all();
+            $arr_addon_menu = VendorDraftItemMenu::find()->menu('addons')->item($id)->all();
         }
         else
         {
             $model = $this->findModel($id);
 
-            $imagedata = Image::find()
-                ->where('item_id = :id', [':id' => $model->item_id])
-                ->orderby(['vendorimage_sort_order' => SORT_ASC])
-                ->all();
+            $imagedata = Image::find()->itemID($model->item_id)->orderby(['vendorimage_sort_order' => SORT_ASC])->all();
 
             $price_values= VendorItemPricing::loadpricevalues($model->item_id);
 
@@ -148,15 +135,8 @@ class VendorItemController extends Controller
                 ->Where(['item_id' => $model->item_id])
                 ->all();
 
-            $arr_menu = VendorItemMenu::findAll([
-                'item_id' => $id,
-                'menu_type' => 'options'
-            ]);
-
-            $arr_addon_menu = VendorItemMenu::findAll([
-                'item_id' => $id,
-                'menu_type' => 'addons'
-            ]);
+            $arr_menu = VendorItemMenu::find()->item($id)->menu('options')->all();
+            $arr_addon_menu = VendorItemMenu::find()->item($id)->menu('addons')->all();
         }
         
         $item_type = ItemType::itemtypename($model->type_id);
@@ -218,11 +198,9 @@ class VendorItemController extends Controller
         }//if model-load 
 
         $main_categories = Category::find()
-            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-            ->where([
-                '{{%category}}.trash' => 'Default',
-                '{{%category_path}}.level' => 0
-            ])
+            ->joinCategoryPath()
+            ->defaultCategories()
+            ->topLevel()
             ->all();
 
         return $this->render('steps/item-info', [
@@ -300,23 +278,19 @@ class VendorItemController extends Controller
 
         $item_child_categories = VendorDraftItemToCategory::find()
             ->select('{{%category}}.category_name, {{%category}}.category_id')
-            ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_draft_item_to_category}}.category_id')
-            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-            ->where([
-                '{{%category}}.trash' => 'Default',
-                '{{%category_path}}.level' => 2,
-                '{{%vendor_draft_item_to_category}}.item_id' => $model->item_id
-            ])
+            ->joinCategory()
+            ->joinCategoryPath()
+            ->defaultDraftCategory()
+            ->secondLevel()
+            ->item($model->item_id)
             ->groupBy('{{%vendor_draft_item_to_category}}.category_id')
             ->all();
     
         //main
         $main_categories = Category::find()
-            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-            ->where([
-                '{{%category}}.trash' => 'Default',
-                '{{%category_path}}.level' => 0
-            ])
+            ->joinCategoryPath()
+            ->topLevel()
+            ->defaultCategories()
             ->all();
 
         return $this->render('steps/item-info', [
@@ -535,10 +509,7 @@ class VendorItemController extends Controller
             return $this->redirect(['vendor-item/addon-menu-items', 'id' => $id]);
         }
 
-        $arr_menu = VendorDraftItemMenu::findAll([
-            'item_id' => $id,
-            'menu_type' => 'options'
-        ]);
+        $arr_menu = VendorDraftItemMenu::find()->menu('options')->item($id)->all();
 
         return $this->render('steps/menu-items', [
             'model' => $model,
@@ -765,7 +736,7 @@ class VendorItemController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = VendorItem::findOne(['item_id'=>$id,'vendor_id'=>Yii::$app->user->getId()])) !== null) {
+        if (($model = VendorItem::find()->item($id)->currentVendor()->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -961,7 +932,7 @@ class VendorItemController extends Controller
         $query = VendorItem::find();
         $date = date('Y-m-d');
         $item_id = '';
-        $query->where(['trash'=>'Default']);
+        $query->defaultItems();
         if (Yii::$app->request->post()) {
             if (Yii::$app->request->post('date')) {
                 $date =Yii::$app->request->post('date');
@@ -971,10 +942,10 @@ class VendorItemController extends Controller
         }
 
         if (Yii::$app->request->post('item_id') && Yii::$app->request->post('item_id') != '') {
-            $query->andWhere(['item_id' => Yii::$app->request->post('item_id')]);
+            $query->item(Yii::$app->request->post('item_id'));
             $item_id =Yii::$app->request->post('item_id');
         }
-        $query->andWhere(['vendor_id' => Yii::$app->user->getId()]);
+        $query->currentVendor();
 
         $provider = new \yii\data\ActiveDataProvider([
             'query' => $query,
