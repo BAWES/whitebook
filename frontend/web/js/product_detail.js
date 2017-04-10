@@ -323,6 +323,10 @@ jQuery(document).delegate('#form_product_option', 'submit', function(e) {
                     });
                 });
 
+                if (data.errors && data.errors.cart_quantity_remain) {
+                    $('.quantity_remain').html("Only "+data.errors.cart_quantity_remain+" item available in stock");
+                }
+
                 if($('#collapse-options').length > 0 && !$('#collapse-options').hasClass('in')) {
                     $('a[href="#collapse-options"]').trigger('click');
                 }

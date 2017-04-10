@@ -460,6 +460,7 @@ else
                                                 </div>
                                                 <span class=" col-lg-12 error cart_quantity text-center"></span>
                                                 <span id="available"></span>
+                                            <span class="quantity_remain" style="clear: both;display: block;color: brown;text-align: center;padding-top: 6px;display: block;"></span>
                                         <?php } // END if item available ?>
                                         </div>
 
