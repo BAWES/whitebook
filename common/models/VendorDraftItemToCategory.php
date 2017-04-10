@@ -63,4 +63,13 @@ class VendorDraftItemToCategory extends \yii\db\ActiveRecord
     {
         return $this->hasOne(VendorItem::className(), ['item_id' => 'item_id']);
     }
+
+    /**
+     * @inheritdoc
+     * @return query\VendorDraftItemToCategoryQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\VendorDraftItemToCategoryQuery(get_called_class());
+    }
 }

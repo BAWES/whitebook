@@ -58,4 +58,13 @@ class VendorDraftImage extends \yii\db\ActiveRecord
     {
         return $this->hasOne(VendorItem::className(), ['item_id' => 'item_id']);
     }
+
+    /**
+     * @inheritdoc
+     * @return query\VendorDraftImageQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\VendorDraftImageQuery(get_called_class());
+    }
 }

@@ -63,4 +63,14 @@ class VendorDraftCategory extends \yii\db\ActiveRecord
     {
         return $this->hasOne(VendorDraft::className(), ['vendor_draft_id' => 'vendor_draft_id']);
     }
+
+
+    /**
+     * @inheritdoc
+     * @return query\VendorDraftCategoryQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\VendorDraftCategoryQuery(get_called_class());
+    }
 }

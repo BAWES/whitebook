@@ -67,4 +67,13 @@ class PriorityItem extends \yii\db\ActiveRecord
             'trash' => 'Trash',
         ];
     }
+
+    /**
+     * @inheritdoc
+     * @return query\PriorityItemQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\PriorityItemQuery(get_called_class());
+    }
 }

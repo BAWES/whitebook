@@ -71,8 +71,9 @@ class SiteController extends Controller
         $dateitemcnt = VendorItem::vendoritemdatecount($vendor_id);
 
         $earning_total = Booking::find()
-            ->where('transaction_id is not NULL')
-            ->andWhere(['vendor_id' => $vendor_id,'booking_status'=>1])
+            ->nonEmptyTransactionID()
+            ->vendor($vendor_id)
+            ->activeBooking()
             ->sum('total_vendor');
 
         $vendor = Vendor::findOne($vendor_id);
@@ -189,8 +190,8 @@ class SiteController extends Controller
             $form = Yii::$app->request->post('VendorPassword');
 
             $rows = Vendor::find()->select('vendor_contact_email')
-    			->where(['vendor_contact_email'=>$form['vendor_contact_email']])
-    			->asArray()
+    			->vendorByEmail($form['vendor_contact_email'])
+                ->asArray()
     			->all();
 
             if(!empty($rows)) {
@@ -245,8 +246,8 @@ class SiteController extends Controller
 
         $v_category = VendorDraftCategory::find()
             ->select('{{%category}}.category_name')
-            ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_draft_category}}.category_id')
-            ->where(['{{%vendor_draft_category}}.vendor_draft_id' => $model->vendor_draft_id])
+            ->joinCategory()
+            ->draft($model->vendor_draft_id)
             ->asArray()
             ->all();
 
@@ -341,7 +342,7 @@ class SiteController extends Controller
         //get vendor order notification email address 
 
         $vendor_order_alert_emails = VendorDraftOrderAlertEmails::find()
-            ->where(['vendor_draft_id' => $model->vendor_draft_id])
+            ->draft($model->vendor_draft_id)
             ->all();
 
         return $this->render('profile', [
@@ -349,7 +350,7 @@ class SiteController extends Controller
             'vendor_order_alert_emails' => $vendor_order_alert_emails,
             'vendor_contact_number' => $vendor_contact_number,
             'vendor_categories' => $vendor_categories,
-            'phones' => VendorDraftPhoneNo::findAll(['vendor_draft_id' => $model->vendor_draft_id]),
+            'phones' => VendorDraftPhoneNo::find()->draft($model->vendor_draft_id)->all()
         ]);
     }
 
@@ -369,7 +370,7 @@ class SiteController extends Controller
     }
 
     public function actionSimpleLogin($_c) {
-        $detail = Vendor::findOne(['auth_token'=>$_c]);
+        $detail = Vendor::find()->authToken($_c)->one();
 
         if (!Yii::$app->user->isGuest) {
             Yii::$app->user->logout();

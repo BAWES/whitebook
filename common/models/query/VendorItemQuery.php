@@ -77,4 +77,12 @@ class VendorItemQuery extends \yii\db\ActiveQuery
         return $this->andWhere('{{%vendor_item}}.category_id='.$id);
     }
 
+    public function item($id) {
+        return $this->andWhere(['item_id'=>$id]);
+    }
+
+    public function currentVendor() {
+        return $this->andWhere(['vendor_id'=>Yii::$app->user->getId()]);
+    }
+
 }
