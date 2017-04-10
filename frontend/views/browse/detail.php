@@ -689,6 +689,17 @@ else
 
                                                                 <?php } ?>
 
+
+                                                                <!-- price -->
+
+                                                                <?php if($menu_item->price > 0) { ?>
+                                                                <span class="menu_item_price">
+                                                                    (+<?= CFormatter::format($menu_item->price) ?>)
+                                                                </span>
+                                                                <?php  } ?>
+
+                                                                <!-- hint -->
+                                                                
                                                                 <?php
 
                                                                 $hint =  Yii::$app->language == 'en' ? $menu_item->hint : $menu_item->hint_ar;

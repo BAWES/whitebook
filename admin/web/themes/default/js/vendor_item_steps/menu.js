@@ -41,7 +41,13 @@ $(function() {
 			}
 		});
 
-	    if($error['txt_min_quantity'] || $error['txt_max_quantity'] || $error['txt_menu_item_name_ar'] 
+		$.each($('.txt_price'), function() {
+			if(!$.isNumeric($(this).val())) {
+				$error['txt_price'] = '<p><i class="fa fa-exclamation"></i> Price field not valid.</p>';
+			}
+		});
+
+	    if($error['txt_price'] || $error['txt_min_quantity'] || $error['txt_max_quantity'] || $error['txt_menu_item_name_ar'] 
 	    	|| $error['txt_menu_item_name'] || $error['txt_menu_name'] || $error['txt_menu_name_ar']) {
 
 		    e.preventDefault();
@@ -72,6 +78,10 @@ $(function() {
 
 			if($error['txt_max_quantity']) {
 				$html += $error['txt_max_quantity'];
+			}
+
+			if($error['txt_price']) {
+				$html += $error['txt_price'];
 			}
 
 			$html += '</div>';
