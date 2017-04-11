@@ -981,15 +981,37 @@ class VendorController extends Controller
     }
 
     public function actionLoginRequest($id){
+        
         $vendor = \common\models\Vendor::findOne($id);
+
         if ($vendor && $vendor->vendor_contact_email) {
+            
             $vendor->auth_token = Yii::$app->getSecurity()->generateRandomString(50);
             $vendor->modified_datetime = date('Y-m-d H:i:s');
-            if ($vendor->save()) {
+            
+            if ($vendor->save(false)) 
+            {
                 return $this->redirect(Yii::$app->urlManagerVendor->createUrl(['site/simple-login','_c'=>$vendor->auth_token]));
+            } 
+            else 
+            {                
+                $html = '';
+
+                foreach ($vendor->getErrros() as $key => $value) {
+                    foreach ($value as $key => $error) {
+                        $html .= '<li>'.$value.'</li>';
+                    }                    
+                }
+
+                Yii::$app->session->setFlash('danger', $html);
+
+                return $this->redirect(['vendor/index']);
             }
-        } else {
-            Yii::$app->session->setFlash('danger','No data found for vendor id : '.$id.' in database');
+        } 
+        else 
+        {
+            Yii::$app->session->setFlash('danger', 'No data found for vendor id : '.$id.' in database');
+            
             return $this->redirect(['vendor/index']);
         }
     }
