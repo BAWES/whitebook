@@ -207,20 +207,33 @@ use common\components\CFormatter;
 		                            <?php if($value['item_how_long_to_make'] > 0) { ?>
                                     <div class="callout-container" style="bottom: 10px;">
                                         <span class="callout light">
-                                            <?php 
+                                            <?php
 
-                                            if($value['notice_period_type'] == 'Day') 
-                                            { 
-                                                echo Yii::t('frontend', 'Notice: {count} days', [
-                                                    'count' => $value['item_how_long_to_make']
-                                                ]); 
+                                            if(isset($value['notice_period_type']) && $value['notice_period_type'] == 'Day') {
+                                                if ($value['item_how_long_to_make'] >= 7) {
+                                                    echo Yii::t('frontend', 'Notice: {count} week(s)', [
+                                                        'count' => substr(($value['item_how_long_to_make'] / 7),0,3)
+                                                    ]);
+                                                } else {
+                                                    echo Yii::t('frontend', 'Notice: {count} day(s)', [
+                                                        'count' => $value['item_how_long_to_make']
+                                                    ]);
+                                                }
                                             }
                                             else
                                             {
-                                                echo Yii::t('frontend', 'Notice: {count} hours', [
-                                                    'count' => $value['item_how_long_to_make']
-                                                ]);
-                                            } ?>
+                                                if ($value['item_how_long_to_make'] >= 24) {
+                                                    echo Yii::t('frontend', 'Notice: {count} day(s)', [
+                                                        'count' => substr(($value['item_how_long_to_make'] / 24),0,3)
+                                                    ]);
+                                                } else {
+                                                    echo Yii::t('frontend', 'Notice: {count} hours', [
+                                                        'count' => $value['item_how_long_to_make']
+                                                    ]);
+                                                }
+
+                                            }
+                                            ?>
                                         </span>
                                     </div>
                                     <?php } ?>
