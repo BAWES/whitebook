@@ -120,4 +120,13 @@ class VendorLocation extends \yii\db\ActiveRecord
             return isset($this->location->location_ar) ? $this->location->location_ar : $this->area_id;
         }
     }
+
+    /**
+     * @inheritdoc
+     * @return query\VendorLocationQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\VendorLocationQuery(get_called_class());
+    }
 }

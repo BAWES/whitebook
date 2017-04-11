@@ -3,11 +3,11 @@
 namespace common\models\query;
 use Yii;
 /**
- * This is the ActiveQuery class for [[ImageQuery]].
+ * This is the ActiveQuery class for [[VendorDraftPhoneNo]].
  *
  * @see Booking
  */
-class ImageQuery extends \yii\db\ActiveQuery
+class VendorDraftPhoneNoQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +16,7 @@ class ImageQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return ImageQuery[]|array
+     * @return VendorDraftPhoneNo[]|array
      */
     public function all($db = null)
     {
@@ -25,18 +25,14 @@ class ImageQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return ImageQuery|array|null
+     * @return VendorDraftPhoneNo|array|null
      */
     public function one($db = null)
     {
         return parent::one($db);
     }
 
-    public function item($itemID){
-        return $this->andWhere('item_id = :id', [':id' => $itemID]);
-    }
-
-    public function module($type) {
-        return $this->andWhere('module_type = :status', [':status' => $type]);
+    public function draft($ID) {
+        return $this->andWhere(['vendor_draft_id' => $ID]);
     }
 }

@@ -47,7 +47,7 @@ class VendorItemCapacityExceptionController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $startdate = VendorItemCapacityException::find()->select('exception_date')
-            ->where(['trash'=>'Default'])
+            ->defaultException()
             ->orderby(['exception_date' => SORT_ASC])
             ->asArray()
             ->all();

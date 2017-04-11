@@ -76,4 +76,13 @@ class VendorDraftItemMenu extends \yii\db\ActiveRecord
     {
         return $this->hasMany(VendorDraftItemMenuItem::className(), ['draft_menu_id' => 'draft_menu_id']);
     }
+
+    /**
+     * @inheritdoc
+     * @return query\VendorDraftItemMenuQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\VendorDraftItemMenuQuery(get_called_class());
+    }
 }

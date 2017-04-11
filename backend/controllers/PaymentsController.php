@@ -52,17 +52,15 @@ class PaymentsController extends Controller
 
         $bookings = VendorPayment::find()
             ->select('{{%booking}}.booking_id, {{%booking}}.customer_name, {{%booking}}.customer_lastname, {{%booking}}.customer_mobile, {{%booking}}.total_with_delivery, {{%booking}}.commission_total')
-            ->innerJoin('{{%booking}}', '{{%booking}}.booking_id = {{%vendor_payment}}.booking_id')
-            ->where(['transfer_id' => $model->payment_id])
+            ->joinBooking()
+            ->transfer($model->payment_id)
             ->asArray()
             ->all();
 
         $orders_by_payment_methods = VendorPayment::find()
             ->select('count({{%booking}}.booking_id) as total, sum({{%booking}}.total_with_delivery) as total_sale, {{%booking}}.payment_method')
-            ->innerJoin('{{%booking}}', '{{%booking}}.booking_id = {{%vendor_payment}}.booking_id')
-            ->where([
-                    'transfer_id' => $model->payment_id
-                ])
+            ->joinBooking()
+            ->transfer($model->payment_id)
             ->groupBy('payment_method')
             ->asArray()
             ->all();

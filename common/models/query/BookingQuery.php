@@ -50,4 +50,20 @@ class BookingQuery extends \yii\db\ActiveQuery
     public function token($booking_token) {
         return $this->where(["booking_token"=>$booking_token]);
     }
+
+    public function nonEmptyTransactionID(){
+        return $this->andWhere('transaction_id is not NULL');
+    }
+
+    public function vendor($vendor_id) {
+        return $this->andWhere(['vendor_id' => $vendor_id]);
+    }
+
+    public function activeBooking() {
+        return $this->andWhere(['booking_status'=>1]);
+    }
+
+    public function inactiveBooking() {
+        return $this->andWhere(['booking_status'=>0]);
+    }
 }

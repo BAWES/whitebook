@@ -39,4 +39,8 @@ class VendorItemCapacityExceptionQuery extends \yii\db\ActiveQuery
     public function exceptionDate($date){
         return $this->andWhere(['exception_date' => $date]);
     }
+
+    public function defaultException(){
+        return $this->andWhere(['trash'=>'Default']);
+    }
 }

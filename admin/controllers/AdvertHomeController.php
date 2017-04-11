@@ -115,7 +115,7 @@ class AdvertHomeController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $imagedata = Image::find()->where('module_type = :status AND item_id = :id', [':id' => $id, ':status' => 'home_ads'])->orderby(['vendorimage_sort_order' => SORT_ASC])->all();
+        $imagedata = Image::find()->module('home_ads')->item($id)->orderby(['vendorimage_sort_order' => SORT_ASC])->all();
           $model1 = new Image();
         if ($model->load(Yii::$app->request->post()) && ($model->validate())) {
             $model->save();

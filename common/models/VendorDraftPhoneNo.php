@@ -57,4 +57,13 @@ class VendorDraftPhoneNo extends \yii\db\ActiveRecord
     {
         return $this->hasOne(VendorDraft::className(), ['vendor_draft_id' => 'vendor_draft_id']);
     }
+
+    /**
+     * @inheritdoc
+     * @return query\VendorDraftPhoneNoQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\VendorDraftPhoneNoQuery(get_called_class());
+    }
 }

@@ -147,8 +147,9 @@ class VendorLocationController extends Controller
 
             //check if already exists 
             $exists = VendorLocation::find()
-                ->where(['vendor_id' => $vendor_id, 'area_id' => $model->area_id])
-                ->andWhere(['!=', 'id', $id])
+                ->vendor($vendor_id)
+                ->area($model->area_id)
+                ->nonSame($id)
                 ->count();
 
             if($exists) {
@@ -189,7 +190,7 @@ class VendorLocationController extends Controller
     {
         $vendor_id = Yii::$app->user->getId();
 
-        if (($model = vendorlocation::findOne(['id' => $id, 'vendor_id' => $vendor_id])) !== null) {
+        if (($model = vendorlocation::find()->vendor($vendor_id)->locationID($id)->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

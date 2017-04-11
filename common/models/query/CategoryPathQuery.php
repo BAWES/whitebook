@@ -177,4 +177,8 @@ class CategoryPathQuery extends \yii\db\ActiveQuery
     public function vendorItems($ids) {
         return $this->andWhere(['{{%vendor_item}}.item_id' => $ids]);
     }
+
+    public function category($id) {
+        return $this->andWhere(['category_id' => $id]);
+    }
 }
