@@ -72,6 +72,10 @@ class VendorQuery extends \yii\db\ActiveQuery
         return $this->andWhere(['like', 'vendor_name', $search]);
     }
 
+    public function vendorByName($name){
+        return $this->andWhere(['vendor_name'=>$name]);
+    }
+
     public function vendorByEmail($email) {
         return $this->andWhere(['vendor_contact_email'=>$email]);
     }

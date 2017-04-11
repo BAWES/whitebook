@@ -218,8 +218,11 @@ class PriorityItemController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    // todo remove this method after analysing
     public static function actionLoadcategory()
     {
+        // seems like function not in use
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
         }
@@ -239,6 +242,8 @@ class PriorityItemController extends Controller
         }
         die; // action used by vendor module also.
     }
+
+    // todo remove this method after analysing in case if not in use
     public function actionLoadsubcategory()
     {
         if (Yii::$app->request->isAjax) {
@@ -255,6 +260,7 @@ class PriorityItemController extends Controller
         }
     }
 
+    // todo remove this method after analysing in case if not in use
     public function actionLoadchildcategory()
     {
         if (Yii::$app->request->isAjax) {
@@ -272,6 +278,7 @@ class PriorityItemController extends Controller
         die; // dont remove die, action used by vendor module also.
     }
 
+    // todo remove this method after analysing in case if not in use
     public function actionLoaditems()
     {
         if (Yii::$app->request->isAjax) {
@@ -296,6 +303,8 @@ class PriorityItemController extends Controller
         }
         return $item;
     }
+
+    // todo remove this method after analysing in case if not in use
     public function actionLoaddatetime()
     {
         if (Yii::$app->request->isAjax) {
@@ -332,6 +341,7 @@ class PriorityItemController extends Controller
         endif;
     }
 
+    // todo remove this method after analysing in case if not in use
     public function actionCheckprioritydate()
     {
         if (Yii::$app->request->isAjax) {

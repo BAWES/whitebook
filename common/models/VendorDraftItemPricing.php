@@ -103,9 +103,16 @@ class VendorDraftItemPricing extends \yii\db\ActiveRecord
     public static function checkprice($item_id,$type_id,$item_price_per_unit)
     {
         $model = VendorDraftItemPricing::find()->where(['item_id'=>$item_id])->all();
-        if(empty($model))
-        {return 0; }
-        else
-        {return 1; }
+        return (empty($model)) ? 0 : 1;
+    }
+
+
+    /**
+     * @inheritdoc
+     * @return query\VendorDraftItemPricingQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\VendorDraftItemPricingQuery(get_called_class());
     }
 }

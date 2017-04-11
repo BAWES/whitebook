@@ -32,6 +32,13 @@ class VendorItemQuery extends \yii\db\ActiveQuery
         return parent::one($db);
     }
 
+    public function joinPackage() {
+        return $this->innerJoin(
+            '{{%vendor_item_to_package}}',
+            '{{%vendor_item_to_package}}.item_id = {{%vendor_item}}.item_id'
+        );
+    }
+
     public function byCategoryID($id)
     {
         return $this->andWhere('{{%vendor_item}}.category_id='.$id);
@@ -83,6 +90,12 @@ class VendorItemQuery extends \yii\db\ActiveQuery
 
     public function currentVendor() {
         return $this->andWhere(['vendor_id'=>Yii::$app->user->getId()]);
+    }
+
+    public function package($id) {
+        return $this->andWhere([
+            '{{%vendor_item_to_package}}.package_id' => $id
+        ]);
     }
 
 }

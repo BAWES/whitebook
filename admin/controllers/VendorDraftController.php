@@ -61,8 +61,8 @@ class VendorDraftController extends Controller
     public function actionView($id)
     {
         $categories = VendorDraftCategory::find()
-            ->innerJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_draft_category}}.category_id')
-            ->where(['vendor_draft_id' => $id])
+            ->joinCategory()
+            ->draft($id)
             ->all();
         
         $phone_nos = VendorDraftPhoneNo::findAll(['vendor_draft_id' => $id]);

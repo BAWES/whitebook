@@ -124,10 +124,10 @@ class Themes extends \yii\db\ActiveRecord
 
     /**
      * @inheritdoc
-     * @return ThemesQuery the active query used by this AR class.
+     * @return query\ThemesQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new \common\models\query\ThemesQuery(get_called_class());
+        return new query\ThemesQuery(get_called_class());
     }
 }

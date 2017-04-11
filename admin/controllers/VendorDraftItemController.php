@@ -96,35 +96,27 @@ class VendorDraftItemController extends Controller
 
         $dataProvider1 = PriorityItem::find()
             ->select(['priority_level','priority_start_date','priority_end_date'])
-            ->where(new \yii\db\Expression('FIND_IN_SET(:item_id, item_id)'))
-            ->addParams([':item_id' => $model->item_id])
+            ->item($model->item_id)
             ->all();
 
         $imagedata = VendorDraftImage::find()
-            ->where('item_id = :id', [':id' => $model->item_id])
+            ->item($model->item_id)
             ->orderby(['vendorimage_sort_order' => SORT_ASC])
             ->all();
 
         $categories = VendorDraftItemToCategory::find()
             ->with('category')
-            ->Where(['item_id' => $model->item_id])
+            ->item($model->item_id)
             ->all();
 
         $price_table = VendorDraftItemPricing::find()
-            ->where(['item_id' => $model->item_id])
+            ->item($model->item_id)
             ->all();
 
         $vendor_item = VendorItem::findOne($model->item_id);
 
-        $arr_menu = VendorDraftItemMenu::findAll([
-            'item_id' => $model->item_id,
-            'menu_type' => 'options'
-        ]);
-
-        $arr_addon_menu = VendorDraftItemMenu::findAll([
-            'item_id' => $model->item_id,
-            'menu_type' => 'addons'
-        ]);
+        $arr_menu = VendorDraftItemMenu::find()->item($model->item_id)->menu('options')->all();
+        $arr_addon_menu = VendorDraftItemMenu::find()->item($model->item_id)->menu('addons')->all();
 
         return $this->render('view', [
             'model' => $model,        

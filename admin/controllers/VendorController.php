@@ -275,12 +275,10 @@ class VendorController extends Controller
         } else {
 
             $main_categories = Category::find()
-                ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-                ->where([
-                    '{{%category_path}}.level' => 0,
-                    'trash' =>'Default'
-                ])
-                ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
+                ->joinCategoryPath()
+                ->topLevel()
+                ->defaultCategories()
+                ->orderByExpression()
                 ->all();
 
             return $this->render('create', [
@@ -431,13 +429,12 @@ class VendorController extends Controller
             $model->category_id = ArrayHelper::map($vendor_category, 'category_id', 'category_id');
 
             $main_categories = Category::find()
-                ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-                ->where([
-                    '{{%category_path}}.level' => 0,
-                    'trash' =>'Default'
-                ])
-                ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
+                ->joinCategoryPath()
+                ->topLevel()
+                ->defaultCategories()
+                ->orderByExpression()
                 ->all();
+
 
             //to prevent password from encrypting encrypted password 
             $model->vendor_password = '';
@@ -558,8 +555,8 @@ class VendorController extends Controller
             $data = Yii::$app->request->post();
         }
         $vendorname = Vendor::find()->select('vendor_name')
-          ->where(['vendor_name' => $data['vendor_name']])
-          ->andwhere(['trash' => 'Default'])
+          ->vendorByName($data['vendor_name'])
+          ->defaultVendor()
           ->all();
         return $result = count($vendorname);
     }
@@ -596,9 +593,7 @@ class VendorController extends Controller
         if(!$vendor_id) {
             $model = new Vendor();         
         } else {
-            $model = Vendor::find()
-                ->where(['vendor_id' => $vendor_id])
-                ->one();
+            $model = Vendor::findOne($vendor_id);
         }
         
         //load posted data to model 
@@ -785,9 +780,7 @@ class VendorController extends Controller
             }                
         } 
         
-        $model = Vendor::find()
-            ->where(['vendor_id' => $vendor_id])
-            ->one();
+        $model = Vendor::findOne($vendor_id);
     
         //load posted data to model 
         $model->load(['Vendor' => $posted_data]);
@@ -835,9 +828,7 @@ class VendorController extends Controller
             }                
         } 
         
-        $model = Vendor::find()
-            ->where(['vendor_id' => $vendor_id])
-            ->one();
+        $model = Vendor::findOne($vendor_id);
     
         //load posted data to model 
         $model->load(['Vendor' => $posted_data]);
@@ -884,9 +875,7 @@ class VendorController extends Controller
             }                
         } 
         
-        $model = Vendor::find()
-            ->where(['vendor_id' => $vendor_id])
-            ->one();
+        $model = Vendor::findOne($vendor_id);
     
         //load posted data to model 
         $model->load(['Vendor' => $posted_data]);

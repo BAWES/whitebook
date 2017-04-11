@@ -66,4 +66,8 @@ class BookingQuery extends \yii\db\ActiveQuery
     public function inactiveBooking() {
         return $this->andWhere(['booking_status'=>0]);
     }
+
+    public function joinVendorPayment() {
+        return $this->leftJoin('{{%vendor_payment}}', '{{%vendor_payment}}.booking_id = {{%booking}}.booking_id');
+    }
 }

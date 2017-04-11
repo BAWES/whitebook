@@ -102,7 +102,8 @@ class LocationController extends Controller
         } else {
 
             $countries = Country::find()
-                ->where(['trash'=>'Default','country_status'=>'Active'])
+                ->defaultCountry()
+                ->active()
                 ->orderBy('country_name')
                 ->all();
 

@@ -90,18 +90,13 @@ class PackageController extends Controller
     public function actionView($id)
     {
         $items = VendorItem::find()
-            ->where(['trash' => 'Default'])
+            ->defaultItems()
             ->all();
 
         $selected_items = VendorItem::find()
-            ->innerJoin(
-                '{{%vendor_item_to_package}}', 
-                '{{%vendor_item_to_package}}.item_id = {{%vendor_item}}.item_id'
-            )
-            ->where([
-                '{{%vendor_item}}.trash' => 'Default',
-                '{{%vendor_item_to_package}}.package_id' => $id
-            ])
+            ->joinPackage()
+            ->defaultItems()
+            ->package($id)
             ->all();
 
         return $this->render('view', [

@@ -112,8 +112,7 @@ class VendorItemController extends Controller
     {
         $dataProvider1 = PriorityItem::find()
             ->select(['priority_level','priority_start_date','priority_end_date'])
-            ->where(new \yii\db\Expression('FIND_IN_SET(:item_id, item_id)'))
-            ->addParams([':item_id' => $id])
+            ->item($id)
             ->all();
 
         $model_question = VendorItemQuestion::find()
@@ -124,24 +123,18 @@ class VendorItemController extends Controller
             ->all();
 
         $imagedata = Image::find()
-            ->where('item_id = :id', [':id' => $id])
+            ->item($id)
             ->orderby(['vendorimage_sort_order' => SORT_ASC])
             ->all();
 
         $categories = VendorItemToCategory::find()
             ->with('category')
-            ->Where(['item_id' => $id])
+            ->item($id)
             ->all();
 
-        $arr_menu = VendorItemMenu::findAll([
-            'item_id' => $id,
-            'menu_type' => 'options'
-        ]);
+        $arr_menu = VendorItemMenu::find()->item($id)->menu('options')->all();
+        $arr_addon_menu = VendorItemMenu::find()->item($id)->menu('addons')->all();
 
-        $arr_addon_menu = VendorItemMenu::findAll([
-            'item_id' => $id,
-            'menu_type' => 'addons'
-        ]);
 
         return $this->render('view', [
             'model' => $this->findModel($id), 
@@ -191,19 +184,15 @@ class VendorItemController extends Controller
 
         //main
         $main_categories = Category::find()
-            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-            ->where([
-                '{{%category}}.trash' => 'Default',
-                '{{%category_path}}.level' => 0
-            ])
+            ->joinCategoryPath()
+            ->defaultCategories()
+            ->topLevel()
             ->all();
 
         $sub_categories = Category::find()
-            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-            ->where([
-                '{{%category}}.trash' => 'Default',
-                '{{%category_path}}.level' => 1
-            ])
+            ->joinCategoryPath()
+            ->defaultCategories()
+            ->categoryPathLevel(1)
             ->all();
 
         $vendors = ArrayHelper::map(Vendor::findAll(['trash' => 'Default']), 'vendor_id', 'vendor_name');
@@ -284,31 +273,25 @@ class VendorItemController extends Controller
 
         //main
         $main_categories = Category::find()
-            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-            ->where([
-                '{{%category}}.trash' => 'Default',
-                '{{%category_path}}.level' => 0
-            ])
+            ->joinCategoryPath()
+            ->defaultCategories()
+            ->categoryPathLevel(0)
             ->all();
 
         $sub_categories = Category::find()
-            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-            ->where([
-                '{{%category}}.trash' => 'Default',
-                '{{%category_path}}.level' => 1
-            ])
+            ->joinCategoryPath()
+            ->defaultCategories()
+            ->categoryPathLevel(1)
             ->all();
 
         //child 
         $item_child_categories = VendorItemToCategory::find()
             ->select('{{%category}}.category_name, {{%category}}.category_id')
-            ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item_to_category}}.category_id')
-            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-            ->where([
-                '{{%category}}.trash' => 'Default',
-                '{{%category_path}}.level' => 2,
-                '{{%vendor_item_to_category}}.item_id' => $model->item_id
-            ])
+            ->joinCategory()
+            ->joinCategoryPath()
+            ->defaultCategory()
+            ->categoryPathLevel(2)
+            ->item($model->item_id)
             ->groupBy('{{%vendor_item_to_category}}.category_id')
             ->all();
 
@@ -424,11 +407,8 @@ class VendorItemController extends Controller
         if($model->load(Yii::$app->request->post()) && $model->save()) 
         {
             //remove old menu and menu items 
-            
-            $old_menues = VendorItemMenu::findALL([
-                'item_id' => $model->item_id,
-                'menu_type' => 'options'
-            ]);
+
+            $old_menues = VendorItemMenu::find()->item($id)->menu('options')->all();
 
             foreach ($old_menues as $key => $value) {
                 VendorItemMenuItem::deleteALL(['menu_id' => $value->menu_id]);
@@ -500,10 +480,7 @@ class VendorItemController extends Controller
             return $this->redirect(['vendor-item/addon-menu-items', 'id' => $id,'_u'=>$_u]);
         }
 
-        $arr_menu = VendorItemMenu::findAll([
-            'item_id' => $id,
-            'menu_type' => 'options'
-        ]);
+        $arr_menu = VendorItemMenu::find()->item($id)->menu('options')->all();
 
         return $this->render('steps/menu-items', [
             'model' => $model,
@@ -524,10 +501,7 @@ class VendorItemController extends Controller
         {           
             //remove old menu and menu items 
 
-            $old_menues = VendorItemMenu::findALL([
-                'item_id' => $model->item_id,
-                'menu_type' => 'addons'
-            ]);
+            $old_menues = VendorItemMenu::find()->item($id)->menu('addons')->all();
 
             foreach ($old_menues as $key => $value) {
                 VendorItemMenuItem::deleteALL(['menu_id' => $value->menu_id]);
@@ -599,10 +573,7 @@ class VendorItemController extends Controller
             return $this->redirect(['vendor-item/item-approval', 'id' => $id,'_u'=>$_u]);
         }
 
-        $arr_addon_menu = VendorItemMenu::findAll([
-            'item_id' => $id,
-            'menu_type' => 'addons'
-        ]);
+        $arr_addon_menu = VendorItemMenu::find()->item($id)->menu('addons')->all();
 
         return $this->render('steps/addon-menu-items', [
             'model' => $model,
@@ -848,7 +819,8 @@ class VendorItemController extends Controller
         $groups = FeatureGroup::loadfeaturegroup();
 
         $themes = Themes::find()
-                    ->where(['theme_status' => 'Active', 'trash' => 'Default'])
+                    ->active()
+                    ->defaultCategory()
                     ->orderBy('theme_name')
                     ->all();
 
@@ -1105,7 +1077,8 @@ class VendorItemController extends Controller
             }
         }
     }
-    
+
+    // todo remove method if not in use
     public function actionGuideimage()
     {
         $base = Yii::$app->basePath;
@@ -1147,6 +1120,7 @@ class VendorItemController extends Controller
         }
     }
 
+    // todo remove method if not in use
     public function actionRenderquestion()
     {
         if (Yii::$app->request->isAjax) {
@@ -1163,6 +1137,7 @@ class VendorItemController extends Controller
         }
     }
 
+    // todo remove method if not in use
     public function actionViewrenderquestion()
     {
         if (Yii::$app->request->isAjax) {
@@ -1179,6 +1154,7 @@ class VendorItemController extends Controller
         }
     }
 
+    // todo remove method if not in use
     public function actionRenderanswer()
     {
         if (Yii::$app->request->isAjax) {
@@ -1237,6 +1213,7 @@ class VendorItemController extends Controller
         return $this->render('gallery');
     }
 
+    // todo remove method if not in use
     public function actionSalesguideimage($id = '')
     {
         $base = Yii::$app->basePath;
@@ -1293,7 +1270,8 @@ class VendorItemController extends Controller
     }
 
         // Delete item type sales image
-    
+
+    // todo remove method if not in use
     public function actionDeletesalesimage()
     {
         $model1 = new Image();
@@ -1310,7 +1288,7 @@ class VendorItemController extends Controller
         }
     }
         // Delete item image
-
+    // todo remove method if not in use
     public function actionDeleteitemimage()
     {
         if (Yii::$app->request->isAjax) {
@@ -1327,7 +1305,7 @@ class VendorItemController extends Controller
             }
         }
     }
-
+    // todo remove method if not in use
     // Delete item type service or rental image
     public function actionDeleteserviceguideimage()
     {
@@ -1345,6 +1323,7 @@ class VendorItemController extends Controller
         }
     }
 
+    // todo remove method if not in use
     public function actionItemnamecheck()
     {
         if (!Yii::$app->request->isAjax) {
