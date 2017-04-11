@@ -60,6 +60,12 @@ class CategoryQuery extends \yii\db\ActiveQuery
         ]);
     }
 
+    public function categoryPathLevel($level) {
+        return $this->andWhere([
+            '{{%category_path}}.level' => $level
+        ]);
+    }
+
     public function topLevelCategory() {
         return $this->andWhere(['category_level' =>0]);
     }

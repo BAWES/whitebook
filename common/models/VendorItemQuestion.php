@@ -86,4 +86,14 @@ class VendorItemQuestion extends \yii\db\ActiveRecord
 
         ];
     }
+
+
+    /**
+     * @inheritdoc
+     * @return query\VendorItemQuestionQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\VendorItemQuestionQuery(get_called_class());
+    }
 }

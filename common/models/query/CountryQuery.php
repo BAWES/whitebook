@@ -1,13 +1,14 @@
 <?php
 
 namespace common\models\query;
+
 use Yii;
 /**
- * This is the ActiveQuery class for [[Themes]].
+ * This is the ActiveQuery class for [[Country]].
  *
  * @see Booking
  */
-class ThemesQuery extends \yii\db\ActiveQuery
+class CountryQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +17,7 @@ class ThemesQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return Themes[]|array
+     * @return Country[]|array
      */
     public function all($db = null)
     {
@@ -25,22 +26,18 @@ class ThemesQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return Themes|array|null
+     * @return Country|array|null
      */
     public function one($db = null)
     {
         return parent::one($db);
     }
 
-    public function theme($id) {
-        return $this->andWhere(['theme_id' => $id]);
+    public function defaultCountry() {
+        return $this->andWhere(['trash'=>'Default']);
     }
 
     public function active() {
-        return $this->andWhere(['theme_status' => 'Active']);
-    }
-
-    public function defaultCategory() {
-        return $this->andWhere(['trash' => 'Default']);
+        return $this->andWhere(['country_status'=>'Active']);
     }
 }

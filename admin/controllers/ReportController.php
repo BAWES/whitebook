@@ -45,7 +45,7 @@ class ReportController extends Controller
         ];
 
         $vendors = Vendor::find()
-            ->where(['trash' => 'Default'])
+            ->defaultVendor()
             ->all();
 
         //result query  
@@ -114,7 +114,7 @@ class ReportController extends Controller
         $vendor_id = Yii::$app->request->get('vendor_id'); 
 
         $query = Booking::find()
-            ->leftJoin('{{%vendor_payment}}', '{{%vendor_payment}}.booking_id = {{%booking}}.booking_id');
+            ->joinVendorPayment();
 
         $implode = [];
 

@@ -3,11 +3,11 @@
 namespace common\models\query;
 use Yii;
 /**
- * This is the ActiveQuery class for [[VendorItem]].
+ * This is the ActiveQuery class for [[VendorDraftItemPricing]].
  *
  * @see Booking
  */
-class VendorItemMenuQuery extends \yii\db\ActiveQuery
+class VendorDraftItemPricingQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +16,7 @@ class VendorItemMenuQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return VendorItem[]|array
+     * @return VendorDraftItemPricing[]|array
      */
     public function all($db = null)
     {
@@ -25,7 +25,7 @@ class VendorItemMenuQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return VendorItem[]|array
+     * @return VendorDraftItemPricing|array|null
      */
     public function one($db = null)
     {
@@ -36,15 +36,4 @@ class VendorItemMenuQuery extends \yii\db\ActiveQuery
         return $this->andWhere(['item_id' => $ID]);
     }
 
-    public function menu($menu_type = 'options') {
-        return $this->andWhere(['menu_type' => $menu_type]);
-    }
-
-    public function optionMenu() {
-        return $this->andWhere(['menu_type' => 'options']);
-    }
-
-    public function addonMenu() {
-        return $this->andWhere(['menu_type' => 'addons']);
-    }
 }

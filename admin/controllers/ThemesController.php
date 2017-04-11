@@ -236,13 +236,9 @@ class ThemesController extends Controller
                 'trash' => 'Default'
             ]);
 
-        $old_theme = Themes::find()
-            ->where(['theme_id' => $old_theme_id])
-            ->one();
+        $old_theme = Themes::findOne($old_theme_id);
 
-        $new_theme = Themes::find()
-            ->where(['theme_id' => $new_theme_id])
-            ->one();
+        $new_theme = Themes::findOne($new_theme_id);
             
         Yii::$app->response->format = 'json';
 
