@@ -775,20 +775,32 @@ class CartController extends BaseController
      * method provide time slots interval between two time slots
      */
     private function slots($startTime = '11:00:00', $endTime = '22:45:00'){
+
         $slots = [];
         if ($startTime && $endTime) {
-            $from = date('h:i A', strtotime($startTime));
+            
+            $from = strtotime($startTime);
             $to ='';
-            while (strtotime($from) < strtotime($endTime)) {
-                $to = strtotime("+30 minutes", strtotime($from));
+
+            if($endTime == '00:00:00') {
+                $endTime = '24:00:00';
+            }
+
+            while ($from < strtotime($endTime)) {
+                
+                $to = strtotime("+30 minutes", $from);
+
                 if ($to > strtotime($endTime)) {
-                    $slots[] = $from;// . '-' . date('H:i:s',strtotime($endTime));
+                    $slots[] = date('h:i A', $from);// . '-' . date('H:i:s',strtotime($endTime));
                     break;
                 }
-                $slots[] = date('h:i A',strtotime($from));// . ' - ' . date('h:i A',$to);
-                $from = date('h:i A',$to);
+
+                $slots[] = date('h:i A', $from);// . ' - ' . date('h:i A',$to);
+                
+                $from = $to;
             }
         }
+
         return $slots;
     }
 }
