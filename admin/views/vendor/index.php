@@ -82,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'login' => function ($url, $model) {
                                 $url = Url::to(['vendor/login-request', 'id' => $model->vendor_id]);
                                 return  Html::a('<span class="fa fa-sign-in"></span>', $url, [
-                                    'title' => Yii::t('app', 'Change Password'), 'data-pjax'=>"0", 'target'=>"_blank",
+                                    'title' => Yii::t('app', 'Login'), 'data-pjax'=>"0", 'target'=>"_blank",
                                 ]);
                             },
                         ],
