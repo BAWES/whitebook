@@ -200,7 +200,7 @@ else
                             if ($menu) {
                                 echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; color: brown; display: none;">'.Yii::t('frontend','Price on selection of menu items').'</span>';
                             }else{
-                                echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; display: none;">'.Yii::t('frontend','Price base on selection').'</span>'; // price warning for 0 amount
+                                echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; display: none;">'.Yii::t('frontend','Price based on selection').'</span>'; // price warning for 0 amount
                             }
 
                             ?>
@@ -986,7 +986,7 @@ else
                                                         {                                                     
                                                             echo CFormatter::format($s['item_base_price']); 
                                                         } else {
-                                                            echo '<span class="small">' . Yii::t('app', 'Price upon request') . '<span>';
+                                                            echo '<span class="small">' . Yii::t('app', 'Price based on selection') . '<span>';
                                                         } ?>
                                                     </p>
                                                 </div>
