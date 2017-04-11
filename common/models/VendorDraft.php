@@ -90,7 +90,7 @@ class VendorDraft extends \yii\db\ActiveRecord
     {
         return [
             [['vendor_id', 'created_by', 'modified_by'], 'integer'],
-            [['vendor_name', 'vendor_contact_number', 'vendor_name_ar', 'vendor_emergency_contact_name', 'vendor_emergency_contact_email', 'vendor_emergency_contact_number', 'vendor_logo_path', 'created_by', 'modified_by', 'created_datetime', 'modified_datetime'], 'required'],
+            [['vendor_name', 'vendor_contact_number', 'vendor_name_ar','vendor_contact_address', 'vendor_emergency_contact_name', 'vendor_emergency_contact_email', 'vendor_emergency_contact_number', 'vendor_logo_path', 'created_by', 'modified_by', 'created_datetime', 'modified_datetime'], 'required'],
             
             [['vendor_return_policy', 'vendor_return_policy_ar', 'vendor_contact_address', 'vendor_contact_address_ar', 'short_description', 'short_description_ar'], 'string'],
             [['created_datetime', 'modified_datetime', 'is_ready'], 'safe'],
