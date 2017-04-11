@@ -17,6 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'I agree on the {a} terms & conditions {/a}' => 'أوافق على {a} البنود والشروط {/a}',
     'Edit' => 'تصحيح',
     'Brief' => 'نبذة',
     'Delivery timeslot not available' => 'وقت التسليم غير متوفر',
