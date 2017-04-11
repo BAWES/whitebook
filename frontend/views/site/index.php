@@ -318,7 +318,7 @@ if (!empty($feature_group_sql_result)) {
                                             } else if (trim($product_val['item_price_per_unit'])) {
                                                 echo CFormatter::format($product_val['item_price_per_unit']);
                                             } else {
-                                                echo '<span class="small">' . Yii::t('app', 'Price upon request') . '<span>';
+                                                echo '<span class="small">' . Yii::t('app', 'Price based on selection') . '<span>';
                                             }
                                             ?>
                                         </p>
