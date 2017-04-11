@@ -243,13 +243,31 @@ use common\models\CustomerCartMenuItem;
     </div>
 </div>
 <?php */ ?>
-<div class="btn-set">
-        <button onclick="address();" class="btn btn-primary btn-checkout pull-left margin-left-0">
+<div class="row checkout-confirm-btn-set">
+
+    <div class="col-sm-4">
+        <button onclick="address();" class="btn btn-primary pull-left margin-left-0">
                 <?= Yii::t('frontend', 'Back') ?>
         </button>
-        <a href="<?= $pg_link ?>" class="btn btn-primary btn-checkout pull-right">
+    </div>
+
+    <div class="col-sm-4 text-center">
+        <div class="checkbox checkbox-inline">    
+            <input type="checkbox" name="agree" value="1" id="chk_agree" />
+            <label for="chk_agree">
+                <?= Yii::t('frontend', 'I agree on the {a} terms & conditions {/a}', [
+                        'a' => '<a target="_blank" href="'.Url::toRoute('/terms-conditions',true).'">', 
+                        '/a' => '</a>'
+                    ]); ?>
+            </label>
+        </div>
+    </div>
+
+    <div class="col-sm-4">
+        <a href="<?= $pg_link ?>" class="btn btn-primary btn-checkout btn-confirm pull-right">
             <?= Yii::t('frontend', 'Confirm Request(s)') ?>
         </a>
+    </div>
 </div>
 <br />
 <br />

@@ -91,7 +91,7 @@ function save_address() {
 			if(data.errors) {
 				
 				$html  = '<div class="alert alert-success">';
-				$html += msg_please_select_address_for_each_items;
+				$html += data.errors;
 				$html += '<button class="close" data-dismiss="alert">&times;</button>';
 				$html += '</div>';
 
@@ -294,6 +294,16 @@ $(document).delegate('.delete-address', 'click', function() {
         });
         return false;
     } else {
+		return false;
+	}
+});
+
+$(document).delegate('.btn-confirm', 'click', function() {
+
+	if($('input[name="agree"]:checked').length > 0) {		
+		return true;
+	}else{
+		$('input[name="agree"]').parent().addClass('error');
 		return false;
 	}
 });
