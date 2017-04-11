@@ -1361,6 +1361,13 @@ div#mobile_search_fail {
 }
 
 @media (max-width: 769px) {
+
+	.checkout-confirm-btn-set .btn,
+	.checkout-confirm-btn-set .checkbox {
+		width: 100%;
+		margin-bottom: 15px;
+	}	
+
     .cart-table .fa-edit {
         position: relative;
         background: black;

@@ -274,13 +274,22 @@ class CheckoutController extends BaseController
 	//save address 
 	public function actionSaveAddress() {
 
-		$json = array();
-
-		Yii::$app->session->set('address_id', Yii::$app->request->post('address_id'));
-
 		Yii::$app->response->format = Response::FORMAT_JSON;
 
-        return $json;
+        $json = array();
+
+        $address_id = Yii::$app->request->post('address_id');
+
+        if(empty($address_id)) 
+        {
+            return [
+                'errors' => Yii::t('frontend', 'Please select address')
+            ];
+        }
+
+		Yii::$app->session->set('address_id', $address_id);
+
+		return $json;
 	}
 
 	//Display form to select payment method 
