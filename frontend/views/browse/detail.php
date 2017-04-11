@@ -200,7 +200,7 @@ else
                             if ($menu) {
                                 echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; color: brown; display: none;">'.Yii::t('frontend','Price on selection of menu items').'</span>';
                             }else{
-                                echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; color: brown; display: none;">'.Yii::t('frontend','Price base on selection').'</span>'; // price warning for 0 amount
+                                echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; display: none;">'.Yii::t('frontend','Price base on selection').'</span>'; // price warning for 0 amount
                             }
 
                             ?>
@@ -336,7 +336,7 @@ else
                                     if ($menu) {
                                         echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; color: brown; display: none;">'.Yii::t('frontend','Price on selection of menu items').'</span>';
                                     }else{
-                                        echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; color: brown; display: none;">'.Yii::t('frontend','Price base on selection').'</span>'; // price warning for 0 amount
+                                        echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; display: none;">'.Yii::t('frontend','Price base on selection').'</span>'; // price warning for 0 amount
                                     }
 
                                     ?>
