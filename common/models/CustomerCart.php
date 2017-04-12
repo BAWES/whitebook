@@ -235,6 +235,12 @@ class CustomerCart extends \yii\db\ActiveRecord
             $time_available = false; 
 
             foreach ($vendor_timeslot as $key => $value) {
+
+                if($value->working_end_time == '00:00:00')
+                {
+                    $value->working_end_time = '24:00:00';   
+                } 
+
                 $start_time = strtotime($value->working_start_time);
                 $end_time = strtotime($value->working_end_time);
 

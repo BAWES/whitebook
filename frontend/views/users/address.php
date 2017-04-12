@@ -201,7 +201,7 @@ $this->registerJs("
         jQuery.ajax({
             type: 'POST',
             url: path, //url to be called
-            data: { address_type_id: address_type_id ,_csrf : csrfToken}, //data to be send
+            data: { hide_area: true, address_type_id: address_type_id, _csrf : csrfToken}, //data to be send
             success: function( data ) {
                  jQuery('.question_wrapper').html(data);
             }
