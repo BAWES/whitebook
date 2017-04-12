@@ -15,6 +15,7 @@ use common\models\CustomerCartMenuItem;
         <?= Yii::t('frontend', 'Please Confirms Booking Requests') ?>
     </h4>
 <hr />
+
 <?php if($items) { ?>
 
 <form method="post" action="<?= Url::to(['cart/update']) ?>" id="cart-form">	
@@ -243,6 +244,7 @@ use common\models\CustomerCartMenuItem;
     </div>
 </div>
 <?php */ ?>
+
 <div class="row checkout-confirm-btn-set">
 
     <div class="col-sm-4">
@@ -269,7 +271,13 @@ use common\models\CustomerCartMenuItem;
         </a>
     </div>
 </div>
+
 <br />
+
+<div style="position: relative;" class="alert alert-info"><?= Yii::t('frontend', 'By confirming you agree to The White Book\'s terms and conditions') ?></div>
+
+<div style="position: relative;" class="alert alert-info"><?= Yii::t('frontend', 'A payment link will be sent to you for your order once your booking is confirmed') ?></div>
+
 <br />
 <br />
 <?php } else { ?>
