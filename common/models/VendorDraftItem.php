@@ -109,9 +109,49 @@ class VendorDraftItem extends \yii\db\ActiveRecord
             [['vendor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Vendor::className(), 'targetAttribute' => ['vendor_id' => 'vendor_id']],
             
             [['type_id'], 'exist', 'skipOnError' => true, 'targetClass' => ItemType::className(), 'targetAttribute' => ['type_id' => 'type_id']],
+
+
+            //MenuItems
+
+            [['allow_special_request', 'have_female_service'], 'number', 'on' => ['MenuItems']],
+
+            //ItemPrice
+
+            [['quantity_label', 'item_price_description','item_price_description_ar', 'item_customization_description', 'item_customization_description_ar'], 'string', 'on' => ['ItemPrice']],
+
+            [['item_default_capacity', 'item_minimum_quantity_to_order'], 'integer', 'on' => ['ItemPrice']],
+
+            [['min_order_amount', 'item_price_per_unit','item_base_price'], 'number', 'on' => ['ItemPrice']],
+
+            [['type_id', 'minimum_increment'], 'integer', 'on' => ['ItemPrice']],
+
+            [['type_id','item_price_per_unit'], 'required', 'on' => ['ItemPrice']],
+
+            //ItemDescription
+
+            [['set_up_time', 'set_up_time_ar', 'max_time', 'max_time_ar', 'requirements','requirements_ar', 'item_how_long_to_make', 'notice_period_type', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'], 'string', 'on' => ['ItemDescription']],
+
+            //ItemInfo
+
+            [['item_name', 'item_name_ar'], 'required', 'on' => ['ItemInfo']]
         ];
     }
 
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+
+        $scenarios['MenuItems'] = ['allow_special_request', 'have_female_service'];
+
+        $scenarios['ItemPrice'] = ['type_id','minimum_increment', 'min_order_amount', 'quantity_label', 'item_default_capacity', 'item_minimum_quantity_to_order', 'item_price_per_unit', 'item_base_price', 'item_price_description', 'item_price_description_ar', 'item_customization_description', 'item_customization_description_ar'];
+
+        $scenarios['ItemDescription'] = ['set_up_time', 'set_up_time_ar', 'max_time', 'max_time_ar', 'requirements', 'requirements_ar', 'item_how_long_to_make', 'notice_period_type', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'];
+
+        $scenarios['ItemInfo'] = ['item_name', 'item_name_ar', 'item_status'];
+
+        return $scenarios;
+    }
+    
     /**
      * @inheritdoc
      */

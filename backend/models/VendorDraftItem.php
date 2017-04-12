@@ -114,7 +114,7 @@ class VendorDraftItem extends \common\models\VendorDraftItem
         $draft = new \common\models\VendorDraftItem();
         $draft->attributes = $model->attributes;
         $draft->item_approved = 'Pending';
-        $draft->save();
+        $draft->save(false);
 
         //copy draft related data
 
