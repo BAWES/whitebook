@@ -103,31 +103,27 @@ $themes = \common\models\Themes::find()->where(['!=', 'theme_status', 'Deactive'
                     <span class="add-on position_news"> <i class="flaticon-calendar189"></i></span>
                 </div>
             </div>
-            <div class="col-lg-3 col-sm-3 col-md-3" id="event-time">
+            <div class="col-lg-3 col-sm-3 col-md-3">
                 <select id="event_time" name="event_time" class="selectpicker" data-live-search="false" data-size="10" data-placeholder="">
-                    <option value="" class="label"><?= Yii::t('frontend', 'Event Time') ?></option>
-                    <optgroup label="am">                        
-                        <?php foreach ($arr_time as $key => $value) {
-                            if($value.' AM' == $event_time) 
-                                $selected = 'selected'; 
-                            else
-                                $selected = ''; ?>
-                            <option value="<?= $value ?> AM" data-content="<?= $value ?> <span>am</span>" <?= $selected ?>> 
-                                <?= $value ?>
-                            </option>
-                        <?php } ?>
-                    </optgroup>
-                    <optgroup label="pm">                        
-                        <?php foreach ($arr_time as $key => $value) { 
-                            if($value.' PM' == $event_time) 
-                                $selected = 'selected'; 
-                            else
-                                $selected = ''; ?>
-                            <option value="<?= $value ?> PM" <?= $selected ?> data-content="<?= $value ?> <span>pm</span>">
-                                <?= $value ?>
-                            </option>
-                        <?php } ?>
-                    </optgroup>
+                    <option value=""><?= Yii::t('frontend', 'Event Time') ?></option>
+                    <?php foreach ($arr_time as $key => $value) {
+                        if($value.' AM' == $event_time) 
+                            $selected = 'selected'; 
+                        else
+                            $selected = ''; ?>
+                        <option value="<?= $value ?> AM" <?= $selected ?>> 
+                            <?= $value ?> AM
+                        </option>
+                    <?php } ?>
+                    <?php foreach ($arr_time as $key => $value) { 
+                        if($value.' PM' == $event_time) 
+                            $selected = 'selected'; 
+                        else
+                            $selected = ''; ?>
+                        <option value="<?= $value ?> PM" <?= $selected ?>>
+                            <?= $value ?> PM
+                        </option>
+                    <?php } ?>
                 </select>
             </div>
             <div class="col-lg-1 col-sm-1 col-md-1 width-5-percent padding-right-0">
