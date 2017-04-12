@@ -5,31 +5,37 @@ use frontend\models\Customer;
 
 //get area from item in cart 
 
-$query = CustomerCart::find();
+$hide_area = Yii::$app->request->post('hide_area');
 
-if (Yii::$app->user->getId()) {
-    $query->andWhere(['{{%customer_cart}}.customer_id' => Yii::$app->user->getId()]);
-} else {
-    $query->andWhere(['{{%customer_cart}}.cart_session_id' => Customer::currentUser()]);
-}
+if(!$hide_area) { 
 
-$area = $query->one()->area;
+	$query = CustomerCart::find();
 
-//get area name 
+	if (Yii::$app->user->getId()) {
+	    $query->andWhere(['{{%customer_cart}}.customer_id' => Yii::$app->user->getId()]);
+	} else {
+	    $query->andWhere(['{{%customer_cart}}.cart_session_id' => Customer::currentUser()]);
+	}
 
-if(Yii::$app->language == 'en')
-{
-	$area_name = $area->location;
-}
-else
-{
-	$area_name = $area->location_ar;
+	$area = $query->one()->area;
+
+	//get area name 
+
+	if(Yii::$app->language == 'en')
+	{
+		$area_name = $area->location;
+	}
+	else
+	{
+		$area_name = $area->location_ar;
+	}
 }
 
 ?>
 
 <div class="row">
 
+<?php if(!$hide_area) { ?>
 <div class="col-md-6">
 	<div class="form-group">
 		<label><?=Yii::t('frontend', 'Area'); ?></label>
@@ -38,6 +44,7 @@ else
 		</div>  
 	</div>
 </div>
+<?php } ?>
 
 <?php foreach($questions as $question) { 
 
