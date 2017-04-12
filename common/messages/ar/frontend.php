@@ -17,6 +17,8 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'A payment link will be sent to you for your order once your booking is confirmed' => 'سيتم إرسال رابط الدفع لك لطلبك بمجرد تأكيد الحجز',
+    'By confirming you agree to The White Book\'s terms and conditions' => 'بتأكيد موافقتك على شروط وأحكام الكتاب الأبيض',
     'I agree on the {a} terms & conditions {/a}' => 'أوافق على {a} البنود والشروط {/a}',
     'Edit' => 'تصحيح',
     'Brief' => 'نبذة',
