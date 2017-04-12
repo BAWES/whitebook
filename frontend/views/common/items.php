@@ -146,6 +146,13 @@ if (!empty($items->getModels())) {
                                 echo CFormatter::format($value['item_base_price']);
                             //} else if (trim($value['item_price_per_unit'])) {
                             //    echo CFormatter::format($value['item_price_per_unit']);
+                            } else if($value['min_order_amount'] > 0) {
+
+
+                                echo '<span class="small">' . Yii::t('frontend','Min. order amount : {amount}', [
+                                    'amount' => CFormatter::format($value['min_order_amount'])
+                                ]) . '<span>';
+
                             } else {
                                 echo '<span class="small">' . Yii::t('app', 'Price based on selection') . '<span>';
                             }
