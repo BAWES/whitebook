@@ -210,6 +210,15 @@ return [
                         'OPTIONS' => 'options'
                     ]
                 ],
+                [ // ThemeController
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/theme',
+                    'patterns' => [
+                        'GET' => 'list',
+                        // OPTIONS VERBS
+                        'OPTIONS' => 'options'
+                    ]
+                ],
             ],
         ],
         'log' => [
