@@ -69,7 +69,7 @@ class ThemeController extends Controller
     public function actionList()
     {
         $query = Themes::find()
-            ->active()
+            ->active();
 
         return new ActiveDataProvider([
             'query' => $query

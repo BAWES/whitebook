@@ -69,7 +69,7 @@ class PackageController extends Controller
     public function actionList()
     {
         $query = Package::find()
-            ->active()
+            ->active();
 
         return new ActiveDataProvider([
             'query' => $query
