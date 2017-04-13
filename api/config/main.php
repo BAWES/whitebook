@@ -201,6 +201,15 @@ return [
                         'OPTIONS detail' => 'options',
                     ]
                 ],
+                [ // PackageController
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/package',
+                    'patterns' => [
+                        'GET' => 'list',
+                        // OPTIONS VERBS
+                        'OPTIONS' => 'options'
+                    ]
+                ],
             ],
         ],
         'log' => [
