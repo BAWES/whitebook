@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\helpers\Url;
+use yii\data\ArrayDataProvider;
 use common\models\Events;
 use common\models\Package;
 use common\models\EventItemlink;
@@ -48,26 +49,47 @@ class PackagesController extends BaseController
             ->orderByExpression()
             ->all();
 
-        if(Yii::$app->user->isGuest) 
-        {
-            $wishlist_item_ids = [];
-            $customer_events = [];
-        } 
-        else 
-        {
-            $wishlist = Users::get_customer_wishlist_details(Yii::$app->user->getId());
-            $wishlist_item_ids = \yii\helpers\ArrayHelper::getColumn($wishlist, 'item_id'); 
-            
-            $customer_events = Events::find()
-                ->where(['customer_id' => Yii::$app->user->identity->customer_id])
-                ->all();            
+        if (Yii::$app->user->isGuest) {
+            $customer_events_list = [];
+        } else {
+            $usermodel = new Users();
+            $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->id);
         }
+
+        $items = VendorItemToPackage::find()
+                ->select(['{{%vendor}}.vendor_name', '{{%vendor}}.vendor_name_ar', '{{%vendor_item}}.*'
+                ])
+                ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%vendor_item_to_package}}.item_id')
+                ->leftJoin(
+                    '{{%vendor_item_to_category}}', 
+                    '{{%vendor_item_to_category}}.item_id = {{%vendor_item}}.item_id'
+                )
+                ->leftJoin(
+                    '{{%category_path}}', 
+                    '{{%category_path}}.category_id = {{%vendor_item_to_category}}.category_id'
+                )
+                ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
+                ->where([
+                    '{{%vendor_item}}.item_status' => 'Active',
+                    '{{%vendor_item}}.trash' => 'Default',
+                    '{{%vendor_item_to_package}}.package_id' => $package->package_id
+                ])
+                ->groupBy('{{%vendor_item_to_package}}.item_id')
+                ->asArray()
+                ->all();
+
+        $provider = new ArrayDataProvider([
+            'allModels' => $items,
+            'pagination' => [
+                'pageSize' => 500,// as we will not have pagination in package detail page 
+            ],
+        ]);
 
         return $this->render('detail', [
             'package' => $package,
             'categories' => $categories,
-            'wishlist_item_ids' => $wishlist_item_ids,
-            'customer_events' => $customer_events
+            'customer_events' => $customer_events_list,
+            'provider' => $provider
         ]);
     }
 
