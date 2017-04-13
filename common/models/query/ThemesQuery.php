@@ -37,7 +37,10 @@ class ThemesQuery extends \yii\db\ActiveQuery
     }
 
     public function active() {
-        return $this->andWhere(['theme_status' => 'Active']);
+        return $this->andWhere([
+                'theme_status' => 'Active',
+                'trash' => 'Default'
+            ]);
     }
 
     public function defaultCategory() {
