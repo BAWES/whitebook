@@ -284,6 +284,15 @@ class VendorItem extends \yii\db\ActiveRecord
         return $this->hasMany(VendorItemThemes::className(), ['item_id' => 'item_id']);
     }
 
+
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+    public function getItemQuestions()
+    {
+        return $this->hasMany(VendorItemQuestion::className(), ['item_id' => 'item_id']);
+    }
+
     public static function vendoritemcount($vid = '')
     {
         if(!$vid) {

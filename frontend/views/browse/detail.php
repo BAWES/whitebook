@@ -73,14 +73,15 @@ if($cart)
 {
     $quantity = $cart->cart_quantity;
     $txt_cart_btn = Yii::t('frontend', 'Update Cart');
-    $cart_url = Yii::$app->urlManager->createAbsoluteUrl('cart/update-cart-item');   
+    $cart_url = Yii::$app->urlManager->createAbsoluteUrl('cart/update-cart-item');
+    echo Html::hiddenInput('update_cart', 1, ['id' => 'update_cart']);
 }
 else
 {
     $txt_cart_btn = Yii::t('frontend', 'Add To Cart');
     $cart_url = Yii::$app->urlManager->createAbsoluteUrl('cart/add');
+    echo Html::hiddenInput('update_cart', 0, ['id' => 'update_cart']);
 }
-
 ?>
 
 <script type="application/ld+json">
@@ -874,6 +875,50 @@ else
                                           </div>
                                         </div>
                                     </div><!-- END .panel -->
+                                    <?php } ?>
+
+                                    <?php if($model->itemQuestions) { ?>
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse"  aria-expanded="true" href="#collapse-customs">
+                                                        <?= Yii::t('frontend', 'Customs') ?>
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapse-customs" class="panel-collapse collapse in">
+                                                <div class="panel-body">
+                                                    <div class="menu-item-detail">
+                                                        <?php foreach ($model->itemQuestions as $key => $question) {
+                                                            $answer = '';
+                                                            if ($cart) {
+                                                                $answerData = \common\models\CustomerCartItemQuestionAnswer::findOne(
+                                                                        [
+                                                                                'question_id'=>$question->item_question_id,
+                                                                                'item_id' => $cart->item_id,
+                                                                                'cart_id' => $cart->cart_id
+                                                                        ]);
+                                                                if ($answerData) {
+                                                                    $answer = $answerData->answer;
+                                                                }
+                                                            }
+
+                                                            ?>
+                                                            <div class="row margin-bottom-10" style="margin-bottom: 20px">
+                                                                <div class="col-lg-12 col-md-12 question">
+                                                                    <span style="text-transform: capitalize"><?=$question->question?></span> <?=($question->required) ? '<span style="color: brown;">*</span>' : '';?>
+                                                                </div>
+                                                                <div class="col-lg-12 col-md-12 answer">
+                                                                    <input type="text" name="answer[<?=$question->item_question_id?>]" id="answer-<?=$question->item_question_id?>" class="form-control input-lg" value="<?=$answer ?>"/>
+                                                                </div>
+                                                                <span class="col-lg-12 col-md-12 error question-<?=$question->item_question_id?>"></span>
+                                                            </div>
+
+                                                        <?php } ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- END .panel -->
                                     <?php } ?>
 
                                     <?php if($model->allow_special_request) { ?>

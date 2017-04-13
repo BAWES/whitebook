@@ -147,7 +147,7 @@ use common\components\CFormatter;
 
 	                    if($menu_addon_items)
                         {
-                        	echo '<div class="clearfix"></div><b>Add-Ons</b>';
+                        	echo '<div class="clearfix"></div><b>Add-Ons</b><br/>';
                         }
 
                         foreach ($menu_addon_items as $key => $menu_item) { 
@@ -161,8 +161,21 @@ use common\components\CFormatter;
                             }
                             
                             echo '</i>';
-	                    } 
-	                    
+	                    }
+
+
+                        if($booking->bookingItemAnswers)
+                        {
+                            echo '<div class="clearfix"></div><b>Custom</b><br/>';
+
+                            $q =1;
+                            foreach($booking->bookingItemAnswers as $answer) {
+                                echo "Question $q: <i>".$answer->question.'</i>';
+                                echo "<br/>answer $q: <i>".$answer->answer.'</i><br/>';
+                                $q++;
+                            }
+                        }
+
                         if($item['female_service']) {
                             echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.Yii::t('frontend', 'Female service').'</i>';
                         }

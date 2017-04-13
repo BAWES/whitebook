@@ -112,6 +112,10 @@ class CustomerCart extends \yii\db\ActiveRecord
         return $this->hasOne(Image::className(), ['item_id' => 'item_id']);
     }
 
+    public function getItemAnswers() {
+        return $this->hasOne(CustomerCartItemQuestionAnswer::className(), ['cart_id' => 'cart_id']);
+    }
+
     public function validate_item($data, $valid_for_cart_item = false) {
 
         $data['area_id'] = Yii::$app->session->get('deliver-location');
@@ -452,6 +456,16 @@ class CustomerCart extends \yii\db\ActiveRecord
                         'menu_name' => $menu_name
                     ]
                 );
+            }
+        }
+
+        $vendorQuestion = VendorItemQuestion::findAll(['item_id'=>$data['item_id'], 'required'=>1]);
+        if ($vendorQuestion) {
+            foreach($vendorQuestion as $question) {
+                  if (isset($data['answer'][$question->item_question_id]) && $data['answer'][$question->item_question_id] == "") {
+                    $errors['question-'.$question->item_question_id][] =
+                        Yii::t('frontend', 'Please provide detail of above question');
+                }
             }
         }
 

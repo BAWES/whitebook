@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\CustomerCartItemQuestionAnswer;
 use Yii;
 use yii\web\Response;
 use yii\filters\AccessControl;
@@ -188,9 +189,27 @@ class CartController extends BaseController
                         }
                     }
 
+                    CustomerCartItemQuestionAnswer::deleteAll(['cart_id' => $cart->cart_id,'item_id'=>$data['item_id']]);
+
+                    if (isset($data['answer'])) {
+                        // add answers
+                        foreach ($data['answer'] as $key => $answer) {
+                            if (!empty($answer)) {
+                                $cartItemAnswers = new CustomerCartItemQuestionAnswer();
+                                $cartItemAnswers->question_id = $key;
+                                $cartItemAnswers->answer = $answer;
+                                $cartItemAnswers->cart_id = $cart->cart_id;
+                                $cartItemAnswers->item_id = $data['item_id'];
+                                $cartItemAnswers->created_datetime = date('Y-m-d H:i:s');
+                                $cartItemAnswers->modified_datetime = date('Y-m-d H:i:s');
+                                $cartItemAnswers->save(false);
+                            }
+                        }
+                    }
+
                     Yii::$app->getSession()->setFlash('success', Yii::t(
                         'frontend',
-                        'Success: Product <a href="{product_link}">{product_name}</a> added to cart!',
+                        'Success: Product <a href="{product_link}">{product_name}</a> updated in cart successfully',
                         [
                             'product_link' => Url::to(['browse/detail', 'slug' => $cart->item->slug]),
                             'product_name' => Yii::$app->language == 'en'? $cart->item->item_name : $cart->item->item_name_ar
@@ -363,7 +382,23 @@ class CartController extends BaseController
                     $cart_menu_item->save(); 
                 }
             }
-            
+
+            if (isset($data['answer'])) {
+                // add answers
+                foreach ($data['answer'] as $key => $value) {
+                    if (!empty($value)) {
+                        $cartItemAnswers = new CustomerCartItemQuestionAnswer();
+                        $cartItemAnswers->question_id = $key;
+                        $cartItemAnswers->answer = $value;
+                        $cartItemAnswers->cart_id = $cart->cart_id;
+                        $cartItemAnswers->item_id = $data['item_id'];
+                        $cartItemAnswers->created_datetime = date('Y-m-d H:i:s');
+                        $cartItemAnswers->modified_datetime = date('Y-m-d H:i:s');
+                        $cartItemAnswers->save(false);
+                    }
+                }
+            }
+
             if(!empty($data['female_service'])) {
                 $cart->female_service = $data['female_service'];
             }

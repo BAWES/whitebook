@@ -421,7 +421,8 @@ function productAvailability(date){
                 return false;
 
             } else {
-                $('.buy_events .button-signin button').html('ADD TO CART');
+                var cartbtnTitle = ($('#update_cart').val() == 1 ) ? 'Update Cart' : 'ADD TO CART';
+                $('.buy_events .button-signin button').html(cartbtnTitle);
                 if (json['price'] == 0) {
                     $('.buy_events .button-signin button').attr('disabled',true);
                     $('.small.price_warning').show();
