@@ -60,6 +60,11 @@ $this->params['breadcrumbs'][] = 'Update';
 	    		Images
 	    	</a>
 	    </li>
+        <li>
+            <a href="<?= Url::to(['vendor-item/item-questions', 'id' => $model->item_id]) ?>">
+                <?=Yii::t('app','Questions')?>
+            </a>
+        </li>
 	    <li>
 	    	<a href="<?= Url::to(['vendor-item/item-themes-groups', 'id' => $model->item_id]) ?>">
 	    		Other

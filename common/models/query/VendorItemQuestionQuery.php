@@ -32,7 +32,7 @@ class VendorItemQuestionQuery extends \yii\db\ActiveQuery
         return parent::one($db);
     }
 
-    public function item() {
-
+    public function item($id) {
+        return $this->andWhere(['item_id'=>$id]);
     }
 }

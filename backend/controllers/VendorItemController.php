@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\VendorDraftItemQuestion;
 use Yii;
 use yii\base\Model;
 use yii\helpers\VarDumper;
@@ -126,13 +127,13 @@ class VendorItemController extends Controller
         {
             $model = $this->findModel($id);
 
-            $imagedata = Image::find()->itemID($model->item_id)->orderby(['vendorimage_sort_order' => SORT_ASC])->all();
+            $imagedata = Image::find()->item($model->item_id)->orderby(['vendorimage_sort_order' => SORT_ASC])->all();
 
             $price_values= VendorItemPricing::loadpricevalues($model->item_id);
 
             $categories = VendorItemToCategory::find()
                 ->with('category')
-                ->Where(['item_id' => $model->item_id])
+                ->where(['item_id' => $model->item_id])
                 ->all();
 
             $arr_menu = VendorItemMenu::find()->item($id)->menu('options')->all();
@@ -140,7 +141,7 @@ class VendorItemController extends Controller
         }
         
         $item_type = ItemType::itemtypename($model->type_id);
-
+        $questions = VendorItemQuestion::findAll(['item_id' => $model->item_id]);
         return $this->render('view', [
             'model' => $model,
             'arr_menu' => $arr_menu,
@@ -150,6 +151,7 @@ class VendorItemController extends Controller
             'price_values' => $price_values,
             'dataProvider1' => $dataProvider1,
             'imagedata' => $imagedata,
+            'questions' => $questions,
         ]);
     }
 
@@ -605,7 +607,7 @@ class VendorItemController extends Controller
                 return $this->redirect(['index']);    
             }            
 
-            return $this->redirect(['vendor-item/item-images', 'id' => $id]);
+            return $this->redirect(['vendor-item/item-questions', 'id' => $id]);
         }
 
         $arr_addon_menu = VendorDraftItemMenu::findAll([
@@ -690,7 +692,7 @@ class VendorItemController extends Controller
         PriorityItem::deleteAll(['item_id' => $id]);
         EventItemlink::deleteAll(['item_id' => $id]);
         FeatureGroupItem::deleteAll(['item_id' => $id]);
-
+        VendorItemQuestion::deleteAll(['item_id' => $id]);
         //menu 
 
         $menues = VendorItemMenu::findAll(['item_id' => $id]);
@@ -955,5 +957,66 @@ class VendorItemController extends Controller
         ]);
 
         return $this->render('inventory',['provider'=>$provider,'date'=>$date,'item_id'=>$item_id]);
+    }
+
+    public function actionItemQuestions($id)
+    {
+        $model = VendorDraftItemQuestion::find()->item($id)->all();
+
+        if(!$model)
+        {
+            $model = VendorDraftItemQuestion::create_from_item($id);
+        }
+
+        if(Yii::$app->request->isPost) {
+
+            VendorDraftItemQuestion::deleteAll(['item_id' => $id]);
+            if (Yii::$app->request->post('VendorDraftItemQuestion')) {
+                foreach (Yii::$app->request->post('VendorDraftItemQuestion') as $question) {
+
+                    if ($question['question'] && !empty($question['question'])) {
+                        $modelQuestion = new VendorDraftItemQuestion;
+                        $modelQuestion->item_id = $id;
+                        $modelQuestion->question = $question['question'];
+                        $modelQuestion->required = $question['required'];
+                        $modelQuestion->created_datetime = date('Y-m-d H:i:s');
+                        $modelQuestion->modified_datetime = date('Y-m-d H:i:s');
+                        $modelQuestion->trash = 'Default';
+                        $modelQuestion->save(false);
+                    }
+                }
+            }
+
+            $complete = Yii::$app->request->post('complete');
+
+            if($complete) {
+
+                //to make draft visible to admin
+                $modelDraft = VendorDraftItem::findOne(['item_id'=>$id]);
+                $modelDraft->is_ready = 1;
+                $modelDraft->item_approved = 'Pending';
+                $modelDraft->save();
+
+                VendorItem::notifyAdmin($id);
+
+                Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
+
+                Yii::info('[Item Updated] Vendor updated ' . addslashes($modelDraft->item_name) . ' item information', __METHOD__);
+
+                return $this->redirect(['index']);
+            }
+
+            return $this->redirect(['vendor-item/item-images', 'id' => $id]);
+        }
+
+        $model = VendorDraftItemQuestion::find()->item($id)->all();
+        if (!$model) {
+            $model = new VendorDraftItemQuestion();
+        }
+
+        return $this->render('steps/item-questions', [
+            'item_id' => $id,
+            'model' => $model,
+        ]);
     }
 }
