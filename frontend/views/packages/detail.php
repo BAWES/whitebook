@@ -21,12 +21,12 @@ use common\components\CFormatter;
 
 	    <div class="package_description">
 		    <div class="row">
-			    <div class="col-lg-4">
+			    <div class="col-lg-6">
 			    	<div class="thumbnail">
 			    		<img src="<?= Url::to("@s3/".$package->package_background_image); ?>" alt="<?= $package->package_name ?>" />
 			    	</div>
 				</div>
-				<div class="col-lg-8">
+				<div class="col-lg-6">
 
 					<?php  /*
 
