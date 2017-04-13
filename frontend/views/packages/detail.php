@@ -28,6 +28,8 @@ use common\components\CFormatter;
 				</div>
 				<div class="col-lg-8">
 
+					<?php  /*
+
 				    <div class="event_form_wrapper">
 				    	<form class="form-inline">
 						    <fieldset>
@@ -72,6 +74,8 @@ use common\components\CFormatter;
 				    </div><!-- END .event_form_wrapper -->
 
 				    <hr />
+
+					*/ ?>
 
 			    	<p>
 					    <?php if(Yii::$app->language == 'en') { ?>
