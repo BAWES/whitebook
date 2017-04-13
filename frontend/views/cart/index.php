@@ -281,7 +281,18 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 		        				//get distinct menu_id 
 
 		        				$arr_menu_id[$menu_item['menu_id']] = $menu_item['menu_id'];
-		        			} 
+		        			}
+                            $questionAnswers = \common\models\CustomerCartItemQuestionAnswer::getCartQuestionAnswer($item['cart_id']);
+                            if($questionAnswers)
+                            {
+                                echo '<b>'.Yii::t('frontend', 'Customs').'</b><br />';
+                                $q =1;
+                                foreach($questionAnswers as $answer) {
+                                    echo "<b>Question $q: </b>".$answer->question->question;
+                                    echo "<br/><b>answer $q: </b>".$answer->answer.'<br/>';
+                                    $q++;
+                                }
+                            }
 
 	                        if($item['female_service']) {
 	                            echo '<i class="cart_menu_item">'.Yii::t('frontend', 'Female service').'</i>';

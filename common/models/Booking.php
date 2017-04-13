@@ -176,6 +176,11 @@ class Booking extends \yii\db\ActiveRecord
         return $this->hasMany(BookingItem::className(), ['booking_id' => 'booking_id']);
     }
 
+    public function getBookingItemAnswers()
+    {
+        return $this->hasMany(BookingItemAnswers::className(), ['booking_id' => 'booking_id']);
+    }
+
     public function beforeSave($insert)
     {
         if (!parent::beforeSave($insert)) {
@@ -398,6 +403,8 @@ class Booking extends \yii\db\ActiveRecord
             $arr_booking[] = $booking;
 
             $arr_booking_id[] = $booking->booking_id;
+
+            BookingItemAnswers::saveItemAnswers($item['cart_id'],$booking->booking_id); //Saving cart item answer
         }
 
         Booking::sendNewBookingEmails($arr_booking);
