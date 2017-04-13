@@ -22,7 +22,8 @@ $this->params['breadcrumbs'][] = $this->title;
             <li><a href="#4" data-toggle="tab">Priority Log</a></li>
             <li><a href="#5" data-toggle="tab">Options</a></li>
             <li><a href="#6" data-toggle="tab">Addons</a></li>
-            <li><a href="#7" data-toggle="tab">Gallery</a></li>
+            <li><a href="#7" data-toggle="tab">Questions</a></li>
+            <li><a href="#8" data-toggle="tab">Gallery</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane" id="1" >
@@ -269,6 +270,22 @@ $this->params['breadcrumbs'][] = $this->title;
                 </ul>
             </div>
             <div class="tab-pane" id="7" >
+                <table class="table table-striped table-bordered detail-view">
+                    <tbody>
+                        <?php if ($questions) {
+                                $i=1;
+                                foreach ($questions as $question) { ?>
+                                    <tr><th>Question <?=$i?></th><td><?=$question->question?></td></tr>
+                                <?php
+                                $i++;
+                                }
+                            } else { ?>
+                            <tr><td colspan="2" align="center">No Question Found</td></tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane" id="8" >
                 <ul class="row">
                     <?php
                     if ($imagedata) {

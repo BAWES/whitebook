@@ -3,90 +3,56 @@
 namespace common\models;
 
 use Yii;
-use yii\db\ActiveRecord;
-use yii\behaviors\SluggableBehavior;
-use yii\behaviors\BlameableBehavior;
-use yii\behaviors\TimestampBehavior;
-use yii\db\Expression;
+
 /**
-* This is the model class for table "{{%vendor_item_question}}".
-*
-* @property string $question_id
-* @property string $item_id
-* @property string $answer_id
-* @property string $question_text
-* @property string $question_answer_type
-* @property integer $question_max_characters
-* @property integer $question_sort_order
-* @property string $question_archived
-* @property integer $created_by
-* @property integer $modified_by
-* @property string $created_datetime
-* @property string $modified_datetime
-* @property string $trash
-*/
+ * This is the model class for table "{{%vendor_item_question}}".
+ *
+ * @property integer $item_question_id
+ * @property integer $item_id
+ * @property string $question
+ * @property integer $required
+ * @property string $created_datetime
+ * @property string $modified_datetime
+ * @property string $trash
+ */
 class VendorItemQuestion extends \yii\db\ActiveRecord
 {
     /**
-    * @inheritdoc
-    */
+     * @inheritdoc
+     */
     public static function tableName()
     {
         return '{{%vendor_item_question}}';
     }
 
     /**
-    * @inheritdoc
-    */
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
-            [['question_text','question_answer_type',], 'required'],
-            [['question_max_characters','question_sort_order', 'created_by', 'modified_by'], 'integer'],
-            [['question_answer_type','guide_caption', 'trash'], 'string'],
-            [['answer_id','guide_caption','item_id','question_answer_type','question_max_characters', 'question_sort_order','created_by', 'modified_by', 'created_datetime', 'modified_datetime'], 'safe'],
-            [['question_text'], 'string', 'max' => 256]
+            [['item_id'], 'required'],
+            [['item_id', 'required'], 'integer'],
+            [['question', 'trash'], 'string'],
+            [['created_datetime', 'modified_datetime'], 'safe'],
         ];
     }
 
-
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => BlameableBehavior::className(),
-                'createdByAttribute' => 'created_by',
-                'updatedByAttribute' => 'modified_by',
-            ],
-            [
-                'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => 'created_datetime',
-                'updatedAtAttribute' => 'modified_datetime',
-                'value' => new Expression('NOW()'),
-            ],
-        ];
-    }
     /**
-    * @inheritdoc
-    */
+     * @inheritdoc
+     */
     public function attributeLabels()
     {
         return [
-            'question_id' => 'Question',
-            'item_id' => 'Item ',
-            'question_text' => 'Question Text',
-            'question_answer_type' => 'Question Type',
-            'question_max_characters' => 'Answer Max Characters',
-            'question_sort_order' => 'Question Sort Order',
-            'created_by' => 'Created By',
-            'modified_by' => 'Modified By',
-            'created_datetime' => 'Created Datetime',
-            'modified_datetime' => 'Modified Datetime',
-            'trash' => 'Trash',
-
+            'item_question_id' => Yii::t('app', 'Item Question ID'),
+            'item_id' => Yii::t('app', 'Item ID'),
+            'question' => Yii::t('app', 'Question'),
+            'required' => Yii::t('app', 'Required'),
+            'created_datetime' => Yii::t('app', 'Created Datetime'),
+            'modified_datetime' => Yii::t('app', 'Modified Datetime'),
+            'trash' => Yii::t('app', 'Trash'),
         ];
     }
-
 
     /**
      * @inheritdoc

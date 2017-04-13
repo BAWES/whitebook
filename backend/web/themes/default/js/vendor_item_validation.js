@@ -1,5 +1,6 @@
 var addon_menu_count = $('#addon_menu_count').val();
 var menu_count = $('#menu_count').val();
+var question_count = $('#question_count').val();
 
 var imagedata = $('#imagedata').val();
 var img  = $('#img').val();
@@ -651,4 +652,69 @@ $(document).delegate('.btn-add-addon-menu-item', 'click', function(){
 	$(this).parents('table').find('tbody').append($html);
 
 	addon_menu_count++;
+});
+
+
+
+$(document).delegate('.btn-add-addon-menu-item', 'click', function(){
+
+    $html  = '<tr>';
+    $html += '	<td>';
+    $html += '		<input placeholder="Name" name="addon_menu_item['+addon_menu_count+'][menu_item_name]" value="" class="txt_menu_item_name form-control" /></td>';
+    $html += '	<td>';
+    $html += '		<input placeholder="Name - Arabic" name="addon_menu_item['+addon_menu_count+'][menu_item_name_ar]" value="" class="txt_menu_item_name_ar form-control" /></td>';
+
+    $html += '	<td>';
+    $html += '		<input placeholder="Price" name="addon_menu_item['+addon_menu_count+'][price]" value="" class="txt_price form-control" />';
+    $html += '	</td>';
+
+    $html += '	<td>';
+    $html += '		<input placeholder="Hint" name="addon_menu_item['+addon_menu_count+'][hint]" value="" class="txt_hint form-control" />';
+    $html += '	</td>';
+
+    $html += '	<td>';
+    $html += '		<input placeholder="Hint - Ar" name="addon_menu_item['+addon_menu_count+'][hint_ar]" value="" class="txt_hint_ar form-control" />';
+    $html += '	</td>';
+
+    $html += '	<td>';
+    $html += '		<button type="button" class="btn btn-danger btn-remove-menu-item">';
+    $html += '			<i class="fa fa-trash-o"></i>';
+    $html += '		</button>';
+    $html += '	</td>';
+    $html += '</tr>';
+
+    $(this).parents('table').find('tbody').append($html);
+
+    addon_menu_count++;
+});
+
+
+
+$('.btn-add-question').click(function(){
+
+    var html = '';
+    html += '<div class="clearfix question question-1 margin-top-10">';
+    html += '    <div class=" col-md-9">';
+    html += '    	<div class="control-label margin-top-10">Question '+question_count+'</div>';
+    html += '			<input type="text" id="question-<?=$question_count?>" class="form-control" name="VendorDraftItemQuestion['+question_count+'][question]">';
+    html += '    </div>';
+    html += '    <div class="col-md-2">';
+    html += '        <div class="control-label margin-top-10">Required?</div>';
+    html += '    		<select id="required-'+question_count+'" class="form-control" name="VendorDraftItemQuestion['+question_count+'][required]">';
+    html += '        		<option value="Yes"> Yes </option>';
+    html += '        		<option value="No" selected="selected"> No </option>';
+    html += '        	</select>';
+    html += '        </div>';
+    html += '		<div class="col-md-1 margin-top-30">';
+    html += '			<button data-id="question-'+question_count+'" type="button" class="btn btn-danger btn-remove-question"><i class="fa fa-trash-o"></i></button>';
+    html += '		</div>';
+    html += '    </div>';
+
+    $('.tab-content .form-group.questions').append(html);
+    question_count++;
+});
+
+
+$(document).delegate('.btn-remove-question', 'click', function() {
+    $(this).parents('.question').remove();
 });

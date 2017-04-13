@@ -45,6 +45,7 @@ use common\models\Package;
 use common\models\VendorItemMenu;
 use common\models\VendorItemMenuItem;
 
+use common\models\VendorDraftItemQuestion;
 /**
 * VendoritemController implements the CRUD actions for VendorItem model.
 */
@@ -115,13 +116,7 @@ class VendorItemController extends Controller
             ->item($id)
             ->all();
 
-        $model_question = VendorItemQuestion::find()
-            ->where(['item_id' => $id, 'answer_id' => null, 'question_answer_type' => 'selection'])
-            ->orwhere(['item_id' => $id, 'question_answer_type' => 'text', 'answer_id' => null])
-            ->orwhere(['item_id' => $id, 'question_answer_type' => 'image', 'answer_id' => null])
-            ->asArray()
-            ->all();
-
+        $model_question = VendorItemQuestion::findAll(['item_id' => $id]);
         $imagedata = Image::find()
             ->item($id)
             ->orderby(['vendorimage_sort_order' => SORT_ASC])
@@ -139,7 +134,7 @@ class VendorItemController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id), 
             'dataProvider1' => $dataProvider1, 
-            'model_question' => $model_question, 
+            'questions' => $model_question,
             'imagedata' => $imagedata,
             'categories' => $categories,
             'arr_menu' => $arr_menu,
@@ -851,6 +846,7 @@ class VendorItemController extends Controller
         VendorItemPricing::deleteAll(['item_id' => $id]);
         VendorItemThemes::deleteAll(['item_id' => $id]);
         VendorItemToCategory::deleteAll(['item_id' => $id]);
+        VendorItemQuestion::deleteAll(['item_id' => $id]);
         CustomerCart::deleteAll(['item_id' => $id]);
         PriorityItem::deleteAll(['item_id' => $id]);
         EventItemlink::deleteAll(['item_id' => $id]);
@@ -1565,5 +1561,49 @@ class VendorItemController extends Controller
         ]);
 
         return $this->render('inventory',['provider'=>$provider,'date'=>$date,'item_id'=>$item_id]);
+    }
+
+
+
+    public function actionItemQuestions($id, $_u = null)
+    {
+        $model = VendorItemQuestion::find()->item($id)->all();
+        $item = VendorItem::findOne($id);
+        if(Yii::$app->request->isPost) {
+
+            VendorItemQuestion::deleteAll(['item_id' => $id]);
+            if (Yii::$app->request->post('VendorDraftItemQuestion')) {
+                foreach (Yii::$app->request->post('VendorDraftItemQuestion') as $question) {
+
+                    if ($question['question'] && !empty($question['question'])) {
+                        $modelQuestion = new VendorItemQuestion;
+                        $modelQuestion->item_id = $id;
+                        $modelQuestion->question = $question['question'];
+                        $modelQuestion->required = $question['required'];
+                        $modelQuestion->created_datetime = date('Y-m-d H:i:s');
+                        $modelQuestion->modified_datetime = date('Y-m-d H:i:s');
+                        $modelQuestion->trash = 'Default';
+                        $modelQuestion->save(false);
+                    }
+                }
+            }
+
+            $complete = Yii::$app->request->post('complete');
+
+            if($complete) {
+
+                Yii::$app->session->setFlash('success', 'Vendor item With ID ' . $item->item_id . ' updated successfully!');
+
+                Yii::info('[Item Updated] Admin updated ' . addslashes($item->item_name) . ' item information', __METHOD__);
+
+                return $this->redirect(['index']);
+            }
+            return $this->redirect(['vendor-item/item-themes-groups', 'id' => $id,'_u'=>$_u]);
+        }
+
+        return $this->render('steps/item-questions', [
+            'item_id' => $id,
+            'model' => $model,
+        ]);
     }
 }

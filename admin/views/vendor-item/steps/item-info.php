@@ -63,6 +63,11 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 	    		Images
 	    	</a>
 	    </li>
+        <li>
+            <a href="<?= Url::to(['vendor-item/item-questions', 'id' => $model->item_id]) ?>">
+                <?=Yii::t('app','Questions')?>
+            </a>
+        </li>
 	    <li>
 	    	<a href="<?= Url::to(['vendor-item/item-themes-groups', 'id' => $model->item_id]) ?>">
 	    		Other
@@ -103,6 +108,11 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 	    <li>
 	    	<a href="javascript::void();">
 	    		Images
+	    	</a>
+	    </li>
+	    <li>
+	    	<a href="javascript::void();">
+	    		Question
 	    	</a>
 	    </li>
 	    <li>
