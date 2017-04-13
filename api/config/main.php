@@ -189,16 +189,33 @@ return [
                         'OPTIONS list-with-address' => 'options'
                     ]
                 ],
-                [ // OrderController
+                [ // BookingController
                     'class' => 'yii\rest\UrlRule',
-                    'controller' => 'v1/orders',
-                    'pluralize' => false,
+                    'controller' => 'v1/booking',
                     'patterns' => [
-                        'GET' => 'list-order',
-                        'GET detail' => 'order-detail',
+                        'GET' => 'list',
+                        'GET <id>' => 'view',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
-                        'OPTIONS detail' => 'options',
+                        'OPTIONS <id>' => 'options',
+                    ]
+                ],
+                [ // PackageController
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/package',
+                    'patterns' => [
+                        'GET' => 'list',
+                        // OPTIONS VERBS
+                        'OPTIONS' => 'options'
+                    ]
+                ],
+                [ // ThemeController
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/theme',
+                    'patterns' => [
+                        'GET' => 'list',
+                        // OPTIONS VERBS
+                        'OPTIONS' => 'options'
                     ]
                 ],
             ],
