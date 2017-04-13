@@ -1,5 +1,6 @@
 var addon_menu_count = $('#addon_menu_count').val();
 var menu_count = $('#menu_count').val();
+var question_count = $('#question_count').val();
 
 var count_q = $('#count_q').val();
 var appImageUrl = $('#appImageUrl').val();
@@ -799,4 +800,35 @@ $(document).delegate('.btn-add-addon-menu-item', 'click', function(){
 	$(this).parents('table').find('tbody').append($html);
 
 	addon_menu_count++;
+});
+
+
+
+$('.btn-add-question').click(function(){
+
+    var html = '';
+    html += '<div class="clearfix question question-1 margin-top-10">';
+    html += '    <div class=" col-md-9">';
+    html += '    	<div class="control-label margin-top-10">Question '+question_count+'</div>';
+    html += '			<input type="text" id="question-<?=$question_count?>" class="form-control" name="VendorDraftItemQuestion['+question_count+'][question]">';
+    html += '    </div>';
+    html += '    <div class="col-md-2">';
+    html += '        <div class="control-label margin-top-10">Required?</div>';
+    html += '    		<select id="required-'+question_count+'" class="form-control" name="VendorDraftItemQuestion['+question_count+'][required]">';
+    html += '        		<option value="Yes"> Yes </option>';
+    html += '        		<option value="No" selected="selected"> No </option>';
+    html += '        	</select>';
+    html += '        </div>';
+    html += '		<div class="col-md-1 margin-top-30">';
+    html += '			<button data-id="question-'+question_count+'" type="button" class="btn btn-danger btn-remove-question"><i class="fa fa-trash-o"></i></button>';
+    html += '		</div>';
+    html += '    </div>';
+
+    $('.tab-content .form-group.questions').append(html);
+    question_count++;
+});
+
+
+$(document).delegate('.btn-remove-question', 'click', function() {
+    $(this).parents('.question').remove();
 });

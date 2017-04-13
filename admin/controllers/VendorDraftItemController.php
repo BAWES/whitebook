@@ -2,6 +2,7 @@
 
 namespace admin\controllers;
 
+use common\models\VendorDraftItemQuestion;
 use Yii;
 use yii\web\Controller;
 use yii\helpers\Url;
@@ -117,7 +118,7 @@ class VendorDraftItemController extends Controller
 
         $arr_menu = VendorDraftItemMenu::find()->item($model->item_id)->menu('options')->all();
         $arr_addon_menu = VendorDraftItemMenu::find()->item($model->item_id)->menu('addons')->all();
-
+        $questions = VendorDraftItemQuestion::findAll(['item_id'=>$model->item_id]);
         return $this->render('view', [
             'model' => $model,        
             'arr_menu' => $arr_menu,
@@ -129,7 +130,8 @@ class VendorDraftItemController extends Controller
             'price_table' => $price_table,
             'is_price_table_changed' => $is_price_table_changed,
             'is_images_changed' => $is_images_changed,
-            'is_categories_changed' => $is_categories_changed
+            'is_categories_changed' => $is_categories_changed,
+            'questions' => $questions
         ]);
     }
 
@@ -248,6 +250,10 @@ class VendorDraftItemController extends Controller
 
             VendorDraftItemMenuItem::deleteAll(['draft_menu_id' => $menu->draft_menu_id]);
         }
+
+        // approved questions moved from draft to real table and removed from draft
+        VendorDraftItemQuestion::approved($item->item_id);
+
 
         //remove draft related data 
 
