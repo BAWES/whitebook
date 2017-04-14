@@ -9,7 +9,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use admin\models\BookingSearch;
 use common\models\Booking;
-
+use kartik\mpdf\Pdf;
 /**
  * OrderRequestStatusController implements the CRUD actions for OrderRequestStatus model.
  */
@@ -204,5 +204,38 @@ class BookingController extends Controller
 
         return $this->redirect(['pending']);
     }
+
+
+    public function actionInvoice($id)
+    {
+        $this->layout = 'pdf';
+
+        $content = $this->render('invoice', [
+            'model' => $this->findModel($id),
+        ]);
+
+        $pdf = new Pdf([
+            // A4 paper format
+            'format' => Pdf::FORMAT_A4,
+            // portrait orientation
+            'orientation' => Pdf::ORIENT_PORTRAIT,
+            // stream to browser inline
+            'destination' => Pdf::DEST_BROWSER,
+            // your html content input
+            'content' => $content,
+            // any css to be embedded if required
+            'cssInline' => '.kv-heading-1{font-size:38px}',
+            // set mPDF properties on the fly
+            'options' => [],//['title' => 'Booking #'.$id],
+            // call mPDF methods on the fly
+            'methods' => [
+                'SetHeader'=>['Booking #'.$id],
+                'SetFooter'=>['{PAGENO}'],
+            ]
+        ]);
+
+        return $pdf->render();
+    }
+
 }
 
