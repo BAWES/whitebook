@@ -205,8 +205,10 @@ return [
                     'controller' => 'v1/package',
                     'patterns' => [
                         'GET' => 'list',
+                        'GET <id>' => 'view',
                         // OPTIONS VERBS
-                        'OPTIONS' => 'options'
+                        'OPTIONS' => 'options',
+                        'OPTIONS <id>' => 'options'
                     ]
                 ],
                 [ // ThemeController

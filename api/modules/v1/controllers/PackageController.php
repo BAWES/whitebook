@@ -7,6 +7,7 @@ use yii\rest\Controller;
 use yii\helpers\ArrayHelper;
 use yii\data\ActiveDataProvider;
 use common\models\Package;
+use common\models\VendorItemToPackage;
 
 /**
  * Package controller 
@@ -94,7 +95,7 @@ class PackageController extends Controller
             return [
                 "operation" => "error",
                 "message" => "Package not found",
-            ]
+            ];
         }
 
         $package['items'] = VendorItemToPackage::find()
