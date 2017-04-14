@@ -129,7 +129,7 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
                         ->joinVendorItemMenuItem()
                         ->joinVendorItemMenu()
                         ->cartID($item['cart_id'])
-                        ->where(['menu_type' => 'options'])
+                        ->andWhere(['menu_type' => 'options'])
 	    				->asArray()
 	    				->all();
 
@@ -138,7 +138,7 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
                         ->joinVendorItemMenuItem()
                         ->joinVendorItemMenu()
                         ->cartID($item['cart_id'])
-	    				->where(['menu_type' => 'addons'])
+	    				->andWhere(['menu_type' => 'addons'])
 	    				->asArray()
 	    				->all();
 
