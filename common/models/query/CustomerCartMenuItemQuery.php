@@ -24,7 +24,6 @@ class CustomerCartMenuItemQuery extends \yii\db\ActiveQuery
         return parent::one($db);
     }
 
-
     public function cartID($cartID) {
         return $this->andWhere(['cart_id' => $cartID]);
     }
