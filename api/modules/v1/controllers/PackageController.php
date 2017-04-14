@@ -7,6 +7,7 @@ use yii\rest\Controller;
 use yii\helpers\ArrayHelper;
 use yii\data\ActiveDataProvider;
 use common\models\Package;
+use common\models\VendorItemToPackage;
 
 /**
  * Package controller 
@@ -74,5 +75,50 @@ class PackageController extends Controller
         return new ActiveDataProvider([
             'query' => $query
         ]);
+    }
+
+    /**
+     * Return package detail 
+     */
+    public function actionView($id)
+    {
+        $package = Package::find()
+            ->where([
+                'package_id' => $id,
+                'status' => 1
+            ])
+            ->asArray()
+            ->one();        
+
+        if(!$package) 
+        {
+            return [
+                "operation" => "error",
+                "message" => "Package not found",
+            ];
+        }
+
+        $package['items'] = VendorItemToPackage::find()
+            ->select(['{{%vendor}}.vendor_name', '{{%vendor}}.vendor_name_ar', '{{%vendor_item}}.*'])
+            ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%vendor_item_to_package}}.item_id')
+            ->leftJoin(
+                '{{%vendor_item_to_category}}', 
+                '{{%vendor_item_to_category}}.item_id = {{%vendor_item}}.item_id'
+            )
+            ->leftJoin(
+                '{{%category_path}}', 
+                '{{%category_path}}.category_id = {{%vendor_item_to_category}}.category_id'
+            )
+            ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
+            ->where([
+                '{{%vendor_item}}.item_status' => 'Active',
+                '{{%vendor_item}}.trash' => 'Default',
+                '{{%vendor_item_to_package}}.package_id' => $package['package_id']
+            ])
+            ->groupBy('{{%vendor_item_to_package}}.item_id')
+            ->asArray()
+            ->all();
+
+        return $package;
     }
 }
