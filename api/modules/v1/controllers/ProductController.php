@@ -11,6 +11,9 @@ use frontend\models\Vendor;
 use common\models\CategoryPath;
 use common\models\VendorItem;
 use common\models\VendorLocation;
+use common\models\VendorItemPricing;
+use common\models\VendorItemMenuItem;
+use common\components\CFormatter;
 use api\models\EventItemlink;
 
 /**
@@ -51,6 +54,7 @@ class ProductController extends Controller
             'product-detail',
             'load-all-themes',
             'load-all-vendor',
+            'final-price'
         ];
 
         return $behaviors;
@@ -432,5 +436,64 @@ class ProductController extends Controller
             ->groupby(['{{%vendor}}.vendor_id'])
             ->asArray()
             ->all();
+    }
+
+    public function actionFinalPrice() 
+    {
+        $item_id = Yii::$app->request->post('item_id');
+
+        $item = VendorItem::findOne($item_id);
+
+        if (empty($item)) 
+        {
+           return [
+                "operation" => "error",
+                "message" => "Package not found",
+            ];
+        }
+        
+        $total = ($item->item_base_price) ? $item->item_base_price : 0;
+
+        $price_chart = VendorItemPricing::find()
+            ->item($item['item_id'])
+            ->defaultItem()
+            ->quantityRange(Yii::$app->request->post('quantity'))
+            ->orderBy('pricing_price_per_unit DESC')
+            ->one();
+
+        if ($item->item_minimum_quantity_to_order > 0) {
+            $min_quantity_to_order = $item->item_minimum_quantity_to_order;
+        } else {
+            $min_quantity_to_order = 1;
+        }
+
+        if ($price_chart) {
+            $unit_price = $price_chart->pricing_price_per_unit;
+        } else {
+            $unit_price = $item->item_price_per_unit;
+        }
+
+        $actual_item_quantity = Yii::$app->request->post('quantity') - $min_quantity_to_order;
+
+        $total += $unit_price * $actual_item_quantity;
+
+        $menu_items = Yii::$app->request->post('menu_item');
+
+        if(!is_array($menu_items)) {
+            $menu_items = [];
+        }
+
+        foreach ($menu_items as $key => $value) {
+            
+            $menu_item = VendorItemMenuItem::findOne($value['menu_item_id']);
+
+            $total += $menu_item->price * $value['quantity'];
+        }
+        
+        Yii::$app->response->format = 'json';
+
+        return [
+            "price" => CFormatter::format($total)
+        ];
     }
 }
