@@ -2,13 +2,8 @@
 
 use yii\web\View;
 use yii\helpers\Url;
-use yii\helpers\Html;
 use yii\widgets\DetailView;
 use common\models\Booking;
-use common\models\Vendor;
-use common\models\BookingStatus;
-use common\models\SuborderItemPurchase;
-use common\models\SuborderItemMenu;
 use common\components\CFormatter;
 
 $this->title = 'Booking #' . $model->booking_id;
@@ -24,7 +19,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ])*/ ?>
-
+    <table class="table table-striped table-bordered detail-view">
+        <tr>
+            <td>
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
@@ -35,22 +32,42 @@ $this->params['breadcrumbs'][] = $this->title;
             'customer_mobile',
             //'statusName',
             'booking_note',
-            'expired_on',
+            [
+                    'attribute'=>'expired_on',
+                    'value'=>function($model){
+                        if ($model->transaction_id == '') {
+                            return $model->expired_on;
+                        }
+                    },
+            ],
             'notification_status',
-            'total_delivery_charge',
-            'total_without_delivery',
-            'total_with_delivery',
-            'commission_percentage',
-            'commission_total',
-            'gateway_percentage',
-            'gateway_fees',
-            'gateway_total',
             'ip_address',
             'created_datetime',
-            'modified_datetime'
+
+
         ],
     ]) ?>
+            </td>
+            <td>
+                <?= DetailView::widget([
+                    'model' => $model,
+                    'attributes' => [
 
+                        'notification_status',
+                        'total_delivery_charge',
+                        'total_without_delivery',
+                        'total_with_delivery',
+                        'commission_percentage',
+                        'commission_total',
+                        'gateway_percentage',
+                        'gateway_fees',
+                        'gateway_total',
+                        'modified_datetime'
+                    ],
+                ]) ?>
+            </td>
+        </tr>
+    </table>
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -69,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="order_status_wrapper" data-id="<?= $model->booking_id ?>">
                         <?= Yii::t('frontend', 'Booking status') ?>: 
                         <span>
-                        <?= $model->statusName ?>
+                            <?= ($model->transaction_id == '') ? $model->statusName : 'Paid'; ?>
                         </span> 
                     </div>
                 </td>
