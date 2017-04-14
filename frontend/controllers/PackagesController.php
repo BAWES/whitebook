@@ -43,12 +43,6 @@ class PackagesController extends BaseController
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => $package->package_description]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => $package->package_description]);
 
-        $categories = \frontend\models\Category::find()
-            ->allParents()
-            ->defaultCategories()
-            ->orderByExpression()
-            ->all();
-
         if (Yii::$app->user->isGuest) {
             $customer_events_list = [];
         } else {
@@ -87,7 +81,6 @@ class PackagesController extends BaseController
 
         return $this->render('detail', [
             'package' => $package,
-            'categories' => $categories,
             'customer_events' => $customer_events_list,
             'provider' => $provider
         ]);
