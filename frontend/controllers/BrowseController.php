@@ -40,6 +40,10 @@ class BrowseController extends BaseController
         parent::init();
     }
 
+    public function actionIndex() {
+        return $this->redirect(['browse/list', 'slug' => 'all']);
+    }
+
     public function actionCategories(){
         \Yii::$app->view->title = 'The White Book | Categories';
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);

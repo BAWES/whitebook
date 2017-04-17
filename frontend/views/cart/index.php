@@ -88,15 +88,6 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
             </div>
         </div>
 
-        <div class="row text-center">
-            
-            <button name="btn_checkout" value="1" class="btn btn-primary btn-lg btn-checkout">
-                <?= Yii::t('frontend', 'Proceed to Checkout') ?>
-            </button>
-        </div>
-
-        <hr />
-
         <table class="table table-bordered cart-table">
 	        <thead>
 	        	<tr>
@@ -405,11 +396,13 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 	        </tbody>        	
         </table>
 
-        
-
-        <a href="<?= Url::to(['browse/list', 'slug' => 'all']) ?>" class="btn btn-primary pull-right btn-checkout">
+        <a href="<?= Url::to(['browse/list', 'slug' => 'all']) ?>" class="btn btn-primary pull-left btn-checkout">
         	<?= Yii::t('frontend', 'Continue Shopping') ?>
         </a>
+
+        <button name="btn_checkout" value="1" class="btn btn-primary btn-checkout pull-right">
+            <?= Yii::t('frontend', 'Proceed to Checkout') ?>
+        </button>
 
         </form>
 
@@ -497,7 +490,7 @@ $this->registerJs("
 </div>
 <?php
 
-$this->registerJsFile('@web/js/cart.js?v=1.6', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/cart.js?v=1.7', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 echo Html::hiddenInput('txt-select', Yii::t('frontend', 'Select '), ['id' => 'txt-select']);
 echo Html::hiddenInput('txt-min', Yii::t('frontend', 'atleast {qty} '), ['id' => 'txt-min']);
