@@ -134,6 +134,11 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 		        		<a target="_blank" href="<?= Url::to(["browse/detail", 'slug' => $item['slug']]) ?>">
 	        				<?=LangFormat::format($item['item_name'],$item['item_name_ar']) ?>
 	        			</a>
+                        <br />
+                        <!-- Quantity -->
+                        <i><small><?=Yii::t('frontend','Quantity').': '. $item['cart_quantity']?></small></i>
+                        <!-- Quantity -->
+                        <br/>
 
 	        			<?php 
 

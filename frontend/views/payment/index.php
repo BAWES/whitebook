@@ -29,14 +29,6 @@ $this->title = Yii::t('frontend', 'Pay Now | Whitebook');
 	        		<td align="center"><?= Yii::t('frontend', 'Image') ?></th>
 	        		<td align="left"><?= Yii::t('frontend', 'Item') ?></th>
 	        		<td align="left"><?= Yii::t('frontend', 'Delivery') ?></th>
-	        		<td aligh="center" class="text-center">
-	        			<span class="visible-md visible-lg">
-	        				<?= Yii::t('frontend', 'Quantity') ?>
-	        			</span>
-	        			<span class="visible-xs visible-sm">
-	        				<?= Yii::t('frontend', 'Qty') ?>
-	        			</span>
-	        		</th>
 	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Unit Price') ?></th>
 	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Base Price') ?></th>
 	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Total') ?></th>
@@ -72,6 +64,12 @@ $this->title = Yii::t('frontend', 'Pay Now | Whitebook');
 	        			<?php } else {  ?>
 	        				<?= LangFormat::format($item['item_name'], $item['item_name_ar']); ?>
 	        			<?php } ?>
+
+                        <br />
+                        <!-- Quantity -->
+                        <i><small><?=Yii::t('frontend','Quantity').': '. $item['quantity']?></small></i>
+                        <!-- Quantity -->
+                        <br/>
 
 	        			<?php
 
@@ -138,9 +136,6 @@ $this->title = Yii::t('frontend', 'Pay Now | Whitebook');
 
 						<?= $msg; ?>
 	        		</td>
-	        		<td align="center">
-		        		<?= $item['quantity'] ?>
-                    </td>
 	        		<td align="right" class="visible-md visible-lg">
                         <?= CFormatter::format($item['price'])  ?>
 	        		</td>

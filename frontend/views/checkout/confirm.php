@@ -26,14 +26,6 @@ use common\models\CustomerCartMenuItem;
         		<td align="center"><?= Yii::t('frontend', 'Image') ?></th>
         		<td align="left"><?= Yii::t('frontend', 'Item') ?></th>
         		<td align="left"><?= Yii::t('frontend', 'Delivery') ?></th>
-        		<td aligh="left">
-                    <span class="visible-md visible-lg">
-                        <?= Yii::t('frontend', 'Quantity') ?>
-                    </span>
-                    <span class="visible-xs visible-sm">
-                        <?= Yii::t('frontend', 'Qty') ?>
-                    </span>
-                </td>
         		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Unit Price') ?></th>
                 <td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Base Price') ?></th>
         		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Total') ?></th>
@@ -131,7 +123,10 @@ use common\models\CustomerCartMenuItem;
                         </a>
 
                         <br />
-
+                        <!-- Quantity -->
+                        <i><small><?=Yii::t('frontend','Quantity').': '. $item['cart_quantity']?></small></i>
+                        <!-- Quantity -->
+                        <br/>
                         <?php
 
                             if($menu_option_items)
@@ -198,10 +193,6 @@ use common\models\CustomerCartMenuItem;
                     </td>
                     <td>
                         <?= Booking::getPurchaseDeliveryAddress(Yii::$app->session->get('address_id')); ?>
-                    </td>
-                    <td align="left">
-                        <?= $item['cart_quantity'] ?>
-                        </div>
                     </td>
                     <td align="right" class="visible-md visible-lg">
                         <?= CFormatter::format($unit_price); ?>
