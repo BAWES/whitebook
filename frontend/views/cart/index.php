@@ -224,10 +224,12 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 	        				<a href="<?= Url::to(["browse/detail", 'slug' => $item['slug'], 'cart_id' => $item['cart_id']]) ?>" style="cursor: pointer;">[<?= Yii::t('frontend', 'Edit') ?>]
 	        				</a>
 	        				<?php } ?>
-
 		        			<br />
-
-		        			<?php 
+                            <!-- Quantity -->
+                            <i><small><?=Yii::t('frontend','Quantity').': '. $item['cart_quantity']?></small></i>
+                            <!-- Quantity -->
+                            <br/>
+		        			<?php
 
 		        			$arr_menu_id = [];
 
