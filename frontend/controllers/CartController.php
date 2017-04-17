@@ -47,7 +47,7 @@ class CartController extends BaseController
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['index','update-cart-item-popup','update-cart-item','add', 'update', 'validation-product-available', 'get-delivery-timeslot', 'save-delivery-timeslot','slots'],
+                        'actions' => ['index','update-cart-item-popup','update-cart-item','add', 'update', 'validation-product-available', 'get-delivery-timeslot', 'save-delivery-timeslot','slots', 'remove'],
                         'allow' => true,
                         'roles' => ['?'],
                     ]
@@ -741,6 +741,38 @@ class CartController extends BaseController
             return $this->redirect(['checkout/index']);
         }
 
+        return $this->redirect(['index']);
+    }
+
+    /**
+     * Remove item from cart
+     */
+    public function actionRemove() {
+
+        $cart_id = Yii::$app->request->get('cart_id');
+
+        $query = CustomerCart::find()
+            ->where([
+                'cart_id' => $cart_id
+            ]);
+
+        if (!Yii::$app->user->isGuest) {
+            $query->andWhere(['{{%customer_cart}}.customer_id'=>Yii::$app->user->getId()]);
+        } else {
+            $query->andWhere(['{{%customer_cart}}.cart_session_id'=>Customer::currentUser()]);
+        }
+
+        $cart = $query->one();
+
+        if($cart)
+        {
+            $cart->delete();
+        }
+        else
+        {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');    
+        }
+        
         return $this->redirect(['index']);
     }
 

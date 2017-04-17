@@ -62,6 +62,7 @@ return [
                   'themes' => 'themes/index',
                   'directory' => 'directory/index',
                   'cart' => 'cart/index',
+                  'cart/remove' => 'cart/remove',
                   'browse' => 'browse/index',
                   'browse/booking' => 'browse/booking',
                   'browse/final-price' => 'browse/final-price',

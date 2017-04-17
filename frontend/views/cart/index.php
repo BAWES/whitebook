@@ -93,14 +93,6 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 	        	<tr>
 	        		<td align="center"><?= Yii::t('frontend', 'Image') ?></th>
 	        		<td align="left"><?= Yii::t('frontend', 'Item') ?></th>
-	        		<td aligh="center" class="text-center">
-	        			<span class="visible-md visible-lg">
-	        				<?= Yii::t('frontend', 'Quantity') ?>
-	        			</span>
-	        			<span class="visible-xs visible-sm">
-	        				<?= Yii::t('frontend', 'Qty') ?>
-	        			</span>
-	        		</th>
 	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Unit Price') ?></th>
 	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Base Price') ?></th>
 	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Total') ?></th>
@@ -202,19 +194,15 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 	                        ?>
 		        		</td>
 		        		<td>
+		        			<input type="hidden" name="quantity[<?= $item['cart_id'] ?>]" value="<?= $item['cart_quantity'] ?>" />
+
 		        			<a href="<?= Url::to(["browse/detail", 'slug' => $item['slug']]) ?>">
 		        				<?= LangFormat::format($item['item_name'], $item['item_name_ar']); ?>
 		        			</a>
 
-		        			<?php if(
-		        					$menu_option_items || 
-		        					$menu_addon_items || 
-		        					$item['have_female_service'] || 
-		        					$item['allow_special_request']
-		        				  ) { ?>
-	        				<a href="<?= Url::to(["browse/detail", 'slug' => $item['slug'], 'cart_id' => $item['cart_id']]) ?>" style="cursor: pointer;">[<?= Yii::t('frontend', 'Edit') ?>]
+		        			<a href="<?= Url::to(["browse/detail", 'slug' => $item['slug'], 'cart_id' => $item['cart_id']]) ?>" style="cursor: pointer;">[<?= Yii::t('frontend', 'Edit') ?>]
 	        				</a>
-	        				<?php } ?>
+
 		        			<br />
                             <!-- Quantity -->
                             <i><small><?=Yii::t('frontend','Quantity').': '. $item['cart_quantity']?></small></i>
@@ -360,27 +348,13 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
                                     }     
                                 } 
                             } ?>
+
+                            <div class="clearfix"></div>
+                            
+                            <a href="<?= Url::to(['cart/remove', 'cart_id' => $item['cart_id']]) ?>" title="<?= Yii::t('frontend', 'Remove') ?>" class="btn btn-primary">
+                            	<i class="fa fa-trash"></i>
+                            </a>
 		        		</td>
-		        		<td align="center">
-			        		<div class="input-group btn-block max-width-150-px">
-			                    <input type="text" name="quantity[<?= $item['cart_id'] ?>]" value="<?= $item['cart_quantity'] ?>" size="1" class="form-control">
-			                    <button type="submit" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Update"><i class="glyphicon glyphicon-refresh"></i></button>
-			                    <button type="button" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Remove"><i class="glyphicon glyphicon-trash"></i></button>
-		                    </div>
-
-		                    <?php if(isset($errors['cart_quantity'])) { 	        				
-		        				foreach($errors['cart_quantity'] as $key => $error) {
-			        				if(is_array($error)) {
-	        							foreach ($error as $value) {
-	        								echo '<span class="label label-danger">' . $value . '</span>';
-	        							}	
-	        						} else {
-	        							echo '<span class="label label-danger">' . $error . '</span>';
-	        						}     
-		        				} 
-		        			} ?>
-	                    </td>
-
                         <td align="right" class="visible-md visible-lg">
                             <?= CFormatter::format($unit_price)  ?>
                         </td>
