@@ -22,7 +22,7 @@ class VendorItemSearch extends VendorItem
     public function rules()
     {
         return [
-            [['item_id', 'type_id', 'vendor_id', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
+            [['item_id', 'type_id', 'vendor_id', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by','included_quantity'], 'integer'],
             [['theme_id', 'group_id', 'item_name','vendor_name','item_description', 'item_status','item_additional_info', 'item_customization_description', 'item_price_description', 'item_approved','priority'], 'safe'],
             [['item_price_per_unit'], 'number'],
            
@@ -95,6 +95,7 @@ class VendorItemSearch extends VendorItem
             'type_id' => $this->type_id,
             'item_status' => $this->item_status,
             'item_default_capacity' => $this->item_default_capacity,
+            'included_quantity' => $this->included_quantity,
             'item_price_per_unit' => $this->item_price_per_unit,
             'item_how_long_to_make' => $this->item_how_long_to_make,
             'item_minimum_quantity_to_order' => $this->item_minimum_quantity_to_order,
@@ -202,6 +203,7 @@ class VendorItemSearch extends VendorItem
             '{{%vendor_item}}.vendor_id' => $this->vendor_id,
           	'{{%vendor_item}}.item_status' => $this->item_status,
             '{{%vendor_item}}.item_default_capacity' => $this->item_default_capacity,
+            '{{%vendor_item}}.included_quantity' => $this->included_quantity,
             '{{%vendor_item}}.item_price_per_unit' => $this->item_price_per_unit,
             '{{%vendor_item}}.item_how_long_to_make' => $this->item_how_long_to_make,
             '{{%vendor_item}}.item_minimum_quantity_to_order' => $this->item_minimum_quantity_to_order,
@@ -263,6 +265,7 @@ class VendorItemSearch extends VendorItem
             'vendor_id' => $this->vendor_id,
             'item_status' => $this->item_status,
             'item_default_capacity' => $this->item_default_capacity,
+            'included_quantity' => $this->included_quantity,
             'item_price_per_unit' => $this->item_price_per_unit,
             'item_how_long_to_make' => $this->item_how_long_to_make,
             'item_minimum_quantity_to_order' => $this->item_minimum_quantity_to_order,

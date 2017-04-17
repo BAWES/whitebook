@@ -43,6 +43,7 @@ use Yii;
  * @property integer $sort
  * @property integer $item_how_long_to_make
  * @property integer $item_minimum_quantity_to_order
+ * @property integer $included_quantity
  * @property string $item_archived
  * @property string $item_approved
  * @property string $item_status

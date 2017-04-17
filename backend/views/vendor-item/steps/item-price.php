@@ -130,14 +130,17 @@ $this->params['breadcrumbs'][] = 'Update';
 						'Guests' => 'Guests'
 					]); ?>
 
-				<?= $form->field($model, 'item_minimum_quantity_to_order')
-						->label('Included Quantity'.Html::tag('span', '*',['class'=>'required mandatory']))
-						->textInput(['maxlength' => 128, 'id' => 'vendoritem-item_minimum_quantity_to_order']); ?>
+                <?= $form->field($model, 'included_quantity')
+                    ->label('Included Quantity '.Html::tag('span', '*',['class'=>'required mandatory']))
+                    ->textInput(['maxlength' => 128, 'id' => 'vendoritem-included_quantity']); ?>
 
-				<?= $form->field($model, 'item_default_capacity')
-						->label('Maximum quantity ordered per day '.Html::tag('span', '*',['class'=>'required mandatory']))
-						->textInput(['maxlength' => 128, 'id' => 'vendoritem-item_default_capacity']); ?>
+                <?= $form->field($model, 'item_minimum_quantity_to_order')
+                    ->label('Minimum quantity to order'.Html::tag('span', '*',['class'=>'required mandatory']))
+                    ->textInput(['maxlength' => 128]); ?>
 
+                <?= $form->field($model, 'item_default_capacity')
+                    ->label('Maximum quantity ordered per day '.Html::tag('span', '*',['class'=>'required mandatory']))
+                    ->textInput(['maxlength' => 128]); ?>
 
 			</fieldset>
 

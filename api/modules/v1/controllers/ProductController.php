@@ -461,10 +461,10 @@ class ProductController extends Controller
             ->orderBy('pricing_price_per_unit DESC')
             ->one();
 
-        if ($item->item_minimum_quantity_to_order > 0) {
-            $min_quantity_to_order = $item->item_minimum_quantity_to_order;
+        if ($item->included_quantity > 0) {
+            $included_quantity = $item->included_quantity;
         } else {
-            $min_quantity_to_order = 1;
+            $included_quantity = 1;
         }
 
         if ($price_chart) {
@@ -473,7 +473,7 @@ class ProductController extends Controller
             $unit_price = $item->item_price_per_unit;
         }
 
-        $actual_item_quantity = Yii::$app->request->post('quantity') - $min_quantity_to_order;
+        $actual_item_quantity = Yii::$app->request->post('quantity') - $included_quantity;
 
         $total += $unit_price * $actual_item_quantity;
 

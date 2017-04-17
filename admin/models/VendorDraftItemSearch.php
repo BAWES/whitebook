@@ -21,7 +21,7 @@ class VendorDraftItemSearch extends VendorDraftItem
     public function rules()
     {
         return [
-            [['minimum_increment', 'item_id', 'type_id', 'vendor_id', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by', 'is_ready'], 'integer'],
+            [['minimum_increment', 'item_id', 'type_id', 'vendor_id', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by', 'is_ready','included_quantity'], 'integer'],
             [['theme_id', 'group_id', 'item_name','vendor_name','item_description', 'item_status','item_additional_info', 'item_customization_description', 'item_price_description', 'item_approved','priority','is_ready'], 'safe'],
             [['item_price_per_unit'], 'number'],
            
@@ -87,6 +87,7 @@ class VendorDraftItemSearch extends VendorDraftItem
             'is_ready' => $this->is_ready,
             'item_status' => $this->item_status,
             'item_default_capacity' => $this->item_default_capacity,
+            'included_quantity' => $this->included_quantity,
             'item_price_per_unit' => $this->item_price_per_unit,
             'item_how_long_to_make' => $this->item_how_long_to_make,
             'item_minimum_quantity_to_order' => $this->item_minimum_quantity_to_order,

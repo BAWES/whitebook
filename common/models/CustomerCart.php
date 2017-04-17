@@ -382,8 +382,8 @@ class CustomerCart extends \yii\db\ActiveRecord
             $unit_price = $item['item_price_per_unit'];
         }
 
-        if ($item['item_minimum_quantity_to_order'] > 0) {
-            $min_quantity_to_order = $item['item_minimum_quantity_to_order'];
+        if ($item['included_quantity'] > 0) {
+            $min_quantity_to_order = $item['included_quantity'];
         } else {
             $min_quantity_to_order = 1;
         }
