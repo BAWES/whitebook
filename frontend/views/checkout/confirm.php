@@ -26,8 +26,6 @@ use common\models\CustomerCartMenuItem;
         		<td align="center"><?= Yii::t('frontend', 'Image') ?></th>
         		<td align="left"><?= Yii::t('frontend', 'Item') ?></th>
         		<td align="left"><?= Yii::t('frontend', 'Delivery') ?></th>
-        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Unit Price') ?></th>
-                <td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Base Price') ?></th>
         		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Total') ?></th>
         	</tr>
         </thead>
@@ -193,15 +191,6 @@ use common\models\CustomerCartMenuItem;
                     </td>
                     <td>
                         <?= Booking::getPurchaseDeliveryAddress(Yii::$app->session->get('address_id')); ?>
-                    </td>
-                    <td align="right" class="visible-md visible-lg">
-                        <?= CFormatter::format($unit_price); ?>
-                    </td>
-                    <td align="right" class="visible-md visible-lg">
-                        <?=($item['item']['item_base_price']) ?
-                            CFormatter::format($item['item']['item_base_price']) :
-                            Yii::t('frontend','Price based <br/>on selection');
-                        ?>
                     </td>
                     <td align="right" class="visible-md visible-lg">
                         <?= CFormatter::format($row_total) ?>

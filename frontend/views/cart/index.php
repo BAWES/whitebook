@@ -93,8 +93,6 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 	        	<tr>
 	        		<td align="center"><?= Yii::t('frontend', 'Image') ?></th>
 	        		<td align="left"><?= Yii::t('frontend', 'Item') ?></th>
-	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Unit Price') ?></th>
-	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Base Price') ?></th>
 	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Total') ?></th>
 	        	</tr>
 	        </thead>
@@ -355,15 +353,7 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
                             	<i class="fa fa-trash"></i>
                             </a>
 		        		</td>
-                        <td align="right" class="visible-md visible-lg">
-                            <?= CFormatter::format($unit_price)  ?>
-                        </td>
-		        		<td align="right" class="visible-md visible-lg">
-		        			<?=($item['item']['item_base_price']) ?
-                                CFormatter::format($item['item']['item_base_price']) :
-                                    Yii::t('frontend','Price based <br/>on selection');
-                            ?>
-		        		</td>
+
 		        		<td align="right" class="visible-md visible-lg">
 		        			<?= CFormatter::format($row_total)  ?>
 		        		</td>
