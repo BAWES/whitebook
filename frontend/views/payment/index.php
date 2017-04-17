@@ -29,8 +29,6 @@ $this->title = Yii::t('frontend', 'Pay Now | Whitebook');
 	        		<td align="center"><?= Yii::t('frontend', 'Image') ?></th>
 	        		<td align="left"><?= Yii::t('frontend', 'Item') ?></th>
 	        		<td align="left"><?= Yii::t('frontend', 'Delivery') ?></th>
-	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Unit Price') ?></th>
-	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Base Price') ?></th>
 	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Total') ?></th>
 	        	</tr>
 	        </thead>
@@ -135,15 +133,6 @@ $this->title = Yii::t('frontend', 'Pay Now | Whitebook');
 						<?= $item['timeslot']; ?><br />
 
 						<?= $msg; ?>
-	        		</td>
-	        		<td align="right" class="visible-md visible-lg">
-                        <?= CFormatter::format($item['price'])  ?>
-	        		</td>
-                    <td align="right" class="visible-md visible-lg">
-                        <?=($item['item_base_price'] != '0.000') ?
-                            CFormatter::format($item['item_base_price']) :
-                            Yii::t('frontend','Price based <br/>on selection');
-                        ?>
 	        		</td>
 	        		<td align="right" class="visible-md visible-lg">
 	        			<?= CFormatter::format($item['total'])  ?>
