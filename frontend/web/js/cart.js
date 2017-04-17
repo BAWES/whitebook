@@ -188,10 +188,16 @@ $(document).delegate('.menu-items .checkbox input', 'click', function(e) {
 
 $(function() {
 
+    $('#area_id, #event_time').change(function() {
+        $('#cart-form').submit();
+    });
+
     $('.delivery-info-wrapper input[name="delivery_date"]').datepicker({
         format: 'dd-mm-yyyy',
         startDate:'today',
         autoclose:true
+    }).on("changeDate", function(e) {
+        $('#cart-form').submit();
     });
 
     $('#update-cart-modal').on('shown.bs.modal', function() {
