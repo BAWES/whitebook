@@ -27,7 +27,7 @@ $this->title = Yii::t('frontend', 'Pay Now | Whitebook');
 	        <thead>
 	        	<tr>
 	        		<td align="center"><?= Yii::t('frontend', 'Image') ?></th>
-	        		<td align="left"><?= Yii::t('frontend', 'Item Name') ?></th>
+	        		<td align="left"><?= Yii::t('frontend', 'Item') ?></th>
 	        		<td align="left"><?= Yii::t('frontend', 'Delivery') ?></th>
 	        		<td aligh="center" class="text-center">
 	        			<span class="visible-md visible-lg">

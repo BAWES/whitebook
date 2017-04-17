@@ -101,7 +101,7 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 	        <thead>
 	        	<tr>
 	        		<td align="center"><?= Yii::t('frontend', 'Image') ?></th>
-	        		<td align="left"><?= Yii::t('frontend', 'Item Name') ?></th>
+	        		<td align="left"><?= Yii::t('frontend', 'Item') ?></th>
 	        		<td aligh="center" class="text-center">
 	        			<span class="visible-md visible-lg">
 	        				<?= Yii::t('frontend', 'Quantity') ?>

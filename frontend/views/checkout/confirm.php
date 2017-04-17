@@ -24,7 +24,7 @@ use common\models\CustomerCartMenuItem;
         <thead>
         	<tr>
         		<td align="center"><?= Yii::t('frontend', 'Image') ?></th>
-        		<td align="left"><?= Yii::t('frontend', 'Item Name') ?></th>
+        		<td align="left"><?= Yii::t('frontend', 'Item') ?></th>
         		<td align="left"><?= Yii::t('frontend', 'Delivery') ?></th>
         		<td aligh="left">
                     <span class="visible-md visible-lg">
