@@ -17,6 +17,8 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Event Date' => 'تاريخ الحدث',
+    'Event Area' => 'منطقة الحدث',
     'I agree on the {a} terms & conditions {/a}' => 'أوافق على {a} البنود والشروط {/a}',
     'Edit' => 'تصحيح',
     'Brief' => 'نبذة',

@@ -37,7 +37,7 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
         <div class="row delivery-info-wrapper">
             <div class="col-md-4">
                 <div class="form-group margin-left-0">
-                    <label><?=Yii::t('frontend', 'Area'); ?></label>
+                    <label><?=Yii::t('frontend', 'Event Area'); ?></label>
                     <div class="select_boxes">
                         <?php
                             echo Html::dropDownList('area_id', $deliver_location,
@@ -49,7 +49,7 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label><?=Yii::t('frontend', 'Delivery Date'); ?></label>
+                    <label><?=Yii::t('frontend', 'Event Date'); ?></label>
                     <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" class="input-append date">
                         <input value="<?= $deliver_date ?>" readonly="true" name="delivery_date" class="date-picker-box form-control required"  placeholder="<?php echo Yii::t('frontend', 'Date'); ?>" >
                         <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -335,7 +335,7 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 
                             <div class="clearfix"></div>
                             
-                            <a href="<?= Url::to(['cart/remove', 'cart_id' => $item['cart_id']]) ?>" title="<?= Yii::t('frontend', 'Remove') ?>" class="btn btn-primary">
+                            <a href="<?= Url::to(['cart/remove', 'cart_id' => $item['cart_id']]) ?>" title="<?= Yii::t('frontend', 'Remove') ?>" class="btn btn-primary pull-left">
                             	<i class="fa fa-trash"></i>
                             </a>
 		        		</td>
