@@ -28,8 +28,8 @@ $session = $session = Yii::$app->session;
 $deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
 $deliver_date  = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
 
-if($model->item_minimum_quantity_to_order > 0) {
-    $quantity = $model->item_minimum_quantity_to_order;
+if($model->included_quantity > 0) {
+    $quantity = $model->included_quantity;
 } else {
     $quantity = 1;
 }
@@ -40,8 +40,8 @@ if($model->type) {
     $item_type_name = 'Product';
 }
 
-if($model['item_minimum_quantity_to_order'] > 0) {
-    $min_quantity_to_order = $model['item_minimum_quantity_to_order'];
+if($model['included_quantity'] > 0) {
+    $min_quantity_to_order = $model['included_quantity'];
 }else{
     $min_quantity_to_order = 1;
 }

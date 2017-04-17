@@ -130,6 +130,7 @@ $this->params['breadcrumbs'][] = $model->item_name;
                         ],
 
                         'item_how_long_to_make',
+                        'included_quantity',
                         'item_minimum_quantity_to_order',
                         'item_approved',
                         [

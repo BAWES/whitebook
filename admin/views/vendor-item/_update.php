@@ -228,6 +228,10 @@ function cmp($a, $b)
 				->label('Item Minimum Quantity to Order '.Html::tag('span', '*',['class'=>'required mandatory']))
 				->textInput(['maxlength' => 128]); ?>
 
+            <?= $form->field($model, 'included_quantity')
+				->label('Included Quantity'.Html::tag('span', '*',['class'=>'required mandatory']))
+				->textInput(['maxlength' => 128]); ?>
+
 			<?= $form->field($model, 'item_price_per_unit', 
 				['options' => [
 					'class' => 'single_price'

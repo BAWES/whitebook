@@ -24,6 +24,7 @@ use common\models\VendorItemToPackage;
 * @property string $item_description
 * @property string $item_additional_info
 * @property integer $item_default_capacity
+* @property integer $included_quantity
 * @property string $item_price_per_unit
 * @property string $item_price_description
 * @property string $item_base_price
@@ -108,7 +109,7 @@ class VendorItem extends \yii\db\ActiveRecord
             
             [['notice_period_type', 'item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_price_description','item_price_description_ar', 'item_approved', 'trash', 'quantity_label','slug'], 'string'],
             
-            [['item_price_per_unit', 'min_order_amount','item_base_price'], 'number'],
+            [['item_price_per_unit', 'min_order_amount','item_base_price','included_quantity'], 'number'],
             
             [['created_datetime', 'modified_datetime','item_status','image_path', 'allow_special_request', 'have_female_service'], 'safe'],
 
@@ -119,7 +120,7 @@ class VendorItem extends \yii\db\ActiveRecord
             [['image_path'],'image', 'extensions' => 'png,jpg,jpeg','maxFiles'=>20],
 
             // set scenario for vendor item add functionality
-            [['type_id', 'hide_price_chart', 'notice_period_type', 'item_description','item_description_ar', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order','item_name', 'item_name_ar', 'item_price_per_unit'], 'required', 'on'=>'VendorItemAdd'],
+            [['type_id', 'hide_price_chart', 'notice_period_type', 'item_description','item_description_ar', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order','included_quantity','item_name', 'item_name_ar', 'item_price_per_unit'], 'required', 'on'=>'VendorItemAdd'],
         ];
     }
 
@@ -147,7 +148,7 @@ class VendorItem extends \yii\db\ActiveRecord
             'item_how_long_to_make' => 'Notice Period',
             'notice_period_type' => 'Notice Period Type',
             'hide_price_chart' => 'Hide price chart from customer',
-            'item_minimum_quantity_to_order' => 'Included Quantity',
+            'item_minimum_quantity_to_order' => 'Minimum Quantity To Order',
             'item_approved' => 'Item Approved',
             'created_by' => 'Created By',
             'modified_by' => 'Modified By',
@@ -166,7 +167,8 @@ class VendorItem extends \yii\db\ActiveRecord
             'whats_include' => 'What\'s include?', 
             'whats_include_ar' => 'What\'s include? - Arabic', 
             'min_order_amount' => 'Min. Order KD',
-            'slug' => 'slug'
+            'slug' => 'slug',
+            'included_quantity' => 'Included Quantity'
         ];
     }
 
@@ -503,10 +505,10 @@ class VendorItem extends \yii\db\ActiveRecord
             ->orderBy('pricing_price_per_unit DESC')
             ->one();
 
-        if ($item->item_minimum_quantity_to_order > 0) {
-            $min_quantity_to_order = $item->item_minimum_quantity_to_order;
+        if ($item->included_quantity > 0) {
+            $included_quantity = $item->included_quantity;
         } else {
-            $min_quantity_to_order = 1;
+            $included_quantity = 1;
         }
 
         if ($price_chart) {
@@ -515,7 +517,7 @@ class VendorItem extends \yii\db\ActiveRecord
             $unit_price = $item->item_price_per_unit;
         }
 
-        $actual_item_quantity = $quantity - $min_quantity_to_order;
+        $actual_item_quantity = $quantity - $included_quantity;
 
         $total += $unit_price * $actual_item_quantity;
 

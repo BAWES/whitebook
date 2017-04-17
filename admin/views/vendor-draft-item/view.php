@@ -206,8 +206,12 @@ $this->params['breadcrumbs'][] = $model->item_name;
                             'value' => strip_tags($model->item_how_long_to_make),
                         ],
                         [
-                            'label' => ($vendor_item->item_minimum_quantity_to_order != $model->item_minimum_quantity_to_order) ? 'Included Quantity *' : 'Included Quantity',
+                            'label' => ($vendor_item->item_minimum_quantity_to_order != $model->item_minimum_quantity_to_order) ? 'Minimum quantity to order *' : 'Minimum quantity to order',
                             'value' => strip_tags($model->item_minimum_quantity_to_order),
+                        ],
+                        [
+                            'label' => ($vendor_item->included_quantity != $model->included_quantity) ? 'Included Quantity *' : 'Included Quantity',
+                            'value' => strip_tags($model->included_quantity),
                         ],
                         [
                             'label' => $vendor_item->item_approved != $model->item_approved ? 'ITEM APPROVED *' : 'ITEM APPROVED',

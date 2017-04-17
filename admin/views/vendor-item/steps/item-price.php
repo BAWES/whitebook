@@ -135,8 +135,12 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 						'Guests' => 'Guests'
 					]); ?>
 
-				<?= $form->field($model, 'item_minimum_quantity_to_order')
+				<?= $form->field($model, 'included_quantity')
 					->label('Included Quantity'.Html::tag('span', '*',['class'=>'required mandatory']))
+					->textInput(['maxlength' => 128]); ?>
+
+				<?= $form->field($model, 'item_minimum_quantity_to_order')
+					->label('Minimum Quantity to Order'.Html::tag('span', '*',['class'=>'required mandatory']))
 					->textInput(['maxlength' => 128]); ?>
 
 				<?= $form->field($model, 'item_default_capacity')

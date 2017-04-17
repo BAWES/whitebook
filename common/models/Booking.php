@@ -298,8 +298,8 @@ class Booking extends \yii\db\ActiveRecord
 
         foreach ($items as $item) {
 
-            if ($item['item']['item_minimum_quantity_to_order'] > 0) {
-                $min_quantity_to_order = $item['item']['item_minimum_quantity_to_order'];
+            if ($item['item']['included_quantity'] > 0) {
+                $min_quantity_to_order = $item['item']['included_quantity'];
             } else {
                 $min_quantity_to_order = 1;
             }
