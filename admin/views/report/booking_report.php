@@ -34,7 +34,13 @@ $status = Booking::statusList();
 		</tr>
 	</thead>
 	<tbody>
-		<?php foreach ($bookings as $key => $value) { ?>
+		<?php 
+
+		$commission = 0;
+
+		foreach ($bookings as $key => $value) { 
+			
+			$commission += $value['commission_total']; ?>
 		<tr>
 			<td><?= date('d/m/y H:i:s', strtotime($value['created_datetime'])) ?></td>
 			<td><?= $value['booking_id'] ?></td>
@@ -52,7 +58,7 @@ $status = Booking::statusList();
 <div class="row">
 	<div class="col-print-6">
 
-		<div class="summary-box">
+		<div class="summary-box nobreak">
 
 			<h4>Order Detail </h4>
 
@@ -79,7 +85,7 @@ $status = Booking::statusList();
 
 	<div class="col-print-6">
 
-		<div class="summary-box">
+		<div class="summary-box nobreak">
 
 			<h4>Sales Detail </h4>
 
@@ -100,6 +106,22 @@ $status = Booking::statusList();
 			<hr />
 
 			<b>Total Sale :</b> <?= $total_sale ?>
+		</div>
+	</div>
+
+	<div class="col-print-6">
+
+		<div class="summary-box nobreak">
+
+			<h4>Summary </h4>
+
+			<b>Total Whitebook charge :</b> <?= $commission ?>
+
+			<div class="clearfix"></div>
+
+			<hr />
+
+			<b>Total Profit :</b> <?= $total_sale - $commission ?>
 		</div>
 	</div>
 </div>

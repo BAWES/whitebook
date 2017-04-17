@@ -118,6 +118,8 @@ class ReportController extends Controller
 
         $implode = [];
 
+        $implode[] = '{{%booking}}.booking_status = '.Booking::STATUS_ACCEPTED;
+
         if($date_start)
             $implode[] = 'DATE({{%booking}}.created_datetime) >= DATE("'.$date_start.'")';
 
