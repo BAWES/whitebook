@@ -53,11 +53,10 @@ currency: 'USD'
 </div>
 
 <!-- WhatsApp !!-->
-<div id='whatsapp' style='background:#128C7E; padding:8px; text-align:center;'>
+<div id='whatsapp' style='padding:8px; margin-top:10px; text-align:center;'>
     <a href='whatsapp://send?text=Hello!&phone=+96590049924'
-        style='color:white; font-weight:bold;'>
-        <img src='https://www.whatsappbrand.com/apple-icon-144x144.png' style='width:20px; height:20px;'>
-        WhatsApp +965 90049924
+        style='font-weight:bold; font-size:1.2em'>
+        Contact us at +965 90049924 for any inquiry or assistance with planning your event
     </a>
 </div>
 
