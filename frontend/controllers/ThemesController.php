@@ -112,7 +112,7 @@ class ThemesController extends BaseController
             ->approvedVendor()
             ->defaultVendor()
             ->vendorItems($theme_items);
-            
+
         $cats = '';
 
         if ($slug != 'all') 
