@@ -76,4 +76,24 @@ class BookingController extends Controller
             'query' => $query
         ]);
     }
+
+    /**
+     * Return Booking Detail
+     */
+    public function actionView($id)
+    {
+        $booking = Booking::find()
+            ->andWhere(['booking_token' => $id])
+            ->one();
+
+        if(!$booking)
+        {
+            return [
+                "operation" => "error",
+                "message" => "Booking not found",
+            ];
+        }
+
+        return $booking;
+    }
 }

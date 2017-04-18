@@ -14,16 +14,35 @@ class Booking extends \common\models\Booking {
      */
     public function fields()
     {
-        $fields = parent::fields();
-
-        // remove fields that contain sensitive information
-        unset($fields['gateway_percentage'],
-        $fields['gateway_fees'],
-        $fields['gateway_total'],
-        $fields['commission_percentage'],
-        $fields['commission_total'],
-        $fields['total_vendor']);
-
-        return $fields;
+        return [
+            'booking_id',
+            'booking_token',
+            'vendor_id',
+            'customer_id',
+            'customer_name',
+            'customer_lastname',
+            'customer_email',
+            'customer_mobile',
+            'delivery_date',
+            'timeslot',
+            'area_id',
+            'address_id',
+            'delivery_address',
+            'booking_note',
+            'expired_on',
+            'notification_status',
+            'payment_method',
+            'transaction_id',
+            'total_delivery_charge',
+            'total_without_delivery',
+            'total_with_delivery',
+            'booking_status',
+            'ip_address',
+            'created_datetime',
+            'modified_datetime',
+            'items' => function($model) {
+                return $model->bookingItems;
+            }
+        ];
     }
 }
