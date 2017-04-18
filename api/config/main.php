@@ -221,6 +221,15 @@ return [
                         'OPTIONS' => 'options'
                     ]
                 ],
+                [ // DirectoryController
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/directory',
+                    'patterns' => [
+                        'GET' => 'list',
+                        // OPTIONS VERBS
+                        'OPTIONS' => 'options'
+                    ]
+                ],
             ],
         ],
         'log' => [
