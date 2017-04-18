@@ -54,7 +54,8 @@ class ProductController extends Controller
             'product-detail',
             'load-all-themes',
             'load-all-vendor',
-            'final-price'
+            'final-price',
+            'product-delivery-time-slot'
         ];
 
         return $behaviors;
@@ -340,9 +341,8 @@ class ProductController extends Controller
     /*
      * Product delivery Time Slot
     */
-    public function actionProductDeliveryTimeSlot($vendor_id, $date, $time, $current_date)
+    public function actionProductDeliveryTimeSlot($vendor_id, $event_date)
     {
-        $list = [];
         if (empty($vendor_id) || !isset($vendor_id)) {
             return [
                 "operation" => "error",
@@ -350,57 +350,31 @@ class ProductController extends Controller
             ];
         }
 
-        if (empty($date) || !isset($date)) {
+        if (empty($event_date) || !isset($event_date)) {
             return [
                 "operation" => "error",
-                'message' => 'Invalid Date'
+                'message' => 'Invalid Event Date'
             ];
         }
 
-        if (empty($time) || !isset($time)) {
-            return [
-                "operation" => "error",
-                'message' => 'Invalid Date'
-            ];
-        }
-
-        if (empty($current_date) || !isset($current_date)) {
-            return [
-                "operation" => "error",
-                'message' => 'Invalid Current Date'
-            ];
-        }
-
-        $string = $date;
+        $string = $event_date;
         $timestamp = strtotime($string);
+        $slots = [];
 
-        $vendor_timeslot = \common\models\DeliveryTimeSlot::find()
-            ->select(['timeslot_id','timeslot_start_time','timeslot_end_time'])
-            ->where(['vendor_id' => $vendor_id])
-            ->andwhere(['timeslot_day' => date("l", $timestamp)])
-            ->asArray()->all();
+        $vendor_timeslot = \common\models\VendorWorkingTiming::find()
+            ->select(['working_id','working_start_time','working_end_time'])
+            ->vendor($vendor_id)
+            ->workingDay(date("l", $timestamp))
+            ->defaultTiming()
+            ->asArray()
+            ->all();
 
         if ($vendor_timeslot) {
+
             foreach ($vendor_timeslot as $key => $value) {
-                if (strtotime($date) == (strtotime($current_date))) {
-                    if (strtotime($time) < strtotime($value['timeslot_start_time'])) {
-                        $start = date('g:i A', strtotime($value['timeslot_start_time']));
-                        $end = date('g:i A', strtotime($value['timeslot_end_time']));
-                        $list[] = array(
-                            'id'=>$value['timeslot_id'],
-                            'value'=>$start . ' - ' . $end
-                        );
-                    }
-                } else {
-                    $start = date('g:i A', strtotime($value['timeslot_start_time']));
-                    $end = date('g:i A', strtotime($value['timeslot_end_time']));
-                    $list[] = array(
-                        'id'=>$value['timeslot_id'],
-                        'value'=>$start . ' - ' . $end
-                    );
-                }
+                $slots = array_merge($slots, $this->slots($value['working_start_time'], $value['working_end_time']));
             }
-            return $list;
+            return $slots;
         } else {
             return [];
         }
@@ -495,5 +469,38 @@ class ProductController extends Controller
         return [
             "price" => CFormatter::format($total)
         ];
+    }
+
+    /*
+     * method provide time slots interval between two time slots
+     */
+    private function slots($startTime = '11:00:00', $endTime = '22:45:00'){
+
+        $slots = [];
+        if ($startTime && $endTime) {
+
+            $from = strtotime($startTime);
+            $to ='';
+
+            if($endTime == '00:00:00') {
+                $endTime = '24:00:00';
+            }
+
+            while ($from < strtotime($endTime)) {
+
+                $to = strtotime("+30 minutes", $from);
+
+                if ($to > strtotime($endTime)) {
+                    $slots[] = date('h:i A', $from);// . '-' . date('H:i:s',strtotime($endTime));
+                    break;
+                }
+
+                $slots[] = date('h:i A', $from);// . ' - ' . date('h:i A',$to);
+
+                $from = $to;
+            }
+        }
+
+        return $slots;
     }
 }
