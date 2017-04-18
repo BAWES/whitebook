@@ -414,6 +414,10 @@ class Booking extends \yii\db\ActiveRecord
 
         $address = '';
 
+        if($model->location) {
+            $address .= $model->location->location.'<br />';    
+        }
+
         $address_responses = CustomerAddressResponse::find()
             ->where(['address_id' => $address_id])
             ->all();
@@ -428,13 +432,9 @@ class Booking extends \yii\db\ActiveRecord
             $address .= $model->address_data.'<br />';
         }
         
-        if($model->location) {
-            $address .= $model->location->location.'<br />';    
-        }
-        
-        if($model->city) {
+        /*if($model->city) {
             $address .= $model->city->city_name.'<br />';
-        }        
+        } */       
 
         return $address;
     }

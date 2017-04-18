@@ -98,10 +98,6 @@ use common\models\CustomerCartMenuItem;
 
                 $sub_total += $row_total;
 
-                $address_data = CustomerCart::getAddressData($address);
-
-                $delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
-
                 ?>
                 <tr>
                     <td align="center">
