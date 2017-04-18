@@ -823,6 +823,16 @@ class Booking extends \yii\db\ActiveRecord
         }
     }
 
+    public static function getDeliveryCharges($address_id,$vendor_id) {
+        $model = CustomerAddress::findOne($address_id);
+        $locationData = VendorLocation::find()->area($model->area_id)->vendor($vendor_id)->one();
+        if ($locationData) {
+            return $locationData->delivery_price;
+        } else {
+            return 0.0;
+        }
+    }
+
     /**
      * @inheritdoc
      * @return query\BookingQuery the active query used by this AR class.

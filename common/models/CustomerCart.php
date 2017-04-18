@@ -2,12 +2,12 @@
 
 namespace common\models;
 
+use common\models\VendorItem;
 use Yii;
 use yii\db\Expression;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use common\models\Booking;
-use common\models\VendorItem;
 use common\models\VendorItemMenu;
 use common\models\VendorItemMenuItem;
 use common\components\CFormatter;
@@ -112,7 +112,8 @@ class CustomerCart extends \yii\db\ActiveRecord
         return $this->hasOne(Image::className(), ['item_id' => 'item_id']);
     }
 
-    public function getItemAnswers() {
+    public function getItemAnswers()
+    {
         return $this->hasOne(CustomerCartItemQuestionAnswer::className(), ['cart_id' => 'cart_id']);
     }
 
@@ -606,6 +607,13 @@ class CustomerCart extends \yii\db\ActiveRecord
         return Booking::getPurchaseDeliveryAddress($address_id);
     }
 
+    public static function getItemVendor($item_id) {
+        return VendorItem::findOne(['item_id'=>$item_id])->vendor;
+    }
+
+    public function getVendorDetail($vendor_id){
+        return Vendor::findOne($vendor_id);
+    }
     /**
      * @inheritdoc
      * @return query\CustomerCartQuery the active query used by this AR class.
