@@ -206,6 +206,11 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
                             <i><small><?=Yii::t('frontend','Quantity').': '. $item['cart_quantity']?></small></i>
                             <!-- Quantity -->
                             <br/>
+
+
+                            <i><small><strong><?=Yii::t('frontend','Vendor Name').':</strong> '. CustomerCart::getVendorDetail($item['vendor_id'])->vendor_name?></small></i>
+                            <!-- Quantity -->
+                            <br/>
 		        			<?php
 
 		        			$arr_menu_id = [];

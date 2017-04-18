@@ -25,17 +25,16 @@ use common\models\CustomerCartMenuItem;
         	<tr>
         		<td align="center"><?= Yii::t('frontend', 'Image') ?></th>
         		<td align="left"><?= Yii::t('frontend', 'Item') ?></th>
-        		<td align="left"><?= Yii::t('frontend', 'Delivery') ?></th>
-        		<td align="right"><?= Yii::t('frontend', 'Delivery Charges') ?></th>
         		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Total') ?></th>
         	</tr>
         </thead>
         <tbody>
         	<?php
         	$sub_total = $delivery_charge = 0;
-
+            $vendors = [];
         	foreach ($items as $item) {
-
+                $vendor_name = CustomerCart::getVendorDetail($item['vendor_id'])->vendor_name;
+                $vendors[$item['vendor_id']] = $vendor_name;
         	    // base price
         	    $row_total = ($item['item']['item_base_price']) ? $item['item']['item_base_price'] : 0;
 
@@ -118,7 +117,11 @@ use common\models\CustomerCartMenuItem;
 
                         <br />
                         <!-- Quantity -->
-                        <i><small><?=Yii::t('frontend','Quantity').': '. $item['cart_quantity']?></small></i>
+                        <i><small><strong><?=Yii::t('frontend','Quantity').':</strong> '. $item['cart_quantity']?></small></i>
+                        <!-- Quantity -->
+                        <br/>
+
+                        <i><small><strong><?=Yii::t('frontend','Vendor Name').':</strong> '. $vendor_name?></small></i>
                         <!-- Quantity -->
                         <br/>
                         <?php
@@ -185,14 +188,6 @@ use common\models\CustomerCartMenuItem;
                                 </div>
                             <?php } ?>
                     </td>
-                    <td>
-                        <?= Booking::getPurchaseDeliveryAddress(Yii::$app->session->get('address_id')); ?>
-                    </td>
-                    <td align="right" class="visible-md visible-lg">
-                        KD <?php
-                        echo $charge = Booking::getDeliveryCharges(Yii::$app->session->get('address_id'),$item['vendor_id']);
-                        $delivery_charge += $charge; ?>
-                    </td>
                     <td align="right" class="visible-md visible-lg">
                         <?= CFormatter::format($row_total) ?>
                     </td>
@@ -200,23 +195,30 @@ use common\models\CustomerCartMenuItem;
         	<?php
         	}
         	?>
-
             <tr>
-                <td colspan="4" class="text-right"><strong><?= Yii::t('frontend', 'Sub-Total') ?></strong></td>
+                <td colspan="2" class="text-right"><strong><?= Yii::t('frontend', 'Sub-Total') ?></strong></td>
                 <td class="text-right"><?= CFormatter::format($sub_total) ?></td>
             </tr>
+            <?php
+                foreach ($vendors as $key => $vendor) {
+                    $charge = Booking::getDeliveryCharges(Yii::$app->session->get('address_id'),$key);
+                    $delivery_charge += (int) $charge;
+            ?>
             <tr>
-                <td colspan="4" class="text-right"><strong><?= Yii::t('frontend', 'Delivery Charge') ?></strong></td>
-                <td class="text-right"><?= CFormatter::format($delivery_charge) ?></td>
+                <td colspan="2" class="text-right"><strong><?= Yii::t('frontend', 'Delivery Charge') ?></strong> <small>( <?=$vendor?> )</small></td>
+                <td class="text-right"><?= CFormatter::format($charge) ?></td>
             </tr>
+            <?php } ?>
             <tr>
-                <td colspan="4"  class="text-right"><strong><?= Yii::t('frontend', 'Total') ?></strong></td>
+                <td colspan="2"  class="text-right"><strong><?= Yii::t('frontend', 'Total') ?></strong></td>
                 <td class="text-right"><?= CFormatter::format($sub_total + $delivery_charge) ?></td>
             </tr>
 
         </tbody>        	
     </table>
 
+    <h3><?= Yii::t('frontend', 'Delivery Address') ?></h3>
+    <?= Booking::getPurchaseDeliveryAddress(Yii::$app->session->get('address_id')); ?>
 </form>
 
 <div class="row checkout-confirm-btn-set">
