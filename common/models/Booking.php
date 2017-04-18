@@ -385,9 +385,9 @@ class Booking extends \yii\db\ActiveRecord
             $vendor = Vendor::findOne($booking->vendor_id);
 
             if (is_null($vendor->commision) || $vendor->commision == '') {
-                $commission_percentage = $vendor->commision;
-            } else {
                 $commission_percentage = $default_commision;
+            } else {
+                $commission_percentage = $vendor->commision;
             }
 
             $commission_total = $total * ($commission_percentage / 100);
