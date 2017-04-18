@@ -26,12 +26,12 @@ use common\models\CustomerCartMenuItem;
         		<td align="center"><?= Yii::t('frontend', 'Image') ?></th>
         		<td align="left"><?= Yii::t('frontend', 'Item') ?></th>
         		<td align="left"><?= Yii::t('frontend', 'Delivery') ?></th>
+        		<td align="right"><?= Yii::t('frontend', 'Delivery Charges') ?></th>
         		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Total') ?></th>
         	</tr>
         </thead>
         <tbody>
-        	<?php 
-
+        	<?php
         	$sub_total = $delivery_charge = 0;
 
         	foreach ($items as $item) {
@@ -193,37 +193,35 @@ use common\models\CustomerCartMenuItem;
                         <?= Booking::getPurchaseDeliveryAddress(Yii::$app->session->get('address_id')); ?>
                     </td>
                     <td align="right" class="visible-md visible-lg">
+                        KD <?php
+                        echo $charge = Booking::getDeliveryCharges(Yii::$app->session->get('address_id'),$item['vendor_id']);
+                        $delivery_charge += $charge; ?>
+                    </td>
+                    <td align="right" class="visible-md visible-lg">
                         <?= CFormatter::format($row_total) ?>
                     </td>
                 </tr>
-        	<?php } ?>
+        	<?php
+        	}
+        	?>
+
+            <tr>
+                <td colspan="4" class="text-right"><strong><?= Yii::t('frontend', 'Sub-Total') ?></strong></td>
+                <td class="text-right"><?= CFormatter::format($sub_total) ?></td>
+            </tr>
+            <tr>
+                <td colspan="4" class="text-right"><strong><?= Yii::t('frontend', 'Delivery Charge') ?></strong></td>
+                <td class="text-right"><?= CFormatter::format($delivery_charge) ?></td>
+            </tr>
+            <tr>
+                <td colspan="4"  class="text-right"><strong><?= Yii::t('frontend', 'Total') ?></strong></td>
+                <td class="text-right"><?= CFormatter::format($sub_total + $delivery_charge) ?></td>
+            </tr>
+
         </tbody>        	
     </table>
 
 </form>
-
-<?php /* ?>
-<div class="row">
-    <div class="col-sm-4 pull-right">
-      <table class="table table-bordered">
-        <tbody>
-        <tr>
-          <td class="text-right"><strong><?= Yii::t('frontend', 'Sub-Total') ?></strong></td>
-          <td class="text-right"><?= CFormatter::format($sub_total) ?></td>
-        </tr>
-        <tr>
-          <td class="text-right"><strong><?= Yii::t('frontend', 'Delivery Charge') ?></strong></td>
-          <td class="text-right"><?= CFormatter::format($delivery_charge) ?></td>
-        </tr>
-        <tr>
-          <td class="text-right"><strong><?= Yii::t('frontend', 'Total') ?></strong></td>
-          <td class="text-right"><?= CFormatter::format($sub_total + $delivery_charge) ?></td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-</div>
-<?php */ ?>
 
 <div class="row checkout-confirm-btn-set">
 
