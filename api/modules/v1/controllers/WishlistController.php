@@ -65,48 +65,32 @@ class WishlistController extends Controller
     /**
      * @return array
      */
-    public function actionWishlistList($offset,$category_id)
+    public function actionWishlistList($offset = 0,$category_id = '')
     {
-        return $this->listing($offset,$category_id);
-    }
-
-
-    /*
-     * Method to list all whishlist related with particular user
-     */
-    private function listing($offset = 0, $category){
-
         $customer_id = Yii::$app->user->getId();
+
         $limit = Yii::$app->params['limit'];
-        $q = "SELECT `whitebook_vendor_item`.`item_id`,`whitebook_wishlist`.`wishlist_id`, ";
-        $q .= "`whitebook_vendor_item`.`item_name`, `whitebook_vendor_item`.`item_price_per_unit`, ";
-        $q .= "`whitebook_vendor`.`vendor_name`, `whitebook_image`.`image_path` FROM `whitebook_wishlist` ";
-        $q .= "LEFT JOIN `whitebook_vendor_item` ON `whitebook_vendor_item`.item_id = `whitebook_wishlist`.item_id ";
-
-        if ($category) {
-            $q .= "LEFT JOIN `whitebook_vendor_item_to_category` ON `whitebook_vendor_item_to_category`.item_id = `whitebook_wishlist`.item_id ";
-        }
-
-        $q .= "LEFT JOIN `whitebook_image` ON `whitebook_vendor_item`.item_id = `whitebook_image`.item_id LEFT JOIN `whitebook_vendor` ON `whitebook_vendor_item`.vendor_id = `whitebook_vendor`.vendor_id  ";
-        $q .= "WHERE (`whitebook_vendor_item`.`trash`='Default') AND (`whitebook_vendor_item`.`item_approved`='Yes') AND (`whitebook_vendor_item`.`item_status`='Active') AND ";
-        $q .= "(`whitebook_wishlist`.`customer_id`=$customer_id) AND (`whitebook_vendor`.`trash`='Default') AND (`whitebook_vendor`.`approve_status`='Yes') ";
-
-        if ($category) {
-            $q .= " AND `whitebook_vendor_item_to_category`.`category_id` = '{$category}' ";
-        }
-
-        $q .= "AND (`whitebook_vendor_item`.`item_archived`='no') GROUP BY `item_id` ORDER BY `whitebook_vendor_item`.`item_name` LIMIT $limit OFFSET $offset";
-        return \Yii::$app->db->createCommand($q)->queryAll();
+        $price = $vendor = $avail_sale = $theme = '';
+        $avail_sale = $vendor = $theme = '';
+        return \frontend\models\Users::get_customer_wishlist($customer_id, $category_id, $price, $vendor, $avail_sale,$limit,$offset);
     }
 
     /*
      * Add to WishList table method
      */
-    public function actionWishlistAdd() {
-
+    public function actionWishlistAdd()
+    {
         if (Yii::$app->user->getId()) {
             $customer_id = Yii::$app->user->getId();
-            $product_id = Yii::$app->request->getBodyParam("product_id");
+            $product_id = Yii::$app->request->getBodyParam("item_id");
+
+            if (empty($product_id) || !isset($product_id)) {
+                return [
+                    "operation" => "error",
+                    "code" => "0",
+                    'message' => 'Invalid item ID'
+                ];
+            }
 
             $exist = Wishlist::find()->where(['item_id' => $product_id, 'customer_id' => $customer_id])->exists();
             if (!$exist) {
@@ -118,20 +102,29 @@ class WishlistController extends Controller
                     return [
                         "operation" => "success",
                         "message" => "Item added to wishlist Successfully",
+                        "code" => "1",
                         "id" => $wish_modal->wishlist_id,
                     ];
                 } else {
                     return [
                         "operation" => "error",
                         "message" => "Error While Adding Item To Wishlist",
+                        "code" => "0",
                         "error" => $wish_modal->errors,
                     ];
                 }
+            } else {
+                return [
+                    "operation" => "error",
+                    "message" => "Item Already Added",
+                    "code" => "0",
+                ];
             }
         } else {
             return [
                 "operation" => "error",
                 "message" => "Please login to add item to wishlist",
+                "code" => "0",
             ];
         }
     }
@@ -139,7 +132,17 @@ class WishlistController extends Controller
     /*
      * Remove to WishList table method
      */
-    public function actionWishlistRemove($wishlist_id) {
+    public function actionWishlistRemove() {
+
+        $wishlist_id = Yii::$app->request->getBodyParam("wishlist_id");
+
+        if (empty($wishlist_id) || !isset($wishlist_id)) {
+            return [
+                "operation" => "error",
+                "code" => "0",
+                'message' => 'Invalid Wishlist ID'
+            ];
+        }
 
         $customer_id = Yii::$app->user->getId();
         $item = Wishlist::findOne(['wishlist_id'=>$wishlist_id,'customer_id'=>$customer_id]);
@@ -147,11 +150,13 @@ class WishlistController extends Controller
         if ($item && $item->delete()) {
             return [
                 "operation" => "success",
+                "code" => "1",
                 "message" => "Item remove from wishlist successfully",
             ];
         } else {
             return [
                 "operation" => "error",
+                "code" => "0",
                 "message" => "Error While Deleting Item From Wishlist",
             ];
         }
