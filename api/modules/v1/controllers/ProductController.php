@@ -266,6 +266,7 @@ class ProductController extends Controller
             if ($check > 0) {
                 return [
                     "operation" => "error",
+                    "code" => "0",
                     'message' => Yii::t('frontend', '{item_name} already exist with {event_name}',
                         [
                             'item_name' => $item_name,
@@ -285,6 +286,7 @@ class ProductController extends Controller
                 {
                     return [
                         "operation" => "success",
+                        "code" => "1",
                         'message' => Yii::t('frontend', '{item_name} has been added to {event_name}',
                             [
                                 'item_name' => $item_name,
@@ -346,6 +348,7 @@ class ProductController extends Controller
         if (empty($vendor_id) || !isset($vendor_id)) {
             return [
                 "operation" => "error",
+                "code" => "0",
                 'message' => 'Invalid Vendor ID'
             ];
         }
@@ -353,6 +356,7 @@ class ProductController extends Controller
         if (empty($event_date) || !isset($event_date)) {
             return [
                 "operation" => "error",
+                "code" => "0",
                 'message' => 'Invalid Event Date'
             ];
         }
@@ -422,6 +426,7 @@ class ProductController extends Controller
         {
            return [
                 "operation" => "error",
+                "code" => "0",
                 "message" => "Package not found",
             ];
         }
