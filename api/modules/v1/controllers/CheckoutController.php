@@ -11,14 +11,12 @@ use common\models\Country;
 use common\models\PaymentGateway;
 use frontend\models\AddressType;
 
-
 /**
  * Class CheckoutController
  * @package api\modules\v1\controllers
  */
 class CheckoutController extends Controller
 {
-
 	/**
 	 * @return array
      */
@@ -201,5 +199,41 @@ class CheckoutController extends Controller
             $cartItemsWithAddress[] = array_merge($item + ['address'=>$addresses]);
         }
         return $cartItemsWithAddress;
+    }
+
+    /**
+     * List delivery area 
+     */
+    public function actionDeliveryArea()
+    {
+    	$cities = \common\models\City::find()->where([
+    		'trash' => 'Default',
+    		'status' => 'Active'
+    	])->with('locations')->all();
+
+        $result = [];
+
+        foreach ($cities as $city) 
+        {
+            $city_name = \common\components\LangFormat::format($city->city_name,$city->city_name_ar);
+            
+            $result[$city_name] = [];
+            
+            foreach ($city->locations as $location) {
+                
+                if ($location->trash != 'Default' || $location->status !='Active') 
+                	continue;
+                
+                $result[$city_name][] = [
+                	'id' => $location->id,
+				    'country_id' => $location->country_id,
+				    'city_id' => $location->city_id,
+				    'location' => $location->location,
+				    'location_ar' => $location->location_ar
+                ];
+            }
+        }
+
+        return $result;
     }
 }

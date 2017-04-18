@@ -182,6 +182,7 @@ return [
                         'GET address' => 'address',
                         'GET success' => 'success',
                         'GET list-with-address' => 'cart-item-with-address',
+                        'GET delivery-area' => 'delivery-area',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
                         'OPTIONS payment-getaway' => 'options',
