@@ -34,6 +34,10 @@ class CustomerAddressResponse extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getAddressQuestion() {
+        return $this->hasOne(AddressQuestion::className(),['ques_id'=>'address_type_question_id']);
+    }
+
     /**
      * @inheritdoc
      */
