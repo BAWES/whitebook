@@ -37,8 +37,8 @@ $this->title = Yii::t('frontend', 'Pay Now | Whitebook');
 	        	<tr>
 	        		<td align="center">
 	        			<?php
-
-	        			$image_row = Image::find()->select(['image_path'])
+                        $vendorData = \common\models\CustomerCart::getItemVendor($item['item_id']);
+                        $image_row = Image::find()->select(['image_path'])
                                 ->where(['item_id' => $item['item_id']])
                                 ->orderby(['vendorimage_sort_order' => SORT_ASC])
                                 ->asArray()
@@ -66,6 +66,11 @@ $this->title = Yii::t('frontend', 'Pay Now | Whitebook');
                         <br />
                         <!-- Quantity -->
                         <i><small><?=Yii::t('frontend','Quantity').': '. $item['quantity']?></small></i>
+                        <!-- Quantity -->
+                        <br/>
+
+
+                        <i><small><strong><?=Yii::t('frontend','Vendor Name').':</strong> '. $vendorData->vendor_name?></small></i>
                         <!-- Quantity -->
                         <br/>
 
@@ -128,7 +133,7 @@ $this->title = Yii::t('frontend', 'Pay Now | Whitebook');
 
 	        			<?= $item['delivery_address'] ?><br />
 
-    					<?= $item['delivery_date'] ?><br />
+                        <?= $item['delivery_date'] ?><br />
 
 						<?= $item['timeslot']; ?><br />
 
@@ -139,6 +144,19 @@ $this->title = Yii::t('frontend', 'Pay Now | Whitebook');
 	        		</td>
 	        	</tr>
 	        	<?php } ?>
+
+                <tr>
+                    <td colspan="3" class="text-right"><strong><?= Yii::t('frontend', 'Sub-Total') ?></strong></td>
+                    <td class="text-right"><?= CFormatter::format($booking['total_without_delivery']) ?></td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="text-right"><strong><?= Yii::t('frontend', 'Delivery Charge') ?></strong></td>
+                    <td class="text-right"><?= CFormatter::format($booking['total_delivery_charge']) ?></td>
+                </tr>
+                <tr>
+                    <td colspan="3"  class="text-right"><strong><?= Yii::t('frontend', 'Total') ?></strong></td>
+                    <td class="text-right"><?= CFormatter::format($booking['total_with_delivery']) ?></td>
+                </tr>
 	        </tbody>
         </table>
 

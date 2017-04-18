@@ -49,6 +49,7 @@ class PaymentController extends BaseController
         $tap = PaymentGateway::find()->active()->getaway('tap')->one();
 
         return $this->render('index', [
+            'booking' => $booking,
             'items' => $booking->bookingItems,
             'cod' => $cod,
             'tap' => $tap
