@@ -806,9 +806,9 @@ class CartController extends BaseController
             }
 
             foreach($slots as $slot) {
-                
-                if($slot == $event_time) 
-                    $selected = 'selected'; 
+
+                if($slot == $event_time)
+                    $selected = 'selected';
                 else
                     $selected = '';
 
