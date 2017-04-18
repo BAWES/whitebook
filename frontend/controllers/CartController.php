@@ -42,7 +42,7 @@ class CartController extends BaseController
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','update-cart-item-popup','update-cart-item','add', 'update', 'validation-product-available', 'get-delivery-timeslot', 'save-delivery-timeslot','slots'],
+                        'actions' => ['index','update-cart-item-popup','update-cart-item','add', 'update', 'validation-product-available', 'get-delivery-timeslot', 'save-delivery-timeslot','slots', 'remove'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -748,7 +748,6 @@ class CartController extends BaseController
      * Remove item from cart
      */
     public function actionRemove() {
-
         $cart_id = Yii::$app->request->get('cart_id');
 
         $query = CustomerCart::find()
@@ -767,9 +766,7 @@ class CartController extends BaseController
         if($cart)
         {
             $cart->delete();
-        }
-        else
-        {
+        } else {
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');    
         }
         

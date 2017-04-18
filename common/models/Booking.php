@@ -385,9 +385,9 @@ class Booking extends \yii\db\ActiveRecord
             $vendor = Vendor::findOne($booking->vendor_id);
 
             if (is_null($vendor->commision) || $vendor->commision == '') {
-                $commission_percentage = $vendor->commision;
-            } else {
                 $commission_percentage = $default_commision;
+            } else {
+                $commission_percentage = $vendor->commision;
             }
 
             $commission_total = $total * ($commission_percentage / 100);
@@ -424,23 +424,22 @@ class Booking extends \yii\db\ActiveRecord
         $address_responses = CustomerAddressResponse::find()
             ->where(['address_id' => $address_id])
             ->all();
-
         foreach ($address_responses as $response) {
             if($response->response_text) {
-                $address .= $response->response_text.'<br />';     
-            }           
+                $address .= '<strong>'.$response->addressQuestion->question. ':</strong> ' .$response->response_text.'<br />';
+            }
         }
 
         if($model->address_data) {
-            $address .= $model->address_data.'<br />';
+            $address .= '<strong>Address Data: </strong>'.$model->address_data.'<br />';
         }
         
         if($model->location) {
-            $address .= $model->location->location.'<br />';    
+            $address .= '<strong>Area:</strong> '.$model->location->location.'<br />';
         }
         
         if($model->city) {
-            $address .= $model->city->city_name.'<br />';
+            $address .= '<strong>City:</strong> '.$model->city->city_name.'<br />';
         }        
 
         return $address;

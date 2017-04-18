@@ -196,6 +196,7 @@ use yii\widgets\ActiveForm;
 				<input type="hidden" id="test1" value="0" name="tests">
 				<input type='hidden' id='test' value='0' name='tests1'>
 
+				<?= $form->field($model, 'commision'); ?>
 				<?= $form->field($model, 'vendor_status')->checkbox(['Active' => 'Active']); ?>
 				<?= $form->field($model, 'vendor_booking_managed_by')->dropDownList(['admin'=>'Admin','vendor'=>'Vendor']); ?>
 				<hr />
