@@ -125,8 +125,15 @@ class AddressType extends \yii\db\ActiveRecord
     // Status Image title
     public function statusTitle($status)
     {
-        if($status == 'Active')
-            return 'Activate';
-        return 'Deactivate';
+        return ($status == 'Active') ? 'Activate': 'Deactivate';
+    }
+
+    /**
+     * @inheritdoc
+     * @return \common\models\query\AddressTypeQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new \common\models\query\AddressTypeQuery(get_called_class());
     }
 }
