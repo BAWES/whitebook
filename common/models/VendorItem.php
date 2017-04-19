@@ -517,6 +517,11 @@ class VendorItem extends \yii\db\ActiveRecord
             $increment_value = $item->item_price_per_unit;
         }
 
+        if($item->minimum_increment < 1)
+        {
+            $item->minimum_increment = 1;
+        }
+
         // by this price will get increase by "price per increment" for each "min increment" qty added to cart  
 
         $total += (($quantity - $included_quantity) / $item->minimum_increment) * $increment_value;
