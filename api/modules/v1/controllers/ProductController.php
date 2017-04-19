@@ -15,6 +15,7 @@ use common\models\VendorItemPricing;
 use common\models\VendorItemMenuItem;
 use common\components\CFormatter;
 use api\models\EventItemlink;
+use common\models\VendorItemMenu;
 
 /**
  * Auth controller provides the initial access token that is required for further requests
@@ -93,7 +94,8 @@ class ProductController extends Controller
         $requestedMaxPrice = 0,
         $requestedCategories = '',
         $requestedVendor = '',
-        $requestedTheme = ''
+        $requestedTheme = '',
+        $event_time = ''
     )
     {
         $products = [];
@@ -105,6 +107,13 @@ class ProductController extends Controller
             $arr_vendor_slugs = [];
         }
 
+
+        if ($category_id != 'all') {
+            $Category = \common\models\Category::findOne($category_id);
+        } else {
+            $Category = '';
+        }
+
         $ActiveVendors = Vendor::loadvalidvendorids(
             false, //current category
             $arr_vendor_slugs, //only selected from filter
@@ -113,114 +122,99 @@ class ProductController extends Controller
         );
 
         $item_query = CategoryPath::find()
-            ->select('{{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar')
-            ->leftJoin(
-                '{{%vendor_item_to_category}}',
-                '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
-            )
-            ->leftJoin(
-                '{{%vendor_item}}',
-                '{{%vendor_item}}.item_id = {{%vendor_item_to_category}}.item_id'
-            )
-            ->leftJoin(
-                '{{%priority_item}}',
-                '{{%priority_item}}.item_id = {{%vendor_item}}.item_id'
-            )
-            ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
-            ->where([
-                '{{%vendor_item}}.trash' => 'Default',
-                '{{%vendor_item}}.item_approved' => 'Yes',
-                '{{%vendor_item}}.item_status' => 'Active',
-            ]);
+            ->selectedFields()
+            ->categoryJoin()
+            ->itemJoin()
+            ->priorityItemJoin()
+            ->vendorJoin()
+            ->defaultItems()
+            ->approved()
+            ->active();
 
         if ($forSale) {
-            $item_query->andWhere(['{{%vendor_item}}.item_for_sale' => 'Yes']);
+            $item_query->sale();
         }
 
-        $item_query->andWhere(['in', '{{%vendor_item}}.vendor_id', $ActiveVendors]);
+
+        $item_query->vendorIDs($ActiveVendors);
 
         //price filter
         if ($requestedMinPrice && $requestedMaxPrice) {
-
-            $price_condition = [];
-
-            $price_condition[] = '{{%vendor_item}}.item_price_per_unit IS NULL';
-            $price_condition[] = '{{%vendor_item}}.item_price_per_unit between '.$requestedMinPrice.' and '.$requestedMaxPrice;
-
-            $item_query->andWhere(implode(' OR ', $price_condition));
+            $item_query->price($requestedMinPrice,$requestedMaxPrice);
         }
 
         //theme filter
         if ($requestedTheme) {
 
-            $item_query->leftJoin('{{%vendor_item_theme}}', '{{%vendor_item}}.item_id = {{%vendor_item_theme}}.item_id');
-            $item_query->leftJoin('{{%theme}}', '{{%theme}}.theme_id = {{%vendor_item_theme}}.theme_id');
-            $item_query->andWhere(['IN', '{{%theme}}.slug', $requestedTheme]);
+            $item_query->itemThemeJoin();
+            $item_query->themeJoin();
+            $item_query->themeSlug($requestedTheme);
 
         }//if themes
+
+        //event time
+        if($event_time) {
+            $item_query->workingTimeJoin();
+        }
 
         //category filter
         $cats = '';
 
-        if ($category_id)
+        if($Category)
         {
-            $cats = $category_id;
+            $cats = $Category->category_id;
         }
 
-//        if (isset($requestedCategories) && count($requestedCategories) > 0)
-//        {
-//            $cats = implode("','",  $requestedCategories);
-//        }
-
-        if ($category_id != "all") {
-            $q = "{{%category_path}}.path_id IN ('" . $cats . "')";
-            $item_query->andWhere($q);
+        if($cats)
+        {
+            $item_query->categoryIDs($cats);
         }
 
         if ($requestedLocation) {
 
-
             if (is_numeric($requestedLocation)) {
                 $location = $requestedLocation;
             } else {
-                $address_id = substr($requestedLocation, strpos($requestedLocation, '_') + 1, strlen($requestedLocation));
+                $end = strlen($requestedLocation);
+                $from = strpos($requestedLocation, '_') + 1;
+                $address_id = substr($requestedLocation, $from, $end);
 
                 $location = \common\models\CustomerAddress::findOne($address_id)->area_id;
             }
-            $item_query->andWhere('EXISTS (SELECT 1 FROM {{%vendor_location}} WHERE {{%vendor_location}}.area_id="'.$location.'" AND {{%vendor_item}}.vendor_id = {{%vendor_location}}.vendor_id)');
+
+            $item_query->deliveryLocation($location);
         }
 
         if ($requestedDeliverDate) {
             $date = date('Y-m-d', strtotime($requestedDeliverDate));
-            $condition = " ({{%vendor}}.vendor_id NOT IN(SELECT vendor_id FROM `whitebook_vendor_blocked_date` where block_date = '".$date."')) ";
-            $item_query->andWhere($condition);
+            $item_query->deliveryDate($date);
         }
 
-        $expression = new Expression(
-            "CASE
-                WHEN
-                    `whitebook_priority_item`.priority_level IS NULL
-                    OR whitebook_priority_item.status = 'Inactive'
-                    OR whitebook_priority_item.trash = 'Deleted'
-                    OR DATE(whitebook_priority_item.priority_start_date) > DATE(NOW())
-                    OR DATE(whitebook_priority_item.priority_end_date) < DATE(NOW())
-                THEN 2
-                WHEN `whitebook_priority_item`.priority_level = 'Normal' THEN 1
-                WHEN `whitebook_priority_item`.priority_level = 'Super' THEN 0
-                ELSE 2
-            END, {{%vendor_item}}.sort");
+        if (!empty($event_time)) {
 
-        $listing = $item_query
+            $delivery_date = $requestedDeliverDate;
+
+            if($delivery_date)
+                $working_day = date('D', strtotime($delivery_date));
+            else
+                $working_day = date('D');
+
+            $event_time = date('H:i:s', strtotime($event_time));
+
+            $item_query->eventTime($event_time,$working_day);
+        }
+
+        $item_query_result = $item_query
             ->groupBy('{{%vendor_item}}.item_id')
-            ->orderBy($expression)
+            ->orderByExpression()
             ->asArray()
             ->offset($offset)
             ->limit($limit)
             ->all();
 
-        if ($listing) {
+        if ($item_query_result) {
 
-            foreach ($listing as $item) {
+            foreach ($item_query_result as $item) {
                 $image = \common\models\Image::find()
                 ->where(['item_id' => $item['item_id']])
                 ->orderBy(['vendorimage_sort_order' => SORT_ASC])
@@ -241,7 +235,19 @@ class ProductController extends Controller
      */
     public function actionProductDetail($product_id)
     {
-        return VendorItem::find()->where(['item_id'=>$product_id])->with(['images','vendor'])->asArray()->one();
+        $itemData = VendorItem::find()->where(['item_id'=>$product_id])->with(['images','vendor'])->asArray()->one();
+        if ($itemData) {
+            $return['menu'] = VendorItemMenu::find()->with('vendorItemMenuItems')->item($product_id)->menu('options')->asArray()->all();
+            $return['addons'] = VendorItemMenu::find()->with('vendorItemMenuItems')->item($product_id)->menu('addons')->asArray()->all();
+            $return['item'] = VendorItem::find()->where(['item_id' => $product_id])->with(['images', 'vendor'])->asArray()->one();
+            return $return;
+        } else {
+            return [
+                "operation" => "error",
+                "code" => "0",
+                'message' => 'Invalid Item ID'
+            ];
+        }
     }
 
     /*
@@ -416,27 +422,27 @@ class ProductController extends Controller
             ->all();
     }
 
-    public function actionFinalPrice() 
+
+    public function actionFinalPrice()
     {
-        $item_id = Yii::$app->request->post('item_id');
+        $item_id = Yii::$app->request->get('item_id');
 
         $item = VendorItem::findOne($item_id);
 
-        if (empty($item)) 
-        {
-           return [
+        if (empty($item)) {
+            return [
                 "operation" => "error",
                 "code" => "0",
-                "message" => "Package not found",
+                'message' => 'Invalid Item ID'
             ];
         }
-        
+
         $total = ($item->item_base_price) ? $item->item_base_price : 0;
 
         $price_chart = VendorItemPricing::find()
             ->item($item['item_id'])
             ->defaultItem()
-            ->quantityRange(Yii::$app->request->post('quantity'))
+            ->quantityRange(Yii::$app->request->get('quantity'))
             ->orderBy('pricing_price_per_unit DESC')
             ->one();
 
@@ -452,28 +458,23 @@ class ProductController extends Controller
             $unit_price = $item->item_price_per_unit;
         }
 
-        $actual_item_quantity = Yii::$app->request->post('quantity') - $included_quantity;
+        $actual_item_quantity = Yii::$app->request->get('quantity') - $included_quantity;
 
         $total += $unit_price * $actual_item_quantity;
 
-        $menu_items = Yii::$app->request->post('menu_item');
+        $menu_items = Yii::$app->request->get('menu_item');
 
         if(!is_array($menu_items)) {
             $menu_items = [];
         }
 
-        foreach ($menu_items as $key => $value) {
-            
-            $menu_item = VendorItemMenuItem::findOne($value['menu_item_id']);
 
+        foreach ($menu_items as $key => $value) {
+
+            $menu_item = VendorItemMenuItem::findOne($value['menu_item_id']);
             $total += $menu_item->price * $value['quantity'];
         }
-        
-        Yii::$app->response->format = 'json';
-
-        return [
-            "price" => CFormatter::format($total)
-        ];
+        return $total;
     }
 
     /*
