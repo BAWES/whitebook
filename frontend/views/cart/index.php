@@ -7,6 +7,7 @@ use common\models\Image;
 use common\models\CustomerCart;
 use common\components\CFormatter;
 use common\components\LangFormat;
+use common\models\VendorItem;
 use common\models\VendorItemPricing;
 use common\models\CustomerCartMenuItem;
 use yii\helpers\ArrayHelper;
