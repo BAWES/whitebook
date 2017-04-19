@@ -4,7 +4,9 @@ namespace api\modules\v1\controllers;
 
 use Yii;
 use yii\rest\Controller;
-use \common\models\CustomerCart;
+use common\models\CustomerCart;
+use common\models\CustomerCartMenuItem;
+
 /**
  * Auth controller provides the initial access token that is required for further requests
  * It initially authorizes via Http Basic Auth using a base64 encoded username and password
@@ -68,23 +70,43 @@ class CartController extends Controller
     }
 
     /**
-     * Method to return list of all cart items
+     * Return list of all cart items
      * in cart table
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function actionListing()
+    public function actionList()
     {
-        return $this->listing();
-    }
+        $items = CustomerCart::items();
 
-    /**
-     * Method to return list of cart items
-     * only to class methods
-     * @return array|\yii\db\ActiveRecord[]
-     */
-    private function listing()
-    {
-        return CustomerCart::items();
+        $result = [];
+
+        foreach ($items as $key => $value) 
+        {
+            unset($value['item']);
+            unset($value['image']);
+
+            $value['options'] = CustomerCartMenuItem::find()
+                ->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_id, {{%vendor_item_menu_item}}.menu_id, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
+                ->joinVendorItemMenuItem()
+                ->joinVendorItemMenu()
+                ->cartID($value['cart_id'])
+                ->andWhere(['menu_type' => 'options'])
+                ->asArray()
+                ->all();
+
+            $value['addons'] = CustomerCartMenuItem::find()
+                ->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_id, {{%vendor_item_menu_item}}.menu_id, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
+                ->joinVendorItemMenuItem()
+                ->joinVendorItemMenu()
+                ->cartID($value['cart_id'])
+                ->andWhere(['menu_type' => 'addons'])
+                ->asArray()
+                ->all();
+
+            $result[] = $value;
+        }
+        
+        return $result;
     }
 
     /**

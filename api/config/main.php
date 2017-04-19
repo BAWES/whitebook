@@ -63,7 +63,7 @@ return [
                     'controller' => 'v1/cart',
                     'pluralize' => false,
                     'patterns' => [
-                        'GET' => 'listing',
+                        'GET' => 'list',
                         'GET count' => 'cart-count',
                         'POST' => 'add',
                         'PATCH' => 'update',
