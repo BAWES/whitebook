@@ -493,7 +493,7 @@ class VendorItem extends \yii\db\ActiveRecord
         $item = self::findOne($item_id);
 
         if (empty($item)) {
-            return 0;
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
         $total = ($item->item_base_price) ? $item->item_base_price : 0;
@@ -512,25 +512,35 @@ class VendorItem extends \yii\db\ActiveRecord
         }
 
         if ($price_chart) {
-            $unit_price = $price_chart->pricing_price_per_unit;
+            $increment_value = $price_chart->pricing_price_per_unit;
         } else {
-            $unit_price = $item->item_price_per_unit;
+            $increment_value = $item->item_price_per_unit;
         }
 
-        $actual_item_quantity = $quantity - $included_quantity;
+        // by this price will get increase by "price per increment" for each "min increment" qty added to cart  
 
-        $total += $unit_price * $actual_item_quantity;
+        $total += (($quantity - $included_quantity) / $item->minimum_increment) * $increment_value;
 
         if(!is_array($menu_items)) {
             $menu_items = [];
         }
 
-        foreach ($menu_items as $key => $value) {
+        // menu item can be manu_item => quantity pair or array of menu items 
 
-            $menu_item = VendorItemMenuItem::findOne($key);
+        foreach ($menu_items as $key => $value) 
+        {
+            if(is_array($value))
+            {
+                $total += $value['price'] * $value['quantity'];
+            }
+            else
+            {
+                $menu_item = VendorItemMenuItem::findOne($key);
 
-            $total += $menu_item->price * $value;
+                $total += $menu_item->price * $value;
+            }
         }
+
         return $total;
     }
 

@@ -136,37 +136,11 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 
 					$delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
 
-					//check quantity fall in price chart 
-					$price_chart = VendorItemPricing::find()
-                        ->item($item['item_id'])
-                        ->defaultItem()
-                        ->quantityRange($item['cart_quantity'])
-						->orderBy('pricing_price_per_unit DESC')
-						->one();
-
-					if ($price_chart) {
-						$unit_price = $price_chart->pricing_price_per_unit;
-					} else {
-					    $unit_price = $item['item_price_per_unit'];
-					}
-
-                    if ($item['item']['included_quantity'] > 0) {
-                        $min_quantity_to_order = $item['item']['included_quantity'];
-                    } else {
-                        $min_quantity_to_order = 1;
-                    }
-
-                    $actual_item_quantity = $item['cart_quantity'] - $min_quantity_to_order;
-
-                    $row_total += $unit_price * $actual_item_quantity;
-
-	    			foreach ($menu_option_items as $key => $value) {
-	    				$row_total += $value['quantity'] * $value['price'];
-	    			}
-
-	    			foreach ($menu_addon_items as $key => $value) {
-	    				$row_total += $value['quantity'] * $value['price'];
-	    			}
+					$row_total = VendorItem::itemFinalPrice(
+			            $item['item_id'], 
+			            $item['cart_quantity'], 
+			            array_merge($menu_option_items, $menu_addon_items)
+			        );
 
 	    			$sub_total += $row_total; // not in use
 
