@@ -107,7 +107,7 @@ return [
                         'GET theme' => 'load-all-themes',
                         'GET vendors' => 'load-all-vendor',
                         'POST event' => 'add-product-to-event',
-                        'POST final-price' => 'final-price',
+                        'GET final-price' => 'final-price',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
                         'OPTIONS detail' => 'options',
@@ -117,6 +117,7 @@ return [
                         'OPTIONS capacity' => 'options',
                         'OPTIONS theme' => 'options',
                         'OPTIONS vendors' => 'options',
+                        'OPTIONS final-price' => 'options',
                     ]
                 ],
                 [ // EventController
