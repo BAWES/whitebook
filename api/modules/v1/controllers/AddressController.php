@@ -69,10 +69,9 @@ class AddressController extends Controller
 
         return AddressType::find()
             ->select(['type_id', 'type_name'])
-            ->where([
-                'status' => 'Active',
-                'trash' => 'Default'
-            ])->all();
+            ->active()
+            ->defaultTrash()
+            ->all();
     }
 
     /*
