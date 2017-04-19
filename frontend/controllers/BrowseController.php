@@ -572,52 +572,12 @@ class BrowseController extends BaseController
 
     public function actionFinalPrice() 
     {
-        $item_id = Yii::$app->request->post('item_id');
+        $total = VendorItem::itemFinalPrice(
+            Yii::$app->request->post('item_id'), 
+            Yii::$app->request->post('quantity'), 
+            Yii::$app->request->post('menu_item')
+        );
 
-        $item = VendorItem::findOne($item_id);
-
-        if (empty($item)) {
-           throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-        }
-        
-        $total = ($item->item_base_price) ? $item->item_base_price : 0;
-
-        $price_chart = VendorItemPricing::find()
-            ->item($item['item_id'])
-            ->defaultItem()
-            ->quantityRange(Yii::$app->request->post('quantity'))
-            ->orderBy('pricing_price_per_unit DESC')
-            ->one();
-
-        if ($item->included_quantity > 0) {
-            $included_quantity = $item->included_quantity;
-        } else {
-            $included_quantity = 1;
-        }
-
-        if ($price_chart) {
-            $unit_price = $price_chart->pricing_price_per_unit;
-        } else {
-            $unit_price = $item->item_price_per_unit;
-        }
-
-        $actual_item_quantity = Yii::$app->request->post('quantity') - $included_quantity;
-
-        $total += $unit_price * $actual_item_quantity;
-
-        $menu_items = Yii::$app->request->post('menu_item');
-
-        if(!is_array($menu_items)) {
-            $menu_items = [];
-        }
-
-        foreach ($menu_items as $key => $value) {
-            
-            $menu_item = VendorItemMenuItem::findOne($key);
-
-            $total += $menu_item->price * $value;
-        }
-        
         Yii::$app->response->format = 'json';
 
         return [

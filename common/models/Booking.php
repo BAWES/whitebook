@@ -228,45 +228,6 @@ class Booking extends \yii\db\ActiveRecord
 
         $items = CustomerCart::items();
 
-        //price chart
-
-        $price_chart = array();
-
-        //check if quantity fall in price chart
-        $BasePrice = '';
-        foreach ($items as $key => $item) {
-            $BasePrice = false;
-            $price_chart[$item['item_id']] = [];
-
-            $price = VendorItemPricing::find()
-                ->where(['item_id' => $item['item_id'], 'trash' => 'Default'])
-                ->andWhere(['<=', 'range_from', $item['cart_quantity']])
-                ->andWhere(['>=', 'range_to', $item['cart_quantity']])
-                ->orderBy('pricing_price_per_unit DESC')
-                ->one();
-
-            if ($price) {
-                $price_chart[$item['item_id']]['unit_price'] = $price->pricing_price_per_unit;
-            } else{
-                $price_chart[$item['item_id']]['unit_price'] = $item['item_price_per_unit'];
-            }
-
-            $price_chart[$item['item_id']]['base_price'] = ($item['item']['item_base_price']) ? $item['item']['item_base_price'] : 0.0;
-
-            $menu_items = CustomerCartMenuItem::find()
-                ->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
-                ->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
-                ->where(['cart_id' => $item['cart_id']])
-                ->asArray()
-                ->all();
-
-            $price_chart[$item['item_id']]['menu_price'] = 0;
-
-            foreach ($menu_items as $key => $menu_item) {
-                $price_chart[$item['item_id']]['menu_price'] += $menu_item['quantity'] * $menu_item['price'];
-            }
-        }
-
         if(Yii::$app->user->isGuest) 
         {
             $customer_id = 0;
@@ -286,6 +247,28 @@ class Booking extends \yii\db\ActiveRecord
             $customer_mobile = $customer->customer_mobile;
         }
 
+        //check if quantity fall in price chart
+        
+        foreach ($items as $key => $item) {
+
+            $price_chart[$item['item_id']] = [];
+
+            $price = VendorItemPricing::find()
+                ->where(['item_id' => $item['item_id'], 'trash' => 'Default'])
+                ->andWhere(['<=', 'range_from', $item['cart_quantity']])
+                ->andWhere(['>=', 'range_to', $item['cart_quantity']])
+                ->orderBy('pricing_price_per_unit DESC')
+                ->one();
+
+            if ($price) {
+                $price_chart[$item['item_id']]['unit_price'] = $price->pricing_price_per_unit;
+            } else{
+                $price_chart[$item['item_id']]['unit_price'] = $item['item_price_per_unit'];
+            }
+
+            $price_chart[$item['item_id']]['base_price'] = $item['item']['item_base_price'];
+        }
+
         //address
         
         $address_id = Yii::$app->session->get('address_id');
@@ -298,17 +281,30 @@ class Booking extends \yii\db\ActiveRecord
 
         foreach ($items as $item) {
 
-            if ($item['item']['included_quantity'] > 0) {
-                $min_quantity_to_order = $item['item']['included_quantity'];
-            } else {
-                $min_quantity_to_order = 1;
-            }
+            $menu_items = CustomerCartMenuItem::find()
+                ->select([
+                    '{{%vendor_item_menu}}.menu_id',
+                    '{{%vendor_item_menu}}.menu_name',
+                    '{{%vendor_item_menu}}.menu_name_ar',
+                    '{{%vendor_item_menu}}.menu_type',
+                    '{{%vendor_item_menu_item}}.menu_item_id',
+                    '{{%vendor_item_menu_item}}.menu_item_name',
+                    '{{%vendor_item_menu_item}}.menu_item_name_ar',
+                    '{{%vendor_item_menu_item}}.price',
+                    '{{%customer_cart_menu_item}}.quantity'
+                ])
+                ->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
+                ->innerJoin('{{%vendor_item_menu}}', '{{%vendor_item_menu}}.menu_id = {{%customer_cart_menu_item}}.menu_id')
+                ->where(['cart_id' => $item['cart_id']])
+                ->asArray()
+                ->all();
 
-            $actual_item_quantity = $item['cart_quantity'] - $min_quantity_to_order;
+            $total = VendorItem::itemFinalPrice(
+                $item['item_id'], 
+                $item['cart_quantity'], 
+                $menu_items
+            );
 
-
-            $total = $price_chart[$item['item_id']]['base_price']; // base price change
-            $total += ($price_chart[$item['item_id']]['unit_price'] * $actual_item_quantity) + $price_chart[$item['item_id']]['menu_price'];
             $booking = new Booking;
             $booking->vendor_id = $item['vendor_id'];
             $booking->customer_id = $customer_id;
@@ -334,34 +330,18 @@ class Booking extends \yii\db\ActiveRecord
             $booking_item->delivery_address = $address;
             
             $booking_item->item_base_price = ($price_chart[$item['item_id']]['base_price']) ? $price_chart[$item['item_id']]['base_price'] : 0.000;
+
             $booking_item->price = $price_chart[$item['item_id']]['unit_price'];
             $booking_item->quantity = $item['cart_quantity'];
             $booking_item->total = $total;
-            //$booking_item->total = ($price_chart[$item['item_id']]['unit_price'] * $item['cart_quantity']) + $price_chart[$item['item_id']]['menu_price'];
+            
             $booking_item->female_service = $item['female_service'];
             $booking_item->special_request = $item['special_request'];
             
             $booking_item->save(false);
 
             //save menu item
-            $menu_items = CustomerCartMenuItem::find()
-                ->select([
-                    '{{%vendor_item_menu}}.menu_id',
-                    '{{%vendor_item_menu}}.menu_name',
-                    '{{%vendor_item_menu}}.menu_name_ar',
-                    '{{%vendor_item_menu}}.menu_type',
-                    '{{%vendor_item_menu_item}}.menu_item_id',
-                    '{{%vendor_item_menu_item}}.menu_item_name',
-                    '{{%vendor_item_menu_item}}.menu_item_name_ar',
-                    '{{%vendor_item_menu_item}}.price',
-                    '{{%customer_cart_menu_item}}.quantity'
-                ])
-                ->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
-                ->innerJoin('{{%vendor_item_menu}}', '{{%vendor_item_menu}}.menu_id = {{%customer_cart_menu_item}}.menu_id')
-                ->where(['cart_id' => $item['cart_id']])
-                ->asArray()
-                ->all();
-
+            
             foreach ($menu_items as $key => $menu_item) {
                 $bim = new BookingItemMenu;
                 $bim->attributes = $menu_item;
