@@ -6,6 +6,8 @@ use Yii;
 use yii\rest\Controller;
 use common\models\CustomerCart;
 use common\models\CustomerCartMenuItem;
+use common\models\VendorItem;
+use common\models\VendorItemPricing;
 
 /**
  * Auth controller provides the initial access token that is required for further requests
@@ -102,6 +104,27 @@ class CartController extends Controller
                 ->andWhere(['menu_type' => 'addons'])
                 ->asArray()
                 ->all();
+
+            // price chart 
+
+            $price_chart = VendorItemPricing::find()
+                ->where(['item_id' => $value['item_id'], 'trash' => 'Default'])
+                ->andWhere(['<=', 'range_from', $value['cart_quantity']])
+                ->andWhere(['>=', 'range_to', $value['cart_quantity']])
+                ->orderBy('pricing_price_per_unit DESC')
+                ->one();
+
+            if ($price_chart) {
+                $value['item_price_per_unit'] = $price_chart->pricing_price_per_unit;
+            } 
+
+            // get final item total 
+
+            $value['total'] = VendorItem::itemFinalPrice(
+                        $value['item_id'], 
+                        $value['cart_quantity'], 
+                        array_merge($value['addons'], $value['options'])
+                    );
 
             $result[] = $value;
         }
