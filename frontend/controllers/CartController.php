@@ -248,6 +248,8 @@ class CartController extends BaseController
         Yii::$app->session->set('deliver-date', $delivery_date);
         Yii::$app->session->set('event_time', $time_slot);
 
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
         //remove menu item with 0 quantity 
 
         if(empty($data['menu_item'])) {
@@ -259,8 +261,6 @@ class CartController extends BaseController
             if($value == 0)
                 unset($data['menu_item'][$key]);
         }
-
-        Yii::$app->response->format = Response::FORMAT_JSON;
 
         if($this->validate_item($data)) {
             
@@ -450,6 +450,7 @@ class CartController extends BaseController
     }
 
 
+
     public function actionValidationProductAvailable() {
 
         // will change them too
@@ -462,6 +463,12 @@ class CartController extends BaseController
         $json = [];
 
         $data = Yii::$app->request->post();
+
+        if(!isset($data['area_id']) && (isset($data['area_id']) && $data['area_id'] == '')) {
+            $json['error'] = Yii::t('frontend', 'Please Select area!');
+
+            return $json;
+        }
 
         if(empty($data['item_id'])) {
             $json['error'] = Yii::t('frontend', 'Item ID require!');
@@ -476,7 +483,7 @@ class CartController extends BaseController
 
             return $json;
         }
-        
+
         $vendor_id = $item->vendor_id;
 
         /*
@@ -498,7 +505,7 @@ class CartController extends BaseController
 
             $delivery_area = CustomerCart::checkLocation($location, $vendor_id);
 
-            if (!$delivery_area) 
+            if (!$delivery_area)
             {
                 $json['error'] = Yii::t('frontend', 'Delivery not available on selected area');
 
@@ -506,7 +513,7 @@ class CartController extends BaseController
             }
         }
 
-        //get item type 
+        //get item type
 
         $item_type = ItemType::findOne($item->type_id);
 
@@ -516,13 +523,13 @@ class CartController extends BaseController
             $item_type_name = 'Product';
         }
 
-        $i = -1; //-1 to start with selected date 
+        $i = -1; //-1 to start with selected date
 
         while(true)
         {
             $i++;
 
-            //check upto 7 days 
+            //check upto 7 days
 
             if($i == 7)
                 break;
@@ -531,7 +538,7 @@ class CartController extends BaseController
 
             $delivery_date = date('Y-m-d', $timestamp);
 
-            //check timeslot available on selected date 
+            //check timeslot available on selected date
 
             $timeslot = VendorWorkingTiming::find()
                 ->defaultTiming()
@@ -547,11 +554,11 @@ class CartController extends BaseController
                 continue;
             }
 
-            if($item->notice_period_type == 'Hour' && !empty($data['time_slot'])) 
+            if($item->notice_period_type == 'Hour' && !empty($data['time_slot']))
             {
                 $min_delivery_time = strtotime('+'.$item->item_how_long_to_make.' hours');
                 $delivery_time = strtotime($delivery_date.' '.$data['time_slot']);
-                
+
                 if($delivery_time < $min_delivery_time)
                 {
                     if($i == 0)
@@ -565,7 +572,7 @@ class CartController extends BaseController
 
             if($item->notice_period_type == 'Day' && !empty($delivery_date))
             {
-                //compare timestamp of date 
+                //compare timestamp of date
 
                 $min_delivery_time = strtotime(date('Y-m-d', strtotime('+'.$item->item_how_long_to_make.' days')));
                 $delivery_time = strtotime($delivery_date);
@@ -603,13 +610,13 @@ class CartController extends BaseController
                 ->valid()
                 ->defaultCart();
 
-                $query->user();
+            $query->user();
 
             $in_cart = $query->sum('cart_quantity');
 
             //2) get no of item purchased for selected date
             $purchased_result = \common\models\Booking::totalPurchasedItem($data['item_id'], $delivery_date);
-            
+
             if ($purchased_result) {
                 $purchased = $purchased_result['purchased'];
             } else {
@@ -632,7 +639,7 @@ class CartController extends BaseController
                 ->blockedDate($delivery_date)
                 ->one();
 
-            if ($block_date) 
+            if ($block_date)
             {
                 if($i == 0)
                     $json['error'] = Yii::t('frontend', 'Item is not available on selected date');
@@ -644,9 +651,9 @@ class CartController extends BaseController
             $blocked_days = explode(',', Vendor::findOne($vendor_id)->blocked_days);
             $day = date('N', strtotime($delivery_date));//7-sunday, 1-monday
 
-            if (in_array($day, $blocked_days)) 
+            if (in_array($day, $blocked_days))
             {
-                //return error only for selected date  
+                //return error only for selected date
 
                 if($i == 0)
                     $json['error'] = Yii::t('frontend', 'Item is not available on selected date');
@@ -654,24 +661,25 @@ class CartController extends BaseController
                 continue;
             }
 
-            // we are lucky! Item available for selected date 
+            // we are lucky! Item available for selected date
 
             if($i == 0)
             {
                 $json['date'] = $delivery_date;
                 $json['capacity'] = $capacity;
-                $json['price'] = VendorItem::itemFinalPrice($data['item_id'], $data['quantity'], (isset($data['menu_item'])) ? $data['menu_item'] : []);    
+                $json['price'] = VendorItem::itemFinalPrice($data['item_id'], $data['quantity'], (isset($data['menu_item'])) ? $data['menu_item'] : []);
             }
-            else //available for other date  
+            else //available for other date
             {
                 $json['error'] = 'Item available on '.date('d-m-Y', strtotime($delivery_date));
             }
-            
+
             break;
         }
 
-       return $json;
+        return $json;
     }
+
 
     /*
         Update item quantity

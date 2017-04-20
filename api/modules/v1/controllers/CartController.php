@@ -146,20 +146,325 @@ class CartController extends Controller
      * after validate
      * @return array
      */
+//    public function actionAdd() {
+//        $data = [];
+//        $data["item_id"] = Yii::$app->request->getBodyParam('item_id');
+//        $data["timeslot_id"] = Yii::$app->request->getBodyParam('timeslot_id');
+//        $data["delivery_date"] = Yii::$app->request->getBodyParam('delivery_date');
+//        $data["quantity"] = Yii::$app->request->getBodyParam('quantity');
+//        $data["area_id"] = Yii::$app->request->getBodyParam('area_id');
+//
+//        if (empty($data["item_id"])) {
+//            return [
+//                "operation" => "error",
+//                "message" => "Invalid Item ID"
+//            ];
+//        } else if (empty($data["timeslot_id"])) {
+//            return [
+//                "operation" => "error",
+//                "message" => "Invalid Time Slot"
+//            ];
+//        } else if (empty($data["delivery_date"])) {
+//            return [
+//                "operation" => "error",
+//                "message" => "Invalid Delivery Date"
+//            ];
+//        } else if (empty($data["quantity"])) {
+//            return [
+//                "operation" => "error",
+//                "message" => "Invalid Quantity"
+//            ];
+//        } else if (empty($data["area_id"])) {
+//            return [
+//                "operation" => "error",
+//                "message" => "Invalid Area"
+//            ];
+//        }
+//
+//        if($this->validateItem($data)) {
+//
+//            if (isset($data['area_id']) && $data['area_id'] != '') {
+//                $deliverlocation = $data['area_id'];
+//                if (is_numeric($deliverlocation)) {
+//                    $location = $deliverlocation;
+//                } else {
+//                    $end = strlen($deliverlocation);
+//                    $from = strpos($deliverlocation, '_') + 1;
+//                    $address_id = substr($deliverlocation, $from, $end);
+//                    $location = \common\models\CustomerAddress::findOne($address_id)->area_id;
+//                }
+//            } else {
+//                $location = '';
+//            }
+//
+//            $cart = CustomerCart::find()
+//                ->where([
+//                    'item_id' => $data['item_id'],
+//                    'area_id'   => $location,
+//                    'timeslot_id' => isset($data['timeslot_id'])?$data['timeslot_id']:'',
+//                    'cart_delivery_date' => date('Y-m-d', strtotime($data['delivery_date']))
+//                ])
+//                ->one();
+//            /*
+//                product already available in cart
+//                Just need to update quantity
+//            */
+//            if($cart) {
+//
+//                if ($data['quantity']) {
+//                    $quantity = $data['quantity'];
+//                } else {
+//                    $quantity = 1;
+//
+//                }
+//
+//                $cart->cart_quantity = $cart->cart_quantity + $quantity;
+//            }
+//
+//            /*
+//                Product not available in cart
+//             */
+//            if(!$cart) {
+//
+//                $cart = new CustomerCart();
+//                $cart->customer_id = Yii::$app->user->getId();
+//                $cart->item_id = $data['item_id'];
+//                $cart->area_id = $location;
+//                $cart->timeslot_id = isset($data['timeslot_id'])?$data['timeslot_id']:'';
+//                $cart->cart_delivery_date = date('Y-m-d', strtotime($data['delivery_date']));
+//                $cart->cart_customization_price_per_unit = 0;
+//                $cart->cart_quantity = $data['quantity'];
+//                $cart->cart_datetime_added = date('Y-d-m h:i:s');
+//                $cart->cart_valid = 'yes';
+//                $cart->trash = 'Default';
+//            }
+//
+//            if($cart->save()) {
+//
+//                return [
+//                    "operation" => "success",
+//                    "message" => "Item Added To Cart Successfully ",
+//                ];
+//
+//            } else {
+//
+//                return [
+//                    "operation" => "error",
+//                    "message" => array_merge($this->errors, $cart->getErrors())
+//                ];
+//            }
+//
+//        } else {
+//            return [
+//                "operation" => "errors",
+//                "message" => $this->getErrorMessage($this->errors)
+//            ];
+//        }
+//    }
+
+    /**
+     * method to update cart item after
+     * validate
+     * @return array
+     */
+//    public function actionUpdate(){
+//
+//        $data = [];
+//        $data["item_id"] = Yii::$app->request->getBodyParam('item_id');
+//        $data["timeslot_id"] = Yii::$app->request->getBodyParam('timeslot_id');
+//        $data["delivery_date"] = Yii::$app->request->getBodyParam('delivery_date');
+//        $data["quantity"] = Yii::$app->request->getBodyParam('quantity');
+//        $data["area_id"] = Yii::$app->request->getBodyParam('area_id');
+//        $data["cart_id"] = Yii::$app->request->getBodyParam('cart_id');
+//
+//        if (empty($data["item_id"])) {
+//            return [
+//                "operation" => "error",
+//                "message" => "Invalid Item ID"
+//            ];
+//        } else if (empty($data["timeslot_id"])) {
+//            return [
+//                "operation" => "error",
+//                "message" => "Invalid Time Slot"
+//            ];
+//        } else if (empty($data["delivery_date"])) {
+//            return [
+//                "operation" => "error",
+//                "message" => "Invalid Delivery Date"
+//            ];
+//        } else if (empty($data["quantity"])) {
+//            return [
+//                "operation" => "error",
+//                "message" => "Invalid Quantity"
+//            ];
+//        } else if (empty($data["area_id"])) {
+//            return [
+//                "operation" => "error",
+//                "message" => "Invalid Area"
+//            ];
+//        } else if (empty($data["cart_id"])) {
+//            return [
+//                "operation" => "error",
+//                "message" => "Invalid Cart ID"
+//            ];
+//        }
+
+
+
+//
+//        if($this->validateItem($data)) {
+//            $cart = CustomerCart::findOne($data['cart_id']);
+//            if ($cart) {
+//                $cart->cart_delivery_date = $data['delivery_date'];
+//                $cart->timeslot_id  =   $data['timeslot_id'];
+//                $cart->cart_quantity =  $data['quantity'];
+//                $cart->cart_delivery_date = date('Y-m-d', strtotime($data['delivery_date']));
+//                $cart->modified_datetime  = date('Y-d-m h:i:s');
+//
+//                if ($cart->save()) {
+//                    return [
+//                        "operation" => "success",
+//                        "message" => "Cart Updated Successfully ",
+//                        "total-cart-items" => CustomerCart::item_count()
+//                    ];
+//                } else {
+//                    return [
+//                        "operation" => "error",
+//                        "message" => Yii::t('frontend','Error while updateing cart')
+//                    ];
+//                }
+//            }
+//        } else {
+//            return [
+//                "operation" => "error",
+//                "message" => $this->errors
+//            ];
+//        }
+//    }
+
+    public function actionUpdateCartItem()
+    {
+        if(!Yii::$app->request->isAjax) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $data = Yii::$app->request->post();
+
+        if($this->validate_item($data)) {
+
+            $cart = CustomerCart::findOne($data['cart_id']);
+
+            if ($cart) {
+
+                //$cart->cart_delivery_date = $data['delivery_date'];
+                //$cart->time_slot =   $data['time_slot'];
+                //$cart->cart_delivery_date = date('Y-m-d', strtotime($data['delivery_date']));
+                //$cart->cart_quantity =  $data['quantity'];
+                $cart->modified_datetime  = date('Y-d-m h:i:s');
+
+                if(!empty($data['female_service'])) {
+                    $cart->female_service = $data['female_service'];
+                }
+
+                if(!empty($data['special_request'])) {
+                    $cart->special_request = $data['special_request'];
+                }
+
+                if ($cart->save()) {
+
+                    // remove old
+
+                    CustomerCartMenuItem::deleteAll(['cart_id' => $cart->cart_id]);
+
+                    // add menu
+
+                    if(empty($data['menu_item'])) {
+                        $data['menu_item'] = [];
+                    }
+
+                    foreach ($data['menu_item'] as $key => $value) {
+
+                        if($value > 0) {
+
+                            $mi = VendorItemMenuItem::findOne($key);
+
+                            $cart_menu_item = new CustomerCartMenuItem;
+                            $cart_menu_item->cart_id = $cart->cart_id;
+                            $cart_menu_item->menu_id = $mi->menu_id;
+                            $cart_menu_item->menu_item_id = $mi->menu_item_id;
+                            $cart_menu_item->quantity = $value;
+                            $cart_menu_item->save();
+                        }
+                    }
+
+                    CustomerCartItemQuestionAnswer::deleteAll(['cart_id' => $cart->cart_id,'item_id'=>$data['item_id']]);
+
+                    if (isset($data['answer'])) {
+                        // add answers
+                        foreach ($data['answer'] as $key => $answer) {
+                            if (!empty($answer)) {
+                                $cartItemAnswers = new CustomerCartItemQuestionAnswer();
+                                $cartItemAnswers->question_id = $key;
+                                $cartItemAnswers->answer = $answer;
+                                $cartItemAnswers->cart_id = $cart->cart_id;
+                                $cartItemAnswers->item_id = $data['item_id'];
+                                $cartItemAnswers->created_datetime = date('Y-m-d H:i:s');
+                                $cartItemAnswers->modified_datetime = date('Y-m-d H:i:s');
+                                $cartItemAnswers->save(false);
+                            }
+                        }
+                    }
+
+                    Yii::$app->getSession()->setFlash('success', Yii::t(
+                        'frontend',
+                        'Success: Product <a href="{product_link}">{product_name}</a> updated in cart successfully',
+                        [
+                            'product_link' => Url::to(['browse/detail', 'slug' => $cart->item->slug]),
+                            'product_name' => Yii::$app->language == 'en'? $cart->item->item_name : $cart->item->item_name_ar
+                        ]
+                    ));
+
+                    return [
+                        'success' => 1
+                    ];
+                } else {
+                    return [
+                        'error' => Yii::t('frontend','Error while updateing cart')
+                    ];
+                }
+            }
+            exit;
+        } else {
+            return [
+                'errors' => $this->errors
+            ];
+        }
+    }
+
+    /**
+     * On post validate options and add item to cart
+     */
     public function actionAdd() {
+
         $data = [];
         $data["item_id"] = Yii::$app->request->getBodyParam('item_id');
-        $data["timeslot_id"] = Yii::$app->request->getBodyParam('timeslot_id');
+        $data["time_slot"] = Yii::$app->request->getBodyParam('time_slot');
         $data["delivery_date"] = Yii::$app->request->getBodyParam('delivery_date');
         $data["quantity"] = Yii::$app->request->getBodyParam('quantity');
         $data["area_id"] = Yii::$app->request->getBodyParam('area_id');
+        $data["menu_item"] = Yii::$app->request->getBodyParam('menu_item');
+        $data["female_service"] = Yii::$app->request->getBodyParam('female_service');
+        $data["special_request"] = Yii::$app->request->getBodyParam('special_request');
+        $data["answer"] = Yii::$app->request->getBodyParam('answer');
 
         if (empty($data["item_id"])) {
             return [
                 "operation" => "error",
                 "message" => "Invalid Item ID"
             ];
-        } else if (empty($data["timeslot_id"])) {
+        } else if (empty($data["time_slot"])) {
             return [
                 "operation" => "error",
                 "message" => "Invalid Time Slot"
@@ -181,30 +486,62 @@ class CartController extends Controller
             ];
         }
 
+        //remove menu item with 0 quantity
+
+        if(empty($data['menu_item'])) {
+            $data['menu_item'] = [];
+        }
+
+        foreach ($data['menu_item'] as $key => $value)
+        {
+            if($value == 0)
+                unset($data['menu_item'][$key]);
+        }
+
         if($this->validateItem($data)) {
 
-            if (isset($data['area_id']) && $data['area_id'] != '') {
-                $deliverlocation = $data['area_id'];
-                if (is_numeric($deliverlocation)) {
-                    $location = $deliverlocation;
-                } else {
-                    $end = strlen($deliverlocation);
-                    $from = strpos($deliverlocation, '_') + 1;
-                    $address_id = substr($deliverlocation, $from, $end);
-                    $location = \common\models\CustomerAddress::findOne($address_id)->area_id;
-                }
-            } else {
-                $location = '';
+            $query = CustomerCart::find()
+                ->item($data['item_id'])
+                ->area($data['area_id'])
+                ->timeSlot($data['time_slot'])
+                ->deliveryDate($data['delivery_date']);
+
+
+            if(!empty($data['female_service'])){
+                $query->femaleService($data['female_service']);
             }
 
-            $cart = CustomerCart::find()
-                ->where([
-                    'item_id' => $data['item_id'],
-                    'area_id'   => $location,
-                    'timeslot_id' => isset($data['timeslot_id'])?$data['timeslot_id']:'',
-                    'cart_delivery_date' => date('Y-m-d', strtotime($data['delivery_date']))
-                ])
-                ->one();
+            if (!empty($data['special_request'])) {
+                $query->request($data['special_request']);
+            }
+            $query->user();
+
+            $cart = $query->one();
+
+            //if available in cart check if have exact menu and quantity combo
+
+            if($cart) {
+                $cart_menu_items = CustomerCartMenuItem::find()->cartID($cart->cart_id)->all();
+
+                $arr_cart_menu_items = ArrayHelper::map($cart_menu_items, 'menu_item_id', 'quantity');
+
+                //if cart menu are same as posted menu_item
+
+                if(sizeof($arr_cart_menu_items) != sizeof($data['menu_item']))
+                    $cart = false;
+
+                //check menu item quantity is same for 1 quantity of item in cart and we trying to add
+                // so we can add cart item with p quantity to cart item item with q quantity if both ahve
+                // same no of menu items
+
+                foreach ($arr_cart_menu_items as $key => $value) {
+                    if(empty($data['menu_item'][$key]) || $data['menu_item'][$key]/$data['quantity'] != $value/$cart->cart_quantity){
+                        $cart = false;
+                        break;
+                    }
+                }
+            }
+
             /*
                 product already available in cart
                 Just need to update quantity
@@ -219,6 +556,13 @@ class CartController extends Controller
                 }
 
                 $cart->cart_quantity = $cart->cart_quantity + $quantity;
+
+                //update menu item quantities
+
+                foreach ($cart_menu_items as $key => $menu_item) {
+                    $menu_item->quantity += $data['menu_item'][$menu_item->menu_item_id];
+                    $menu_item->save();
+                }
             }
 
             /*
@@ -226,120 +570,106 @@ class CartController extends Controller
              */
             if(!$cart) {
 
+                if (isset($data['area_id']) && $data['area_id'] != '') {
+                    $deliverlocation = $data['area_id'];
+                    if (is_numeric($deliverlocation)) {
+                        $location = $deliverlocation;
+                    } else {
+                        $end = strlen($deliverlocation);
+                        $from = strpos($deliverlocation, '_') + 1;
+                        $address_id = substr($deliverlocation, $from, $end);
+                        $location = \common\models\CustomerAddress::findOne($address_id)->area_id;
+                    }
+                } else {
+                    $location = '';
+                }
+
                 $cart = new CustomerCart();
                 $cart->customer_id = Yii::$app->user->getId();
                 $cart->item_id = $data['item_id'];
                 $cart->area_id = $location;
-                $cart->timeslot_id = isset($data['timeslot_id'])?$data['timeslot_id']:'';
+                $cart->time_slot  = isset($data['time_slot'])?$data['time_slot']:'';
                 $cart->cart_delivery_date = date('Y-m-d', strtotime($data['delivery_date']));
                 $cart->cart_customization_price_per_unit = 0;
                 $cart->cart_quantity = $data['quantity'];
                 $cart->cart_datetime_added = date('Y-d-m h:i:s');
+                $cart->cart_session_id = (!Yii::$app->user->getId()) ? \common\models\Customer::currentUser() : '';
                 $cart->cart_valid = 'yes';
                 $cart->trash = 'Default';
+
+                if(!$cart->save())
+                {
+                    return [
+                        'operation' => 'error',
+                        'code' => '0',
+                        'message' => array_merge($this->errors, $cart->getErrors())
+                    ];
+                }
+
+                // add menu
+
+                foreach ($data['menu_item'] as $key => $value) {
+
+                    $mi = \common\models\VendorItemMenuItem::findOne($key);
+
+                    $cart_menu_item = new CustomerCartMenuItem;
+                    $cart_menu_item->cart_id = $cart->cart_id;
+                    $cart_menu_item->menu_id = $mi->menu_id;
+                    $cart_menu_item->menu_item_id = $mi->menu_item_id;
+                    $cart_menu_item->quantity = $value;
+                    $cart_menu_item->save();
+                }
+            }
+
+            if (isset($data['answer'])) {
+                // add answers
+                foreach ($data['answer'] as $key => $value) {
+                    if (!empty($value)) {
+                        $cartItemAnswers = new \common\models\CustomerCartItemQuestionAnswer();
+                        $cartItemAnswers->question_id = $key;
+                        $cartItemAnswers->answer = $value;
+                        $cartItemAnswers->cart_id = $cart->cart_id;
+                        $cartItemAnswers->item_id = $data['item_id'];
+                        $cartItemAnswers->created_datetime = date('Y-m-d H:i:s');
+                        $cartItemAnswers->modified_datetime = date('Y-m-d H:i:s');
+                        $cartItemAnswers->save(false);
+                    }
+                }
+            }
+
+            if(!empty($data['female_service'])) {
+                $cart->female_service = $data['female_service'];
+            }
+
+            if(!empty($data['special_request'])) {
+                $cart->special_request = $data['special_request'];
             }
 
             if($cart->save()) {
 
                 return [
                     "operation" => "success",
-                    "message" => "Item Added To Cart Successfully ",
+                    "code" => "1",
+                    "message" => "Item added to cart successfully"
                 ];
 
             } else {
 
                 return [
-                    "operation" => "error",
-                    "message" => array_merge($this->errors, $cart->getErrors())
+                    'operation' => 'error',
+                    'code' => '0',
+                    'message' => array_merge($this->errors, $cart->getErrors())
                 ];
             }
 
         } else {
             return [
-                "operation" => "errors",
-                "message" => $this->getErrorMessage($this->errors)
+                'operation' => 'error',
+                'code' => '0',
+                'message' => $this->errors
             ];
         }
     }
-
-    /**
-     * method to update cart item after
-     * validate
-     * @return array
-     */
-    public function actionUpdate(){
-
-        $data = [];
-        $data["item_id"] = Yii::$app->request->getBodyParam('item_id');
-        $data["timeslot_id"] = Yii::$app->request->getBodyParam('timeslot_id');
-        $data["delivery_date"] = Yii::$app->request->getBodyParam('delivery_date');
-        $data["quantity"] = Yii::$app->request->getBodyParam('quantity');
-        $data["area_id"] = Yii::$app->request->getBodyParam('area_id');
-        $data["cart_id"] = Yii::$app->request->getBodyParam('cart_id');
-
-        if (empty($data["item_id"])) {
-            return [
-                "operation" => "error",
-                "message" => "Invalid Item ID"
-            ];
-        } else if (empty($data["timeslot_id"])) {
-            return [
-                "operation" => "error",
-                "message" => "Invalid Time Slot"
-            ];
-        } else if (empty($data["delivery_date"])) {
-            return [
-                "operation" => "error",
-                "message" => "Invalid Delivery Date"
-            ];
-        } else if (empty($data["quantity"])) {
-            return [
-                "operation" => "error",
-                "message" => "Invalid Quantity"
-            ];
-        } else if (empty($data["area_id"])) {
-            return [
-                "operation" => "error",
-                "message" => "Invalid Area"
-            ];
-        } else if (empty($data["cart_id"])) {
-            return [
-                "operation" => "error",
-                "message" => "Invalid Cart ID"
-            ];
-        }
-
-
-        if($this->validateItem($data)) {
-            $cart = CustomerCart::findOne($data['cart_id']);
-            if ($cart) {
-                $cart->cart_delivery_date = $data['delivery_date'];
-                $cart->timeslot_id  =   $data['timeslot_id'];
-                $cart->cart_quantity =  $data['quantity'];
-                $cart->cart_delivery_date = date('Y-m-d', strtotime($data['delivery_date']));
-                $cart->modified_datetime  = date('Y-d-m h:i:s');
-
-                if ($cart->save()) {
-                    return [
-                        "operation" => "success",
-                        "message" => "Cart Updated Successfully ",
-                        "total-cart-items" => CustomerCart::item_count()
-                    ];
-                } else {
-                    return [
-                        "operation" => "error",
-                        "message" => Yii::t('frontend','Error while updateing cart')
-                    ];
-                }
-            }
-        } else {
-            return [
-                "operation" => "error",
-                "message" => $this->errors
-            ];
-        }
-    }
-
     /**
      * @param $data
      * @return bool
@@ -364,17 +694,20 @@ class CartController extends Controller
                 $cartData->delete();
                 return [
                     "operation" => "success",
+                    "code" => "1",
                     "message" => "Cart Item Deleted Successfully"
                 ];
             } else {
                 return [
                     "operation" => "error",
+                    "code" => "0",
                     "message" => "Invalid Cart ID"
                 ];
             }
         } else {
             return [
                 "operation" => "error",
+                "code" => "0",
                 "message" => "Invalid Cart ID"
             ];
         }
