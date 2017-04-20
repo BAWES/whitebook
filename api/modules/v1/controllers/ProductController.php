@@ -2,20 +2,20 @@
 
 namespace api\modules\v1\controllers;
 
-use common\models\Themes;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\rest\Controller;
 use yii\db\Expression;
 use frontend\models\Vendor;
 use common\models\CategoryPath;
-use common\models\VendorItem;
 use common\models\VendorLocation;
 use common\models\VendorItemPricing;
 use common\models\VendorItemMenuItem;
 use common\components\CFormatter;
-use api\models\EventItemlink;
 use common\models\VendorItemMenu;
+use common\models\Themes;
+use api\models\EventItemlink;
+use api\models\VendorItem;
 
 /**
  * Auth controller provides the initial access token that is required for further requests
@@ -235,19 +235,41 @@ class ProductController extends Controller
      */
     public function actionProductDetail($product_id)
     {
-        $itemData = VendorItem::find()->where(['item_id'=>$product_id])->with(['images','vendor'])->asArray()->one();
-        if ($itemData) {
-            $return['menu'] = VendorItemMenu::find()->with('vendorItemMenuItems')->item($product_id)->menu('options')->asArray()->all();
-            $return['addons'] = VendorItemMenu::find()->with('vendorItemMenuItems')->item($product_id)->menu('addons')->asArray()->all();
-            $return['item'] = VendorItem::find()->where(['item_id' => $product_id])->with(['images', 'vendor'])->asArray()->one();
-            return $return;
-        } else {
+        $model = VendorItem::find()
+            ->where(['item_id' => $product_id])
+            ->one();
+
+        if (!$model) 
+        {
             return [
                 "operation" => "error",
                 "code" => "0",
                 'message' => 'Invalid Item ID'
             ];
         }
+
+        $menu = VendorItemMenu::find()
+            ->with('vendorItemMenuItems')
+            ->item($product_id)
+            ->menu('options')
+            ->asArray()
+            ->all();
+
+        $addons = VendorItemMenu::find()
+            ->with('vendorItemMenuItems')
+            ->item($product_id)
+            ->menu('addons')
+            ->asArray()
+            ->all();
+
+        return [
+            'item' => $model,
+            'type' => $model->type,
+            'vendor' => $model->vendor,
+            'images' => $model->images,
+            'menu' => $menu,
+            'addons' => $addons
+        ];        
     }
 
     /*
