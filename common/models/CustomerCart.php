@@ -638,9 +638,9 @@ class CustomerCart extends \yii\db\ActiveRecord
         /*
             Check if deliery availabel in selected area
         */
-        if (!empty($data['area_id'])) {
+        if (!empty($area_id)) {
 
-            if ($data['area_id'] != '') {
+            if ($area_id != '') {
                 $deliverlocation = $area_id;
                 if (is_numeric($deliverlocation)) {
                     $location = $deliverlocation;
@@ -743,7 +743,7 @@ class CustomerCart extends \yii\db\ActiveRecord
             //1) get capacity exception for selected date
 
             $capacity_exception = \common\models\VendorItemCapacityException::find()
-                ->item($data['item_id'])
+                ->item($item_id)
                 ->exceptionDate($delivery_date)
                 ->one();
 
@@ -754,7 +754,7 @@ class CustomerCart extends \yii\db\ActiveRecord
             }
 
             $query = CustomerCart::find()
-                ->item($data['item_id'])
+                ->item($item_id)
                 ->deliveryDate(date('Y-m-d', strtotime($delivery_date)))
                 ->valid()
                 ->defaultCart();
@@ -816,7 +816,7 @@ class CustomerCart extends \yii\db\ActiveRecord
             {
                 $json['date'] = $delivery_date;
                 $json['capacity'] = $capacity;
-                $json['price'] = VendorItem::itemFinalPrice($data['item_id'], $quantity, (isset($menu_item)) ? $menu_item : []);
+                $json['price'] = VendorItem::itemFinalPrice($item_id, $quantity, (isset($menu_item)) ? $menu_item : []);
             }
             else //available for other date
             {

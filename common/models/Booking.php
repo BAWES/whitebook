@@ -807,9 +807,13 @@ class Booking extends \yii\db\ActiveRecord
         }
     }
 
-    public static function getDeliveryCharges($address_id,$vendor_id) {
-        $model = CustomerAddress::findOne($address_id);
-        $locationData = VendorLocation::find()->area($model->area_id)->vendor($vendor_id)->one();
+    public static function getDeliveryCharges($address_id,$vendor_id,$area_id = false) {
+        if ($area_id) {
+            $locationData = VendorLocation::find()->area($area_id)->vendor($vendor_id)->one();
+        } else {
+            $model = CustomerAddress::findOne($address_id);
+            $locationData = VendorLocation::find()->area($model->area_id)->vendor($vendor_id)->one();
+        }
         if ($locationData) {
             return $locationData->delivery_price;
         } else {
