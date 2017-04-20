@@ -39,6 +39,15 @@ $(function() {
 			if($(this).val() != '' && !$.isNumeric($(this).val())) {
 				$error['txt_max_quantity'] = '<p><i class="fa fa-exclamation"></i> Max Quantity field not valid.</p>';
 			}
+
+			$min_qty = $(this).parents('tr').find('.txt_min_quantity').val();
+
+			$max_qty = $(this).val();
+
+			if($max_qty < $min_qty) 
+			{
+				$error['txt_max_quantity'] = '<p><i class="fa fa-exclamation"></i> Max Quantity must be grater than or equal to Min Quantity.</p>';
+			}
 		});
 
 		$.each($('.txt_price'), function() {
