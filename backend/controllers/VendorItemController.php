@@ -436,6 +436,8 @@ class VendorItemController extends Controller
 
         if($model->load(Yii::$app->request->post()) && $model->save()) 
         {
+            $transaction = Yii::$app->db->beginTransaction();
+
             //remove old menu and menu items 
             
             $old_menues = VendorDraftItemMenu::findALL([
@@ -465,7 +467,7 @@ class VendorItemController extends Controller
             /* This method will allow user to sort menu and menu item easily */
 
             foreach ($menu_items as $key => $value) {
-                
+
                 //if menu 
                 if(isset($value['menu_name'])) {
 
@@ -473,10 +475,28 @@ class VendorItemController extends Controller
                     $menu->attributes = $value;
                     $menu->menu_type = 'options';
                     $menu->item_id = $model->item_id;
-                    $menu->save();
+                    
+                    if($menu->save()) 
+                    {
+                        //update current menu id 
+                        $draft_menu_id = $menu->draft_menu_id;
+                    }
+                    else
+                    {
+                        $transaction->rollBack();
 
-                    //update current menu id 
-                    $draft_menu_id = $menu->draft_menu_id;
+                        $html = '';
+
+                        foreach ($menu->getErrors() as $key => $value) {
+                            foreach ($value as $key => $error) {
+                                $html .= '<p>'.$error.'</p>';
+                            }
+                        }
+
+                        Yii::$app->session->setFlash('danger', $html);
+
+                        return $this->redirect(['vendor-item/menu-items', 'id' => $id]);
+                    }
 
                 //if menu item 
                 } else {
@@ -485,9 +505,27 @@ class VendorItemController extends Controller
                     $menu_item->attributes = $value;
                     $menu_item->draft_menu_id = $draft_menu_id;
                     $menu_item->item_id = $model->item_id;
-                    $menu_item->save();
+
+                    if(!$menu_item->save())
+                    {
+                        $transaction->rollBack();
+
+                        $html = '';
+
+                        foreach ($menu->getErrors() as $key => $value) {
+                            foreach ($value as $key => $error) {
+                                $html .= '<p>'.$error.'</p>';
+                            }
+                        }
+
+                        Yii::$app->session->setFlash('danger', $html);
+
+                        return $this->redirect(['vendor-item/menu-items', 'id' => $id]);
+                    }
                 }
             }
+
+            $transaction->commit();
 
             $complete = Yii::$app->request->post('complete');
 
