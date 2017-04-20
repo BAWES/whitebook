@@ -5,6 +5,20 @@ use common\models\Booking;
 
 $status = Booking::statusList();
 
+$total_orders = 0; 
+
+foreach ($orders_by_payment_methods as $key => $value) 
+{ 
+	$total_orders += $value['total'];
+} 
+
+$total_sale = 0; 
+
+foreach ($orders_by_payment_methods as $key => $value) 
+{ 
+	$total_sale += $value['total_sale'];
+}
+
 ?>
 
 <div class="row" style="margin-top: 0px; margin-bottom: 10px;">
@@ -56,72 +70,22 @@ $status = Booking::statusList();
 </table>
 
 <div class="row">
-	<div class="col-print-6">
-
-		<div class="summary-box nobreak">
-
-			<h4>Order Detail </h4>
-
-			<?php 
-
-			$total_orders = 0; 
-			
-			foreach ($orders_by_payment_methods as $key => $value) { 
-
-				$total_orders += $value['total'];
-
-				?>
-				<b>Total <?= $value['payment_method'] ?> Orders :</b> <?= $value['total'] ?> 
-
-				<div class="clearfix"></div>
-			<?php } ?>
-
-			<hr />
-
-			<b>Total Orders :</b> <?= $total_orders ?>
-
-		</div>
-	</div>
-
-	<div class="col-print-6">
-
-		<div class="summary-box nobreak">
-
-			<h4>Sales Detail </h4>
-
-			<?php 
-
-			$total_sale = 0; 
-			
-			foreach ($orders_by_payment_methods as $key => $value) { 
-
-				$total_sale += $value['total_sale'];
-
-				?>
-				<b>Total <?= $value['payment_method'] ?> Sale :</b> <?= $value['total_sale'] ?>
-
-				<div class="clearfix"></div>
-			<?php } ?>
-
-			<hr />
-
-			<b>Total Sale :</b> <?= $total_sale ?>
-		</div>
-	</div>
-
+	
 	<div class="col-print-6">
 
 		<div class="summary-box nobreak">
 
 			<h4>Summary </h4>
 
-			<b>Total Whitebook charge :</b> <?= $commission ?>
+			<b>Total number of orders:</b> <?= $total_orders ?><br />
+			<b>Total Sales:</b> KD <?= $total_sale ?> <br />
+			<b>Total Whitebook charge:</b> KD <?= $commission ?>
 
 			<div class="clearfix"></div>
 
 			<hr />
 
-			<b>Total Profit :</b> <?= $total_sale - $commission ?>
+			<b>Net:</b> KD <?= $total_sale - $commission ?>
 		</div>
 	</div>
 </div>
