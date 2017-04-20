@@ -464,6 +464,12 @@ class CartController extends BaseController
 
         $data = Yii::$app->request->post();
 
+        if(!isset($data['area_id']) && (isset($data['area_id']) && $data['area_id'] == '')) {
+            $json['error'] = Yii::t('frontend', 'Please Select area!');
+
+            return $json;
+        }
+
         if(empty($data['item_id'])) {
             $json['error'] = Yii::t('frontend', 'Item ID require!');
 
