@@ -467,8 +467,8 @@ class CartController extends BaseController
             $data['item_id'],
             $data['area_id'],
             $data['delivery_date'],
-            $data['time_slot'],
-            $data['menu_item'],
+            (isset($data['time_slot'])) ? $data['time_slot'] : '',
+            (isset($data['menu_item'])) ? $data['menu_item'] : '',
             $data['quantity']
         );
     }

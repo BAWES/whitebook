@@ -101,9 +101,12 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 	        	<?php
 	        	
 	        	$sub_total = $delivery_charge = 0;
-
 	        	foreach ($items as $item) {
-                    
+                    $vendor_name = CustomerCart::getVendorDetail($item['vendor_id'])->vendor_name;
+                    $vendors[$item['vendor_id']] = [
+                            'vendor'=>$vendor_name,
+                            'area_id' => $item['area_id']
+                        ];
                     $row_total = ($item['item']['item_base_price']) ? $item['item']['item_base_price'] : 0;
 	        		
 	        		$menu_option_items = CustomerCartMenuItem::find()
@@ -339,6 +342,24 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 		        		</td>
 		        	</tr>
 	        	<?php } ?>
+                <tr>
+                    <td colspan="2" class="text-right"><strong><?= Yii::t('frontend', 'Sub-Total') ?></strong></td>
+                    <td class="text-right"><?= CFormatter::format($sub_total) ?></td>
+                </tr>
+                <?php
+                foreach ($vendors as $key => $vendor) {
+                    $charge = \common\models\Booking::getDeliveryCharges('',$key,$vendor['area_id']);
+                    $delivery_charge += (int) $charge;
+                    ?>
+                    <tr>
+                        <td colspan="2" class="text-right"><strong><?= Yii::t('frontend', 'Delivery Charge') ?></strong> <small>( <?=$vendor['vendor']?> )</small></td>
+                        <td class="text-right"><?= CFormatter::format($charge) ?></td>
+                    </tr>
+                <?php } ?>
+                <tr>
+                    <td colspan="2"  class="text-right"><strong><?= Yii::t('frontend', 'Total') ?></strong></td>
+                    <td class="text-right"><?= CFormatter::format($sub_total + $delivery_charge) ?></td>
+                </tr>
 	        </tbody>        	
         </table>
 
