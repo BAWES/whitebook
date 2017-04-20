@@ -625,6 +625,12 @@ class CustomerCart extends \yii\db\ActiveRecord
             return $json;
         }
 
+        if(empty($area_id)) {
+            $json['error'] = Yii::t('frontend', 'Invalid Area ID!');
+
+            return $json;
+        }
+
         $item = VendorItem::findOne($item_id);
 
         if (!$item) {
