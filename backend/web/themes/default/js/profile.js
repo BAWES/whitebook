@@ -122,16 +122,18 @@ $('.twovalid2').click(function() {
 		$('.field-vendordraft-vendor_contact_number').addClass('has-error');
 		$('.field-vendordraft-vendor_contact_number').find('.help-block').html('Contact number cannot be blank.');
 		return false;
-    }
-
-    if($('#vendordraft-vendor_contact_address').val()=='')
-	{
-		$('.field-vendordraft-vendor_contact_address').addClass('has-error');
-		$('.field-vendordraft-vendor_contact_address').find('.help-block').html('Contact address cannot be blank.');
-		return false;
-	} else {
+    } else {
 		return true;
 	}
+
+    // if($('#vendordraft-vendor_contact_address').val()=='')
+	// {
+	// 	$('.field-vendordraft-vendor_contact_address').addClass('has-error');
+	// 	$('.field-vendordraft-vendor_contact_address').find('.help-block').html('Contact address cannot be blank.');
+	// 	return false;
+	// } else {
+	// 	return true;
+	// }
 
 });//twovalid2 click 
 
