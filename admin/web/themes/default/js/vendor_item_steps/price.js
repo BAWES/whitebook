@@ -15,6 +15,12 @@ $(function() {
 			$error += '<p><i class="fa fa-exclamation"></i> Minimum Quantity to Order field require.</p>';	    		
     	}
 
+        if ($('#vendoritem-included_quantity').val() > $('#vendoritem-item_minimum_quantity_to_order').val()) {
+            $('.field-vendoritem-item_minimum_quantity_to_order').addClass('has-error');
+            $('.field-vendoritem-item_minimum_quantity_to_order .help-block').html('Minimum Quantity To Order must be greater than or equal to "Included Quantity".');
+            return false;
+        }
+
 	    if($error) {
 
 		    e.preventDefault();
