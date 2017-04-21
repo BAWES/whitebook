@@ -80,7 +80,6 @@ class ProductController extends Controller
         return $actions;
     }
 
-
     /**
      * @return array
      */
@@ -99,28 +98,19 @@ class ProductController extends Controller
     )
     {
         $products = [];
+        
         $limit = Yii::$app->params['limit'];
+        
+        $theme_id = Yii::$app->request->get("theme_id");
 
-        if ($requestedVendor) {
-            $arr_vendor_slugs = $requestedVendor;
-        }else{
-            $arr_vendor_slugs = [];
-        }
-
+        $vendor_id = Yii::$app->request->get("vendor_id");
 
         if ($category_id != 'all') {
             $Category = \common\models\Category::findOne($category_id);
         } else {
             $Category = '';
         }
-
-        $ActiveVendors = Vendor::loadvalidvendorids(
-            false, //current category
-            $arr_vendor_slugs, //only selected from filter
-            '', //who available today
-            ''//delivery on location available
-        );
-
+        
         $item_query = CategoryPath::find()
             ->selectedFields()
             ->categoryJoin()
@@ -130,77 +120,81 @@ class ProductController extends Controller
             ->defaultItems()
             ->approved()
             ->active();
-
+        
         if ($forSale) {
             $item_query->sale();
         }
+        
+        if($vendor_id)
+        {
+            $vendors = Vendor::find()
+                ->where(['in', 'vendor_id', $vendor_id])
+                ->andWhere([
+                    'trash' => 'Default',
+                    'approve_status' => 'Yes'
+                ])
+                ->all();
 
+            $vendor_ids = ArrayHelper::map($vendors, 'vendor_id', 'vendor_id');
 
-        $item_query->vendorIDs($ActiveVendors);
-
+            $item_query->vendorIDs($vendor_ids);
+        }
+                
         //price filter
         if ($requestedMinPrice && $requestedMaxPrice) {
             $item_query->price($requestedMinPrice,$requestedMaxPrice);
         }
-
+        
         //theme filter
-        if ($requestedTheme) {
-
+        if ($theme_id) 
+        {
             $item_query->itemThemeJoin();
             $item_query->themeJoin();
-            $item_query->themeSlug($requestedTheme);
-
+            $item_query->byThemeIDs($theme_id);
         }//if themes
-
+        
         //event time
         if($event_time) {
             $item_query->workingTimeJoin();
         }
-
+        
         //category filter
         $cats = '';
-
+        
         if($Category)
         {
             $cats = $Category->category_id;
         }
-
+        
         if($cats)
         {
             $item_query->categoryIDs($cats);
         }
-
+        
         if ($requestedLocation) {
-
             if (is_numeric($requestedLocation)) {
                 $location = $requestedLocation;
             } else {
                 $end = strlen($requestedLocation);
                 $from = strpos($requestedLocation, '_') + 1;
                 $address_id = substr($requestedLocation, $from, $end);
-
                 $location = \common\models\CustomerAddress::findOne($address_id)->area_id;
             }
-
             $item_query->deliveryLocation($location);
         }
-
+        
         if ($requestedDeliverDate) {
             $date = date('Y-m-d', strtotime($requestedDeliverDate));
             $item_query->deliveryDate($date);
         }
 
         if (!empty($event_time)) {
-
             $delivery_date = $requestedDeliverDate;
-
             if($delivery_date)
                 $working_day = date('D', strtotime($delivery_date));
             else
                 $working_day = date('D');
-
             $event_time = date('H:i:s', strtotime($event_time));
-
             $item_query->eventTime($event_time,$working_day);
         }
 
@@ -212,13 +206,15 @@ class ProductController extends Controller
             ->limit($limit)
             ->all();
 
-        if ($item_query_result) {
-
-            foreach ($item_query_result as $item) {
+        if ($item_query_result) 
+        {
+            foreach ($item_query_result as $item) 
+            {
                 $image = \common\models\Image::find()
-                ->where(['item_id' => $item['item_id']])
-                ->orderBy(['vendorimage_sort_order' => SORT_ASC])
-                ->one();
+                    ->where(['item_id' => $item['item_id']])
+                    ->orderBy(['vendorimage_sort_order' => SORT_ASC])
+                    ->one();
+                    
                 if ($image) {
                     $products[] = $item + ['image'=>$image->image_path];
                 } else {
