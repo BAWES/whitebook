@@ -92,6 +92,11 @@ class CategoryPathQuery extends \yii\db\ActiveQuery
         return $this->andWhere(['in', '{{%vendor_item}}.vendor_id', $ActiveVendors]);
     }
 
+    public function byThemeIDs($themes)
+    {
+        return $this->andWhere(['IN', '{{%theme}}.theme_id', $themes]);
+    }
+
     public function byThemeSlug($themes)
     {
         return $this->andWhere(['IN', '{{%theme}}.slug', $themes]);

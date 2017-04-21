@@ -86,147 +86,84 @@ class ProductController extends Controller
         $requestedDeliverDate = null,
         $requestedMinPrice = 0,
         $requestedMaxPrice = 0,
-        $requestedCategories = '',
-        $requestedVendor = '',
-        $requestedTheme = ''
+        $requestedCategories = ''
     )
     {
-        $products = [];
+        $theme_id = Yii::$app->request->get("theme_id");
+
+        $vendor_id = Yii::$app->request->get("vendor_id");
+        
         $limit = Yii::$app->params['limit'];
 
-        if ($requestedVendor) {
-            $arr_vendor_slugs = $requestedVendor;
-        }else{
-            $arr_vendor_slugs = [];
-        }
-
-        $ActiveVendors = Vendor::loadvalidvendorids(
-            false, //current category
-            $arr_vendor_slugs, //only selected from filter
-            '', //who available today
-            ''//delivery on location available
-        );
-
         $item_query = CategoryPath::find()
-            ->select('{{%vendor_item}}.item_for_sale, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar')
-            ->leftJoin(
-                '{{%vendor_item_to_category}}',
-                '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
-            )
-            ->leftJoin(
-                '{{%vendor_item}}',
-                '{{%vendor_item}}.item_id = {{%vendor_item_to_category}}.item_id'
-            )
-            ->leftJoin(
-                '{{%priority_item}}',
-                '{{%priority_item}}.item_id = {{%vendor_item}}.item_id'
-            )
-            ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
-            ->where([
-                '{{%vendor_item}}.trash' => 'Default',
-                '{{%vendor_item}}.item_approved' => 'Yes',
-                '{{%vendor_item}}.item_status' => 'Active',
-            ]);
+            ->selectedFields()
+            ->categoryJoin()
+            ->itemJoin()
+            ->priorityItemJoin()
+            ->vendorJoin()
+            ->defaultItems()
+            ->approvedItems()
+            ->activeItems();
 
         if ($forSale) {
-            $item_query->andWhere(['{{%vendor_item}}.item_for_sale' => 'Yes']);
+            $item_query->saleItems();
         }
 
-        $item_query->andWhere(['in', '{{%vendor_item}}.vendor_id', $ActiveVendors]);
+        if($vendor_id)
+        {
+            $vendors = Vendor::find()
+                ->where(['in', 'vendor_id', $vendor_id])
+                ->andWhere([
+                    'trash' => 'Default',
+                    'approve_status' => 'Yes'
+                ])
+                ->all();
 
+            $vendor_ids = ArrayHelper::map($vendors, 'vendor_id', 'vendor_id');
+
+            $item_query->byVendorIDs($vendor_ids);
+        }
+        
         //price filter
         if ($requestedMinPrice && $requestedMaxPrice) {
-
             $price_condition = [];
-
-            $price_condition[] = '{{%vendor_item}}.item_price_per_unit IS NULL';
-            $price_condition[] = '{{%vendor_item}}.item_price_per_unit between '.$requestedMinPrice.' and '.$requestedMaxPrice;
-
-            $item_query->andWhere(implode(' OR ', $price_condition));
+            $arr_min_max = explode('-', $data['price']);
+            $item_query->byPrice($arr_min_max[0],$arr_min_max[1]);
         }
 
         //theme filter
-        if ($requestedTheme) {
-
-            $item_query->leftJoin('{{%vendor_item_theme}}', '{{%vendor_item}}.item_id = {{%vendor_item_theme}}.item_id');
-            $item_query->leftJoin('{{%theme}}', '{{%theme}}.theme_id = {{%vendor_item_theme}}.theme_id');
-            $item_query->andWhere(['IN', '{{%theme}}.slug', $requestedTheme]);
-
+        if ($theme_id) 
+        {
+            $item_query->itemThemeJoin();
+            $item_query->themeJoin();
+            $item_query->byThemeIDs($theme_id);
         }//if themes
 
         //category filter
-        $cats = '';
-
-        if ($category_id)
+        
+        if($category_id && $category_id != 'all')
         {
-            $cats = $category_id;
+            $item_query->byCategoryIDs($category_id);
         }
 
-//        if (isset($requestedCategories) && count($requestedCategories) > 0)
-//        {
-//            $cats = implode("','",  $requestedCategories);
-//        }
-
-        if ($category_id != "all") {
-            $q = "{{%category_path}}.path_id IN ('" . $cats . "')";
-            $item_query->andWhere($q);
+        if ($requestedLocation) 
+        {
+            $item_query->byDeliveryLocation($requestedLocation);
         }
 
-        if ($requestedLocation) {
-
-
-            if (is_numeric($requestedLocation)) {
-                $location = $requestedLocation;
-            } else {
-                $address_id = substr($requestedLocation, strpos($requestedLocation, '_') + 1, strlen($requestedLocation));
-
-                $location = \common\models\CustomerAddress::findOne($address_id)->area_id;
-            }
-            $item_query->andWhere('EXISTS (SELECT 1 FROM {{%vendor_location}} WHERE {{%vendor_location}}.area_id="'.$location.'" AND {{%vendor_item}}.vendor_id = {{%vendor_location}}.vendor_id)');
-        }
-
-        if ($requestedDeliverDate) {
+        if ($requestedDeliverDate) 
+        {
             $date = date('Y-m-d', strtotime($requestedDeliverDate));
-            $condition = " ({{%vendor}}.vendor_id NOT IN(SELECT vendor_id FROM `whitebook_vendor_blocked_date` where block_date = '".$date."')) ";
-            $item_query->andWhere($condition);
+            $item_query->byDeliveryDate($date);
         }
 
-        $expression = new Expression(
-            "CASE
-                WHEN
-                    `whitebook_priority_item`.priority_level IS NULL
-                    OR whitebook_priority_item.status = 'Inactive'
-                    OR whitebook_priority_item.trash = 'Deleted'
-                    OR DATE(whitebook_priority_item.priority_start_date) > DATE(NOW())
-                    OR DATE(whitebook_priority_item.priority_end_date) < DATE(NOW())
-                THEN 2
-                WHEN `whitebook_priority_item`.priority_level = 'Normal' THEN 1
-                WHEN `whitebook_priority_item`.priority_level = 'Super' THEN 0
-                ELSE 2
-            END, {{%vendor_item}}.sort");
-
-        $listing = $item_query
+        $products = $item_query
             ->groupBy('{{%vendor_item}}.item_id')
-            ->orderBy($expression)
-            ->asArray()
+            ->orderByExpression()
             ->offset($offset)
             ->limit($limit)
+            ->asArray()
             ->all();
-
-        if ($listing) {
-
-            foreach ($listing as $item) {
-                $image = \common\models\Image::find()
-                ->where(['item_id' => $item['item_id']])
-                ->orderBy(['vendorimage_sort_order' => SORT_ASC])
-                ->one();
-                if ($image) {
-                    $products[] = $item + ['image'=>$image->image_path];
-                } else {
-                    $products[] = $item;
-                }
-            }
-        }
 
         return $products;
     }
