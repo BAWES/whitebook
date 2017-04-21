@@ -79,12 +79,12 @@ class CheckoutController extends Controller
 		$items = CustomerCart::items();
 		$errors = [];
 		if ($items) {
-			foreach ($items as $item) {
+		    foreach ($items as $item) {
 
 				$errors[] = $model->validate_item([
 					'item_id' => $item['item_id'],
 					'delivery_date' => $item['cart_delivery_date'],
-					'timeslot_end_time' => $item['timeslot_end_time'],
+					'timeslot_end_time' => $item['time_slot'],
 					'area_id' => $item['area_id'],
 					'quantity' => $item['cart_quantity']
 				], true);
@@ -92,6 +92,7 @@ class CheckoutController extends Controller
 			if ($errors) {
 				return [
 					"operation" => "error",
+					"code" => "0",
 					"message" => $errors,
 					"cart-list" => $items
 				];
@@ -144,7 +145,8 @@ class CheckoutController extends Controller
 		$order_id = Yii::$app->session->get('order_id',111111);
 
 		return [
-			"operation" => "error",
+			"operation" => "success",
+			"code" => "1",
 			"message" => 'Order Successfully Completed',
 			"order_id" => $order_id,
 		];
