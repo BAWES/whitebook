@@ -91,6 +91,7 @@ class AuthController extends Controller
         if($user->customer_activation_status == Customer::ACTIVATION_FALSE){
             return [
                 "operation" => "error",
+                "code" => "0",
                 "errorType" => "email-not-verified",
                 "message" => "Please click the verification link sent to you by email to activate your account",
             ];
@@ -100,6 +101,7 @@ class AuthController extends Controller
         $accessToken = $user->accessToken->token_value;
         return [
             "operation" => "success",
+            "code" => "1",
             "token" => $accessToken
         ];
     }
@@ -145,9 +147,13 @@ class AuthController extends Controller
 
             $message_admin = $model->customer_name.' registered in TheWhiteBook';
 
-            $send_admin = Yii::$app->mailer->compose(
-                ["html" => "customer/user-register"],
-                ["message" => $message_admin]
+            $send_admin = Yii::$app->mailer->compose("customer/user-register",
+                [
+                    'confirm_link' => Url::to(['/users/confirm_email', 'key' => $model->customer_activation_key], true),
+                    'logo_1' => Url::to("@web/images/twb-logo-horiz-white.png", true),
+                    'logo_2' => Url::to("@web/images/twb-logo-trans.png", true),
+                    'model' => $model
+                ]
             );
 
             $send_admin
@@ -158,12 +164,14 @@ class AuthController extends Controller
 
             return [
                 "operation" => "success",
+                "code" => "1",
                 "message" => "Please click on the link sent to you by email to verify your account"
             ];
 
         } else {
             return [
                 "operation" => "error",
+                "code" => "0",
                 "message" => $model->getErrorMessage($model->errors)
             ];
 
@@ -181,6 +189,7 @@ class AuthController extends Controller
         if ($email == ' ') {
             return [
                 'operation' => 'error',
+                'code' => '0',
                 'message' => 'Invalid Email'
             ];
         }
@@ -203,17 +212,20 @@ class AuthController extends Controller
             if ($send) {
                 return [
                     'operation' => 'success',
+                    'code' => '1',
                     'message' => 'Password reset link sent, please check your email for further instructions.'
                 ];
             } else {
                 return [
                     'operation' => 'error',
+                    'code' => '0',
                     'message' => 'Server issue. Please try again'
                 ];
             }
         } else {
             return [
                 'operation' => 'error',
+                'code' => '0',
                 'message' => 'Email Does Not Exist'
             ];
         }
