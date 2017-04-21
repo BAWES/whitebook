@@ -1,6 +1,6 @@
 <?php
-
 namespace common\models\query;
+
 use Yii;
 /**
  * This is the ActiveQuery class for [[CategoryPath]].
@@ -95,6 +95,11 @@ class CategoryPathQuery extends \yii\db\ActiveQuery
     public function vendorIDs($ActiveVendors)
     {
         return $this->andWhere(['in', '{{%vendor_item}}.vendor_id', $ActiveVendors]);
+    }
+
+    public function byThemeIDs($themes)
+    {
+        return $this->andWhere(['IN', '{{%theme}}.theme_id', $themes]);
     }
 
     public function themeSlug($themes)
