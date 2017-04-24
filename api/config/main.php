@@ -82,6 +82,8 @@ return [
                         'PATCH' => 'update',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
+                        'OPTIONS index' => 'options',
+                        'OPTIONS update' => 'options',
                     ]
                 ],
                 [ // CategoryController
