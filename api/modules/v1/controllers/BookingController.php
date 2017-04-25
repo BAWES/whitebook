@@ -68,13 +68,13 @@ class BookingController extends Controller
      */
     public function actionList()
     {
-        $query = Booking::find()
-            ->currentUser()
-            ->orderByDate();
+        $offset = Yii::$app->request->get('offset');
 
-        return new ActiveDataProvider([
-            'query' => $query
-        ]);
+        return Booking::find()
+            ->currentUser()
+            ->orderByDate()
+            ->offset($offset)
+            ->all(); 
     }
 
     /**
