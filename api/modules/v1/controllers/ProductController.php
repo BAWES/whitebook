@@ -5,13 +5,11 @@ namespace api\modules\v1\controllers;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\rest\Controller;
-use yii\db\Expression;
 use frontend\models\Vendor;
 use common\models\CategoryPath;
 use common\models\VendorLocation;
 use common\models\VendorItemPricing;
 use common\models\VendorItemMenuItem;
-use common\components\CFormatter;
 use common\models\VendorItemMenu;
 use common\models\Themes;
 use api\models\EventItemlink;
@@ -101,9 +99,9 @@ class ProductController extends Controller
         
         $limit = Yii::$app->params['limit'];
         
-        $theme_id = Yii::$app->request->get("theme_id");
+        $theme_id = $requestedTheme;
 
-        $vendor_id = Yii::$app->request->get("vendor_id");
+        $vendor_id = $requestedVendor;
 
         if ($category_id != 'all') {
             $Category = \common\models\Category::findOne($category_id);
