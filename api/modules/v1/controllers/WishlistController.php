@@ -72,6 +72,7 @@ class WishlistController extends Controller
         $limit = Yii::$app->params['limit'];
         $price = $vendor = $avail_sale = $theme = '';
         $avail_sale = $vendor = $theme = '';
+        $category_id = ($category_id) ? $category_id : '';
         return \frontend\models\Users::get_customer_wishlist($customer_id, $category_id, $price, $vendor, $avail_sale,$limit,$offset);
     }
 
