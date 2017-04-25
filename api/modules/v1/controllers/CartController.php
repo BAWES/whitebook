@@ -76,9 +76,10 @@ class CartController extends Controller
      * in cart table
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function actionList()
+    public function actionList($offset=0)
     {
-        $items = CustomerCart::items();
+        $limit = Yii::$app->params['limit'];
+        $items = CustomerCart::items($limit, $offset);
 
         $result = [];
 
@@ -119,12 +120,13 @@ class CartController extends Controller
             } 
 
             // get final item total 
-
+            $vendorDetail = CustomerCart::getVendorDetail($value['vendor_id']);
             $value['total'] = VendorItem::itemFinalPrice(
                         $value['item_id'], 
                         $value['cart_quantity'], 
                         array_merge($value['addons'], $value['options'])
                     );
+            $value['vendor']= $vendorDetail->vendor_name;
 
             $result[] = $value;
         }
