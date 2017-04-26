@@ -77,14 +77,25 @@ class CartController extends Controller
      * in cart table
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function actionList()
+    public function actionList($offset=0)
     {
-        $items = CustomerCart::items();
-
+        $limit = Yii::$app->params['limit'];
+        $items = CustomerCart::items($limit, $offset);
+        $subTotal = $total = $delivery_charge = 0;
         $result = [];
+        $delivery = [];
+        $options = [];
+        $cartItems['items'] = [];
+        $cartItems['summary'] = [];
 
         foreach ($items as $key => $value) 
         {
+            $vendor_name = CustomerCart::getVendorDetail($value['vendor_id'])->vendor_name;
+            $vendors[$value['vendor_id']] = [
+                'vendor'=>$vendor_name,
+                'area_id' => $value['area_id']
+            ];
+
             unset($value['item']);
             unset($value['image']);
 
@@ -120,17 +131,49 @@ class CartController extends Controller
             } 
 
             // get final item total 
-
+            $vendorDetail = CustomerCart::getVendorDetail($value['vendor_id']);
             $value['total'] = VendorItem::itemFinalPrice(
                         $value['item_id'], 
                         $value['cart_quantity'], 
                         array_merge($value['addons'], $value['options'])
                     );
+            $value['vendor']= $vendorDetail->vendor_name;
+            $subTotal += $value['total'];
 
+
+            $questionAnswers = \common\models\CustomerCartItemQuestionAnswer::getCartQuestionAnswer($value['cart_id']);
+            if($questionAnswers)
+            {
+                $q=0;
+                foreach($questionAnswers as $answer) {
+                    $options[$q] = ['question'=>$answer->question->question,'answer'=>$answer->answer];
+                    $q++;
+                }
+                $value['customs'] = $options;
+            } else {
+                $value['customs'] = [];
+            }
             $result[] = $value;
         }
-        
-        return $result;
+        if ($result) {
+            $i=0;
+            foreach ($vendors as $key => $vendor) {
+                $charge = \common\models\Booking::getDeliveryCharges('', $key, $vendor['area_id']);
+                $delivery_charge += (int)$charge;
+                $delivery[$i] = ['vendor'=>$vendor['vendor'],'charges'=>\common\components\CFormatter::format($charge)];
+                $i++;
+            }
+
+
+
+            $cartItems['items'] = $result;
+            $cartItems['summary']['subtotal'] = $subTotal;
+            $cartItems['summary']['delivery_vendors'] = $delivery;
+            $cartItems['summary']['delivery_charges'] = $delivery_charge;
+            $cartItems['summary']['total'] = $subTotal + $delivery_charge;
+        }
+
+        return $cartItems;
     }
 
     /**
