@@ -113,10 +113,6 @@ class CustomerCart extends \yii\db\ActiveRecord
 
     public function validate_item($data, $valid_for_cart_item = false) {
 
-        $data['area_id'] = Yii::$app->session->get('deliver-location');
-        $data['delivery_date'] = Yii::$app->session->get('deliver-date');
-        $data['time_slot'] = Yii::$app->session->get('event_time');
-
         $errors = [];
 
         $item = VendorItem::findOne($data['item_id']);
@@ -207,8 +203,9 @@ class CustomerCart extends \yii\db\ActiveRecord
         }
             
         // to check with old delivery date
+
         if ($data['delivery_date'] && strtotime($data['delivery_date']) < strtotime(date('Y-m-d'))) { 
-            $errors['cart_delivery_date'][] = Yii::t('frontend','Cart item with past delivery date');     
+            $errors['cart_delivery_date'][] = Yii::t('frontend','Invalid delivery date');     
         }
 
         //get timeslot

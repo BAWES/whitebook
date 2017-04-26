@@ -141,7 +141,7 @@ class CartController extends BaseController
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         $data = Yii::$app->request->post();
-
+        
         if($this->validate_item($data)) {
 
             $cart = CustomerCart::findOne($data['cart_id']);
@@ -443,6 +443,10 @@ class CartController extends BaseController
     */
     public function validate_item($data) {
 
+        $data['area_id'] = Yii::$app->session->get('deliver-location');
+        $data['delivery_date'] = Yii::$app->session->get('deliver-date');
+        $data['time_slot'] = Yii::$app->session->get('event_time');
+
         // will change them too
         $this->errors = CustomerCart::validate_item($data);
 
@@ -724,9 +728,9 @@ class CartController extends BaseController
 
             $errors = CustomerCart::validate_item([
                 'item_id' => $cart['item_id'],
-                'time_slot' => $cart['time_slot'],
-                'delivery_date' => $cart['cart_delivery_date'],
-                'area_id' => $cart['area_id'],
+                'time_slot' => Yii::$app->session->get('event_time'),
+                'delivery_date' => Yii::$app->session->get('deliver-date'),
+                'area_id' => Yii::$app->session->get('deliver-location'),
                 'quantity' => $cart['cart_quantity'],
                 'menu_item' => ArrayHelper::map(
                         $menu_items, 'menu_item_id', 'quantity'
