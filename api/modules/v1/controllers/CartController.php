@@ -4,6 +4,7 @@ namespace api\modules\v1\controllers;
 
 use Yii;
 use yii\rest\Controller;
+use yii\helpers\ArrayHelper;
 use common\models\CustomerCart;
 use common\models\CustomerCartMenuItem;
 use common\models\VendorItem;
@@ -527,15 +528,16 @@ class CartController extends Controller
 
                 //if cart menu are same as posted menu_item
 
-                if(sizeof($arr_cart_menu_items) != sizeof($data['menu_item']))
+                if(sizeof($arr_cart_menu_items) != sizeof($data['menu_item'])) {
                     $cart = false;
+                }
 
                 //check menu item quantity is same for 1 quantity of item in cart and we trying to add
                 // so we can add cart item with p quantity to cart item item with q quantity if both ahve
                 // same no of menu items
 
                 foreach ($arr_cart_menu_items as $key => $value) {
-                    if(empty($data['menu_item'][$key]) || $data['menu_item'][$key]/$data['quantity'] != $value/$cart->cart_quantity){
+                    if(!$cart || empty($data['menu_item'][$key]) || $data['menu_item'][$key]/$data['quantity'] != $value/$cart->cart_quantity){
                         $cart = false;
                         break;
                     }
@@ -657,7 +659,7 @@ class CartController extends Controller
 
                 return [
                     'operation' => 'error',
-                    'code' => '0',
+                    'code' => '2',
                     'message' => array_merge($this->errors, $cart->getErrors())
                 ];
             }
@@ -665,7 +667,7 @@ class CartController extends Controller
         } else {
             return [
                 'operation' => 'error',
-                'code' => '0',
+                'code' => '3',
                 'message' => $this->errors
             ];
         }

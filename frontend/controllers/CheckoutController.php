@@ -36,9 +36,9 @@ class CheckoutController extends BaseController
 
     		$errors = CustomerCart::validate_item([
     			'item_id' => $item['item_id'],
-                'time_slot' => $item['time_slot'],
-                'delivery_date' => $item['cart_delivery_date'],
-                'area_id' => $item['area_id'],
+                'time_slot' => Yii::$app->session->get('event_time'),
+                'delivery_date' => Yii::$app->session->get('deliver-date'),
+                'area_id' => Yii::$app->session->get('deliver-location'),
     			'quantity' => $item['cart_quantity'],
                 'menu_item' => ArrayHelper::map($menu_items, 'menu_item_id', 'quantity')
     		], true);
@@ -101,9 +101,9 @@ class CheckoutController extends BaseController
 
             $error = CustomerCart::validate_item([
     			'item_id' => $item['item_id'],
-                'time_slot' => $item['time_slot'],
-    			'delivery_date' => $item['cart_delivery_date'],
-                'area_id' => $item['area_id'],
+                'time_slot' => Yii::$app->session->get('event_time'),
+    			'delivery_date' => Yii::$app->session->get('deliver-date'),
+                'area_id' => Yii::$app->session->get('deliver-location'),
     			'quantity' => $item['cart_quantity'],
                 'menu_item' => ArrayHelper::map($menu_items, 'menu_item_id', 'quantity')
     		], true);
@@ -303,9 +303,10 @@ class CheckoutController extends BaseController
 			$error = CustomerCart::validate_item([
     			'item_id' => $item['item_id'],
                 'working_id' => $item['working_id'],
-    			'delivery_date' => $item['cart_delivery_date'],
+                'time_slot' => Yii::$app->session->get('event_time'),
+    			'delivery_date' => Yii::$app->session->get('deliver-date'),
                 'working_end_time' => $item['working_end_time'],
-    			'area_id' => $item['area_id'],
+    			'area_id' => Yii::$app->session->get('deliver-location'),
     			'quantity' => $item['cart_quantity'],
                 'menu_item' => ArrayHelper::map($menu_items, 'menu_item_id', 'quantity')
     		], true);
@@ -355,9 +356,9 @@ class CheckoutController extends BaseController
 
 			$error = CustomerCart::validate_item([
     			'item_id' => $item['item_id'],
-                'time_slot' => $item['time_slot'],
-    			'delivery_date' => $item['cart_delivery_date'],
-                'area_id' => $item['area_id'],
+                'time_slot' => Yii::$app->session->get('event_time'),
+    			'delivery_date' => Yii::$app->session->get('delivery-date'),
+                'area_id' => Yii::$app->session->get('delivery-location'),
     			'quantity' => $item['cart_quantity'],
                 'menu_item' => ArrayHelper::map($menu_items, 'menu_item_id', 'quantity')
     		], true);
