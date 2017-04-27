@@ -17,6 +17,9 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'What\'s your occasion?' => 'ما هي مناسباتك؟',
+    'Book everything you need for your event' => 'احجز كل ما تحتاجه لمناسباتك',
+    'You pick, we take care of the rest. Your friends will be jealous, guaranteed!' => 'إختر إلي تبيه و الباجي علينا',
     'A payment link will be sent to you for your order once your booking is confirmed' => 'سيتم إرسال رابط الدفع لك لطلبك بمجرد تأكيد الحجز',
     'By confirming you agree to The White Book\'s terms and conditions' => 'بتأكيد موافقتك على شروط وأحكام الكتاب الأبيض',
     'Event Date' => 'تاريخ الحدث',
