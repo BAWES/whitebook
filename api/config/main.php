@@ -208,6 +208,7 @@ return [
                 [ // PackageController
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'v1/package',
+                    'pluralize' => false,
                     'patterns' => [
                         'GET' => 'list',
                         'GET <id>' => 'view',
