@@ -5,13 +5,14 @@ namespace api\modules\v1\controllers;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\rest\Controller;
-use frontend\models\Vendor;
 use common\models\CategoryPath;
 use common\models\VendorLocation;
 use common\models\VendorItemPricing;
 use common\models\VendorItemMenuItem;
 use common\models\VendorItemMenu;
 use common\models\Themes;
+use common\components\CFormatter;
+use frontend\models\Vendor;
 use api\models\EventItemlink;
 use api\models\VendorItem;
 
@@ -21,7 +22,6 @@ use api\models\VendorItem;
  */
 class ProductController extends Controller
 {
-
     public function behaviors()
     {
         $behaviors = parent::behaviors();
@@ -438,59 +438,19 @@ class ProductController extends Controller
             ->all();
     }
 
-
     public function actionFinalPrice()
     {
-        $item_id = Yii::$app->request->get('item_id');
+        $total = VendorItem::itemFinalPrice(
+            Yii::$app->request->getBodyParam('item_id'), 
+            Yii::$app->request->getBodyParam('quantity'), 
+            Yii::$app->request->getBodyParam('menu_item')
+        );
 
-        $item = VendorItem::findOne($item_id);
+        Yii::$app->response->format = 'json';
 
-        if (empty($item)) {
-            return [
-                "operation" => "error",
-                "code" => "0",
-                'message' => 'Invalid Item ID'
-            ];
-        }
-
-        $total = ($item->item_base_price) ? $item->item_base_price : 0;
-
-        $price_chart = VendorItemPricing::find()
-            ->item($item['item_id'])
-            ->defaultItem()
-            ->quantityRange(Yii::$app->request->get('quantity'))
-            ->orderBy('pricing_price_per_unit DESC')
-            ->one();
-
-        if ($item->included_quantity > 0) {
-            $included_quantity = $item->included_quantity;
-        } else {
-            $included_quantity = 1;
-        }
-
-        if ($price_chart) {
-            $unit_price = $price_chart->pricing_price_per_unit;
-        } else {
-            $unit_price = $item->item_price_per_unit;
-        }
-
-        $actual_item_quantity = Yii::$app->request->get('quantity') - $included_quantity;
-
-        $total += $unit_price * $actual_item_quantity;
-
-        $menu_items = Yii::$app->request->get('menu_item');
-
-        if(!is_array($menu_items)) {
-            $menu_items = [];
-        }
-
-
-        foreach ($menu_items as $key => $value) {
-
-            $menu_item = VendorItemMenuItem::findOne($value['menu_item_id']);
-            $total += $menu_item->price * $value['quantity'];
-        }
-        return $total;
+        return [
+            'total' => CFormatter::format($total)
+        ];
     }
 
     /*

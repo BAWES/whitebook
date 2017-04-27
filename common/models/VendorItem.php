@@ -534,6 +534,9 @@ class VendorItem extends \yii\db\ActiveRecord
 
         foreach ($menu_items as $key => $value) 
         {
+            if(empty($value))
+                continue;
+
             if(is_array($value))
             {
                 $total += $value['price'] * $value['quantity'];

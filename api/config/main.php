@@ -109,7 +109,7 @@ return [
                         'GET theme' => 'load-all-themes',
                         'GET vendors' => 'load-all-vendor',
                         'POST event' => 'add-product-to-event',
-                        'GET final-price' => 'final-price',
+                        'POST final-price' => 'final-price',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
                         'OPTIONS detail' => 'options',
