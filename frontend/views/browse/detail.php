@@ -28,23 +28,23 @@ $session = $session = Yii::$app->session;
 $deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
 $deliver_date  = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
 
-if($model->included_quantity > 0) {
-    $quantity = $model->included_quantity;
-} else {
-    $quantity = 1;
-}
-
 if($model->type) {
     $item_type_name = $model->type->type_name;
 } else {
     $item_type_name = 'Product';
 }
 
-if($model['included_quantity'] > 0) {
+$min_quantity_to_order = 1;
+
+if($model['item_minimum_quantity_to_order'] > 0) {
+    $min_quantity_to_order = $item['item_minimum_quantity_to_order'];
+} 
+    
+if($model['included_quantity'] > $min_quantity_to_order) {
     $min_quantity_to_order = $model['included_quantity'];
-}else{
-    $min_quantity_to_order = 1;
 }
+
+$quantity = $min_quantity_to_order;
 
 $capacity = $model->item_default_capacity;
 
