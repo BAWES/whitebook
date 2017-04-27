@@ -33,28 +33,17 @@ class SiteController extends BaseController
 
     public function actionIndex()
     {
+        $this->layout = 'home';
+
         \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Home';
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
-        $website_model = new Website();
-        $featuremodel = new FeatureGroupItem();
-        $product_list = $featuremodel->get_featured_product_id();
-        
-        $banner = $website_model->get_banner_details();
-        
-        $featured_product = array();
-        
-        if (!Yii::$app->user->isGuest) {
-            $featured_product = VendorItem::get_featured_product();
-        }
-        
-        return $this->render('index', [
-            'home_slider_alias' => Siteinfo::info('home_slider_alias'),
-            'featured_product' => $featured_product,
-            'banner' => $banner,
-            'key' => '0',
-        ]);
+        $themes = Themes::loadthemenames();
+
+        return $this->render('home', [
+                'themes' => $themes
+            ]);
     }
 
     /*
