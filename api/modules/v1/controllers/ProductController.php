@@ -206,6 +206,7 @@ class ProductController extends Controller
 
         if ($item_query_result) 
         {
+            $customData = ['image'=>'','notice'=>''];
             foreach ($item_query_result as $item) 
             {
                 $image = \common\models\Image::find()
@@ -214,10 +215,40 @@ class ProductController extends Controller
                     ->one();
                     
                 if ($image) {
-                    $products[] = $item + ['image'=>$image->image_path];
+                    $customData['image'] = $image->image_path;
                 } else {
-                    $products[] = $item;
+                    $customData['image'] = '';
                 }
+
+                // for notice period
+                $value = $item;
+                $notice = '';
+                if (isset($value['item_how_long_to_make']) && $value['item_how_long_to_make'] > 0) {
+                    if (isset($value['notice_period_type']) && $value['notice_period_type'] == 'Day') {
+                        if ($value['item_how_long_to_make'] >= 7) {
+                            $notice = Yii::t('frontend', '{count} week(s)', [
+                                'count' => substr(($value['item_how_long_to_make'] / 7), 0, 3)
+                            ]);
+                        } else {
+                            $notice = Yii::t('frontend', '{count} day(s)', [
+                                'count' => $value['item_how_long_to_make']
+                            ]);
+                        }
+                    } else {
+                        if ($value['item_how_long_to_make'] >= 24) {
+                            $notice = Yii::t('frontend', '{count} day(s)', [
+                                'count' => substr(($value['item_how_long_to_make'] / 24), 0, 3)
+                            ]);
+                        } else {
+                            $notice = Yii::t('frontend', '{count} hours', [
+                                'count' => $value['item_how_long_to_make']
+                            ]);
+                        }
+                    }
+                }
+                $customData['notice'] = $notice;
+
+                $products[] = $item + $customData;
             }
         }
 
@@ -255,6 +286,31 @@ class ProductController extends Controller
             ->menu('addons')
             ->asArray()
             ->all();
+        $value = $model;
+        $notice = '';
+        if (isset($value['item_how_long_to_make']) && $value['item_how_long_to_make'] > 0) {
+            if (isset($value['notice_period_type']) && $value['notice_period_type'] == 'Day') {
+                if ($value['item_how_long_to_make'] >= 7) {
+                    $notice = Yii::t('frontend', '{count} week(s)', [
+                        'count' => substr(($value['item_how_long_to_make'] / 7), 0, 3)
+                    ]);
+                } else {
+                    $notice = Yii::t('frontend', '{count} day(s)', [
+                        'count' => $value['item_how_long_to_make']
+                    ]);
+                }
+            } else {
+                if ($value['item_how_long_to_make'] >= 24) {
+                    $notice = Yii::t('frontend', '{count} day(s)', [
+                        'count' => substr(($value['item_how_long_to_make'] / 24), 0, 3)
+                    ]);
+                } else {
+                    $notice = Yii::t('frontend', '{count} hours', [
+                        'count' => $value['item_how_long_to_make']
+                    ]);
+                }
+            }
+        }
 
         return [
             'item' => $model,
@@ -262,8 +318,9 @@ class ProductController extends Controller
             'vendor' => $model->vendor,
             'images' => $model->images,
             'menu' => $menu,
-            'addons' => $addons
-        ];        
+            'addons' => $addons,
+            'notice' => $notice
+        ];
     }
 
     /*
