@@ -475,7 +475,7 @@ class CustomerCart extends \yii\db\ActiveRecord
     }
 
     //return customer items 
-    public static function items($limit = 10, $offset = 0) {
+    public static function items() {
 
         $query = CustomerCart::find()
             ->select('
@@ -507,8 +507,6 @@ class CustomerCart extends \yii\db\ActiveRecord
             }
 
         $items = $query->asArray()
-            ->limit($limit)
-            ->offset($offset)
             ->all();
 
         return $items;    
