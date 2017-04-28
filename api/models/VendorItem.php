@@ -1,6 +1,7 @@
 <?php
 namespace api\models;
 
+use common\models\VendorItemPricing;
 use Yii;
 use api\models\Vendor;
 use api\models\Image;
@@ -67,5 +68,10 @@ class VendorItem extends \common\models\VendorItem {
     public function getType()
     {
         return $this->hasOne(ItemType::className(), ['type_id' => 'type_id']);
+    }
+
+    public function getPrice()
+    {
+        return $this->hasMany(VendorItemPricing::className(),['item_id'=>'item_id']);
     }
 }

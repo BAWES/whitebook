@@ -37,7 +37,7 @@ if($model->type) {
 $min_quantity_to_order = 1;
 
 if($model['item_minimum_quantity_to_order'] > 0) {
-    $min_quantity_to_order = $item['item_minimum_quantity_to_order'];
+    $min_quantity_to_order = $model['item_minimum_quantity_to_order'];
 } 
     
 if($model['included_quantity'] > $min_quantity_to_order) {
