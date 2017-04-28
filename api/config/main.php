@@ -23,7 +23,7 @@ return [
             ]
         ],
         'user' => [
-            'identityClass' => 'api\models\customer',
+            'identityClass' => 'api\models\Customer',
             'enableAutoLogin' => false,
             'enableSession' => false,
             'loginUrl' => null
