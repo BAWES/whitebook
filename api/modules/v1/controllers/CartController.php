@@ -77,10 +77,9 @@ class CartController extends Controller
      * in cart table
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function actionList($offset=0)
+    public function actionList()
     {
-        $limit = Yii::$app->params['limit'];
-        $items = CustomerCart::items($limit, $offset);
+        $items = CustomerCart::items();
         $subTotal = $total = $delivery_charge = 0;
         $result = [];
         $delivery = [];
