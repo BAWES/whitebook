@@ -17,7 +17,6 @@ class Booking extends \common\models\Booking {
         return [
             'booking_id',
             'booking_token',
-            'vendor_id',
             'customer_id',
             'customer_name',
             'customer_lastname',
@@ -36,12 +35,17 @@ class Booking extends \common\models\Booking {
             'total_delivery_charge',
             'total_without_delivery',
             'total_with_delivery',
-            'booking_status',
+            'booking_status'=>function($model) {
+                return $model->getStatusName();
+            },
             'ip_address',
             'created_datetime',
             'modified_datetime',
             'items' => function($model) {
                 return $model->bookingItems;
+            },
+            'vendor' => function($model) {
+                return $model->vendor->vendor_name;
             }
         ];
     }
