@@ -33,6 +33,7 @@ use yii\helpers\Url;
                                         <option selected="selected" value="">
                                             <?= Yii::t('frontend', 'What\'s your occasion?') ?>
                                         </option>
+                                        <option value="<?= Url::to('browse/all') ?>">All Themes</option>
                                         <?php foreach ($themes as $key => $value) { ?>
                                             <option value="<?= Url::to('browse/all?filter=1&themes[]='.$value['slug']) ?>">
                                                 <?php if(Yii::$app->language == 'en') { 
