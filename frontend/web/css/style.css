@@ -5,7 +5,7 @@ body{color:#333!important; -webkit-text-stroke-width: .05px; font-family: 'OpenS
 #top_header{background:#fff;}
 .logo_header{background-repeat: no-repeat;margin-top: 23px;  margin-bottom: 23px;}
 .navbar-inverse{ background: #fff; min-height:60px; }
-.border-top-yellow{ display: inline-block; width: 100%; background: #fff; min-height: 111px; vertical-align: top;}
+.border-top-yellow{ display: inline-block; width: 100%; background: #fff; vertical-align: top;}
 .navbar.navbar-inverse.navbar-static-top{ border-top: 1px solid #e6e6e6;border-bottom: 1px solid #e6e6e6; display: inline-block; width: 100%; float: left; z-index: 99;}
 .navbar-nav > li > a{  font-size:12px; color:#000; font-family:'OpenSansRegular' ;text-transform: uppercase;   padding: 0 19px; }
 .nav > li > a:focus, .nav > li > a:hover{ background:none;}
