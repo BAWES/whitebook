@@ -22,6 +22,9 @@ use api\models\VendorItem;
  */
 class ProductController extends Controller
 {
+    /**
+     * @return array
+     */
     public function behaviors()
     {
         $behaviors = parent::behaviors();
@@ -79,17 +82,26 @@ class ProductController extends Controller
     }
 
     /**
+     * @param int $offset
+     * @param $category_id
+     * @param bool $forSale
+     * @param null $requestedLocation
+     * @param null $requestedDeliverDate
+     * @param int $requestedMinPrice
+     * @param int $requestedMaxPrice
+     * @param string $requestedCategories
+     * @param string $requestedVendor
+     * @param string $requestedTheme
+     * @param string $event_time
      * @return array
      */
     public function actionCategoryProducts(
         $offset = 0,
         $category_id,
-        $forSale = false,
         $requestedLocation = null,
         $requestedDeliverDate = null,
         $requestedMinPrice = 0,
         $requestedMaxPrice = 0,
-        $requestedCategories = '',
         $requestedVendor = '',
         $requestedTheme = '',
         $event_time = ''
@@ -98,8 +110,6 @@ class ProductController extends Controller
         $products = [];
         
         $limit = Yii::$app->params['limit'];
-        
-        $theme_id = $requestedTheme;
 
         $vendor_id = $requestedVendor;
 
@@ -118,10 +128,6 @@ class ProductController extends Controller
             ->defaultItems()
             ->approved()
             ->active();
-        
-        if ($forSale) {
-            $item_query->sale();
-        }
         
         if($vendor_id)
         {
@@ -144,11 +150,11 @@ class ProductController extends Controller
         }
         
         //theme filter
-        if ($theme_id) 
+        if ($requestedTheme)
         {
             $item_query->itemThemeJoin();
             $item_query->themeJoin();
-            $item_query->byThemeIDs($theme_id);
+            $item_query->byThemeIDs($requestedTheme);
         }//if themes
         
         //event time
@@ -257,6 +263,10 @@ class ProductController extends Controller
 
     /*
      * Method to view product detail
+     */
+    /**
+     * @param $product_id
+     * @return array
      */
     public function actionProductDetail($product_id)
     {
