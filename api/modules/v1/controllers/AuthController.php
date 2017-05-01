@@ -38,19 +38,12 @@ class AuthController extends Controller
         $behaviors['authenticator'] = [
             'class' => HttpBasicAuth::className(),
             'except' => ['options'],
-            'auth' => function ($email, $password) {
-                $user = Customer::findOne(['customer_email'=>$email]);
-                if ($user && $user->validatePassword($password)) {
-                    return $user;
-                }
-                return null;
-            }
+            'auth' => [$this, 'auth']
         ];
         // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
         // also avoid for public actions like registration and password reset
         $behaviors['authenticator']['except'] = [
             'options',
-            'login',
             'create-account',
             'request-reset-password',
         ];
@@ -76,6 +69,14 @@ class AuthController extends Controller
         return $actions;
     }
 
+    public function Auth($email, $password)
+    {
+        $user = Customer::findOne(['customer_email'=>$email]);
+        if ($user && $user->validatePassword($password)) {
+            return $user;
+        }
+        return null;
+    }
 
     /**
      * Perform validation on the agent account (check if he's allowed login to platform)
@@ -92,7 +93,6 @@ class AuthController extends Controller
         if($user->customer_activation_status == Customer::ACTIVATION_FALSE){
             return [
                 "operation" => "error",
-                "code" => "0",
                 "errorType" => "email-not-verified",
                 "message" => "Please click the verification link sent to you by email to activate your account",
             ];
@@ -102,7 +102,6 @@ class AuthController extends Controller
         $accessToken = $user->accessToken->token_value;
         return [
             "operation" => "success",
-            "code" => "1",
             "token" => $accessToken
         ];
     }

@@ -314,6 +314,7 @@ class ProductController extends Controller
 
         return [
             'item' => $model,
+            'price' => $model->price,
             'type' => $model->type,
             'vendor' => $model->vendor,
             'images' => $model->images,
