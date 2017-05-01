@@ -135,7 +135,7 @@ class WishlistController extends Controller
      */
     public function actionWishlistRemove() {
 
-        $wishlist_id = Yii::$app->request->getBodyParam("wishlist_id");
+        $wishlist_id = Yii::$app->request->get("wishlist_id");
 
         if (empty($wishlist_id) || !isset($wishlist_id)) {
             return [
