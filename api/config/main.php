@@ -235,6 +235,15 @@ return [
                         'OPTIONS' => 'options'
                     ]
                 ],
+                [ // DirectoryController
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/cms',
+                    'patterns' => [
+                        'GET <id>' => 'view',
+                        // OPTIONS VERBS
+                        'OPTIONS <id>' => 'options'
+                    ]
+                ],
             ],
         ],
         'log' => [
