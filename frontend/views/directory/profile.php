@@ -32,8 +32,8 @@ $url = \yii\helpers\Url::toRoute(["directory/profile", 'slug' => $vendor_details
 \Yii::$app->view->registerMetaTag(['property' => 'twitter:card', 'content' => 'summary_large_image']);
 
 $session = Yii::$app->session;
-$deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
-$deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
+$deliver_location   = ($session->has('delivery-location')) ? $session->get('delivery-location') : null;
+$deliver_date       = ($session->has('delivery-date')) ? $session->get('delivery-date') : '';
 
 $description = nl2br(LangFormat::format(strip_tags($vendor_detail['short_description']), strip_tags($vendor_detail['short_description_ar'])));
 

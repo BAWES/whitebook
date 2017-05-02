@@ -55,14 +55,14 @@ class CustomerCart extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['item_id', 'area_id', 'time_slot', 'cart_delivery_date', 'cart_customization_price_per_unit', 'cart_quantity', 'cart_datetime_added'], 'required'],
-            [['customer_id', 'item_id', 'area_id', 'cart_quantity', 'created_by','modified_by'], 'integer'],
+            [['item_id', 'cart_customization_price_per_unit', 'cart_quantity', 'cart_datetime_added'], 'required'],
+            [['customer_id', 'item_id', 'cart_quantity', 'created_by','modified_by'], 'integer'],
 
-            [['cart_delivery_date', 'cart_datetime_added', 'created_datetime', 'modified_datetime', 'female_service', 'special_request'], 'safe'],
+            [['cart_datetime_added', 'created_datetime', 'modified_datetime', 'female_service', 'special_request'], 'safe'],
 
             [['cart_customization_price_per_unit'], 'number'],
             ['cart_quantity', 'compare', 'compareValue' => 0, 'operator' => '>'],
-            [['cart_valid', 'trash','time_slot','cart_session_id'], 'string'],
+            [['cart_valid', 'trash', 'cart_session_id'], 'string'],
         ];
     }
 
@@ -140,10 +140,10 @@ class CustomerCart extends \yii\db\ActiveRecord
             $query = CustomerCart::find();
             $query->where([
                     'item_id' => $data['item_id'],
-                    'cart_delivery_date' => date('Y-m-d', strtotime($data['delivery_date'])),
                     'cart_valid' => 'yes',
                     'trash' => 'Default'
                 ]);
+
             if (Yii::$app->user->getId()) {
                 $query->andWhere(['customer_id'=>Yii::$app->user->getId()]);
             } else {
@@ -151,6 +151,7 @@ class CustomerCart extends \yii\db\ActiveRecord
             }
 
             $in_cart = $query->sum('cart_quantity');
+
         /*
             Check if deliery availabel in selected area 
         */
@@ -570,11 +571,17 @@ class CustomerCart extends \yii\db\ActiveRecord
 
     public static function customerAddress(){
         
-        if(Yii::$app->user->isGuest) {
+        if(Yii::$app->user->isGuest) 
+        {
             return [];
         }
                 
-        $area_id = self::findOne(['customer_id' => Yii::$app->user->getId()])->area_id;
+        $area_id  = Yii::$app->session->get('delivery-location');
+
+        if(!$area_id)
+        {
+            return [];
+        }
 
         $result = CustomerAddress::find()
             ->joinWith('location')

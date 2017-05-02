@@ -15,8 +15,8 @@ use yii\helpers\ArrayHelper;
 $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook'); 
 
 $session = $session = Yii::$app->session;
-$deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
-$deliver_date  = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
+$delivery_location   = ($session->has('delivery-location')) ? $session->get('delivery-location') : null;
+$delivery_date  = ($session->has('delivery-date')) ? $session->get('delivery-date') : '';
 $event_time  = ($session->has('event_time')) ? $session->get('event_time') : '';
 
 $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00',
@@ -41,7 +41,7 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
                     <label><?=Yii::t('frontend', 'Event Area'); ?></label>
                     <div class="select_boxes">
                         <?php
-                            echo Html::dropDownList('area_id', $deliver_location,
+                            echo Html::dropDownList('area_id', $delivery_location,
                             $vendor_area,
                             ['data-height'=>"100px",'data-live-search'=>"true",'id'=>"area_id", 'class'=>"selectpicker", 'data-size'=>"10", 'data-style'=>"btn-primary"]);
                         ?>
@@ -52,7 +52,7 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
                 <div class="form-group">
                     <label><?=Yii::t('frontend', 'Event Date'); ?></label>
                     <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" class="input-append date">
-                        <input value="<?= $deliver_date ?>" readonly="true" name="delivery_date" class="date-picker-box form-control required"  placeholder="<?php echo Yii::t('frontend', 'Date'); ?>" >
+                        <input value="<?= $delivery_date ?>" readonly="true" name="delivery_date" class="date-picker-box form-control required"  placeholder="<?php echo Yii::t('frontend', 'Date'); ?>" >
                         <i class="fa fa-calendar" aria-hidden="true"></i>
                     </div>
                 </div>
@@ -103,10 +103,12 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 	        	$sub_total = $delivery_charge = 0;
 	        	foreach ($items as $item) {
                     $vendor_name = CustomerCart::getVendorDetail($item['vendor_id'])->vendor_name;
+                    
                     $vendors[$item['vendor_id']] = [
-                            'vendor'=>$vendor_name,
-                            'area_id' => $item['area_id']
+                            'vendor' => $vendor_name,
+                            'area_id' => $delivery_location
                         ];
+
                     $row_total = ($item['item']['item_base_price']) ? $item['item']['item_base_price'] : 0;
 	        		
 	        		$menu_option_items = CustomerCartMenuItem::find()
@@ -129,16 +131,16 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 
 	        		$errors = CustomerCart::validate_item([
 	        			'item_id' => $item['item_id'],
-	        			'time_slot' => $item['time_slot'],
-	        			'delivery_date' => $item['cart_delivery_date'],
-	        			'area_id' => $item['area_id'],
+			        	'time_slot' => Yii::$app->session->get('event_time'),
+		    			'delivery_date' => Yii::$app->session->get('delivery-date'),
+		                'area_id' => Yii::$app->session->get('delivery-location'),
 	        			'quantity' => $item['cart_quantity'],
 	        			'menu_item' => ArrayHelper::map(
 	        					array_merge($menu_option_items, $menu_addon_items), 'menu_item_id', 'quantity'
 	        				)
 	        		], true);
 
-					$delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
+					$delivery_area = CustomerCart::geLocation($delivery_location, $item['vendor_id']);
 
 					$row_total = VendorItem::itemFinalPrice(
 			            $item['item_id'], 

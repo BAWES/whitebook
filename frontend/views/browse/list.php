@@ -20,8 +20,8 @@ $this->params['breadcrumbs'][] = ['label' => ucfirst($CName), 'url' => Url::to([
 $get = Yii::$app->request->get();
 
 $session = Yii::$app->session;
-$deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
-$deliver_date       = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
+$deliver_location   = ($session->has('delivery-location')) ? $session->get('delivery-location') : null;
+$deliver_date       = ($session->has('delivery-date')) ? $session->get('delivery-date') : '';
 
 ?>
 

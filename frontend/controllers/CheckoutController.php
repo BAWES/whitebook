@@ -37,8 +37,8 @@ class CheckoutController extends BaseController
     		$errors = CustomerCart::validate_item([
     			'item_id' => $item['item_id'],
                 'time_slot' => Yii::$app->session->get('event_time'),
-                'delivery_date' => Yii::$app->session->get('deliver-date'),
-                'area_id' => Yii::$app->session->get('deliver-location'),
+                'delivery_date' => Yii::$app->session->get('delivery-date'),
+                'area_id' => Yii::$app->session->get('delivery-location'),
     			'quantity' => $item['cart_quantity'],
                 'menu_item' => ArrayHelper::map($menu_items, 'menu_item_id', 'quantity')
     		], true);
@@ -102,8 +102,8 @@ class CheckoutController extends BaseController
             $error = CustomerCart::validate_item([
     			'item_id' => $item['item_id'],
                 'time_slot' => Yii::$app->session->get('event_time'),
-    			'delivery_date' => Yii::$app->session->get('deliver-date'),
-                'area_id' => Yii::$app->session->get('deliver-location'),
+    			'delivery_date' => Yii::$app->session->get('delivery-date'),
+                'area_id' => Yii::$app->session->get('delivery-location'),
     			'quantity' => $item['cart_quantity'],
                 'menu_item' => ArrayHelper::map($menu_items, 'menu_item_id', 'quantity')
     		], true);
@@ -304,9 +304,9 @@ class CheckoutController extends BaseController
     			'item_id' => $item['item_id'],
                 'working_id' => $item['working_id'],
                 'time_slot' => Yii::$app->session->get('event_time'),
-    			'delivery_date' => Yii::$app->session->get('deliver-date'),
+    			'delivery_date' => Yii::$app->session->get('delivery-date'),
                 'working_end_time' => $item['working_end_time'],
-    			'area_id' => Yii::$app->session->get('deliver-location'),
+    			'area_id' => Yii::$app->session->get('delivery-location'),
     			'quantity' => $item['cart_quantity'],
                 'menu_item' => ArrayHelper::map($menu_items, 'menu_item_id', 'quantity')
     		], true);

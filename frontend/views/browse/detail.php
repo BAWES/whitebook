@@ -25,8 +25,8 @@ $this->title = 'Whitebook - ' . $item_name;
 $this->params['breadcrumbs'][] = ' '.$item_name;
 
 $session = $session = Yii::$app->session;
-$deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
-$deliver_date  = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
+$deliver_location   = ($session->has('delivery-location')) ? $session->get('delivery-location') : null;
+$deliver_date  = ($session->has('delivery-date')) ? $session->get('delivery-date') : '';
 
 if($model->type) {
     $item_type_name = $model->type->type_name;

@@ -6,7 +6,7 @@ use common\models\Location;
 use common\models\CustomerCart;
 use common\components\LangFormat;
 
-$customer_address_modal->area_id = Yii::$app->session->get('deliver-location');
+$customer_address_modal->area_id = Yii::$app->session->get('delivery-location');
 
 ?>
 

@@ -244,8 +244,8 @@ class CartController extends BaseController
         $time_slot = empty($data['time_slot'])?'':$data['time_slot'];
         $delivery_date = empty($data['delivery_date'])?'':date('Y-m-d', strtotime($data['delivery_date']));
 
-        Yii::$app->session->set('deliver-location', $area_id);
-        Yii::$app->session->set('deliver-date', $delivery_date);
+        Yii::$app->session->set('delivery-location', $area_id);
+        Yii::$app->session->set('delivery-date', $delivery_date);
         Yii::$app->session->set('event_time', $time_slot);
 
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -265,11 +265,10 @@ class CartController extends BaseController
         if($this->validate_item($data)) {
             
             $query = CustomerCart::find()
-                ->item($data['item_id'])
-                ->area($area_id)
-                ->timeSlot($time_slot)
-                ->deliveryDate($delivery_date);
-
+                ->item($data['item_id']);
+                //->area($area_id)
+                //->timeSlot($time_slot)
+                //->deliveryDate($delivery_date);
 
             if(!empty($data['female_service'])){
                 $query->femaleService($data['female_service']);
@@ -278,7 +277,8 @@ class CartController extends BaseController
             if (!empty($data['special_request'])) {
                 $query->request($data['special_request']);
             }
-                $query->user();
+                
+            $query->user();
 
             $cart = $query->one();
 
@@ -443,8 +443,8 @@ class CartController extends BaseController
     */
     public function validate_item($data) {
 
-        $data['area_id'] = Yii::$app->session->get('deliver-location');
-        $data['delivery_date'] = Yii::$app->session->get('deliver-date');
+        $data['area_id'] = Yii::$app->session->get('delivery-location');
+        $data['delivery_date'] = Yii::$app->session->get('delivery-date');
         $data['time_slot'] = Yii::$app->session->get('event_time');
 
         // will change them too
@@ -694,8 +694,8 @@ class CartController extends BaseController
 
         //save delivery info in session 
 
-        Yii::$app->session->set('deliver-location', Yii::$app->request->post('area_id'));
-        Yii::$app->session->set('deliver-date', Yii::$app->request->post('delivery_date'));
+        Yii::$app->session->set('delivery-location', Yii::$app->request->post('area_id'));
+        Yii::$app->session->set('delivery-date', Yii::$app->request->post('delivery_date'));
         Yii::$app->session->set('event_time', Yii::$app->request->post('event_time'));
 
         foreach ($quantity as $key => $value) {
@@ -704,10 +704,6 @@ class CartController extends BaseController
 
             if(!$cart) 
                 continue;
-
-            $cart->area_id = Yii::$app->request->post('area_id');
-            $cart->time_slot = Yii::$app->request->post('event_time');
-            $cart->cart_delivery_date = Yii::$app->request->post('delivery_date');
 
             if ($value > 0) {
                 $cart->cart_quantity = $value;
@@ -729,8 +725,8 @@ class CartController extends BaseController
             $errors = CustomerCart::validate_item([
                 'item_id' => $cart['item_id'],
                 'time_slot' => Yii::$app->session->get('event_time'),
-                'delivery_date' => Yii::$app->session->get('deliver-date'),
-                'area_id' => Yii::$app->session->get('deliver-location'),
+                'delivery_date' => Yii::$app->session->get('delivery-date'),
+                'area_id' => Yii::$app->session->get('delivery-location'),
                 'quantity' => $cart['cart_quantity'],
                 'menu_item' => ArrayHelper::map(
                         $menu_items, 'menu_item_id', 'quantity'
@@ -801,7 +797,7 @@ class CartController extends BaseController
 
         $event_time = Yii::$app->session->get('event_time');
 
-        Yii::$app->session->set('deliver-date', $data['sel_date']);
+        Yii::$app->session->set('delivery-date', $data['sel_date']);
 
         $vendor_timeslot = VendorWorkingTiming::find()
             ->select(['working_id','working_start_time','working_end_time'])

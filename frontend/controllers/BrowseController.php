@@ -76,13 +76,13 @@ class BrowseController extends BaseController
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => (isset($Category->category_meta_keywords)) ? $Category->category_meta_keywords : Yii::$app->params['META_KEYWORD']]);
 
         if (!empty($data['location'])) {
-            $session->set('deliver-location', $data['location']);
+            $session->set('delivery-location', $data['location']);
         } else {
-            unset($_SESSION['deliver-location']);
+            unset($_SESSION['delivery-location']);
         }
 
         if (!empty($data['date'])) {
-            $session->set('deliver-date', $data['date']);
+            $session->set('delivery-date', $data['date']);
             $date = date('Y-m-d', strtotime($data['date']));
             $block_date = $date;
         }else{
@@ -163,14 +163,14 @@ class BrowseController extends BaseController
             $item_query->categoryIDs($cats);
         }
         
-        if ($session->has('deliver-location')) {
+        if ($session->has('delivery-location')) {
 
-            if (is_numeric($session->get('deliver-location'))) {
-                $location = $session->get('deliver-location');
+            if (is_numeric($session->get('delivery-location'))) {
+                $location = $session->get('delivery-location');
             } else {
-                $end = strlen($session->get('deliver-location'));
-                $from = strpos($session->get('deliver-location'), '_') + 1;
-                $address_id = substr($session->get('deliver-location'), $from, $end);
+                $end = strlen($session->get('delivery-location'));
+                $from = strpos($session->get('delivery-location'), '_') + 1;
+                $address_id = substr($session->get('delivery-location'), $from, $end);
 
                 $location = CustomerAddress::findOne($address_id)->area_id;
             }
@@ -178,14 +178,14 @@ class BrowseController extends BaseController
             $item_query->deliveryLocation($location);
         }
 
-        if ($session->has('deliver-date')) {
-            $date = date('Y-m-d', strtotime($session->get('deliver-date')));
+        if ($session->has('delivery-date')) {
+            $date = date('Y-m-d', strtotime($session->get('delivery-date')));
             $item_query->deliveryDate($date);
         }
 
         if (!empty($session->get('event_time'))) {
             
-            $delivery_date = $session->get('deliver-date');
+            $delivery_date = $session->get('delivery-date');
 
             if($delivery_date)
                 $working_day = date('D', strtotime($delivery_date));
@@ -595,8 +595,8 @@ class BrowseController extends BaseController
             exit;
         } else {
             $session = Yii::$app->session;
-            $session->set('deliver-location', $location_name);
-            $session->set('deliver-date', $delivery_date);
+            $session->set('delivery-location', $location_name);
+            $session->set('delivery-date', $delivery_date);
         }
     }
 }

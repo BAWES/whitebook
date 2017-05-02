@@ -2,9 +2,9 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 $session = Yii::$app->session;
-$dLocation = $session->get('deliver-location');
+$dLocation = $session->get('delivery-location');
 
-$date = $session->get('deliver-date');
+$date = $session->get('delivery-date');
 
 $event_time = $session->get('event_time');
 
