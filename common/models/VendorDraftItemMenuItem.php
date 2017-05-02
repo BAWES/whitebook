@@ -40,7 +40,7 @@ class VendorDraftItemMenuItem extends \yii\db\ActiveRecord
             [['price'], 'number'],
             [['menu_item_name', 'menu_item_name_ar'], 'required'],
             [['menu_item_name', 'menu_item_name_ar'], 'string', 'max' => 100],
-            [['hint', 'hint_ar'], 'string', 'max' => 250],
+            [['image', 'hint', 'hint_ar'], 'string', 'max' => 250],
             [['item_id'], 'exist', 'skipOnError' => true, 'targetClass' => VendorDraftItem::className(), 'targetAttribute' => ['item_id' => 'item_id']],
             [['draft_menu_id'], 'exist', 'skipOnError' => true, 'targetClass' => VendorDraftItemMenu::className(), 'targetAttribute' => ['draft_menu_id' => 'draft_menu_id']],
         ];
@@ -57,6 +57,7 @@ class VendorDraftItemMenuItem extends \yii\db\ActiveRecord
             'item_id' => Yii::t('frontend', 'Item ID'),
             'menu_item_name' => Yii::t('frontend', 'Menu Item Name'),
             'menu_item_name_ar' => Yii::t('frontend', 'Menu Item Name Ar'),
+            'image' => Yii::t('frontend', 'Image'),
             'price' => Yii::t('frontend', 'Price'),
             'hint' => Yii::t('frontend', 'Hint'),
             'hint_ar' => Yii::t('frontend', 'Hint Ar'),

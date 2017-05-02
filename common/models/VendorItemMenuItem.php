@@ -40,7 +40,7 @@ class VendorItemMenuItem extends \yii\db\ActiveRecord
             [['item_id', 'menu_id', 'sort_order'], 'integer'],
             [['price'], 'number'],
             [['menu_item_name', 'menu_item_name_ar'], 'string', 'max' => 100],
-            [['hint', 'hint_ar'], 'string', 'max' => 250],
+            [['image', 'hint', 'hint_ar'], 'string', 'max' => 250],
             [['item_id'], 'exist', 'skipOnError' => true, 'targetClass' => VendorItem::className(), 'targetAttribute' => ['item_id' => 'item_id']],
             [['menu_id'], 'exist', 'skipOnError' => true, 'targetClass' => VendorItemMenu::className(), 'targetAttribute' => ['menu_id' => 'menu_id']],
         ];
@@ -57,6 +57,7 @@ class VendorItemMenuItem extends \yii\db\ActiveRecord
             'menu_id' => 'Menu ID',
             'menu_item_name' => 'Menu Item Name',
             'menu_item_name_ar' => 'Menu Item Name - Arabic',
+            'image' => 'Image',
             'price' => 'Price',
             'hint' => 'Hint',
             'hint_ar' => 'Hint - Arabic',

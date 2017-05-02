@@ -44,8 +44,9 @@ use common\models\VendorItemToPackage;
 use common\models\Package;
 use common\models\VendorItemMenu;
 use common\models\VendorItemMenuItem;
-
 use common\models\VendorDraftItemQuestion;
+use common\models\UploadForm;
+
 /**
 * VendoritemController implements the CRUD actions for VendorItem model.
 */
@@ -1393,6 +1394,67 @@ class VendorItemController extends Controller
                 'errors' => $model->getErrors()
             ];
         }        
+    }
+
+    /**
+     * upload croped image 
+     * @param base64 image data 
+     * @return json containing image url and image name 
+     */
+    public function actionUploadMenuImage() {
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $temp_folder = sys_get_temp_dir().'/'; 
+
+        // Set max execution time 3 minutes.
+        set_time_limit(3 * 60); 
+
+        $model = new UploadForm;
+
+        $image = UploadedFile::getInstance($model, 'file');
+
+        $image_name = Yii::$app->security->generateRandomString() .'.' .$image->extension;
+
+        $imagine = new \Imagine\Gd\Imagine();
+
+        //resize to 70 x 70 
+
+        $thumbnail = $imagine->open($image->tempName);
+        $thumbnail->resize($thumbnail->getSize()->widen(70));
+        $thumbnail->save($temp_folder . $image_name); 
+
+        //save thumbnail to s3
+        $awsResult = Yii::$app->resourceManager->save(
+            null, //file upload object  
+            VendorItem::UPLOADFOLDER_MENUITEM_THUMBNAIL . $image_name, // name
+            [], //options 
+            $temp_folder . $image_name, // source file
+            $image->type
+        ); 
+
+        if (!$awsResult) {
+            return [
+                'error' => 'File not uploaded successfully!'
+            ];    
+        }
+
+        //save original image to s3
+        $awsResult = Yii::$app->resourceManager->save(
+            $image, //file upload object  
+            VendorItem::UPLOADFOLDER_MENUITEM . $image_name// name
+        ); 
+
+        //delete temp file 
+        unlink($temp_folder . $image_name);
+        unlink($image->tempName);
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        return [
+            'image_url' => Yii::getAlias("@s3/") . VendorItem::UPLOADFOLDER_MENUITEM_THUMBNAIL . $image_name,
+            'image' => $image_name
+        ];
     }
 
     /**

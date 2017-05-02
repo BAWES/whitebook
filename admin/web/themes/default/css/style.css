@@ -8563,3 +8563,10 @@ a.delivery_href:hover{
 .margin-top-30{
   margin-top:30px;
 }
+
+#item_addon_menu_list .thumbnail,
+#item_menu_list .thumbnail {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 0;
+}
