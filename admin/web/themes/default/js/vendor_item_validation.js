@@ -644,9 +644,10 @@ $(document).delegate('.btn-add-menu', 'click', function(){
 	$html += '	<table class="table table-bordered">';
 	$html += '		<thead>';
 	$html += '			<tr>';
-	$html += '				<th colspan="6" class="heading">Menu Items</th>';
+	$html += '				<th colspan="7" class="heading">Menu Items</th>';
 	$html += '			</tr>';
 	$html += '			<tr>';
+	$html += '				<th>Image</th>';
 	$html += '				<th>Name</th>';
 	$html += '				<th>Name - Ar</th>';
 	$html += '				<th>Price</th>';
@@ -659,7 +660,7 @@ $(document).delegate('.btn-add-menu', 'click', function(){
 	$html += '		</tbody>';
 	$html += '		<tfoot>';
 	$html += '			<tr>';
-	$html += '				<td colspan="6">';
+	$html += '				<td colspan="7">';
 	$html += '					<button type="button" class="btn btn-primary btn-add-menu-item">';
 	$html += '						<i class="fa fa-plus"></i> Add Item';
 	$html += '					</button>';
@@ -677,6 +678,12 @@ $(document).delegate('.btn-add-menu', 'click', function(){
 $(document).delegate('.btn-add-menu-item', 'click', function(){
 	
 	$html  = '<tr>';
+	$html += '	<td>';									
+	$html += '		<a id="thumb-image' + menu_count + '" data-toggle="image" class="thumbnail">';
+	$html += '			<img src="' + $('#no_image').val() + '" />';
+	$html += '		</a>';
+	$html += '		<input type="hidden" name="menu_item['+menu_count+'][image]" value="" id="input-image'+menu_count+'" />';
+	$html += '	</td>';
 	$html += '	<td class="required">';
 	$html += '		<input placeholder="Name" name="menu_item['+menu_count+'][menu_item_name]" value="" class="txt_menu_item_name form-control" /></td>';
 	$html += '	<td class="required">';
@@ -740,9 +747,10 @@ $(document).delegate('.btn-add-addon-menu', 'click', function(){
 	$html += '	<table class="table table-bordered">';
 	$html += '		<thead>';
 	$html += '			<tr>';
-	$html += '				<th colspan="6" class="heading">Menu Items</th>';
+	$html += '				<th colspan="7" class="heading">Menu Items</th>';
 	$html += '			</tr>';
 	$html += '			<tr>';
+	$html += '				<th>Image</th>';
 	$html += '				<th>Name</th>';
 	$html += '				<th>Name - Ar</th>';	
 	$html += '				<th>Price</th>';
@@ -755,7 +763,7 @@ $(document).delegate('.btn-add-addon-menu', 'click', function(){
 	$html += '		</tbody>';
 	$html += '		<tfoot>';
 	$html += '			<tr>';
-	$html += '				<td colspan="6">';
+	$html += '				<td colspan="7">';
 	$html += '					<button type="button" class="btn btn-primary btn-add-addon-menu-item">';
 	$html += '						<i class="fa fa-plus"></i> Add addon item';
 	$html += '					</button>';
@@ -773,6 +781,12 @@ $(document).delegate('.btn-add-addon-menu', 'click', function(){
 $(document).delegate('.btn-add-addon-menu-item', 'click', function(){
 	
 	$html  = '<tr>';
+	$html += '	<td>';									
+	$html += '		<a id="thumb-image' + addon_menu_count + '" data-toggle="image" class="thumbnail">';
+	$html += '			<img src="' + $('#no_image').val() + '" />';
+	$html += '		</a>';
+	$html += '		<input type="hidden" name="menu_item['+addon_menu_count+'][image]" value="" id="input-image'+addon_menu_count+'" />';
+	$html += '	</td>';
 	$html += '	<td>';
 	$html += '		<input placeholder="Name" name="addon_menu_item['+addon_menu_count+'][menu_item_name]" value="" class="txt_menu_item_name form-control" /></td>';
 	$html += '	<td>';
@@ -831,4 +845,56 @@ $('.btn-add-question').click(function(){
 
 $(document).delegate('.btn-remove-question', 'click', function() {
     $(this).parents('.question').remove();
+});
+
+//Upload menu/ option images 
+
+$(document).delegate('a[id^=\'thumb-image\']', 'click', function() {
+	var node = this;
+
+	$('#form-upload').remove();
+	
+	$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="UploadForm[file]" /></form>');
+	
+	$('#form-upload input')
+		.trigger('click')
+		.on('change', function() {
+			$.ajax({
+				url: $('#image_upload_url').val(),
+				type: 'post',
+				dataType: 'json',
+				data: new FormData($('#form-upload')[0]),
+				cache: false,
+				contentType: false,
+				processData: false,
+				beforeSend: function() {
+					$(node).button('loading');
+				},
+				complete: function() {
+				//	$(node).button('reset');
+				},
+				success: function(json) {
+					$('.text-danger').remove();
+					
+					if (json['error']) {
+						  $html  = '<br />';
+			              $html += '<div class="alert alert-danger">';
+			              $html += '    <button type="button" class="close" data-dismiss="alert">×</button>';
+			              $html +=      json['error'];
+			              $html += '</div>';
+
+			              $('.message_wrapper').append($html);
+					}
+					                            
+					if (json['image']) {
+		    			$(node).parent().find('input').val(json['image']);
+		    			$(node).html('<img src="' + json['image_url'] + '" />');
+		    			return false;
+		    		}
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+			});
+		});		
 });

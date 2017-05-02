@@ -65,7 +65,9 @@ class VendorItem extends \yii\db\ActiveRecord
     const UPLOADFOLDER_530 = "vendor_item_images_530/";
     const UPLOADFOLDER_1000 = "vendor_item_images_1000/";
     const UPLOADSALESGUIDE = "sales_guide_images/";
-    
+    const UPLOADFOLDER_MENUITEM = "vendor_menu_item/";
+    const UPLOADFOLDER_MENUITEM_THUMBNAIL = "vendor_menu_item/thumbnail/";
+
     public $themes;
     public $groups;
     public $packages;
