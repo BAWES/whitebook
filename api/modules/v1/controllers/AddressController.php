@@ -317,10 +317,9 @@ class AddressController extends Controller
     /*
      * To delete address and question/response
      */
-    public function actionAddressRemove()
+    public function actionAddressRemove($address_id = 0)
     {
         $customer_id = Yii::$app->user->getId();
-        $address_id = Yii::$app->request->getBodyParam('address_id');
 
         $exist = CustomerAddress::find()
             ->where(['address_id' => $address_id, 'customer_id' => $customer_id])
@@ -333,13 +332,13 @@ class AddressController extends Controller
             return [
                 "operation" => "success",
                 "message" => "Address Deleted Successfully",
-                'address-list' => $this->listing()
+                'code' => '1'
             ];
         } else {
             return [
                 "operation" => "error",
                 "message" => "Address Doesn't exist",
-                'address-list' => $this->listing()
+                'code' => '0'
             ];
         }
     }
