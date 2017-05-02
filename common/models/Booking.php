@@ -218,8 +218,8 @@ class Booking extends \yii\db\ActiveRecord
      */
     public function checkoutConfirm()
     {
-        $area_id = Yii::$app->session->get('deliver-location');
-        $cart_delivery_date = date('Y-m-d', strtotime(Yii::$app->session->get('deliver-date')));
+        $area_id = Yii::$app->session->get('delivery-location');
+        $cart_delivery_date = date('Y-m-d', strtotime(Yii::$app->session->get('delivery-date')));
         $time_slot = Yii::$app->session->get('event_time');
 
         //default commision
@@ -352,7 +352,7 @@ class Booking extends \yii\db\ActiveRecord
 
             //delivery charge
 
-            $delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
+            $delivery_area = CustomerCart::geLocation($area_id, $item['vendor_id']);
 
             $delivery_charge = $delivery_area->delivery_price;
 
@@ -811,9 +811,9 @@ class Booking extends \yii\db\ActiveRecord
         if ($area_id) {
             $locationData = VendorLocation::find()->area($area_id)->vendor($vendor_id)->one();
         } else {
-            $model = CustomerAddress::findOne($address_id);
-            $locationData = VendorLocation::find()->area($model->area_id)->vendor($vendor_id)->one();
+            $locationData = VendorLocation::find()->area(Yii::$app->session->get('delivery-location'))->vendor($vendor_id)->one();
         }
+
         if ($locationData) {
             return $locationData->delivery_price;
         } else {

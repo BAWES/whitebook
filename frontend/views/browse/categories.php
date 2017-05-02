@@ -148,7 +148,7 @@ if (!Yii::$app->user->isGuest) {
     
     $session = Yii::$app->session;
 
-    if (!$session->has('deliver-location')) {
+    if (!$session->has('delivery-location')) {
         
         echo $this->render('_popup');
 
