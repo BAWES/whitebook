@@ -103,7 +103,7 @@ class PackageController extends Controller
         }
 
         $items = VendorItemToPackage::find()
-            ->select(['{{%vendor}}.vendor_name', '{{%vendor}}.vendor_name_ar', '{{%vendor_item}}.item_name','{{%vendor_item}}.item_name_ar','{{%vendor_item}}.item_id','{{%vendor_item}}.item_price_per_unit','{{%vendor_item}}.notice_period_type','{{%vendor_item}}.item_how_long_to_make','{{%vendor_item}}.item_base_price'])
+            ->select(['{{%vendor}}.vendor_name', '{{%vendor}}.vendor_name_ar', '{{%vendor_item}}.item_name','{{%vendor_item}}.item_name_ar','{{%vendor_item}}.item_id','{{%vendor_item}}.item_price_per_unit','{{%vendor_item}}.notice_period_type','{{%vendor_item}}.item_how_long_to_make','{{%vendor_item}}.item_base_price','{{%vendor_item}}.min_order_amount'])
             ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%vendor_item_to_package}}.item_id')
             ->leftJoin(
                 '{{%vendor_item_to_category}}', 
