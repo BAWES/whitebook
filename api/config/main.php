@@ -80,10 +80,12 @@ return [
                     'patterns' => [
                         'GET' => 'index',
                         'PATCH' => 'update',
+                        'POST contact' => 'contact',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
                         'OPTIONS index' => 'options',
                         'OPTIONS update' => 'options',
+                        'OPTIONS contact' => 'options',
                     ]
                 ],
                 [ // CategoryController
@@ -233,6 +235,15 @@ return [
                         'GET' => 'list',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options'
+                    ]
+                ],
+                [ // DirectoryController
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/cms',
+                    'patterns' => [
+                        'GET <id>' => 'view',
+                        // OPTIONS VERBS
+                        'OPTIONS <id>' => 'options'
                     ]
                 ],
             ],

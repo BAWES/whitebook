@@ -772,4 +772,29 @@ class CartController extends Controller
             return implode(',',$error['timeslot_id']);
         }
     }
+
+    public static function getDeliveryAddress(){
+
+        if(Yii::$app->user->isGuest) {
+            return [];
+        }
+
+        $area_id = self::findOne(['customer_id' => Yii::$app->user->getId()])->area_id;
+
+        $result = CustomerAddress::find()
+            ->joinWith('location')
+            ->joinWith('city')
+            ->where([
+                '{{%customer_address}}.customer_id' => Yii::$app->user->getId(),
+                '{{%customer_address}}.trash' => 'Default',
+                '{{%location}}.id' => $area_id,
+                '{{%location}}.status' => 'Active',
+                '{{%location}}.trash' => 'Default',
+                '{{%city}}.status' => 'Active',
+                '{{%city}}.trash' => 'Default'])
+            ->asArray()
+            ->all();
+
+        return $result;
+    }
 }
