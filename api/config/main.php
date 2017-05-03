@@ -80,10 +80,12 @@ return [
                     'patterns' => [
                         'GET' => 'index',
                         'PATCH' => 'update',
+                        'POST contact' => 'contact',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
                         'OPTIONS index' => 'options',
                         'OPTIONS update' => 'options',
+                        'OPTIONS contact' => 'options',
                     ]
                 ],
                 [ // CategoryController
