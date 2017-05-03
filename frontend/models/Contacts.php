@@ -56,4 +56,13 @@ class Contacts extends \yii\db\ActiveRecord
             'message' => 'Message',
         ];
     }
+
+    public function errorDetail() {
+        if ($this->errors) {
+            foreach ($this->errors as $key => $value) {
+                return $this->getFirstError($key);
+                exit;
+            }
+        }
+    }
 }

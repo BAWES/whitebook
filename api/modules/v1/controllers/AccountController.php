@@ -36,7 +36,10 @@ class AccountController extends Controller
             'class' => \yii\filters\auth\HttpBearerAuth::className(),
         ];
         // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
-        $behaviors['authenticator']['except'] = ['options'];
+        $behaviors['authenticator']['except'] = [
+            'options',
+            'contact'
+        ];
 
         return $behaviors;
     }
@@ -117,5 +120,68 @@ class AccountController extends Controller
     private function currentUser(){
         $customer_id = Yii::$app->user->getId();
         return Customer::findOne($customer_id);
+    }
+
+    public function actionContact()
+    {
+        \Yii::$app->view->title = Yii::$app->params['SITE_NAME'] . ' | Contact';
+        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
+        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+
+            $subject = 'Enquiry from user';
+            $name = Yii::$app->request->getBodyParam('name');
+            $email  = Yii::$app->request->getBodyParam('email');
+            $msg      = Yii::$app->request->getBodyParam('msg');
+
+            $model = new \frontend\models\Contacts();
+            $model->contact_name = $name;
+            $model->contact_email = $email;
+            $model->created_datetime = date('Y/m/d');
+            $model->message = $msg;
+            $model->subject = $subject;
+
+            $body = '<table>
+            <tbody>
+            <tr>
+            <td><b>Username</b></td>
+            <td>' . $name . '</td>
+            </tr>
+            <tr>
+            <td><b>Email-id</b></td>
+            <td>' . $email . '</td>
+            </tr>
+            <tr>
+            <td><b>Message</b></td>
+            <td>' . $msg . '</td>
+            </tr>
+            </tbody>
+            </table>';
+
+            if ($model->validate() && $model->save()) {
+                Yii::$app->mailer->compose([
+                    "html" => "customer/contact-inquiry"
+                ], [
+                    "message" => $body,
+                    "user" => $name
+                ])
+                    ->setFrom(Yii::$app->params['supportEmail'])
+                    ->setTo(Yii::$app->params['adminEmail'])
+                    ->setSubject($subject)
+                    ->send();
+
+                return [
+                    "operation" => "success",
+                    "code" => "1",
+                    "message" => "Mail sent successfully",
+                ];
+
+            } else {
+
+                return [
+                    "operation" => "error",
+                    "code" => "1",
+                    "message" => $model->errorDetail(),
+                ];
+            }
     }
 }
