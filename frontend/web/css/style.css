@@ -2288,6 +2288,15 @@ span.small {
 
 .menu-item-detail .menu-items li {
     padding: 5px;
+    height: 50px;
+    line-height: 40px;
+}
+.menu-item-detail .menu-items li img {
+    float: right;
+    height: 100%;
+}
+.menu-item-detail .menu-items .checkbox label::before {
+    top: 12px !important;
 }
 .menu-item-detail .menu-item-name {
     text-transform: capitalize;    
@@ -2680,4 +2689,8 @@ span.small {
     border-color: #C2C2C2;
     color: #C2C2C2;
     line-height: 23px;
+}
+
+.menu-items li:nth-child(odd) {
+    background-color: #eee;
 }
