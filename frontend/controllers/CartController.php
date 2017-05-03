@@ -89,6 +89,8 @@ class CartController extends BaseController
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
         
+        $delivery_date = Yii::$app->session->get('delivery-date');
+
         $item = CustomerCart::findOne(Yii::$app->request->post('id'));
         
         if(!$item) {
@@ -108,7 +110,7 @@ class CartController extends BaseController
 
         $vendor_timeslot = VendorWorkingTiming::find()
             ->vendor($model->vendor_id)
-            ->workingDay(date("l", strtotime($item->cart_delivery_date)))
+            ->workingDay(date("l", strtotime($delivery_date)))
             ->defaultTiming()
             ->asArray()
             ->all();
@@ -148,10 +150,6 @@ class CartController extends BaseController
             
             if ($cart) {
 
-                //$cart->cart_delivery_date = $data['delivery_date'];
-                //$cart->time_slot =   $data['time_slot'];
-                //$cart->cart_delivery_date = date('Y-m-d', strtotime($data['delivery_date']));
-                //$cart->cart_quantity =  $data['quantity'];
                 $cart->modified_datetime  = date('Y-d-m h:i:s');
 
                 if(!empty($data['female_service'])) {
@@ -351,9 +349,6 @@ class CartController extends BaseController
                 $cart = new CustomerCart();
                 $cart->customer_id = Yii::$app->user->getId();
                 $cart->item_id = $data['item_id'];
-                $cart->area_id = $location;
-                $cart->time_slot  = isset($data['time_slot'])?$data['time_slot']:'';
-                $cart->cart_delivery_date = date('Y-m-d', strtotime($data['delivery_date']));
                 $cart->cart_customization_price_per_unit = 0;
                 $cart->cart_quantity = $data['quantity'];
                 $cart->cart_datetime_added = date('Y-d-m h:i:s');
@@ -452,8 +447,6 @@ class CartController extends BaseController
 
         return !$this->errors;
     }
-
-
 
     public function actionValidationProductAvailable() {
 
@@ -608,16 +601,6 @@ class CartController extends BaseController
                 $capacity = $item->item_default_capacity;
             }
 
-            $query = CustomerCart::find()
-                ->item($data['item_id'])
-                ->deliveryDate(date('Y-m-d', strtotime($data['delivery_date'])))
-                ->valid()
-                ->defaultCart();
-
-            $query->user();
-
-            $in_cart = $query->sum('cart_quantity');
-
             //2) get no of item purchased for selected date
             $purchased_result = \common\models\Booking::totalPurchasedItem($data['item_id'], $delivery_date);
 
@@ -627,7 +610,7 @@ class CartController extends BaseController
                 $purchased = 0;
             }
 
-            if (($purchased+$in_cart) >= $capacity)
+            if ($purchased >= $capacity)
             {
                 if($i == 0)
                     $json['error'] = Yii::t('frontend', 'Item is not available on selected date');

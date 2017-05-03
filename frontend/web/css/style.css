@@ -2298,6 +2298,9 @@ span.small {
 .menu-item-detail .menu-items .checkbox label::before {
     top: 12px !important;
 }
+.menu-item-detail .menu-items .checkbox label::after {
+    top: 11px !important;
+}
 .menu-item-detail .menu-item-name {
     text-transform: capitalize;    
     margin-left: 10px;

@@ -120,7 +120,6 @@ class BrowseController extends BaseController
             $item_query->sale();
         }
 
-
         $item_query->vendorIDs($ActiveVendors);
 
         //price filter
@@ -188,13 +187,13 @@ class BrowseController extends BaseController
             $delivery_date = $session->get('delivery-date');
 
             if($delivery_date)
-                $working_day = date('D', strtotime($delivery_date));
+                $working_day = date('l', strtotime($delivery_date));
             else 
-                $working_day = date('D');
+                $working_day = date('l');
 
             $event_time = date('H:i:s', strtotime($session->get('event_time')));
             
-            $item_query->eventTime($event_time,$working_day);
+            $item_query->eventTime($event_time, $working_day);
         }
 
         $item_query_result = $item_query
