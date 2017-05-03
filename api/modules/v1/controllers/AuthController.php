@@ -129,11 +129,10 @@ class AuthController extends Controller
 
             //Send Email to user
             Yii::$app->mailer->htmlLayout = 'layouts/empty';
-
             Yii::$app->mailer->compose("customer/confirm",
                 [
                     "user" => $model->customer_name,
-                    "confirm_link" => \Yii::$app->params['@RootPath'].'/users/confirm_email?key='.$model->customer_activation_key,
+                    "confirm_link" => Url::to(['/users/confirm_email', 'key' => $model->customer_activation_key], true),
                     "logo_1" => Url::to("@web/images/twb-logo-horiz-white.png", true),
                     "logo_2" => Url::to("@web/images/twb-logo-trans.png", true),
                 ])
@@ -201,8 +200,7 @@ class AuthController extends Controller
             $model->modified_datetime = $time;
             $model->save();
 
-            $message = 'Your requested password reset.</br><a href=' . Yii::$app->params['@RootPath'].'/users/reset_confirm?cust_id='.$model->customer_activation_key. ' title="Click Here">Click here </a> to reset your password';
-
+            $message = 'Your requested password reset.</br><a href='.Url::to(["/users/reset_confirm", "cust_id" => $model->customer_activation_key], true).' title="Click Here">Click here </a> to reset your password';
             $send = Yii::$app->mailer->compose("customer/password-reset",
                 ["message" => $message, "user" => "Customer"])
                 ->setFrom(Yii::$app->params['supportEmail'])
