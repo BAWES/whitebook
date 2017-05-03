@@ -785,7 +785,7 @@ $(document).delegate('.btn-add-addon-menu-item', 'click', function(){
 	$html += '		<a id="thumb-image' + addon_menu_count + '" data-toggle="image" class="thumbnail">';
 	$html += '			<img src="' + $('#no_image').val() + '" />';
 	$html += '		</a>';
-	$html += '		<input type="hidden" name="menu_item['+addon_menu_count+'][image]" value="" id="input-image'+addon_menu_count+'" />';
+	$html += '		<input type="hidden" name="addon_menu_item['+addon_menu_count+'][image]" value="" id="input-image'+addon_menu_count+'" />';
 	$html += '	</td>';
 	$html += '	<td>';
 	$html += '		<input placeholder="Name" name="addon_menu_item['+addon_menu_count+'][menu_item_name]" value="" class="txt_menu_item_name form-control" /></td>';

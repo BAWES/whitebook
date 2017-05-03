@@ -1411,6 +1411,12 @@ class VendorItemController extends Controller
         set_time_limit(3 * 60); 
 
         $model = new UploadForm;
+        
+        if(!$model->validate()) {
+            return [
+                'error' => 'Invalid file!'
+            ];
+        }
 
         $image = UploadedFile::getInstance($model, 'file');
 
@@ -1624,8 +1630,6 @@ class VendorItemController extends Controller
 
         return $this->render('inventory',['provider'=>$provider,'date'=>$date,'item_id'=>$item_id]);
     }
-
-
 
     public function actionItemQuestions($id, $_u = null)
     {

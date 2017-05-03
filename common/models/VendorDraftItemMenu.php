@@ -39,7 +39,7 @@ class VendorDraftItemMenu extends \yii\db\ActiveRecord
             [['menu_id', 'item_id', 'min_quantity', 'max_quantity', 'sort_order'], 'integer'],
             [['menu_type'], 'string'],            
             ['max_quantity', 'compare', 'compareAttribute' => 'min_quantity', 'operator' => '>='],
-            [['menu_name', 'menu_name_ar', 'quantity_type'], 'required'],
+            [['menu_name', 'menu_name_ar'], 'required'],
             [['menu_name', 'menu_name_ar', 'quantity_type'], 'string', 'max' => 100],
             [['item_id'], 'exist', 'skipOnError' => true, 'targetClass' => VendorDraftItem::className(), 'targetAttribute' => ['item_id' => 'item_id']],
         ];
