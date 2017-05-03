@@ -7,6 +7,7 @@ use common\models\VendorItemPricing;
 use common\models\VendorItemMenuItem;
 use common\models\CustomerCart;
 use common\models\CustomerCartMenuItem;
+use common\models\VendorItem;
 use common\components\LangFormat;
 use common\components\CFormatter;
 
@@ -724,6 +725,10 @@ else
                                                                 <?php } ?>
 
                                                                 <span class="error menu_item_<?= $menu_item->menu_item_id ?>"></span>
+
+                                                                <?php if($menu_item->image) { ?>
+                                                                <a href="<?= Yii::getAlias("@s3/"). VendorItem::UPLOADFOLDER_MENUITEM. $menu_item->image ?>" data-lightbox="menu-items" data-title="<?= Yii::$app->language == 'en'?$menu_item->menu_item_name:$menu_item->menu_item_name_ar; ?>"><img src="<?= Yii::getAlias("@s3/"). VendorItem::UPLOADFOLDER_MENUITEM_THUMBNAIL. $menu_item->image ?>"></a>
+                                                                <?php } ?>
                                                             </li>
                                                         <?php } ?>
                                                         </ul>
@@ -857,6 +862,10 @@ else
                                                                 <?php } ?>
 
                                                                 <span class="error menu_item_<?= $menu_item->menu_item_id ?>"></span>
+
+                                                                <?php if($menu_item->image) { ?>
+                                                                <a href="<?= Yii::getAlias("@s3/"). VendorItem::UPLOADFOLDER_MENUITEM. $menu_item->image ?>" data-lightbox="menu-items" data-title="<?= Yii::$app->language == 'en'?$menu_item->menu_item_name:$menu_item->menu_item_name_ar; ?>"><img src="<?= Yii::getAlias("@s3/"). VendorItem::UPLOADFOLDER_MENUITEM_THUMBNAIL. $menu_item->image ?>"></a>
+                                                                <?php } ?>
                                                             </li>
                                                         <?php } ?>
                                                         </ul>
@@ -1261,5 +1270,9 @@ $this->registerCss("
         color: black !important;
     }
 ");
+
+$this->registerCssFile('@web/css/lightbox.css', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerJsFile('@web/js/lightbox.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerJsFile('@web/js/product_detail.js?v=1.28', ['depends' => [\yii\web\JqueryAsset::className()]]);
