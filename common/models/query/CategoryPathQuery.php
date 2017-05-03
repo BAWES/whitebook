@@ -131,9 +131,9 @@ class CategoryPathQuery extends \yii\db\ActiveQuery
         return $this->andWhere("{{%vendor}}.vendor_id NOT IN(SELECT vendor_id FROM `whitebook_vendor_blocked_date` where block_date = '" . $date . "')");
     }
 
-    public function eventTime($event_time,$working_day)
+    public function eventTime($event_time, $working_day)
     {
-        return $this->andWhere("'" . $event_time . "' >= {{%vendor_working_timing}}.working_start_time AND '" . $event_time . "' < {{%vendor_working_timing}}.working_end_time AND working_day='" . $working_day . "day'");
+        return $this->andWhere("'" . $event_time . "' >= {{%vendor_working_timing}}.working_start_time AND '" . $event_time . "' < {{%vendor_working_timing}}.working_end_time AND working_day='" . $working_day . "'");
     }
 
     public function orderByExpression()
