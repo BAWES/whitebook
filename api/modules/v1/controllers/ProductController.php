@@ -97,7 +97,7 @@ class ProductController extends Controller
      */
     public function actionCategoryProducts(
         $offset = 0,
-        $category_id,
+        $category_id = 0,
         $requestedLocation = null,
         $requestedDeliverDate = null,
         $requestedMinPrice = 0,
