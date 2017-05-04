@@ -38,7 +38,8 @@ class AccountController extends Controller
         // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
         $behaviors['authenticator']['except'] = [
             'options',
-            'contact'
+            'contact',
+            'vendor-request'
         ];
 
         return $behaviors;
@@ -124,64 +125,98 @@ class AccountController extends Controller
 
     public function actionContact()
     {
-        \Yii::$app->view->title = Yii::$app->params['SITE_NAME'] . ' | Contact';
-        \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
-        \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
+        $subject = 'Enquiry from user';
+        $name = Yii::$app->request->getBodyParam('name');
+        $email  = Yii::$app->request->getBodyParam('email');
+        $msg      = Yii::$app->request->getBodyParam('msg');
 
-            $subject = 'Enquiry from user';
-            $name = Yii::$app->request->getBodyParam('name');
-            $email  = Yii::$app->request->getBodyParam('email');
-            $msg      = Yii::$app->request->getBodyParam('msg');
+        $model = new \frontend\models\Contacts();
+        $model->contact_name = $name;
+        $model->contact_email = $email;
+        $model->created_datetime = date('Y/m/d');
+        $model->message = $msg;
+        $model->subject = $subject;
 
-            $model = new \frontend\models\Contacts();
-            $model->contact_name = $name;
-            $model->contact_email = $email;
-            $model->created_datetime = date('Y/m/d');
-            $model->message = $msg;
-            $model->subject = $subject;
+        $body = '<table>
+        <tbody>
+        <tr>
+        <td><b>Username</b></td>
+        <td>' . $name . '</td>
+        </tr>
+        <tr>
+        <td><b>Email-id</b></td>
+        <td>' . $email . '</td>
+        </tr>
+        <tr>
+        <td><b>Message</b></td>
+        <td>' . $msg . '</td>
+        </tr>
+        </tbody>
+        </table>';
 
-            $body = '<table>
-            <tbody>
-            <tr>
-            <td><b>Username</b></td>
-            <td>' . $name . '</td>
-            </tr>
-            <tr>
-            <td><b>Email-id</b></td>
-            <td>' . $email . '</td>
-            </tr>
-            <tr>
-            <td><b>Message</b></td>
-            <td>' . $msg . '</td>
-            </tr>
-            </tbody>
-            </table>';
+        if ($model->validate() && $model->save()) {
+            Yii::$app->mailer->compose([
+                "html" => "customer/contact-inquiry"
+            ], [
+                "message" => $body,
+                "user" => $name
+            ])
+                ->setFrom(Yii::$app->params['supportEmail'])
+                ->setTo(Yii::$app->params['adminEmail'])
+                ->setSubject($subject)
+                ->send();
 
-            if ($model->validate() && $model->save()) {
-                Yii::$app->mailer->compose([
-                    "html" => "customer/contact-inquiry"
-                ], [
-                    "message" => $body,
-                    "user" => $name
-                ])
-                    ->setFrom(Yii::$app->params['supportEmail'])
-                    ->setTo(Yii::$app->params['adminEmail'])
-                    ->setSubject($subject)
-                    ->send();
+            return [
+                "operation" => "success",
+                "code" => "1",
+                "message" => "Mail sent successfully",
+            ];
 
-                return [
-                    "operation" => "success",
-                    "code" => "1",
-                    "message" => "Mail sent successfully",
-                ];
+        } else {
 
-            } else {
+            return [
+                "operation" => "error",
+                "code" => "1",
+                "message" => $model->errorDetail(),
+            ];
+        }
+    }
 
-                return [
-                    "operation" => "error",
-                    "code" => "1",
-                    "message" => $model->errorDetail(),
-                ];
-            }
+    public function actionVendorRequest() 
+    {        
+        $model = new \common\models\VendorRequest();
+        $model->business = Yii::$app->request->getBodyParam('business');
+        $model->name = Yii::$app->request->getBodyParam('name');
+        $model->mobile = Yii::$app->request->getBodyParam('mobile');
+        $model->email = Yii::$app->request->getBodyParam('email');
+        $model->licence = Yii::$app->request->getBodyParam('licence');
+        $model->description = Yii::$app->request->getBodyParam('description');
+
+        if(!$model->validate())
+        {
+            return [
+                'operation' => 'error',
+                'message' => $model->errorDetail()
+            ];
+        }
+
+        Yii::$app->mailer->compose("admin/vendor-request",
+            [
+                "business" => $model->business,
+                "name" => $model->name,
+                'mobile' => $model->mobile,
+                'email' => $model->email,
+                'license' => $model->licence,
+                'description' => $model->description
+            ])
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->params['SITE_NAME']])
+            ->setTo(Yii::$app->params['adminEmail'])
+            ->setSubject('Vendor Registration Request')
+            ->send();
+
+        return [
+            "operation" => "success",
+            "message" => "Mail sent successfully",
+        ];
     }
 }

@@ -81,8 +81,10 @@ return [
                         'GET' => 'index',
                         'PATCH' => 'update',
                         'POST contact' => 'contact',
+                        'POST vendor-request' => 'vendor-request',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
+                        'OPTIONS vendor-request' => 'options',
                         'OPTIONS index' => 'options',
                         'OPTIONS update' => 'options',
                         'OPTIONS contact' => 'options',
