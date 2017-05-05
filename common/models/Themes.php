@@ -100,7 +100,7 @@ class Themes extends \yii\db\ActiveRecord
     */
     public function getVendorItemThemes()
     {
-        return $this->hasMany(VendorItemTheme::className(), ['theme_id' => 'theme_id']);
+        return $this->hasMany(\common\models\VendorItemThemes::className(), ['theme_id' => 'theme_id']);
     }
 
     /**

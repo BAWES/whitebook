@@ -35,6 +35,15 @@ $this->params['breadcrumbs'][] = $this->title;
 				'label'=>'created date',			
 			],
             [
+                'label'=>'Total Items',
+                'format'=>'raw',
+                'value'=>function($data) {
+                    $total = count($data->vendorItemThemes);
+                    $url = Url::to(['/themes/assign','id'=>$data->theme_id]);
+                    return "<a href='$url' class=\"btn btn-primary\"><span class=\"badge\">$total</span> View & Assign</a>";
+                }
+            ],
+            [
                 'class' => 'yii\grid\ActionColumn',
                 'header'=>'Action',
                 'template' => '{update} {move} {delete}',
