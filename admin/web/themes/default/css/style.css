@@ -8570,3 +8570,8 @@ a.delivery_href:hover{
   height: 48px;
   margin-bottom: 0;
 }
+.themes-assign .item-listing label {
+  width:20%;
+  float: left;
+  overflow: hidden;
+}
