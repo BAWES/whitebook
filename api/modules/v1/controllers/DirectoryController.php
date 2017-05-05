@@ -41,7 +41,10 @@ class DirectoryController extends Controller
             'class' => \yii\filters\auth\HttpBearerAuth::className(),
         ];
         // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
-        $behaviors['authenticator']['except'] = ['options'];
+        $behaviors['authenticator']['except'] = [
+            'options',
+            'list'
+        ];
 
         return $behaviors;
     }
@@ -79,34 +82,26 @@ class DirectoryController extends Controller
             ->active()
             ->approved();
 
-        $directory = $query->orderby(['{{%vendor}}.'.$sort => SORT_ASC])
+        $vendors = $query->orderby(['{{%vendor}}.'.$sort => SORT_ASC])
             ->groupby(['{{%vendor}}.vendor_id'])
             ->all();
 
-        $prevLetter = '';
+        $result = [];
 
-        $result = array();
-
-        foreach ($directory as $d) {
-
+        foreach ($vendors as $key => $value) 
+        {
             if(Yii::$app->language == "en") {
-                $firstLetter = mb_substr($d['vendor_name'], 0, 1, 'utf8');
+                $firstLetter = strtoupper(mb_substr($value['vendor_name'], 0, 1, 'utf8'));
             }else{
-                $firstLetter = mb_substr($d['vendor_name_ar'], 0, 1, 'utf8');
+                $firstLetter = mb_substr($value['vendor_name_ar'], 0, 1, 'utf8');
             }
 
-            if ($firstLetter != $prevLetter) {
-                $result[] = strtoupper($firstLetter);
-            }
-
-            $prevLetter = $firstLetter;
+            $result[$firstLetter][] = $value;
         }
 
-        $result = array_unique($result);
-
         return [
-            'directory' => $directory,
-            'first_letter' => $result
+            'directory' => $result,
+            'keys' => array_keys($result)
         ];
     }
 }
