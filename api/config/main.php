@@ -233,13 +233,14 @@ return [
                 [ // DirectoryController
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'v1/directory',
+                    'pluralize' => false,
                     'patterns' => [
                         'GET' => 'list',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options'
                     ]
                 ],
-                [ // DirectoryController
+                [ // CmsController
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'v1/cms',
                     'patterns' => [
