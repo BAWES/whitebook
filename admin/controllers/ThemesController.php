@@ -249,4 +249,32 @@ class ThemesController extends Controller
                 ])
         ];
     }
+
+    public function actionAssign($id){
+        $model = Themes::findOne($id);
+        $themes = Themes::find()->active()->all();
+
+        if (!$model) {
+            Yii::$app->session->setFlash('danger', 'Invalid Theme');
+            return $this->redirect(['index']);
+        }
+
+        if (Yii::$app->request->isPost) {
+
+            VendorItemThemes::deleteAll(['theme_id'=>$id]);
+            $items = Yii::$app->request->post('items');
+            foreach($items as $item) {
+                $vendorItemTheme = new VendorItemThemes;
+                $vendorItemTheme->item_id = $item;
+                $vendorItemTheme->theme_id = $id;
+                $vendorItemTheme->trash = 'Default';
+                $vendorItemTheme->save();
+            }
+            Yii::$app->session->setFlash('success','Theme item changes.');
+            return $this->redirect(['index']);
+        }
+
+
+        return $this->render('assign',['model'=>$model,'allThemes'=>$themes]);
+    }
 }
