@@ -2693,7 +2693,5 @@ span.small {
     color: #C2C2C2;
     line-height: 23px;
 }
-
-.menu-items li:nth-child(odd) {
-    background-color: #eee;
-}
+.menu-items li:nth-child(odd) {background-color: #eee;}
+.margin-left-20{margin-left:20px;}
