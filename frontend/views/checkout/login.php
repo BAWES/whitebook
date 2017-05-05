@@ -34,21 +34,26 @@ use yii\widgets\ActiveForm;
 				</div>
 				<span class="error customer_password"></span>
 			</div>
+            <div class="clearfix">
+                <div class="pull-left">
+                    <button class="btn btn-primary">
+                        <?= Yii::t('frontend', 'Sign In') ?>
+                    </button>
+                </div>
 
-			<div class="pull-left">
-				<button class="btn btn-primary">
-					<?= Yii::t('frontend', 'Sign In') ?>
-				</button>
-			</div>
+                <div class="margin-left-20 pull-left">
+                    <button type="button" class="btn btn-primary new_btn" id="signup_button" data-toggle="modal" data-target="#myModal1" onclick="show_register_modal();"><?= Yii::t('frontend', 'Sign Up') ?></button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="pull-left">
+                    <a data-target="#chkForgotPwdModal" onclick="forgot_modal();" data-dismiss="modal" data-toggle="modal" title="Signup" class="actionButtons" href="#chkForgotPwdModal" style="line-height: 35px;margin-right: 20px;margin-left: 20px;">
+                        <?= Yii::t('frontend', 'Forgot your password?') ?>
+                    </a>
+                </div>
 
-			<div class="pull-left">
-				<a data-target="#chkForgotPwdModal" onclick="forgot_modal();" data-dismiss="modal" data-toggle="modal" title="Signup" class="actionButtons" href="#chkForgotPwdModal" style="line-height: 35px;margin-right: 20px;margin-left: 20px;"> 
-					<?= Yii::t('frontend', 'Forgot your password?') ?>						
-				</a>
-			</div>
-		
-			<div class="clearfix"></div>
-
+                <div class="clearfix"></div>
+            </div>
 		<?php ActiveForm::end(); ?>
 
 		<hr />
