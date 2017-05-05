@@ -79,6 +79,7 @@ return [
                     'pluralize' => false,
                     'patterns' => [
                         'GET' => 'index',
+                        'GET logout' => 'logout',
                         'PATCH' => 'update',
                         'POST contact' => 'contact',
                         'POST vendor-request' => 'vendor-request',
@@ -88,6 +89,7 @@ return [
                         'OPTIONS index' => 'options',
                         'OPTIONS update' => 'options',
                         'OPTIONS contact' => 'options',
+                        'OPTIONS logout' => 'options',
                     ]
                 ],
                 [ // CategoryController

@@ -219,4 +219,38 @@ class AccountController extends Controller
             "message" => "Mail sent successfully",
         ];
     }
+
+
+    public function actionLogout()
+    {
+        $user = Yii::$app->user->identity;
+        // Email and password are correct, check if his email has been verified
+        // If agent email has been verified, then allow him to log in
+        if($user->customer_activation_status == Customer::ACTIVATION_FALSE){
+            return [
+                "operation" => "error",
+                "errorType" => "email-not-verified",
+                "message" => "Please click the verification link sent to you by email to activate your account",
+            ];
+        }
+        $token = \common\models\CustomerToken::findOne([
+            'customer_id' => $user->getId(),
+        ]);
+
+        $deleted = \common\models\CustomerToken::deleteAll(['customer_id'=>$user->getId(),'token_value'=>$token->token_value]);
+
+        if ($deleted) {
+            return [
+                "operation" => "success",
+                "code" => "1",
+                "message" => 'User logged out successfully'
+            ];
+        } else {
+            return [
+                "operation" => "error",
+                "code" => "0",
+                "message" => 'Error with User logged out. Please try again.'
+            ];
+        }
+    }
 }
