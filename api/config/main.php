@@ -236,8 +236,10 @@ return [
                     'pluralize' => false,
                     'patterns' => [
                         'GET' => 'list',
+                        'GET view' => 'view',
                         // OPTIONS VERBS
-                        'OPTIONS' => 'options'
+                        'OPTIONS' => 'options',
+                        'OPTIONS view' => 'options'
                     ]
                 ],
                 [ // CmsController

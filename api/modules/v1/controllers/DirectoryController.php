@@ -5,6 +5,7 @@ namespace api\modules\v1\controllers;
 use Yii;
 use yii\rest\Controller;
 use api\models\Vendor;
+use common\models\CategoryPath;
 
 /**
  * Directory controller 
@@ -43,7 +44,8 @@ class DirectoryController extends Controller
         // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
         $behaviors['authenticator']['except'] = [
             'options',
-            'list'
+            'list',
+            'view'
         ];
 
         return $behaviors;
@@ -103,5 +105,89 @@ class DirectoryController extends Controller
             'directory' => $result,
             'keys' => array_keys($result)
         ];
+    }
+    /**
+     * @param int $offset
+     * @param $vendor_id
+     * @return array
+     */
+    public function actionView ($offset = 0, $vendor_id = 0)
+    {
+        $products = [];
+        
+        $limit = Yii::$app->params['limit'];
+
+        $item_query = CategoryPath::find()
+            ->selectedFields()
+            ->categoryJoin()
+            ->itemJoin()
+            ->priorityItemJoin()
+            ->vendorJoin()
+            ->defaultItems()
+            ->approved()
+            ->active();
+        
+        if($vendor_id)
+        {
+            $item_query->vendorIDs([$vendor_id]);
+        }
+
+        $item_query_result = $item_query
+            ->groupBy('{{%vendor_item}}.item_id')
+            ->orderByExpression()
+            ->asArray()
+            ->offset($offset)
+            ->limit($limit)
+            ->all();
+
+        if ($item_query_result) 
+        {
+            $customData = ['image'=>'','notice'=>''];
+            foreach ($item_query_result as $item) 
+            {
+                $image = \common\models\Image::find()
+                    ->where(['item_id' => $item['item_id']])
+                    ->orderBy(['vendorimage_sort_order' => SORT_ASC])
+                    ->one();
+                    
+                if ($image) {
+                    $customData['image'] = $image->image_path;
+                } else {
+                    $customData['image'] = '';
+                }
+
+                // for notice period
+                $value = $item;
+                $notice = '';
+                if (isset($value['item_how_long_to_make']) && $value['item_how_long_to_make'] > 0) {
+                    if (isset($value['notice_period_type']) && $value['notice_period_type'] == 'Day') {
+                        if ($value['item_how_long_to_make'] >= 7) {
+                            $notice = Yii::t('frontend', '{count} week(s)', [
+                                'count' => substr(($value['item_how_long_to_make'] / 7), 0, 3)
+                            ]);
+                        } else {
+                            $notice = Yii::t('frontend', '{count} day(s)', [
+                                'count' => $value['item_how_long_to_make']
+                            ]);
+                        }
+                    } else {
+                        if ($value['item_how_long_to_make'] >= 24) {
+                            $notice = Yii::t('frontend', '{count} day(s)', [
+                                'count' => substr(($value['item_how_long_to_make'] / 24), 0, 3)
+                            ]);
+                        } else {
+                            $notice = Yii::t('frontend', '{count} hours', [
+                                'count' => $value['item_how_long_to_make']
+                            ]);
+                        }
+                    }
+                }
+                $customData['notice'] = $notice;
+
+                $products[] = $item + $customData;
+            }
+        }
+
+        return $products;
     }
 }
