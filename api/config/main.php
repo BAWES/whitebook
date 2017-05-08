@@ -212,6 +212,22 @@ return [
                         'OPTIONS <id>' => 'options',
                     ]
                 ],
+                [ // TapController
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/tap',
+                    'pluralize' => false,
+                    'patterns' => [
+                        'GET' => 'index',
+                        'GET success' => 'success',
+                        'GET error' => 'error',
+                        'GET callback' => 'callback',
+                        // OPTIONS VERBS
+                        'OPTIONS' => 'options',
+                        'OPTIONS success' => 'options',
+                        'OPTIONS error' => 'options',
+                        'OPTIONS callback' => 'options',
+                    ]
+                ],
                 [ // PackageController
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'v1/package',

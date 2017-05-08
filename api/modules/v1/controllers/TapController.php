@@ -1,6 +1,5 @@
 <?php
-
-namespace frontend\controllers\payment;
+namespace api\modules\v1\controllers;
 
 use Yii;
 use yii\web\Controller;
@@ -9,12 +8,71 @@ use yii\helpers\ArrayHelper;
 use common\models\Booking;
 use common\models\PaymentGateway;
 
+/**
+ * Tap Payment Gateway controller 
+ */
 class TapController extends Controller
 {
-    private $tap_merchantid;
-    private $tap_username;
-    private $tap_password;
-    private $tap_api_key;
+    private $tap_merchantid = '';
+    private $tap_username = '';
+    private $tap_password = '';
+    private $tap_api_key = '';
+
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+
+        // remove authentication filter for cors to work
+        unset($behaviors['authenticator']);
+
+        // Allow XHR Requests from our different subdomains and dev machines
+        $behaviors['corsFilter'] = [
+            'class' => \yii\filters\Cors::className(),
+            'cors' => [
+                'Origin' => Yii::$app->params['allowedOrigins'],
+                'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
+                'Access-Control-Request-Headers' => ['*'],
+                'Access-Control-Allow-Credentials' => null,
+                'Access-Control-Max-Age' => 86400,
+                'Access-Control-Expose-Headers' => [
+                    'X-Pagination-Current-Page',
+                    'X-Pagination-Page-Count',
+                    'X-Pagination-Per-Page',
+                    'X-Pagination-Total-Count'
+                ],
+            ],
+        ];
+
+        // Bearer Auth checks for Authorize: Bearer <Token> header to login the user
+        $behaviors['authenticator'] = [
+            'class' => \yii\filters\auth\HttpBearerAuth::className(),
+        ];
+        // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
+        $behaviors['authenticator']['except'] = [
+            'options',
+            'index',
+            'callback',
+            'success',
+            'error'
+        ];
+
+        return $behaviors;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function actions()
+    {
+        $actions = parent::actions();
+        $actions['options'] = [
+            'class' => 'yii\rest\OptionsAction',
+            // optional:
+            'collectionOptions' => ['GET', 'POST', 'HEAD', 'OPTIONS'],
+            'resourceOptions' => ['GET', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
+        ];
+        return $actions;
+    }
 
     public function init()
     {
@@ -41,10 +99,10 @@ class TapController extends Controller
         $gateway = PaymentGateway::find()->where(['code' => 'tap', 'status' => 1])->one();
 
         if(!$gateway) {
-            $this->redirect(['checkout/index']);
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
-        $booking_id = Yii::$app->session->get('booking_id');
+        $booking_token = Yii::$app->request->get('booking_token');
 
         if (!$gateway['under_testing']) {
             $data['action'] = 'https://www.gotapnow.com/webpay.aspx';
@@ -53,7 +111,9 @@ class TapController extends Controller
             $data['action'] = 'http://live.gotapnow.com/webpay.aspx';
         }
 
-        $booking = Booking::findOne($booking_id);
+        $booking = Booking::find()
+            ->where(['booking_token' => $booking_token])
+            ->one();
 
         if(!$booking) {
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
@@ -68,18 +128,21 @@ class TapController extends Controller
         $data['itemprice1'] = $booking->total_with_delivery;
         $data['itemname1'] = implode(', ', $arr_item_name);
         $data['currencycode'] = 'KWD';
-        $data['ordid'] = $booking_id;
+        $data['ordid'] = $booking->booking_id;
 
         $data['cstemail'] = $booking->customer_email;
         $data['cstname'] = $booking->customer_name;
         $data['cstmobile'] = $booking->customer_mobile;
         $data['cntry'] = 'KW';
 
-        $data['returnurl'] = Url::toRoute(['payment/tap/callback', 'hashcd' => md5($booking_id . $booking->total_with_delivery . 'KWD' . $this->tap_password)], true);
+        $data['returnurl'] = Url::toRoute(['tap/callback', 'hashcd' => md5($booking->booking_id . $booking->total_with_delivery . 'KWD' . $this->tap_password)], true);
 
         return $this->renderPartial('index', $data);
     }
 
+    /**
+     * Callback page to get parameters in mobile app 
+     */
     public function actionCallback() {
 
         $request = Yii::$app->request->get();
@@ -107,14 +170,12 @@ class TapController extends Controller
             $error = Yii::t('frontend', 'Payment was declined by Tap');
         }
    
-        if ($error) {
-           
-            return $this->render('error', [
-                'message' => $error
-            ]);
-            
-        } else {
-            
+        if ($error) 
+        {
+           return $this->redirect(['error']);                        
+        } 
+        else 
+        {            
             //gateway info 
             $gateway = PaymentGateway::find()->where(['code' => 'tap', 'status' => 1])->one();
 
@@ -141,7 +202,23 @@ class TapController extends Controller
             Booking::sendBookingPaidEmails($booking_id);
 
             //redirect to order success 
-            $this->redirect(['payment/success']);
+            return $this->redirect(['success']);  
         }
+    }
+
+    /**
+     * Payment success
+     */
+    public function actionSuccess() 
+    {
+
+    }
+
+    /**
+     * Payment error
+     */
+    public function actionError() 
+    {
+
     }
 }
