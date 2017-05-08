@@ -190,6 +190,7 @@ return [
                         'GET success' => 'success',
                         'GET list-with-address' => 'cart-item-with-address',
                         'GET delivery-area' => 'delivery-area',
+                        'GET confirm' => 'confirm',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
                         'OPTIONS payment-getaway' => 'options',
