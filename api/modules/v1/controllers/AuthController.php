@@ -2,6 +2,7 @@
 
 namespace api\modules\v1\controllers;
 
+use common\models\CustomerToken;
 use Yii;
 use yii\rest\Controller;
 use yii\filters\auth\HttpBasicAuth;
