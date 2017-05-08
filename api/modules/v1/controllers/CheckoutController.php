@@ -238,4 +238,37 @@ class CheckoutController extends Controller
 
         return $result;
     }
+
+    public function actionConfirm() 
+    {
+    	$items = CustomerCart::items();
+		
+		foreach ($items as $item) {
+            $menu_items = CustomerCartMenuItem::find()->cartID($item['cart_id'])->all();
+
+			$error = CustomerCart::validate_item([
+    			'item_id' => $item['item_id'],
+                'time_slot' => Yii::$app->session->get('event_time'),
+    			'delivery_date' => Yii::$app->session->get('delivery-date'),
+                'area_id' => Yii::$app->session->get('delivery-location'),
+    			'quantity' => $item['cart_quantity'],
+                'menu_item' => ArrayHelper::map($menu_items, 'menu_item_id', 'quantity')
+    		], true);
+
+    		if($error) {
+    			return [
+    				'operation' => 'error',
+    				'message' => 'Please check cart',
+    			];
+    		}
+		}
+    
+        $arr_booking_id = Booking::checkoutConfirm();
+
+        Yii::$app->session->set('arr_booking_id', $arr_booking_id);
+
+        return [
+        	'operation' => 'success'
+        ]
+    }
 }
