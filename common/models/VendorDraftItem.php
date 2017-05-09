@@ -359,4 +359,28 @@ class VendorDraftItem extends \yii\db\ActiveRecord
     {
         return new query\VendorDraftItemQuery(get_called_class());
     }
+
+    /**
+     * Clear draft
+     */
+    public static function clearDraft($id)
+    {
+        $menues = VendorDraftItemMenu::findAll(['item_id' => $id]);
+
+        foreach ($menues as $key => $menu) {
+            VendorDraftItemMenuItem::deleteAll(['draft_menu_id' => $menu->draft_menu_id]);
+        }
+
+        VendorDraftItemMenu::deleteAll(['item_id' => $id]);
+        
+        //draft related 
+        VendorDraftItemPricing::deleteAll(['item_id' => $id]);
+        VendorDraftImage::deleteAll(['item_id' => $id]);
+        VendorDraftItemToCategory::deleteAll(['item_id' => $id]);
+        VendorDraftItemQuestion::deleteAll(['item_id' => $id]);
+        VendorDraftItemToCategory::deleteAll(['item_id' => $id]);
+        
+        //draft 
+        VendorDraftItem::deleteAll(['item_id' => $id]); 
+    }
 }

@@ -252,6 +252,9 @@ class VendorItemController extends Controller
                 $vic->save();
             }
 
+            //clear draft 
+            VendorDraftItem::clearDraft($model->item_id);
+
             $complete = Yii::$app->request->post('complete');
 
             if($complete) {
@@ -315,7 +318,10 @@ class VendorItemController extends Controller
         $model->scenario = 'ItemDescription';
 
         if($model->load(Yii::$app->request->post()) && $model->save()) {
-                    
+
+            //clear draft 
+            VendorDraftItem::clearDraft($model->item_id);
+  
             $complete = Yii::$app->request->post('complete');
 
             if($complete) {
@@ -347,6 +353,9 @@ class VendorItemController extends Controller
         $model->scenario = 'ItemPrice';
 
         if($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            //clear draft 
+            VendorDraftItem::clearDraft($model->item_id);
 
             //remove old price chart
             VendorItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
@@ -401,7 +410,10 @@ class VendorItemController extends Controller
         $model->scenario = 'MenuItems';
 
         if($model->load(Yii::$app->request->post()) && $model->save()) 
-        {
+        {            
+            //clear draft 
+            VendorDraftItem::clearDraft($model->item_id);
+
             //remove old menu and menu items 
 
             $old_menues = VendorItemMenu::find()->item($id)->menu('options')->all();
@@ -494,7 +506,10 @@ class VendorItemController extends Controller
         $model = $this->findModel($id);
 
         if(Yii::$app->request->isPost) 
-        {           
+        {                     
+            //clear draft 
+            VendorDraftItem::clearDraft($model->item_id);
+  
             //remove old menu and menu items 
 
             $old_menues = VendorItemMenu::find()->item($id)->menu('addons')->all();
@@ -590,6 +605,9 @@ class VendorItemController extends Controller
 
         if($model->load(Yii::$app->request->post()) && $model->save()) {
 
+            //clear draft 
+            VendorDraftItem::clearDraft($model->item_id);
+
             $complete = Yii::$app->request->post('complete');
 
             if($complete) {
@@ -619,7 +637,10 @@ class VendorItemController extends Controller
         $model = $this->findModel($id);
 
         if(Yii::$app->request->isPost) 
-        {
+        {            
+            //clear draft 
+            VendorDraftItem::clearDraft($model->item_id);
+
             $images = Yii::$app->request->post('images');
 
             if(!$images) {
@@ -693,7 +714,11 @@ class VendorItemController extends Controller
     {
         $model = $this->findModel($id);
 
-        if(Yii::$app->request->isPost) {
+        if(Yii::$app->request->isPost) 
+        {            
+            //clear draft 
+            VendorDraftItem::clearDraft($model->item_id);
+
             $vendor_item = Yii::$app->request->post('VendorItem');
             // save themes
 
@@ -853,7 +878,12 @@ class VendorItemController extends Controller
         EventItemlink::deleteAll(['item_id' => $id]);
         FeatureGroupItem::deleteAll(['item_id' => $id]);
         VendorDraftItem::deleteAll(['item_id' => $id]);
+        
+        //clear draft 
+        VendorDraftItem::clearDraft($model->item_id);
+
         $model->delete();
+        
         Yii::$app->session->setFlash('success', 'Vendor item deleted successfully!');
         return $this->redirect(['index']);
     }

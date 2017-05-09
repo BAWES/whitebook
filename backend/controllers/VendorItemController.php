@@ -809,23 +809,8 @@ class VendorItemController extends Controller
 
         VendorItemMenu::deleteAll(['item_id' => $id]);
 
-        //draft menu 
-
-        $menues = VendorDraftItemMenu::findAll(['item_id' => $id]);
-
-        foreach ($menues as $key => $menu) {
-            VendorDraftItemMenuItem::deleteAll(['draft_menu_id' => $menu->draft_menu_id]);
-        }
-
-        VendorDraftItemMenu::deleteAll(['item_id' => $id]);
-        
-        //draft related 
-        VendorDraftItemPricing::deleteAll(['item_id' => $id]);
-        VendorDraftImage::deleteAll(['item_id' => $id]);
-        VendorDraftItemToCategory::deleteAll(['item_id' => $id]);
-
         //draft 
-        VendorDraftItem::deleteAll(['item_id' => $id]); 
+        VendorDraftItem::clearDraft($id); 
         
         //main model 
         $model->delete();
