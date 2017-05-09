@@ -23,8 +23,15 @@ $session = Yii::$app->session;
 $deliver_location   = ($session->has('delivery-location')) ? $session->get('delivery-location') : null;
 $deliver_date       = ($session->has('delivery-date')) ? $session->get('delivery-date') : '';
 
+if(isset($get['themes']))
+{
+    $selected_themes = $get['themes'];
+}
+else
+{
+    $selected_themes = [];
+} 
 ?>
-
     <!-- coniner start -->
     <section id="inner_pages_white_back" class="<?=Yii::$app->controller->id;?>">
         <?php /* @TODO Removed Event Section ?>
@@ -50,20 +57,24 @@ $deliver_date       = ($session->has('delivery-date')) ? $session->get('delivery
             <div class="plan_venues" id="wrapper">
                 <div class="overlay"></div>
                 <div class="overlay_filter clearfix">
+
+                    <div class="col-lg-3 padding-left-0 theme-filter">
+                        <?= $this->render('@frontend/views/common/filter/themes.php', [
+                            'themes' => $themes,
+                            'selected_themes' => $selected_themes
+                        ]); ?>
+                    </div>  
+
                     <div class="col-lg-3 padding-left-0 date-filter">
                         <?= $this->render('@frontend/views/common/filter/date.php', [
                             'deliver_date' => $deliver_date
                         ]); ?>
                     </div>
-                    <div class="mid-space">
-                        &nbsp;
-                    </div>
+
                     <div class="col-lg-3 padding-left-0 event-filter">
                         <?= $this->render('@frontend/views/common/filter/event_time.php');  ?>
                     </div>
-                    <div class="mid-space">
-                        &nbsp;
-                    </div>
+
                     <div class="col-lg-3 padding-left-0 location-filter">
                         <?= $this->render('@frontend/views/common/filter/locations.php', [
                             'deliver_location' => $deliver_location
@@ -150,6 +161,10 @@ $this->registerJs("
 jQuery(document).delegate('a#filter-clear-date', 'click', function() {
     jQuery('#delivery_date_2').val('');
     jQuery(this).hide();
+    filter();
+});
+
+$(document).delegate('#theme_filter', 'change', function() {
     filter();
 });
 

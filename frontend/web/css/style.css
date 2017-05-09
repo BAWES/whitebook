@@ -2695,3 +2695,11 @@ span.small {
 }
 .menu-items li:nth-child(odd) {background-color: #eee;}
 .margin-left-20{margin-left:20px;}
+
+.theme-filter .btn{
+    padding: 10px !important;
+    height: 40px;
+}
+.theme-filter .panel-heading {
+    border: none;
+}
