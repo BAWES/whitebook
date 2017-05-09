@@ -7,30 +7,6 @@ use frontend\models\Customer;
 
 $hide_area = Yii::$app->request->post('hide_area');
 
-if(!$hide_area) { 
-
-	$query = CustomerCart::find();
-
-	if (Yii::$app->user->getId()) {
-	    $query->andWhere(['{{%customer_cart}}.customer_id' => Yii::$app->user->getId()]);
-	} else {
-	    $query->andWhere(['{{%customer_cart}}.cart_session_id' => Customer::currentUser()]);
-	}
-
-	$area = $query->one()->area;
-
-	//get area name 
-
-	if(Yii::$app->language == 'en')
-	{
-		$area_name = $area->location;
-	}
-	else
-	{
-		$area_name = $area->location_ar;
-	}
-}
-
 ?>
 
 <div class="row">
