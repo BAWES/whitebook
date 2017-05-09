@@ -1699,6 +1699,12 @@ function filter(){
             return this.value;
         }).get();
     }
+
+    if (($('#theme_filter').length)>0) {
+        var theme_name = $('#theme_filter option:selected').map(function () {
+            return this.value;
+        }).get();
+    }
     
     if (($('input[name=vendor]').length)>0) {
         var vendor_name = $('input[name=vendor]:checked').map(function () {

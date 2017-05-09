@@ -100,7 +100,7 @@ use common\components\LangFormat;
                         
                         <?= $this->render('@frontend/views/common/filter/price.php');  ?>
                         
-                        <?= $this->render('@frontend/views/common/filter/theme.php', ['themes' => $themes]); ?>
+                        <?php //$this->render('@frontend/views/common/filter/theme.php', ['themes' => $themes]); ?>
 
                         <?php 
 
