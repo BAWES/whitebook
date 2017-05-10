@@ -15,6 +15,7 @@ use frontend\models\Customer;
 use common\models\Events;
 use common\models\ItemType;
 use common\models\Category;
+use common\models\Themes;
 use common\models\Location;
 use common\models\CategoryPath;
 use common\models\VendorPhoneNo;
@@ -255,27 +256,18 @@ class BrowseController extends BaseController
             ],
         ]);
 
-        $get_unique_themes = array();
+        //get themes 
 
-        if (!empty($items)) {
+        $q = Themes::find()
+            ->where(['trash' => 'Default']);
 
-            $item_ids = ArrayHelper::map($items, 'item_id', 'item_id');
-
-            $q = VendorItemThemes::find()
-                ->select(['{{%vendor_item_theme}}.theme_id'])
-                ->joinWith('themeDetail')
-                ->defaultItemThemes()
-                ->itemIDs(implode(',', array_keys($item_ids)))
-                ->groupBy('{{%vendor_item_theme}}.theme_id');
-            
-            if (Yii::$app->language == 'en') {
-                $q->orderBy('theme_name');
-            } else {
-                $q->orderBy('theme_name_ar');
-            }
-
-            $themes = $q->asArray()->all();
+        if (Yii::$app->language == 'en') {
+            $q->orderBy('theme_name');
+        } else {
+            $q->orderBy('theme_name_ar');
         }
+
+        $themes = $q->all();
 
         //get available vendor in item query result 
 
