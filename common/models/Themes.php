@@ -66,7 +66,7 @@ class Themes extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            ['theme_name','themevalidation','on' => 'insert',],
+            ['theme_name', 'themevalidation', 'on' => 'insert',],
             [['theme_name','theme_name_ar'], 'required'],
             [['created_by', 'modified_by'], 'integer'],
             [['created_datetime', 'modified_datetime'], 'safe'],
