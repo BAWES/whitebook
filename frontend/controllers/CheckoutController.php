@@ -138,6 +138,8 @@ class CheckoutController extends BaseController
 
 	public function actionAddAddress() {
 
+        $area_id = Yii::$app->session->get('delivery-location');
+
 		$json = array();
 
         $questions = Yii::$app->request->post('question');
@@ -157,7 +159,7 @@ class CheckoutController extends BaseController
             ->customer(Yii::$app->user->getId())
             ->one();
 
-        $customer_address->area_id = $cart_item->area_id;
+        $customer_address->area_id = $area_id;
 
         //get city & country from area 
         $location = Location::findOne($customer_address->area_id);
@@ -192,6 +194,8 @@ class CheckoutController extends BaseController
      */ 
     public function actionSaveGuestAddress() 
     {
+        $area_id = Yii::$app->session->get('delivery-location');
+
         //save address 
 
         $json = array('errors' => array());
@@ -211,7 +215,7 @@ class CheckoutController extends BaseController
             ->sessionUser()
             ->one();
 
-        $customer_address->area_id = $cart_item->area_id;
+        $customer_address->area_id = $area_id;
 
         //get city & country from area 
         $location = Location::findOne($customer_address->area_id);
