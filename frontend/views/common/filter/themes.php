@@ -1,10 +1,18 @@
-<div class="panel panel-default" id="top_panel_date">
+<div class="panel panel-default" id="top_panel_theme">
     <div class="panel-heading">
-        <p><?= Yii::t('frontend', 'Themes') ?></p>
+        <p>
+            <?= Yii::t('frontend', 'Themes') ?>
+            <a href="javascript:void(0)" style="<?=(sizeof($selected_themes) > 1)?'display:inline':'';?>" class="filter-clear" id="filter-clear-date" title="Clear">- <?= Yii::t('frontend', 'Clear') ?></a>        
+        </p>
     </div>
     <div class="panel-collapse">
         <div class="panel-body">
-            <select name="themes[]" id="theme_filter" class="selectpicker" data-live-search="true" data-size="10" multiple>
+            <select name="themes[]" id="theme_filter" class="selectpicker" data-title="<?= Yii::t('frontend', 'All') ?>" data-live-search="true" data-size="10" multiple>
+
+            <option value="all" <?= (in_array('all', $selected_themes)) ? 'selected' : '' ?>>
+                <?= Yii::t('frontend', 'All') ?>
+            </option>
+
             <?php 
             foreach ($themes as $key => $value) 
             { 

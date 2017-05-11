@@ -29,7 +29,7 @@ if(isset($get['themes']))
 }
 else
 {
-    $selected_themes = [];
+    $selected_themes = ['all'];
 } 
 ?>
     <!-- coniner start -->
@@ -165,7 +165,33 @@ jQuery(document).delegate('a#filter-clear-date', 'click', function() {
 });
 
 $(document).delegate('#theme_filter', 'change', function() {
+    
+    if($('#theme_filter option[value=\"all\"]:selected').length > 0) {
+        $('#theme_filter').selectpicker('val', ['all']);
+    }else{
+
+        var a = [];
+
+        $('#theme_filter option:selected').each(function(){
+
+            if($(this).val() != 'all') 
+                a.push($(this).val());
+        });
+
+        $('#theme_filter').selectpicker('val', a);
+    }
+
+    if($('#theme_filter option:selected').length > 1) {
+        $('#top_panel_theme .filter-clear').css('display', 'inline');
+    }else{
+        $('#top_panel_theme .filter-clear').css('display', 'none');
+    }
+
     filter();
+});
+
+$('#top_panel_theme .filter-clear').click(function(){
+    $('#theme_filter').selectpicker('val', ['all']);
 });
 
 ", View::POS_END);
