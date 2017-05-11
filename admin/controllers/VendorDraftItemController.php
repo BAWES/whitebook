@@ -2,8 +2,10 @@
 
 namespace admin\controllers;
 
+use common\models\VendorDraftItemQuestion;
 use Yii;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use yii\helpers\Url;
 use yii\filters\VerbFilter;
 use admin\models\Image;
@@ -45,7 +47,7 @@ class VendorDraftItemController extends Controller
                         'allow' => AccessControlList::can()
                     ],
                 ],
-            ],            
+            ],
         ];
     }
 
@@ -65,7 +67,7 @@ class VendorDraftItemController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
-    }    
+    }
 
     /**
     * Displays a single VendorItem model.
@@ -80,64 +82,57 @@ class VendorDraftItemController extends Controller
 
         $model = VendorDraftItem::findOne($id);
 
-        if(!$model) 
+        if(!$model)
         {
              throw new NotFoundHttpException('The requested page does not exist.');
         }
 
-        //check if have change price table 
+        //check if have change price table
         $is_price_table_changed = VendorDraftItem::is_price_table_changed($model->item_id);
 
         //check if have change images
         $is_images_changed = VendorDraftItem::is_images_changed($model->item_id);
 
-        //check if have change category 
+        //check if have change category
         $is_categories_changed = VendorDraftItem::is_categories_changed($model->item_id);
 
         $dataProvider1 = PriorityItem::find()
             ->select(['priority_level','priority_start_date','priority_end_date'])
-            ->where(new \yii\db\Expression('FIND_IN_SET(:item_id, item_id)'))
-            ->addParams([':item_id' => $model->item_id])
+            ->item($model->item_id)
             ->all();
 
         $imagedata = VendorDraftImage::find()
-            ->where('item_id = :id', [':id' => $model->item_id])
+            ->item($model->item_id)
             ->orderby(['vendorimage_sort_order' => SORT_ASC])
             ->all();
 
         $categories = VendorDraftItemToCategory::find()
             ->with('category')
-            ->Where(['item_id' => $model->item_id])
+            ->item($model->item_id)
             ->all();
 
         $price_table = VendorDraftItemPricing::find()
-            ->where(['item_id' => $model->item_id])
+            ->item($model->item_id)
             ->all();
 
         $vendor_item = VendorItem::findOne($model->item_id);
 
-        $arr_menu = VendorDraftItemMenu::findAll([
-            'item_id' => $model->item_id,
-            'menu_type' => 'options'
-        ]);
-
-        $arr_addon_menu = VendorDraftItemMenu::findAll([
-            'item_id' => $model->item_id,
-            'menu_type' => 'addons'
-        ]);
-
+        $arr_menu = VendorDraftItemMenu::find()->item($model->item_id)->menu('options')->all();
+        $arr_addon_menu = VendorDraftItemMenu::find()->item($model->item_id)->menu('addons')->all();
+        $questions = VendorDraftItemQuestion::findAll(['item_id'=>$model->item_id]);
         return $this->render('view', [
-            'model' => $model,        
+            'model' => $model,
             'arr_menu' => $arr_menu,
             'arr_addon_menu' => $arr_addon_menu,
             'vendor_item' => $vendor_item,
-            'dataProvider1' => $dataProvider1, 
+            'dataProvider1' => $dataProvider1,
             'imagedata' => $imagedata,
             'categories' => $categories,
             'price_table' => $price_table,
             'is_price_table_changed' => $is_price_table_changed,
             'is_images_changed' => $is_images_changed,
-            'is_categories_changed' => $is_categories_changed
+            'is_categories_changed' => $is_categories_changed,
+            'questions' => $questions
         ]);
     }
 
@@ -145,18 +140,18 @@ class VendorDraftItemController extends Controller
 
         $draft = VendorDraftItem::findOne($id);
 
-        if(!$draft) 
+        if(!$draft)
         {
              throw new NotFoundHttpException('The requested page does not exist.');
         }
 
         $attributes = $draft->attributes;
 
-        //unset sort from draft to keep sort from vendor item list 
+        //unset sort from draft to keep sort from vendor item list
         unset($attributes['version']);
         unset($attributes['sort']);
-        
-        //copy to item from draft 
+
+        //copy to item from draft
         $item = VendorItem::findOne($draft->item_id);
         $item->attributes = $attributes;
         $item->item_approved = 'Yes';
@@ -164,15 +159,15 @@ class VendorDraftItemController extends Controller
         $item->slug = $draft->slug;
         $item->save(false);
 
-        //remove old price table data 
+        //remove old price table data
 
         VendorItemPricing::deleteAll(['item_id' => $item->item_id]);
 
-        //add new price table data 
+        //add new price table data
 
         $pricing = VendorDraftItemPricing::findAll(['item_id' => $item->item_id]);
 
-        foreach ($pricing as $key => $value) 
+        foreach ($pricing as $key => $value)
         {
             $vip = new VendorItemPricing;
             $vip->attributes = $value->attributes;
@@ -180,31 +175,31 @@ class VendorDraftItemController extends Controller
             $vip->trash = 'Default';
             $vip->save();
         }
-        
-        //remove old categories 
+
+        //remove old categories
 
         VendorItemToCategory::deleteAll(['item_id' => $item->item_id]);
 
-        //add new categories 
-        
+        //add new categories
+
         $categories = VendorDraftItemToCategory::findAll(['item_id' => $item->item_id]);
 
-        foreach ($categories as $key => $value) 
+        foreach ($categories as $key => $value)
         {
             $vic = new VendorItemToCategory;
             $vic->attributes = $value->attributes;
             $vic->save();
         }
 
-        //remove old images 
+        //remove old images
 
         Image::deleteAll(['item_id' => $item->item_id]);
 
-        //add new images 
+        //add new images
 
         $images = VendorDraftImage::findAll(['item_id' => $item->item_id]);
 
-        foreach ($images as $key => $value) 
+        foreach ($images as $key => $value)
         {
             $image = new Image;
             $image->attributes = $value->attributes;
@@ -216,56 +211,60 @@ class VendorDraftItemController extends Controller
             $image->save();
         }
 
-        //remove old menu 
+        //remove old menu
 
         $menues = VendorItemMenu::findAll(['item_id' => $item->item_id]);
 
         foreach ($menues as $key => $menu) {
-            VendorItemMenuItem::deleteAll(['menu_id' => $menu->menu_id]);        
+            VendorItemMenuItem::deleteAll(['menu_id' => $menu->menu_id]);
         }
 
         VendorItemMenu::deleteAll(['item_id' => $item->item_id]);
 
-        //copy menu 
+        //copy menu
 
         $menues = VendorDraftItemMenu::findAll(['item_id' => $item->item_id]);
 
         foreach ($menues as $key => $menu) {
 
-            //add menu 
+            //add menu
 
             $m = new VendorItemMenu;
             $m->attributes = $menu->attributes;
             $m->save();
 
-            //get all menu items 
-            
+            //get all menu items
+
             $items = VendorDraftItemMenuItem::findAll(['draft_menu_id' => $menu->draft_menu_id]);
 
-            //add all items 
+            //add all items
 
             foreach ($items as $key => $item) {
-               
+
                 $i = new VendorItemMenuItem;
                 $i->attributes = $item->attributes;
                 $i->menu_id = $m->menu_id;
                 $i->save();
             }
 
-            //remove all draft menu items 
+            //remove all draft menu items
 
             VendorDraftItemMenuItem::deleteAll(['draft_menu_id' => $menu->draft_menu_id]);
         }
 
-        //remove draft related data 
+        // approved questions moved from draft to real table and removed from draft
+        VendorDraftItemQuestion::approved($item->item_id);
+
+
+        //remove draft related data
 
         VendorDraftItemPricing::deleteAll(['item_id' => $item->item_id]);
         VendorDraftImage::deleteAll(['item_id' => $item->item_id]);
         VendorDraftItemMenu::deleteAll(['item_id' => $item->item_id]);
         VendorDraftItemToCategory::deleteAll(['item_id' => $item->item_id]);
 
-        //remove from draft 
-        
+        //remove from draft
+
         $draft->delete();
 
         Yii::$app->session->setFlash('success', 'Item approved successfully!');
@@ -277,20 +276,20 @@ class VendorDraftItemController extends Controller
     {
         $draft_item_id = Yii::$app->request->post('draft_item_id');
 
-        $reason = Yii::$app->request->post('reason'); 
+        $reason = Yii::$app->request->post('reason');
 
         $model = VendorDraftItem::findOne(['draft_item_id' => $draft_item_id]);
 
-        if(!$model) 
+        if(!$model)
         {
              throw new NotFoundHttpException('The requested page does not exist.');
         }
 
         $vendor = Vendor::findOne($model->vendor_id);
 
-        //send mail 
+        //send mail
         Yii::$app->mailer->htmlLayout = 'layouts/empty';
-        
+
         $mail = Yii::$app->mailer->compose("admin/item-reject",
             [
                 "reason" => $reason,
@@ -302,28 +301,28 @@ class VendorDraftItemController extends Controller
             ->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name ])
             ->setSubject('Item rejected');
 
-        //to contact email  
-        $mail 
+        //to contact email
+        $mail
             ->setTo($vendor->vendor_contact_email)
             ->send();
 
-        //send to all notification mails 
+        //send to all notification mails
         $vendor_alert_emails = VendorOrderAlertEmails::findAll(['vendor_id' => $vendor->vendor_id]);
 
         foreach ($vendor_alert_emails as $key => $value) {
-            $mail    
+            $mail
                 ->setTo($value->email_address)
                 ->send();
         }
 
-        //hide draft from admin 
+        //hide draft from admin
         $model->is_ready = 0;
         $model->save();
 
         Yii::$app->session->setFlash('success', 'Item rejected and vendor notified by email!');
 
         Yii::$app->response->format = 'json';
-        
+
         return [
             'location' => Url::to(['vendor-draft-item/index'])
         ];

@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\helpers\Url;
+use yii\data\ArrayDataProvider;
 use common\models\Events;
 use common\models\Package;
 use common\models\EventItemlink;
@@ -22,7 +23,7 @@ class PackagesController extends BaseController
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => 'Event Packages in The White Book - Event Planning Platform']);
 
     	$packages = Package::find()
-    		->where(['status' => 1])
+    		->active()
     		->all();
 
     	return $this->render('index', [
@@ -42,31 +43,46 @@ class PackagesController extends BaseController
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => $package->package_description]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => $package->package_description]);
 
-        $categories = \frontend\models\Category::find()
-            ->where('(parent_category_id IS NULL or parent_category_id = 0) AND trash = "Default"')
-            ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
-            ->all();
-
-        if(Yii::$app->user->isGuest) 
-        {
-            $wishlist_item_ids = [];
-            $customer_events = [];
-        } 
-        else 
-        {
-            $wishlist = Users::get_customer_wishlist_details(Yii::$app->user->getId());
-            $wishlist_item_ids = \yii\helpers\ArrayHelper::getColumn($wishlist, 'item_id'); 
-            
-            $customer_events = Events::find()
-                ->where(['customer_id' => Yii::$app->user->identity->customer_id])
-                ->all();            
+        if (Yii::$app->user->isGuest) {
+            $customer_events_list = [];
+        } else {
+            $usermodel = new Users();
+            $customer_events_list = $usermodel->get_customer_wishlist_details(Yii::$app->user->identity->id);
         }
+
+        $items = VendorItemToPackage::find()
+                ->select(['{{%vendor}}.vendor_name', '{{%vendor}}.vendor_name_ar', '{{%vendor_item}}.*'
+                ])
+                ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%vendor_item_to_package}}.item_id')
+                ->leftJoin(
+                    '{{%vendor_item_to_category}}', 
+                    '{{%vendor_item_to_category}}.item_id = {{%vendor_item}}.item_id'
+                )
+                ->leftJoin(
+                    '{{%category_path}}', 
+                    '{{%category_path}}.category_id = {{%vendor_item_to_category}}.category_id'
+                )
+                ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
+                ->where([
+                    '{{%vendor_item}}.item_status' => 'Active',
+                    '{{%vendor_item}}.trash' => 'Default',
+                    '{{%vendor_item_to_package}}.package_id' => $package->package_id
+                ])
+                ->groupBy('{{%vendor_item_to_package}}.item_id')
+                ->asArray()
+                ->all();
+
+        $provider = new ArrayDataProvider([
+            'allModels' => $items,
+            'pagination' => [
+                'pageSize' => 500,// as we will not have pagination in package detail page 
+            ],
+        ]);
 
         return $this->render('detail', [
             'package' => $package,
-            'categories' => $categories,
-            'wishlist_item_ids' => $wishlist_item_ids,
-            'customer_events' => $customer_events
+            'customer_events' => $customer_events_list,
+            'provider' => $provider
         ]);
     }
 
@@ -105,7 +121,7 @@ class PackagesController extends BaseController
         }
 
         $items = VendorItemToPackage::find()
-                ->where(['package_id' => $package->package_id])
+                ->package($package->package_id)
                 ->all();
 
         foreach ($items as $key => $value) {
@@ -139,10 +155,8 @@ class PackagesController extends BaseController
         $request = Yii::$app->request;
 
         $package = Package::find()
-            ->where([
-                'package_id' => $request->post('package_id'),
-                'status' => 1
-            ])
+            ->active()
+            ->package($request->post('package_id'))
             ->one();
 
         if (!$package) 
@@ -197,7 +211,7 @@ class PackagesController extends BaseController
         //add package items to event 
 
         $items = VendorItemToPackage::find()
-                ->where(['package_id' => $package->package_id])
+                ->package($package->package_id)
                 ->all();
 
         foreach ($items as $key => $value) {

@@ -24,6 +24,7 @@ use common\models\VendorItemToPackage;
 * @property string $item_description
 * @property string $item_additional_info
 * @property integer $item_default_capacity
+* @property integer $included_quantity
 * @property string $item_price_per_unit
 * @property string $item_price_description
 * @property string $item_base_price
@@ -64,7 +65,9 @@ class VendorItem extends \yii\db\ActiveRecord
     const UPLOADFOLDER_530 = "vendor_item_images_530/";
     const UPLOADFOLDER_1000 = "vendor_item_images_1000/";
     const UPLOADSALESGUIDE = "sales_guide_images/";
-    
+    const UPLOADFOLDER_MENUITEM = "vendor_menu_item/";
+    const UPLOADFOLDER_MENUITEM_THUMBNAIL = "vendor_menu_item/thumbnail/";
+
     public $themes;
     public $groups;
     public $packages;
@@ -104,11 +107,11 @@ class VendorItem extends \yii\db\ActiveRecord
         return [
             [['type_id', 'vendor_id', 'item_name', 'item_name_ar'], 'required'],
             
-            [['minimum_increment', 'type_id', 'vendor_id', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
+            [['minimum_increment', 'hide_price_chart', 'type_id', 'vendor_id', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
             
             [['notice_period_type', 'item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_price_description','item_price_description_ar', 'item_approved', 'trash', 'quantity_label','slug'], 'string'],
             
-            [['item_price_per_unit', 'min_order_amount','item_base_price'], 'number'],
+            [['item_price_per_unit', 'min_order_amount','item_base_price','included_quantity'], 'number'],
             
             [['created_datetime', 'modified_datetime','item_status','image_path', 'allow_special_request', 'have_female_service'], 'safe'],
 
@@ -119,7 +122,7 @@ class VendorItem extends \yii\db\ActiveRecord
             [['image_path'],'image', 'extensions' => 'png,jpg,jpeg','maxFiles'=>20],
 
             // set scenario for vendor item add functionality
-            [['type_id', 'notice_period_type', 'item_description','item_description_ar', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order','item_name', 'item_name_ar', 'item_price_per_unit'], 'required', 'on'=>'VendorItemAdd'],
+            [['type_id', 'hide_price_chart', 'notice_period_type', 'item_description','item_description_ar', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order','included_quantity','item_name', 'item_name_ar', 'item_price_per_unit'], 'required', 'on'=>'VendorItemAdd'],
         ];
     }
 
@@ -146,7 +149,8 @@ class VendorItem extends \yii\db\ActiveRecord
             'item_price_description_ar' => 'Item Price Description - Arabic',
             'item_how_long_to_make' => 'Notice Period',
             'notice_period_type' => 'Notice Period Type',
-            'item_minimum_quantity_to_order' => 'Included Quantity',
+            'hide_price_chart' => 'Hide price chart from customer',
+            'item_minimum_quantity_to_order' => 'Minimum Quantity To Order',
             'item_approved' => 'Item Approved',
             'created_by' => 'Created By',
             'modified_by' => 'Modified By',
@@ -165,7 +169,8 @@ class VendorItem extends \yii\db\ActiveRecord
             'whats_include' => 'What\'s include?', 
             'whats_include_ar' => 'What\'s include? - Arabic', 
             'min_order_amount' => 'Min. Order KD',
-            'slug' => 'slug'
+            'slug' => 'slug',
+            'included_quantity' => 'Included Quantity'
         ];
     }
 
@@ -281,6 +286,15 @@ class VendorItem extends \yii\db\ActiveRecord
     public function getVendorItemThemes()
     {
         return $this->hasMany(VendorItemThemes::className(), ['item_id' => 'item_id']);
+    }
+
+
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+    public function getItemQuestions()
+    {
+        return $this->hasMany(VendorItemQuestion::className(), ['item_id' => 'item_id']);
     }
 
     public static function vendoritemcount($vid = '')
@@ -481,7 +495,7 @@ class VendorItem extends \yii\db\ActiveRecord
         $item = self::findOne($item_id);
 
         if (empty($item)) {
-            return 0;
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
 
         $total = ($item->item_base_price) ? $item->item_base_price : 0;
@@ -493,41 +507,59 @@ class VendorItem extends \yii\db\ActiveRecord
             ->orderBy('pricing_price_per_unit DESC')
             ->one();
 
-        if ($item->item_minimum_quantity_to_order > 0) {
-            $min_quantity_to_order = $item->item_minimum_quantity_to_order;
+        if ($item->included_quantity > 0) {
+            $included_quantity = $item->included_quantity;
         } else {
-            $min_quantity_to_order = 1;
+            $included_quantity = 1;
         }
 
         if ($price_chart) {
-            $unit_price = $price_chart->pricing_price_per_unit;
+            $increment_value = $price_chart->pricing_price_per_unit;
         } else {
-            $unit_price = $item->item_price_per_unit;
+            $increment_value = $item->item_price_per_unit;
         }
 
-        $actual_item_quantity = $quantity - $min_quantity_to_order;
+        if($item->minimum_increment < 1)
+        {
+            $item->minimum_increment = 1;
+        }
 
-        $total += $unit_price * $actual_item_quantity;
+        // by this price will get increase by "price per increment" for each "min increment" qty added to cart  
+
+        $total += (($quantity - $included_quantity) / $item->minimum_increment) * $increment_value;
 
         if(!is_array($menu_items)) {
             $menu_items = [];
         }
 
-        foreach ($menu_items as $key => $value) {
+        // menu item can be manu_item => quantity pair or array of menu items 
 
-            $menu_item = VendorItemMenuItem::findOne($key);
+        foreach ($menu_items as $key => $value) 
+        {
+            if(empty($value))
+                continue;
 
-            $total += $menu_item->price * $value;
+            if(is_array($value))
+            {
+                $total += $value['price'] * $value['quantity'];
+            }
+            else
+            {
+                $menu_item = VendorItemMenuItem::findOne($key);
+
+                $total += $menu_item->price * $value;
+            }
         }
+
         return $total;
     }
 
     /**
      * @inheritdoc
-     * @return VendorItemQuery the active query used by this AR class.
+     * @return query\VendorItemQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new \common\models\query\VendorItemQuery(get_called_class());
+        return new query\VendorItemQuery(get_called_class());
     }
 }

@@ -23,8 +23,21 @@ class VendorItemMenuQuery extends \yii\db\ActiveQuery
         return parent::all($db);
     }
 
-    public function byItemID($ID) {
+    /**
+     * @inheritdoc
+     * @return VendorItem[]|array
+     */
+    public function one($db = null)
+    {
+        return parent::one($db);
+    }
+
+    public function item($ID) {
         return $this->andWhere(['item_id' => $ID]);
+    }
+
+    public function menu($menu_type = 'options') {
+        return $this->andWhere(['menu_type' => $menu_type]);
     }
 
     public function optionMenu() {

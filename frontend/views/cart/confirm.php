@@ -62,7 +62,7 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 	        <thead>
 	        	<tr>
 	        		<td align="center"><?= Yii::t('frontend', 'Image') ?></th>
-	        		<td align="left"><?= Yii::t('frontend', 'Item Name') ?></th>
+	        		<td align="left"><?= Yii::t('frontend', 'Item') ?></th>
 	        		<td align="left"><?= Yii::t('frontend', 'Delivery') ?></th>
 	        		<td aligh="left" class="text-center"><?= Yii::t('frontend', 'Quantity') ?></th>
 	        		<td align="right"><?= Yii::t('frontend', 'Unit Price') ?></th>
@@ -134,6 +134,11 @@ $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook');
 		        		<a target="_blank" href="<?= Url::to(["browse/detail", 'slug' => $item['slug']]) ?>">
 	        				<?=LangFormat::format($item['item_name'],$item['item_name_ar']) ?>
 	        			</a>
+                        <br />
+                        <!-- Quantity -->
+                        <i><small><?=Yii::t('frontend','Quantity').': '. $item['cart_quantity']?></small></i>
+                        <!-- Quantity -->
+                        <br/>
 
 	        			<?php 
 

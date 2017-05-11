@@ -323,6 +323,10 @@ jQuery(document).delegate('#form_product_option', 'submit', function(e) {
                     });
                 });
 
+                if (data.errors && data.errors.cart_quantity_remain) {
+                    $('.quantity_remain').html("Only "+data.errors.cart_quantity_remain+" item available in stock");
+                }
+
                 if($('#collapse-options').length > 0 && !$('#collapse-options').hasClass('in')) {
                     $('a[href="#collapse-options"]').trigger('click');
                 }
@@ -359,13 +363,10 @@ jQuery(document).on('click','.btn-stepper',function() {
         if ($qty >= parseInt(jQuery('#quantity').data('min')) + $minimum_increment) {
             jQuery('#quantity').val($qty - $minimum_increment);
             update_price();
-            update_option_menu_title_hint();
-            update_option_menu_item_qty();//remove option qty for max option rule             
         }
     } else if (jQuery(this).data('case') == 1 && ($item_type_name == 'Product' || ($qty + $minimum_increment <= $capacity))) {
         jQuery('#quantity').val($qty + $minimum_increment);
         update_price();
-        update_option_menu_title_hint();
     }
 
     return false;
@@ -417,7 +418,8 @@ function productAvailability(date){
                 return false;
 
             } else {
-                $('.buy_events .button-signin button').html('ADD TO CART');
+                var cartbtnTitle = ($('#update_cart').val() == 1 ) ? 'Update Cart' : 'ADD TO CART';
+                $('.buy_events .button-signin button').html(cartbtnTitle);
                 if (json['price'] == 0) {
                     $('.buy_events .button-signin button').attr('disabled',true);
                     $('.small.price_warning').show();
@@ -440,9 +442,7 @@ function productAvailability(date){
 
                 if($item_type_name != 'Product' && $qty > json['capacity']) {
                     $('input[name="quantity"]').val(json['capacity']);   
-                    update_price();
-                    update_option_menu_title_hint();    
-                    update_option_menu_item_qty();             
+                    update_price(); 
                 }
 
             } 
@@ -517,14 +517,6 @@ $(document).delegate('.menu-item-qty-box .fa-plus', 'click', function() {
 });
 
 $(document).delegate('.menu-items .checkbox input', 'click', function(e) {
-
-    /*if (isGuest) {
-        show_login_modal('-2');
-        $('#myModal').modal('show');
-        return false;
-    }*/
-
-    $qty = $('input[name="quantity"]').val();
 
     //max quantity for menu 
 
@@ -627,77 +619,8 @@ $(document).delegate("#timeslot_id", 'changed.bs.select', function() {
 
 $(document).delegate('input[name="quantity"]', 'change', function() {
     update_price();
-    update_option_menu_title_hint();
-    update_option_menu_item_qty();
 });
-
-function update_option_menu_title_hint() {
-
-    $.each($('.menu-hint'), function() {
-
-        $max = $(this).attr('data-max-quantity');
-        $min = $(this).attr('data-min-quantity');
-        $qty = $('#quantity').val();
-
-        //build html 
-
-        $html = $('#txt-select').val();
-
-        if($min > 0) {
-            $html += $('#txt-min').val().replace('{qty}', $min);//* $qty
-        }
-        
-        if($min > 0 && $max > 0) { 
-            $html += ' , ';
-        }
-
-        if($max > 0) {
-            $html += $('#txt-max').val().replace('{qty}', $max);// * $qty
-        }
-
-        $(this).html($html);
-    });    
-}
-
-function update_option_menu_item_qty() {
-
-    $.each($('#collapse-options ul.menu-items'), function() {
-
-        $max = $(this).attr('data-max-quantity');// * $('input[name="quantity"]').val();
-
-        $total = 0;
-
-        $.each($(this).find('li'), function() {
-
-            $qty_input = $(this).find('.menu-item-qty');
-
-            $qty = parseInt($qty_input.val());
-
-            //if exceed limit 
-            if($total + $qty > $max) {
-
-                //if checkbox, uncheck
-                if($qty_input.attr('type') == "checkbox" && $qty_input.prop("checked") == true) 
-                {
-                    $qty_input.prop('checked', false);
-                } 
-                else if ($max - $total > 0) 
-                {
-                    $qty_input.val($max - $total);
-                    console.log('Setting : max - total = ' + ($max-$total));
-                } 
-                else 
-                {
-                    $qty_input.val(0);
-                    console.log('Setting : = ' + 0);
-                }
-            }
-
-            $total += $qty;
-        });
-    });
-}
-        
+  
 $(document).delegate('.lnk-price-chart', 'click', function() {
 
     $('.price_chart_wrapper').toggleClass('hidden');
@@ -708,7 +631,6 @@ $(document).delegate('.lnk-price-chart', 'click', function() {
         $('.lnk-price-chart .fa-plus-square-o').removeClass('fa-plus-square-o').addClass('fa-minus-square-o');
     }
 });
-
 
 $(function(){
     update_price();

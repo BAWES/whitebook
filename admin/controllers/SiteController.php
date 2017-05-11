@@ -128,6 +128,7 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
+    // todo remove method after anaylising in case not in use
     public function actionRecoverypassword()
     {
         $model = new PasswordForm();
@@ -164,6 +165,7 @@ class SiteController extends Controller
 
         return $this->renderPartial('passwords', ['model' => $model]);
     }
+
     public function actionChangepassword()
     {
         $model = new PasswordForm();

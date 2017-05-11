@@ -66,7 +66,7 @@ class Themes extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            ['theme_name','themevalidation','on' => 'insert',],
+            ['theme_name', 'themevalidation', 'on' => 'insert',],
             [['theme_name','theme_name_ar'], 'required'],
             [['created_by', 'modified_by'], 'integer'],
             [['created_datetime', 'modified_datetime'], 'safe'],
@@ -100,7 +100,7 @@ class Themes extends \yii\db\ActiveRecord
     */
     public function getVendorItemThemes()
     {
-        return $this->hasMany(VendorItemTheme::className(), ['theme_id' => 'theme_id']);
+        return $this->hasMany(\common\models\VendorItemThemes::className(), ['theme_id' => 'theme_id']);
     }
 
     /**
@@ -124,10 +124,10 @@ class Themes extends \yii\db\ActiveRecord
 
     /**
      * @inheritdoc
-     * @return ThemesQuery the active query used by this AR class.
+     * @return query\ThemesQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new \common\models\query\ThemesQuery(get_called_class());
+        return new query\ThemesQuery(get_called_class());
     }
 }

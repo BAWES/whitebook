@@ -11,14 +11,12 @@ use common\models\Country;
 use common\models\PaymentGateway;
 use frontend\models\AddressType;
 
-
 /**
  * Class CheckoutController
  * @package api\modules\v1\controllers
  */
 class CheckoutController extends Controller
 {
-
 	/**
 	 * @return array
      */
@@ -81,12 +79,12 @@ class CheckoutController extends Controller
 		$items = CustomerCart::items();
 		$errors = [];
 		if ($items) {
-			foreach ($items as $item) {
+		    foreach ($items as $item) {
 
 				$errors[] = $model->validate_item([
 					'item_id' => $item['item_id'],
 					'delivery_date' => $item['cart_delivery_date'],
-					'timeslot_end_time' => $item['timeslot_end_time'],
+					'timeslot_end_time' => $item['time_slot'],
 					'area_id' => $item['area_id'],
 					'quantity' => $item['cart_quantity']
 				], true);
@@ -94,6 +92,7 @@ class CheckoutController extends Controller
 			if ($errors) {
 				return [
 					"operation" => "error",
+					"code" => "0",
 					"message" => $errors,
 					"cart-list" => $items
 				];
@@ -146,7 +145,8 @@ class CheckoutController extends Controller
 		$order_id = Yii::$app->session->get('order_id',111111);
 
 		return [
-			"operation" => "error",
+			"operation" => "success",
+			"code" => "1",
 			"message" => 'Order Successfully Completed',
 			"order_id" => $order_id,
 		];
@@ -201,5 +201,74 @@ class CheckoutController extends Controller
             $cartItemsWithAddress[] = array_merge($item + ['address'=>$addresses]);
         }
         return $cartItemsWithAddress;
+    }
+
+    /**
+     * List delivery area 
+     */
+    public function actionDeliveryArea()
+    {
+    	$cities = \common\models\City::find()->where([
+    		'trash' => 'Default',
+    		'status' => 'Active'
+    	])->with('locations')->all();
+
+        $result = [];
+
+        foreach ($cities as $city) 
+        {
+            $city_name = \common\components\LangFormat::format($city->city_name,$city->city_name_ar);
+            
+            $result[$city_name] = [];
+            
+            foreach ($city->locations as $location) {
+                
+                if ($location->trash != 'Default' || $location->status !='Active') 
+                	continue;
+                
+                $result[$city_name][] = [
+                	'id' => $location->id,
+				    'country_id' => $location->country_id,
+				    'city_id' => $location->city_id,
+				    'location' => $location->location,
+				    'location_ar' => $location->location_ar
+                ];
+            }
+        }
+
+        return $result;
+    }
+
+    public function actionConfirm() 
+    {
+    	$items = CustomerCart::items();
+		
+		foreach ($items as $item) {
+            $menu_items = CustomerCartMenuItem::find()->cartID($item['cart_id'])->all();
+
+			$error = CustomerCart::validate_item([
+    			'item_id' => $item['item_id'],
+                'time_slot' => Yii::$app->session->get('event_time'),
+    			'delivery_date' => Yii::$app->session->get('delivery-date'),
+                'area_id' => Yii::$app->session->get('delivery-location'),
+    			'quantity' => $item['cart_quantity'],
+                'menu_item' => ArrayHelper::map($menu_items, 'menu_item_id', 'quantity')
+    		], true);
+
+    		if($error) {
+    			return [
+    				'operation' => 'error',
+    				'message' => 'Please check cart',
+    			];
+    		}
+		}
+    
+        $arr_booking_id = Booking::checkoutConfirm();
+
+        Yii::$app->session->set('arr_booking_id', $arr_booking_id);
+
+        return [
+        	'operation' => 'success'
+        ]
     }
 }

@@ -36,7 +36,11 @@ class AccountController extends Controller
             'class' => \yii\filters\auth\HttpBearerAuth::className(),
         ];
         // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
-        $behaviors['authenticator']['except'] = ['options'];
+        $behaviors['authenticator']['except'] = [
+            'options',
+            'contact',
+            'vendor-request'
+        ];
 
         return $behaviors;
     }
@@ -117,5 +121,136 @@ class AccountController extends Controller
     private function currentUser(){
         $customer_id = Yii::$app->user->getId();
         return Customer::findOne($customer_id);
+    }
+
+    public function actionContact()
+    {
+        $subject = 'Enquiry from user';
+        $name = Yii::$app->request->getBodyParam('name');
+        $email  = Yii::$app->request->getBodyParam('email');
+        $msg      = Yii::$app->request->getBodyParam('msg');
+
+        $model = new \frontend\models\Contacts();
+        $model->contact_name = $name;
+        $model->contact_email = $email;
+        $model->created_datetime = date('Y/m/d');
+        $model->message = $msg;
+        $model->subject = $subject;
+
+        $body = '<table>
+        <tbody>
+        <tr>
+        <td><b>Username</b></td>
+        <td>' . $name . '</td>
+        </tr>
+        <tr>
+        <td><b>Email-id</b></td>
+        <td>' . $email . '</td>
+        </tr>
+        <tr>
+        <td><b>Message</b></td>
+        <td>' . $msg . '</td>
+        </tr>
+        </tbody>
+        </table>';
+
+        if ($model->validate() && $model->save()) {
+            Yii::$app->mailer->compose([
+                "html" => "customer/contact-inquiry"
+            ], [
+                "message" => $body,
+                "user" => $name
+            ])
+                ->setFrom(Yii::$app->params['supportEmail'])
+                ->setTo(Yii::$app->params['adminEmail'])
+                ->setSubject($subject)
+                ->send();
+
+            return [
+                "operation" => "success",
+                "code" => "1",
+                "message" => "Mail sent successfully",
+            ];
+
+        } else {
+
+            return [
+                "operation" => "error",
+                "code" => "1",
+                "message" => $model->errorDetail(),
+            ];
+        }
+    }
+
+    public function actionVendorRequest() 
+    {        
+        $model = new \common\models\VendorRequest();
+        $model->business = Yii::$app->request->getBodyParam('business');
+        $model->name = Yii::$app->request->getBodyParam('name');
+        $model->mobile = Yii::$app->request->getBodyParam('mobile');
+        $model->email = Yii::$app->request->getBodyParam('email');
+        $model->licence = Yii::$app->request->getBodyParam('licence');
+        $model->description = Yii::$app->request->getBodyParam('description');
+
+        if(!$model->validate())
+        {
+            return [
+                'operation' => 'error',
+                'message' => $model->errorDetail()
+            ];
+        }
+
+        Yii::$app->mailer->compose("admin/vendor-request",
+            [
+                "business" => $model->business,
+                "name" => $model->name,
+                'mobile' => $model->mobile,
+                'email' => $model->email,
+                'license' => $model->licence,
+                'description' => $model->description
+            ])
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->params['SITE_NAME']])
+            ->setTo(Yii::$app->params['adminEmail'])
+            ->setSubject('Vendor Registration Request')
+            ->send();
+
+        return [
+            "operation" => "success",
+            "message" => "Mail sent successfully",
+        ];
+    }
+
+
+    public function actionLogout()
+    {
+        $user = Yii::$app->user->identity;
+        // Email and password are correct, check if his email has been verified
+        // If agent email has been verified, then allow him to log in
+        if($user->customer_activation_status == Customer::ACTIVATION_FALSE){
+            return [
+                "operation" => "error",
+                "errorType" => "email-not-verified",
+                "message" => "Please click the verification link sent to you by email to activate your account",
+            ];
+        }
+        $token = \common\models\CustomerToken::findOne([
+            'customer_id' => $user->getId(),
+        ]);
+
+        $deleted = \common\models\CustomerToken::deleteAll(['customer_id'=>$user->getId(),'token_value'=>$token->token_value]);
+
+        if ($deleted) {
+            return [
+                "operation" => "success",
+                "code" => "1",
+                "message" => 'User logged out successfully'
+            ];
+        } else {
+            return [
+                "operation" => "error",
+                "code" => "0",
+                "message" => 'Error with User logged out. Please try again.'
+            ];
+        }
     }
 }

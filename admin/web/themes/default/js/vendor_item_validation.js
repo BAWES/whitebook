@@ -1,5 +1,6 @@
 var addon_menu_count = $('#addon_menu_count').val();
 var menu_count = $('#menu_count').val();
+var question_count = $('#question_count').val();
 
 var count_q = $('#count_q').val();
 var appImageUrl = $('#appImageUrl').val();
@@ -643,9 +644,10 @@ $(document).delegate('.btn-add-menu', 'click', function(){
 	$html += '	<table class="table table-bordered">';
 	$html += '		<thead>';
 	$html += '			<tr>';
-	$html += '				<th colspan="6" class="heading">Menu Items</th>';
+	$html += '				<th colspan="7" class="heading">Menu Items</th>';
 	$html += '			</tr>';
 	$html += '			<tr>';
+	$html += '				<th>Image</th>';
 	$html += '				<th>Name</th>';
 	$html += '				<th>Name - Ar</th>';
 	$html += '				<th>Price</th>';
@@ -658,7 +660,7 @@ $(document).delegate('.btn-add-menu', 'click', function(){
 	$html += '		</tbody>';
 	$html += '		<tfoot>';
 	$html += '			<tr>';
-	$html += '				<td colspan="6">';
+	$html += '				<td colspan="7">';
 	$html += '					<button type="button" class="btn btn-primary btn-add-menu-item">';
 	$html += '						<i class="fa fa-plus"></i> Add Item';
 	$html += '					</button>';
@@ -676,6 +678,12 @@ $(document).delegate('.btn-add-menu', 'click', function(){
 $(document).delegate('.btn-add-menu-item', 'click', function(){
 	
 	$html  = '<tr>';
+	$html += '	<td>';									
+	$html += '		<a id="thumb-image' + menu_count + '" data-toggle="image" class="thumbnail">';
+	$html += '			<img src="' + $('#no_image').val() + '" />';
+	$html += '		</a>';
+	$html += '		<input type="hidden" name="menu_item['+menu_count+'][image]" value="" id="input-image'+menu_count+'" />';
+	$html += '	</td>';
 	$html += '	<td class="required">';
 	$html += '		<input placeholder="Name" name="menu_item['+menu_count+'][menu_item_name]" value="" class="txt_menu_item_name form-control" /></td>';
 	$html += '	<td class="required">';
@@ -739,9 +747,10 @@ $(document).delegate('.btn-add-addon-menu', 'click', function(){
 	$html += '	<table class="table table-bordered">';
 	$html += '		<thead>';
 	$html += '			<tr>';
-	$html += '				<th colspan="6" class="heading">Menu Items</th>';
+	$html += '				<th colspan="7" class="heading">Menu Items</th>';
 	$html += '			</tr>';
 	$html += '			<tr>';
+	$html += '				<th>Image</th>';
 	$html += '				<th>Name</th>';
 	$html += '				<th>Name - Ar</th>';	
 	$html += '				<th>Price</th>';
@@ -754,7 +763,7 @@ $(document).delegate('.btn-add-addon-menu', 'click', function(){
 	$html += '		</tbody>';
 	$html += '		<tfoot>';
 	$html += '			<tr>';
-	$html += '				<td colspan="6">';
+	$html += '				<td colspan="7">';
 	$html += '					<button type="button" class="btn btn-primary btn-add-addon-menu-item">';
 	$html += '						<i class="fa fa-plus"></i> Add addon item';
 	$html += '					</button>';
@@ -772,6 +781,12 @@ $(document).delegate('.btn-add-addon-menu', 'click', function(){
 $(document).delegate('.btn-add-addon-menu-item', 'click', function(){
 	
 	$html  = '<tr>';
+	$html += '	<td>';									
+	$html += '		<a id="thumb-image' + addon_menu_count + '" data-toggle="image" class="thumbnail">';
+	$html += '			<img src="' + $('#no_image').val() + '" />';
+	$html += '		</a>';
+	$html += '		<input type="hidden" name="addon_menu_item['+addon_menu_count+'][image]" value="" id="input-image'+addon_menu_count+'" />';
+	$html += '	</td>';
 	$html += '	<td>';
 	$html += '		<input placeholder="Name" name="addon_menu_item['+addon_menu_count+'][menu_item_name]" value="" class="txt_menu_item_name form-control" /></td>';
 	$html += '	<td>';
@@ -799,4 +814,87 @@ $(document).delegate('.btn-add-addon-menu-item', 'click', function(){
 	$(this).parents('table').find('tbody').append($html);
 
 	addon_menu_count++;
+});
+
+
+
+$('.btn-add-question').click(function(){
+
+    var html = '';
+    html += '<div class="clearfix question question-1 margin-top-10">';
+    html += '    <div class=" col-md-9">';
+    html += '    	<div class="control-label margin-top-10">Question '+question_count+'</div>';
+    html += '			<input type="text" id="question-<?=$question_count?>" class="form-control" name="VendorDraftItemQuestion['+question_count+'][question]">';
+    html += '    </div>';
+    html += '    <div class="col-md-2">';
+    html += '        <div class="control-label margin-top-10">Required?</div>';
+    html += '    		<select id="required-'+question_count+'" class="form-control" name="VendorDraftItemQuestion['+question_count+'][required]">';
+    html += '        		<option value="Yes"> Yes </option>';
+    html += '        		<option value="No" selected="selected"> No </option>';
+    html += '        	</select>';
+    html += '        </div>';
+    html += '		<div class="col-md-1 margin-top-30">';
+    html += '			<button data-id="question-'+question_count+'" type="button" class="btn btn-danger btn-remove-question"><i class="fa fa-trash-o"></i></button>';
+    html += '		</div>';
+    html += '    </div>';
+
+    $('.tab-content .form-group.questions').append(html);
+    question_count++;
+});
+
+
+$(document).delegate('.btn-remove-question', 'click', function() {
+    $(this).parents('.question').remove();
+});
+
+//Upload menu/ option images 
+
+$(document).delegate('a[id^=\'thumb-image\']', 'click', function() {
+	var node = this;
+
+	$('#form-upload').remove();
+	
+	$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="UploadForm[file]" /></form>');
+	
+	$('#form-upload input')
+		.trigger('click')
+		.on('change', function() {
+			$.ajax({
+				url: $('#image_upload_url').val(),
+				type: 'post',
+				dataType: 'json',
+				data: new FormData($('#form-upload')[0]),
+				cache: false,
+				contentType: false,
+				processData: false,
+				beforeSend: function() {
+					$(node).button('loading');
+				},
+				complete: function() {
+				//	$(node).button('reset');
+				},
+				success: function(json) {
+					$('.text-danger').remove();
+					
+					if (json['error']) {
+						  $html  = '<br />';
+			              $html += '<div class="alert alert-danger">';
+			              $html += '    <button type="button" class="close" data-dismiss="alert">×</button>';
+			              $html +=      json['error'];
+			              $html += '</div>';
+
+			              $('.message_wrapper').append($html);
+					}
+					                            
+					if (json['image']) {
+		    			$(node).parent().find('input').val(json['image']);
+		    			$(node).html('<img src="' + json['image_url'] + '" />');
+		    			return false;
+		    		}
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+			});
+		});		
 });

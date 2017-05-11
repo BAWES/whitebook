@@ -4,14 +4,8 @@ namespace common\models;
 
 use Yii;
 use yii\db\Expression;
-use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
-use common\models\Booking;
-use common\models\VendorItem;
-use common\models\VendorItemMenu;
-use common\models\VendorItemMenuItem;
 use common\components\CFormatter;
-use common\models\VendorWorkingTiming;
 
 /**
  * This is the model class for table "whitebook_customer_cart".
@@ -61,14 +55,14 @@ class CustomerCart extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['item_id', 'area_id', 'time_slot', 'cart_delivery_date', 'cart_customization_price_per_unit', 'cart_quantity', 'cart_datetime_added'], 'required'],
-            [['customer_id', 'item_id', 'area_id', 'cart_quantity', 'created_by','modified_by'], 'integer'],
+            [['item_id', 'cart_customization_price_per_unit', 'cart_quantity', 'cart_datetime_added'], 'required'],
+            [['customer_id', 'item_id', 'cart_quantity', 'created_by','modified_by'], 'integer'],
 
-            [['cart_delivery_date', 'cart_datetime_added', 'created_datetime', 'modified_datetime', 'female_service', 'special_request'], 'safe'],
+            [['cart_datetime_added', 'created_datetime', 'modified_datetime', 'female_service', 'special_request'], 'safe'],
 
             [['cart_customization_price_per_unit'], 'number'],
             ['cart_quantity', 'compare', 'compareValue' => 0, 'operator' => '>'],
-            [['cart_valid', 'trash','time_slot','cart_session_id'], 'string'],
+            [['cart_valid', 'trash', 'cart_session_id'], 'string'],
         ];
     }
 
@@ -81,9 +75,6 @@ class CustomerCart extends \yii\db\ActiveRecord
             'cart_id' => 'Cart ID',
             'customer_id' => Yii::t('frontend', 'Customer'),
             'item_id' => Yii::t('frontend', 'Item'),
-            'area_id' => Yii::t('frontend', 'Area'),
-            'time_slot' => Yii::t('frontend', 'Delivery time'),
-            'cart_delivery_date' => Yii::t('frontend', 'Cart Delivery Date'),
             'cart_customization_price_per_unit' => Yii::t('frontend', 'Cart Customization Price Per Unit'),
             'cart_quantity' => Yii::t('frontend', 'Quantity'),
             'cart_datetime_added' => Yii::t('frontend', 'Cart Datetime Added'),
@@ -112,11 +103,12 @@ class CustomerCart extends \yii\db\ActiveRecord
         return $this->hasOne(Image::className(), ['item_id' => 'item_id']);
     }
 
-    public function validate_item($data, $valid_for_cart_item = false) {
+    public function getItemAnswers()
+    {
+        return $this->hasOne(CustomerCartItemQuestionAnswer::className(), ['cart_id' => 'cart_id']);
+    }
 
-        $data['area_id'] = Yii::$app->session->get('deliver-location');
-        $data['delivery_date'] = Yii::$app->session->get('deliver-date');
-        $data['time_slot'] = Yii::$app->session->get('event_time');
+    public function validate_item($data, $valid_for_cart_item = false) {
 
         $errors = [];
 
@@ -145,10 +137,10 @@ class CustomerCart extends \yii\db\ActiveRecord
             $query = CustomerCart::find();
             $query->where([
                     'item_id' => $data['item_id'],
-                    'cart_delivery_date' => date('Y-m-d', strtotime($data['delivery_date'])),
                     'cart_valid' => 'yes',
                     'trash' => 'Default'
                 ]);
+
             if (Yii::$app->user->getId()) {
                 $query->andWhere(['customer_id'=>Yii::$app->user->getId()]);
             } else {
@@ -156,6 +148,7 @@ class CustomerCart extends \yii\db\ActiveRecord
             }
 
             $in_cart = $query->sum('cart_quantity');
+
         /*
             Check if deliery availabel in selected area 
         */
@@ -208,8 +201,9 @@ class CustomerCart extends \yii\db\ActiveRecord
         }
             
         // to check with old delivery date
+
         if ($data['delivery_date'] && strtotime($data['delivery_date']) < strtotime(date('Y-m-d'))) { 
-            $errors['cart_delivery_date'][] = Yii::t('frontend','Cart item with past delivery date');     
+            $errors['cart_delivery_date'][] = Yii::t('frontend','Invalid delivery date');     
         }
 
         //get timeslot
@@ -236,10 +230,9 @@ class CustomerCart extends \yii\db\ActiveRecord
 
             foreach ($vendor_timeslot as $key => $value) {
 
-                if($value->working_end_time == '00:00:00')
-                {
-                    $value->working_end_time = '24:00:00';   
-                } 
+                if($value->working_end_time == '00:00:00') {
+                    $value->working_end_time = '24:00:00';
+                }
 
                 $start_time = strtotime($value->working_start_time);
                 $end_time = strtotime($value->working_end_time);
@@ -319,6 +312,7 @@ class CustomerCart extends \yii\db\ActiveRecord
             $errors['cart_quantity'][] = [
                 Yii::t('frontend', 'Item is Out of stock')
             ];
+            $errors['cart_quantity_remain']= ($purchased + $in_cart) - $capacity;
 //            $errors['cart_quantity'][] = [
 //                Yii::t('frontend', 'Max item available for selected date is "{no_of_available}".', [
 //                   'no_of_available' => $no_of_available
@@ -331,7 +325,7 @@ class CustomerCart extends \yii\db\ActiveRecord
         if(!$valid_for_cart_item && ($data['quantity'] + $purchased + $in_cart) > $capacity) {
 
             $no_of_available = $capacity - $purchased - $in_cart;
-
+            $errors['cart_quantity_remain'] = $no_of_available;
 //            $errors['cart_quantity'][] = [
 //                Yii::t('frontend', 'Max item available for selected date is "{no_of_available}".', [
 //                   'no_of_available' => $no_of_available
@@ -378,8 +372,8 @@ class CustomerCart extends \yii\db\ActiveRecord
             $unit_price = $item['item_price_per_unit'];
         }
 
-        if ($item['item_minimum_quantity_to_order'] > 0) {
-            $min_quantity_to_order = $item['item_minimum_quantity_to_order'];
+        if ($item['included_quantity'] > 0) {
+            $min_quantity_to_order = $item['included_quantity'];
         } else {
             $min_quantity_to_order = 1;
         }
@@ -452,6 +446,16 @@ class CustomerCart extends \yii\db\ActiveRecord
                         'menu_name' => $menu_name
                     ]
                 );
+            }
+        }
+
+        $vendorQuestion = VendorItemQuestion::findAll(['item_id'=>$data['item_id'], 'required'=>1]);
+        if ($vendorQuestion) {
+            foreach($vendorQuestion as $question) {
+                  if (isset($data['answer'][$question->item_question_id]) && $data['answer'][$question->item_question_id] == "") {
+                    $errors['question-'.$question->item_question_id][] =
+                        Yii::t('frontend', 'Please provide detail of above question');
+                }
             }
         }
 
@@ -564,11 +568,17 @@ class CustomerCart extends \yii\db\ActiveRecord
 
     public static function customerAddress(){
         
-        if(Yii::$app->user->isGuest) {
+        if(Yii::$app->user->isGuest) 
+        {
             return [];
         }
                 
-        $area_id = self::findOne(['customer_id' => Yii::$app->user->getId()])->area_id;
+        $area_id  = Yii::$app->session->get('delivery-location');
+
+        if(!$area_id)
+        {
+            return [];
+        }
 
         $result = CustomerAddress::find()
             ->joinWith('location')
@@ -592,9 +602,243 @@ class CustomerCart extends \yii\db\ActiveRecord
         return Booking::getPurchaseDeliveryAddress($address_id);
     }
 
+    public static function getItemVendor($item_id) {
+        return VendorItem::findOne(['item_id'=>$item_id])->vendor;
+    }
+
+    public function getVendorDetail($vendor_id){
+        return Vendor::findOne($vendor_id);
+    }
+
+
+    public static function validationProductAvailable(
+        $item_id,
+        $area_id,
+        $delivery_date,
+        $time_slot,
+        $menu_item,
+        $quantity
+    ) {
+
+        if(empty($item_id)) {
+            $json['error'] = Yii::t('frontend', 'Item ID require!');
+
+            return $json;
+        }
+
+        if(empty($area_id)) {
+            $json['error'] = Yii::t('frontend', 'Invalid Area ID!');
+
+            return $json;
+        }
+
+        $item = VendorItem::findOne($item_id);
+
+        if (!$item) {
+            $json['error'] = Yii::t('frontend', 'Item not available for sell!');
+
+            return $json;
+        }
+
+        $vendor_id = $item->vendor_id;
+
+        /*
+            Check if deliery availabel in selected area
+        */
+        if (!empty($area_id)) {
+
+            if ($area_id != '') {
+                $deliverlocation = $area_id;
+                if (is_numeric($deliverlocation)) {
+                    $location = $deliverlocation;
+                } else {
+                    $end = strlen($deliverlocation);
+                    $from = strpos($deliverlocation, '_') + 1;
+                    $address_id = substr($deliverlocation, $from, $end);
+                    $location = \common\models\CustomerAddress::findOne($address_id)->area_id;
+                }
+            }
+
+            $delivery_area = CustomerCart::checkLocation($location, $vendor_id);
+
+            if (!$delivery_area)
+            {
+                $json['error'] = Yii::t('frontend', 'Delivery not available on selected area');
+
+                return $json;
+            }
+        }
+
+        //get item type
+
+        $item_type = ItemType::findOne($item->type_id);
+
+        if($item_type) {
+            $item_type_name = $item_type->type_name;
+        } else {
+            $item_type_name = 'Product';
+        }
+
+        $i = -1; //-1 to start with selected date
+
+        while(true)
+        {
+            $i++;
+
+            //check upto 7 days
+
+            if($i == 7)
+                break;
+
+            $timestamp = strtotime($delivery_date) + ($i * 24 * 60 * 60);
+
+            $delivery_date = date('Y-m-d', $timestamp);
+
+            //check timeslot available on selected date
+
+            $timeslot = VendorWorkingTiming::find()
+                ->defaultTiming()
+                ->vendor($item->vendor_id)
+                ->workingDay(date('l', strtotime($delivery_date)))
+                ->one();
+
+            if(!$timeslot)
+            {
+                if($i == 0)
+                    $json['error'] = Yii::t('frontend', 'Delivery timeslot not available');
+
+                continue;
+            }
+
+            if($item->notice_period_type == 'Hour' && !empty($time_slot))
+            {
+                $min_delivery_time = strtotime('+'.$item->item_how_long_to_make.' hours');
+                $delivery_time = strtotime($delivery_date.' '.$time_slot);
+
+                if($delivery_time < $min_delivery_time)
+                {
+                    if($i == 0)
+                        $json['error'] = Yii::t('frontend', 'Item notice period {count} hour(s)!', [
+                            'count' => $item->item_how_long_to_make
+                        ]);
+
+                    continue;
+                }
+            }
+
+            if($item->notice_period_type == 'Day' && !empty($delivery_date))
+            {
+                //compare timestamp of date
+
+                $min_delivery_time = strtotime(date('Y-m-d', strtotime('+'.$item->item_how_long_to_make.' days')));
+                $delivery_time = strtotime($delivery_date);
+
+                if($delivery_time < $min_delivery_time)
+                {
+                    if($i == 0)
+                        $json['error'] = Yii::t('frontend', 'Item notice period {count} day(s)!', [
+                            'count' => $item->item_how_long_to_make
+                        ]);
+
+                    continue;
+                }
+            }
+
+            //-------------- Start Item Capacity -----------------//
+            //default capacity is how many of it they can process per day
+
+            //1) get capacity exception for selected date
+
+            $capacity_exception = \common\models\VendorItemCapacityException::find()
+                ->item($item_id)
+                ->exceptionDate($delivery_date)
+                ->one();
+
+            if ($capacity_exception && $capacity_exception->exception_capacity) {
+                $capacity = $capacity_exception->exception_capacity;
+            } else {
+                $capacity = $item->item_default_capacity;
+            }
+
+            $query = CustomerCart::find()
+                ->item($item_id)
+                ->deliveryDate(date('Y-m-d', strtotime($delivery_date)))
+                ->valid()
+                ->defaultCart();
+
+            $query->user();
+
+            $in_cart = $query->sum('cart_quantity');
+
+            //2) get no of item purchased for selected date
+            $purchased_result = \common\models\Booking::totalPurchasedItem($item_id, $delivery_date);
+
+            if ($purchased_result) {
+                $purchased = $purchased_result['purchased'];
+            } else {
+                $purchased = 0;
+            }
+
+            if (($purchased+$in_cart) >= $capacity)
+            {
+                if($i == 0)
+                    $json['error'] = Yii::t('frontend', 'Item is not available on selected date');
+
+                continue;
+            }
+
+            //-------------- END Item Capacity -----------------//
+
+            //current date should not in blocked date
+            $block_date = \common\models\BlockedDate::find()
+                ->vendor($vendor_id)
+                ->blockedDate($delivery_date)
+                ->one();
+
+            if ($block_date)
+            {
+                if($i == 0)
+                    $json['error'] = Yii::t('frontend', 'Item is not available on selected date');
+
+                continue;
+            }
+
+            //day should not in week off
+            $blocked_days = explode(',', Vendor::findOne($vendor_id)->blocked_days);
+            $day = date('N', strtotime($delivery_date));//7-sunday, 1-monday
+
+            if (in_array($day, $blocked_days))
+            {
+                //return error only for selected date
+
+                if($i == 0)
+                    $json['error'] = Yii::t('frontend', 'Item is not available on selected date');
+
+                continue;
+            }
+
+            // we are lucky! Item available for selected date
+
+            if($i == 0)
+            {
+                $json['date'] = $delivery_date;
+                $json['capacity'] = $capacity;
+                $json['price'] = VendorItem::itemFinalPrice($item_id, $quantity, (isset($menu_item)) ? $menu_item : []);
+            }
+            else //available for other date
+            {
+                $json['error'] = 'Item available on '.date('d-m-Y', strtotime($delivery_date));
+            }
+
+            break;
+        }
+
+        return $json;
+    }
+
     /**
      * @inheritdoc
-     * @return ImageQuery the active query used by this AR class.
+     * @return query\CustomerCartQuery the active query used by this AR class.
      */
     public static function find()
     {

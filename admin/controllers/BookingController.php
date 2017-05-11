@@ -165,10 +165,7 @@ class BookingController extends Controller
      */
     public function actionStatus($token, $action){
 
-        $booking = Booking::findOne([
-            'booking_token' => $token,
-            'booking_status' => '0',
-        ]);
+        $booking = Booking::find()->inactiveBooking()->token($token)->one();
         $_oldBookingStatus = $booking->booking_status;
 
         if ($booking) {

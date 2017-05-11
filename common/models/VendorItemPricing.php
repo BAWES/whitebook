@@ -85,15 +85,6 @@ class VendorItemPricing extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-    * @inheritdoc
-    * @return VendorItemPricingQuery the active query used by this AR class.
-    */
-    public static function find()
-    {
-        return new query\VendorItemPricingQuery(get_called_class());
-    }
-
     public static function loadpricevalues($item_id)
     {
         $model = VendorItemPricing::find()->where(['item_id'=>$item_id])->all();
@@ -126,4 +117,13 @@ class VendorItemPricing extends \yii\db\ActiveRecord
         return (empty($model)) ? 0 : 1;
     }
 
+
+    /**
+     * @inheritdoc
+     * @return query\VendorItemPricingQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\VendorItemPricingQuery(get_called_class());
+    }
 }

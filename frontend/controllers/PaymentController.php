@@ -30,7 +30,7 @@ class PaymentController extends BaseController
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
-        $booking = Booking::findOne(['booking_token' => $token]);
+        $booking = Booking::find()->token($token)->one();
 
         if(!$booking) {
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
@@ -44,11 +44,12 @@ class PaymentController extends BaseController
 
         Yii::$app->session->set('booking_id', $booking->booking_id);
 
-        $cod = PaymentGateway::find()->where(['code' => 'cod', 'status' => 1])->one();
+        $cod = PaymentGateway::find()->active()->getaway('cod')->one();
 
-        $tap = PaymentGateway::find()->where(['code' => 'tap', 'status' => 1])->one();
+        $tap = PaymentGateway::find()->active()->getaway('tap')->one();
 
         return $this->render('index', [
+            'booking' => $booking,
             'items' => $booking->bookingItems,
             'cod' => $cod,
             'tap' => $tap
@@ -59,7 +60,7 @@ class PaymentController extends BaseController
 
         $booking_id = Yii::$app->session->get('booking_id');
 
-        $booking = Booking::findOne(['booking_id' => $booking_id]);
+        $booking = Booking::findOne($booking_id);
 
         if(!$booking) {
             throw new \yii\web\NotFoundHttpException('The requested page does not exist.');

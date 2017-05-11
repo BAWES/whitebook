@@ -176,12 +176,17 @@ class Booking extends \yii\db\ActiveRecord
         return $this->hasMany(BookingItem::className(), ['booking_id' => 'booking_id']);
     }
 
+    public function getBookingItemAnswers()
+    {
+        return $this->hasMany(BookingItemAnswers::className(), ['booking_id' => 'booking_id']);
+    }
+
     public function beforeSave($insert)
     {
         if (!parent::beforeSave($insert)) {
             return false;
         }
-        
+
         if (!$this->booking_status) {
             $this->booking_status = Booking::STATUS_PENDING;
         }
@@ -189,7 +194,7 @@ class Booking extends \yii\db\ActiveRecord
         if (!$this->booking_token) {
             $this->booking_token = $this->generateToken();
         }
-        
+
         return true;
     }
 
@@ -200,21 +205,21 @@ class Booking extends \yii\db\ActiveRecord
         $exists = Booking::findOne([
                 'booking_token' => $unique
             ]); ;
-        
+
         if (!empty($exists)) {
             return $this->generateToken();
         }
-        
+
         return $unique;
     }
 
-    /** 
-     * Add new bookings on checkout confirm 
-     */ 
+    /**
+     * Add new bookings on checkout confirm
+     */
     public function checkoutConfirm()
-    {   
-        $area_id = Yii::$app->session->get('deliver-location');
-        $cart_delivery_date = date('Y-m-d', strtotime(Yii::$app->session->get('deliver-date')));
+    {
+        $area_id = Yii::$app->session->get('delivery-location');
+        $cart_delivery_date = date('Y-m-d', strtotime(Yii::$app->session->get('delivery-date')));
         $time_slot = Yii::$app->session->get('event_time');
 
         //default commision
@@ -223,14 +228,29 @@ class Booking extends \yii\db\ActiveRecord
 
         $items = CustomerCart::items();
 
-        //price chart
+        if(Yii::$app->user->isGuest)
+        {
+            $customer_id = 0;
+            $customer_name = Yii::$app->session->get('customer_name');
+            $customer_lastname = Yii::$app->session->get('customer_lastname');
+            $customer_email = Yii::$app->session->get('customer_email');
+            $customer_mobile = Yii::$app->session->get('customer_mobile');
+        }
+        else
+        {
+            $customer = Customer::findOne(Yii::$app->user->getId());
 
-        $price_chart = array();
+            $customer_id = $customer->customer_id;
+            $customer_name = $customer->customer_name;
+            $customer_lastname = $customer->customer_last_name;
+            $customer_email = $customer->customer_email;
+            $customer_mobile = $customer->customer_mobile;
+        }
 
         //check if quantity fall in price chart
-        $BasePrice = '';
+
         foreach ($items as $key => $item) {
-            $BasePrice = false;
+
             $price_chart[$item['item_id']] = [];
 
             $price = VendorItemPricing::find()
@@ -246,64 +266,45 @@ class Booking extends \yii\db\ActiveRecord
                 $price_chart[$item['item_id']]['unit_price'] = $item['item_price_per_unit'];
             }
 
-            $price_chart[$item['item_id']]['base_price'] = ($item['item']['item_base_price']) ? $item['item']['item_base_price'] : 0.0;
-
-            $menu_items = CustomerCartMenuItem::find()
-                ->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
-                ->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
-                ->where(['cart_id' => $item['cart_id']])
-                ->asArray()
-                ->all();
-
-            $price_chart[$item['item_id']]['menu_price'] = 0;
-
-            foreach ($menu_items as $key => $menu_item) {
-                $price_chart[$item['item_id']]['menu_price'] += $menu_item['quantity'] * $menu_item['price'];
-            }
-        }
-
-        if(Yii::$app->user->isGuest) 
-        {
-            $customer_id = 0;
-            $customer_name = Yii::$app->session->get('customer_name');
-            $customer_lastname = Yii::$app->session->get('customer_lastname');
-            $customer_email = Yii::$app->session->get('customer_email'); 
-            $customer_mobile = Yii::$app->session->get('customer_mobile'); 
-        }
-        else
-        {   
-            $customer = Customer::findOne(Yii::$app->user->getId());
-
-            $customer_id = $customer->customer_id;
-            $customer_name = $customer->customer_name;
-            $customer_lastname = $customer->customer_last_name;
-            $customer_email = $customer->customer_email;
-            $customer_mobile = $customer->customer_mobile;
+            $price_chart[$item['item_id']]['base_price'] = $item['item']['item_base_price'];
         }
 
         //address
-        
+
         $address_id = Yii::$app->session->get('address_id');
-        
+
         $address = Booking::getPurchaseDeliveryAddress($address_id);
-    
+
         $arr_booking_id = [];
-        
+
         $arr_booking = [];
 
         foreach ($items as $item) {
 
-            if ($item['item']['item_minimum_quantity_to_order'] > 0) {
-                $min_quantity_to_order = $item['item']['item_minimum_quantity_to_order'];
-            } else {
-                $min_quantity_to_order = 1;
-            }
+            $menu_items = CustomerCartMenuItem::find()
+                ->select([
+                    '{{%vendor_item_menu}}.menu_id',
+                    '{{%vendor_item_menu}}.menu_name',
+                    '{{%vendor_item_menu}}.menu_name_ar',
+                    '{{%vendor_item_menu}}.menu_type',
+                    '{{%vendor_item_menu_item}}.menu_item_id',
+                    '{{%vendor_item_menu_item}}.menu_item_name',
+                    '{{%vendor_item_menu_item}}.menu_item_name_ar',
+                    '{{%vendor_item_menu_item}}.price',
+                    '{{%customer_cart_menu_item}}.quantity'
+                ])
+                ->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
+                ->innerJoin('{{%vendor_item_menu}}', '{{%vendor_item_menu}}.menu_id = {{%customer_cart_menu_item}}.menu_id')
+                ->where(['cart_id' => $item['cart_id']])
+                ->asArray()
+                ->all();
 
-            $actual_item_quantity = $item['cart_quantity'] - $min_quantity_to_order;
+            $total = VendorItem::itemFinalPrice(
+                $item['item_id'],
+                $item['cart_quantity'],
+                $menu_items
+            );
 
-
-            $total = $price_chart[$item['item_id']]['base_price']; // base price change
-            $total += ($price_chart[$item['item_id']]['unit_price'] * $actual_item_quantity) + $price_chart[$item['item_id']]['menu_price'];
             $booking = new Booking;
             $booking->vendor_id = $item['vendor_id'];
             $booking->customer_id = $customer_id;
@@ -324,38 +325,22 @@ class Booking extends \yii\db\ActiveRecord
             $booking_item->timeslot = $time_slot;
             $booking_item->area_id = $area_id;
             $booking_item->delivery_date = $cart_delivery_date;
-            
+
             $booking_item->address_id = $address_id;
             $booking_item->delivery_address = $address;
-            
+
             $booking_item->item_base_price = ($price_chart[$item['item_id']]['base_price']) ? $price_chart[$item['item_id']]['base_price'] : 0.000;
+
             $booking_item->price = $price_chart[$item['item_id']]['unit_price'];
             $booking_item->quantity = $item['cart_quantity'];
             $booking_item->total = $total;
-            //$booking_item->total = ($price_chart[$item['item_id']]['unit_price'] * $item['cart_quantity']) + $price_chart[$item['item_id']]['menu_price'];
+
             $booking_item->female_service = $item['female_service'];
             $booking_item->special_request = $item['special_request'];
-            
+
             $booking_item->save(false);
 
             //save menu item
-            $menu_items = CustomerCartMenuItem::find()
-                ->select([
-                    '{{%vendor_item_menu}}.menu_id',
-                    '{{%vendor_item_menu}}.menu_name',
-                    '{{%vendor_item_menu}}.menu_name_ar',
-                    '{{%vendor_item_menu}}.menu_type',
-                    '{{%vendor_item_menu_item}}.menu_item_id',
-                    '{{%vendor_item_menu_item}}.menu_item_name',
-                    '{{%vendor_item_menu_item}}.menu_item_name_ar',
-                    '{{%vendor_item_menu_item}}.price',
-                    '{{%customer_cart_menu_item}}.quantity'
-                ])
-                ->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
-                ->innerJoin('{{%vendor_item_menu}}', '{{%vendor_item_menu}}.menu_id = {{%customer_cart_menu_item}}.menu_id')
-                ->where(['cart_id' => $item['cart_id']])
-                ->asArray()
-                ->all();
 
             foreach ($menu_items as $key => $menu_item) {
                 $bim = new BookingItemMenu;
@@ -365,24 +350,24 @@ class Booking extends \yii\db\ActiveRecord
                 $bim->save();
             }
 
-            //delivery charge 
+            //delivery charge
 
-            $delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
+            $delivery_area = CustomerCart::geLocation($area_id, $item['vendor_id']);
 
             $delivery_charge = $delivery_area->delivery_price;
 
-            //total 
+            //total
 
             $total = $booking_item->total + $delivery_charge;
 
-            //commission percentage 
+            //commission percentage
 
             $vendor = Vendor::findOne($booking->vendor_id);
 
             if (is_null($vendor->commision) || $vendor->commision == '') {
-                $commission_percentage = $vendor->commision;
-            } else {
                 $commission_percentage = $default_commision;
+            } else {
+                $commission_percentage = $vendor->commision;
             }
 
             $commission_total = $total * ($commission_percentage / 100);
@@ -398,6 +383,8 @@ class Booking extends \yii\db\ActiveRecord
             $arr_booking[] = $booking;
 
             $arr_booking_id[] = $booking->booking_id;
+
+            BookingItemAnswers::saveItemAnswers($item['cart_id'],$booking->booking_id); //Saving cart item answer
         }
 
         Booking::sendNewBookingEmails($arr_booking);
@@ -409,37 +396,40 @@ class Booking extends \yii\db\ActiveRecord
     {
         $model = CustomerAddress::findOne($address_id);
 
-        if(!$model) 
+        if(!$model)
             return null;
 
         $address = '';
 
         if($model->location) {
-            $address .= $model->location->location.'<br />';    
+            $address .= '<strong>Area:</strong> '.$model->location->location.'<br />';
+        }
+
+        if($model->location) {
+            $address .= $model->location->location.'<br />';
         }
 
         $address_responses = CustomerAddressResponse::find()
             ->where(['address_id' => $address_id])
             ->all();
-
         foreach ($address_responses as $response) {
             if($response->response_text) {
-                $address .= $response->response_text.'<br />';     
-            }           
+                $address .= '<strong>'.$response->addressQuestion->question. ':</strong> ' .$response->response_text.'<br />';
+            }
         }
 
         if($model->address_data) {
-            $address .= $model->address_data.'<br />';
+            $address .= '<strong>Address Data: </strong>'.$model->address_data.'<br />';
         }
-        
+
         /*if($model->city) {
-            $address .= $model->city->city_name.'<br />';
-        } */       
+            $address .= '<strong>City:</strong> '.$model->city->city_name.'<br />';
+        }*/
 
         return $address;
     }
 
-    public function sendNewBookingEmails($arr_booking) 
+    public function sendNewBookingEmails($arr_booking)
     {
         //send to customer
 
@@ -454,7 +444,7 @@ class Booking extends \yii\db\ActiveRecord
         ->setSubject('New Booking #'.$arr_booking[0]->booking_id)
         ->send();
 
-        
+
         //send to admin
 
         Yii::$app->mailer->compose([
@@ -467,22 +457,22 @@ class Booking extends \yii\db\ActiveRecord
         ->setTo(Yii::$app->params['adminEmail'])
         ->setSubject('New Booking #'.$arr_booking[0]->booking_id)
         ->send();
-        
-        //send to vendor 
+
+        //send to vendor
 
         $arr_vendor_booking = [];
 
-        foreach ($arr_booking as $key => $value) 
-        {   
-            if(!isset($arr_vendor_booking[$value->vendor_id])) 
+        foreach ($arr_booking as $key => $value)
+        {
+            if(!isset($arr_vendor_booking[$value->vendor_id]))
                 $arr_vendor_booking[$value->vendor_id] = [];
 
             $arr_vendor_booking[$value->vendor_id][] = $value;
         }
 
-        foreach ($arr_vendor_booking as $key => $arr_booking) 
-        {   
-            //get all vendor alert email 
+        foreach ($arr_vendor_booking as $key => $arr_booking)
+        {
+            //get all vendor alert email
 
             if (Vendor::vendorManageBy($arr_booking[0]->vendor_id) == 'vendor') {
                 $emails = VendorOrderAlertEmails::find()
@@ -507,9 +497,9 @@ class Booking extends \yii\db\ActiveRecord
         }
     }
 
-    public static function approved($booking) 
+    public static function approved($booking)
     {
-        //set expiry 
+        //set expiry
         $booking->booking_status = Booking::STATUS_ACCEPTED;
         $booking->expired_on = date('Y-m-d H:i:s',strtotime('+2 day')); // set 48 hour expire date
         $booking->save(false);
@@ -557,7 +547,7 @@ class Booking extends \yii\db\ActiveRecord
                 ->send();
         }
 
-        //send to admin 
+        //send to admin
 
         Yii::$app->mailer->htmlLayout = 'layouts/empty';
 
@@ -694,11 +684,11 @@ class Booking extends \yii\db\ActiveRecord
     }
 
     public static function getReportQuery($data = array())
-    {    
+    {
         $query = self::find()
           ->select('
-              MIN(created_datetime) AS date_start, 
-              MAX(created_datetime) AS date_end, 
+              MIN(created_datetime) AS date_start,
+              MAX(created_datetime) AS date_end,
               COUNT(*) AS `count`,
               SUM(commission_total) AS `commission`,
           ')
@@ -706,7 +696,7 @@ class Booking extends \yii\db\ActiveRecord
 
         if (!empty($data['vendor_id'])) {
           $query->andWhere('vendor_id = ' . $data['vendor_id']);
-        } 
+        }
 
         if (!empty($data['date_start'])) {
           $query->andWhere("DATE(created_datetime) >= '" . $data['date_start'] . "'");
@@ -765,7 +755,7 @@ class Booking extends \yii\db\ActiveRecord
 
         Yii::$app->mailer->htmlLayout = 'layouts/empty';
 
-        //get all vendor alert email 
+        //get all vendor alert email
 
         if (Vendor::vendorManageBy($booking->vendor_id) == 'vendor') {
             $emails = VendorOrderAlertEmails::find()
@@ -802,7 +792,7 @@ class Booking extends \yii\db\ActiveRecord
         return Yii::$app->db->createCommand($q)->queryOne();
     }
 
-    public static function addPayment($booking) 
+    public static function addPayment($booking)
     {
         $payment = new VendorPayment;
         $payment->vendor_id = $booking->vendor_id;
@@ -810,19 +800,33 @@ class Booking extends \yii\db\ActiveRecord
         $payment->type = VendorPayment::TYPE_ORDER;
         $payment->amount = $booking->total_vendor;
         $payment->description = 'Booking #'.$booking->booking_id.' got paid.';
-        
+
         if(!$payment->save())
         {
             print_r($payment->getErrors());
         }
     }
 
+    public static function getDeliveryCharges($address_id,$vendor_id,$area_id = false) {
+        if ($area_id) {
+            $locationData = VendorLocation::find()->area($area_id)->vendor($vendor_id)->one();
+        } else {
+            $locationData = VendorLocation::find()->area(Yii::$app->session->get('delivery-location'))->vendor($vendor_id)->one();
+        }
+
+        if ($locationData) {
+            return $locationData->delivery_price;
+        } else {
+            return 0.0;
+        }
+    }
+
     /**
      * @inheritdoc
-     * @return BookingQuery the active query used by this AR class.
+     * @return query\BookingQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new \common\models\query\BookingQuery(get_called_class());
+        return new query\BookingQuery(get_called_class());
     }
 }

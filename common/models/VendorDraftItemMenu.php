@@ -39,7 +39,7 @@ class VendorDraftItemMenu extends \yii\db\ActiveRecord
             [['menu_id', 'item_id', 'min_quantity', 'max_quantity', 'sort_order'], 'integer'],
             [['menu_type'], 'string'],            
             ['max_quantity', 'compare', 'compareAttribute' => 'min_quantity', 'operator' => '>='],
-            [['menu_name', 'menu_name_ar', 'quantity_type'], 'required'],
+            [['menu_name', 'menu_name_ar'], 'required'],
             [['menu_name', 'menu_name_ar', 'quantity_type'], 'string', 'max' => 100],
             [['item_id'], 'exist', 'skipOnError' => true, 'targetClass' => VendorDraftItem::className(), 'targetAttribute' => ['item_id' => 'item_id']],
         ];
@@ -77,5 +77,14 @@ class VendorDraftItemMenu extends \yii\db\ActiveRecord
     public function getVendorDraftItemMenuItems()
     {
         return $this->hasMany(VendorDraftItemMenuItem::className(), ['draft_menu_id' => 'draft_menu_id']);
+    }
+
+    /**
+     * @inheritdoc
+     * @return query\VendorDraftItemMenuQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\VendorDraftItemMenuQuery(get_called_class());
     }
 }

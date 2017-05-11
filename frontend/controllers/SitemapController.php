@@ -16,25 +16,25 @@ class SitemapController extends Controller
 {
     public function actionIndex()
     {
-    	//category 
-    	$categories = Category::find()
-            ->where(['trash' => 'Default'])
-            ->andWhere(['!=', 'slug', ''])
+        //category
+        $categories = Category::find()
+            ->defaultCategories()
+            ->nonEmptySlug()
             ->all();
 
-    	//items  
-    	$items = VendorItem::findAll([
-    			'item_approved' => 'Yes',
-    			'item_status' => 'Active',
-    			'trash' => 'Default'
-    		]);
+        //items
+        $items = VendorItem::find()
+            ->defaultItems()
+            ->active()
+            ->approved()
+            ->all();
 
-    	//vendor 
-    	$vendors = Vendor::findAll([
-    			'vendor_status' => 'Active',
-    			'approve_status' => 'Yes',
-    			'trash' => 'Default'
-    		]);
+        //vendor
+        $vendors = Vendor::find()
+            ->defaultVendor()
+            ->approved()
+            ->active()
+            ->all();
 
         header("Content-type: text/xml");
 

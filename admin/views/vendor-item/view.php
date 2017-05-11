@@ -39,7 +39,8 @@ $this->params['breadcrumbs'][] = $model->item_name;
         <li><a href="#2" data-toggle="tab">Priority Log</a></li>
         <li><a href="#3" data-toggle="tab">Options</a></li>
         <li><a href="#4" data-toggle="tab">Addons</a></li>
-        <li><a href="#5" data-toggle="tab">Gallery</a></li>
+        <li><a href="#5" data-toggle="tab">Question</a></li>
+        <li><a href="#6" data-toggle="tab">Gallery</a></li>
     </ul>
     <div class="tab-content">
 
@@ -129,6 +130,7 @@ $this->params['breadcrumbs'][] = $model->item_name;
                         ],
 
                         'item_how_long_to_make',
+                        'included_quantity',
                         'item_minimum_quantity_to_order',
                         'item_approved',
                         [
@@ -326,6 +328,23 @@ $this->params['breadcrumbs'][] = $model->item_name;
         </div>
 
         <div class="tab-pane" id="5">
+            <table class="table table-striped table-bordered detail-view">
+                <tbody>
+                <?php if ($questions) {
+                    $i=1;
+                    foreach ($questions as $question) { ?>
+                        <tr><th>Question <?=$i?></th><td><?=$question->question?></td></tr>
+                        <?php
+                        $i++;
+                    }
+                } else { ?>
+                    <tr><td colspan="2" align="center">No Question Found</td></tr>
+                <?php } ?>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-pane" id="6">
             <ul class="row">
                 <?php foreach ($imagedata as $image) {
                     $alias = ($image->module_type == 'vendor_item') ? Yii::getAlias('@vendor_item_images_210/') : Yii::getAlias('@sales_guide_images/')

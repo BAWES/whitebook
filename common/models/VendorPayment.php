@@ -162,4 +162,14 @@ class VendorPayment extends \yii\db\ActiveRecord
             return false;
         }
     }
+
+
+    /**
+     * @inheritdoc
+     * @return query\VendorPaymentQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\VendorPaymentQuery(get_called_class());
+    }
 }

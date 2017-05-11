@@ -33,28 +33,17 @@ class SiteController extends BaseController
 
     public function actionIndex()
     {
+        $this->layout = 'home';
+
         \Yii::$app->view->title = Yii::$app->params['SITE_NAME'].' | Home';
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => Yii::$app->params['META_DESCRIPTION']]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
-        $website_model = new Website();
-        $featuremodel = new FeatureGroupItem();
-        $product_list = $featuremodel->get_featured_product_id();
-        
-        $banner = $website_model->get_banner_details();
-        
-        $featured_product = array();
-        
-        if (!Yii::$app->user->isGuest) {
-            $featured_product = VendorItem::get_featured_product();
-        }
-        
-        return $this->render('index', [
-            'home_slider_alias' => Siteinfo::info('home_slider_alias'),
-            'featured_product' => $featured_product,
-            'banner' => $banner,
-            'key' => '0',
-        ]);
+        $themes = Themes::loadthemenames();
+
+        return $this->render('home', [
+                'themes' => $themes
+            ]);
     }
 
     /*
@@ -244,13 +233,13 @@ class SiteController extends BaseController
         
         $loadvendorid = \common\models\VendorItem::find()
             ->select(['vendor_id'])
-            ->byCategoryID($data['cat_id'])
+            ->category($data['cat_id'])
             ->asArray()
             ->all();
         
         $loadvendor = \common\models\Vendor::find()
             ->select(['DISTINCT(vendor_id)','vendor_name'])
-            ->byVendorID($loadvendorid)
+            ->vendorIDs($loadvendorid)
             ->asArray()
             ->all();
         
@@ -269,7 +258,7 @@ class SiteController extends BaseController
 
         $themes = \common\models\VendorItemThemes::find()
             ->select(['GROUP_CONCAT(DISTINCT(theme_id)) as theme_id'])
-            ->byVendorID($data['v_id'])
+            ->vendor($data['v_id'])
             ->asArray()
             ->all();
         
@@ -277,7 +266,7 @@ class SiteController extends BaseController
         
         $loadthemes = Themes::find()
             ->select('theme_id, theme_name')
-            ->byThemeID($loadtheme_ids[0]['theme_id'])
+            ->theme($loadtheme_ids[0]['theme_id'])
             ->asArray()
             ->all();
 
@@ -301,18 +290,16 @@ class SiteController extends BaseController
             ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.item_id = {{%wishlist}}.item_id')
             ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
             ->leftJoin('{{%vendor_item_theme}}', '{{%vendor_item_theme}}.item_id = {{%vendor_item}}.item_id')
-            ->Where([
-                '{{%wishlist}}.wish_status' => 1,
-                '{{%wishlist}}.customer_id' => $customer_id,
-                '{{%vendor_item}}.trash' => 'Default'
-            ]);
+            ->active()
+            ->defaultWishlist()
+            ->customer($customer_id);
 
         if (!empty($data['v_id'])) {
-            $wishlist_query->andWhere(['{{%vendor_item}}.vendor_id' => $data['v_id']]);
+            $wishlist_query->vendor($data['v_id']);
         }
     
         if (!empty($data['t_id'])) {
-            $wishlist_query->andWhere('FIND_IN_SET ("'.$data['t_id'].'", {{%vendor_item_theme}}.theme_id)');
+            $wishlist_query->theme($data['t_id']);
         }
 
         $wishlist = $wishlist_query
@@ -373,7 +360,7 @@ class SiteController extends BaseController
 
         $area = Location::find()
             ->select('id, location, location_ar')
-            ->byCityID($data['city_id'])
+            ->city($data['city_id'])
             ->all();
 
         $options = '<option value="">'.Yii::t('frontend', 'Select').'</option>';
@@ -401,7 +388,7 @@ class SiteController extends BaseController
 
         $city = City::find()
             ->select('city_id, city_name, city_name_ar')
-            ->byCountryID($data['country_id'])
+            ->country($data['country_id'])
             ->all();
         
         $options = '<option value="">'.Yii::t('frontend', 'Select').'</option>';

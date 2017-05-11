@@ -44,6 +44,8 @@ use common\models\VendorItemToPackage;
 use common\models\Package;
 use common\models\VendorItemMenu;
 use common\models\VendorItemMenuItem;
+use common\models\VendorDraftItemQuestion;
+use common\models\UploadForm;
 
 /**
 * VendoritemController implements the CRUD actions for VendorItem model.
@@ -112,41 +114,28 @@ class VendorItemController extends Controller
     {
         $dataProvider1 = PriorityItem::find()
             ->select(['priority_level','priority_start_date','priority_end_date'])
-            ->where(new \yii\db\Expression('FIND_IN_SET(:item_id, item_id)'))
-            ->addParams([':item_id' => $id])
+            ->item($id)
             ->all();
 
-        $model_question = VendorItemQuestion::find()
-            ->where(['item_id' => $id, 'answer_id' => null, 'question_answer_type' => 'selection'])
-            ->orwhere(['item_id' => $id, 'question_answer_type' => 'text', 'answer_id' => null])
-            ->orwhere(['item_id' => $id, 'question_answer_type' => 'image', 'answer_id' => null])
-            ->asArray()
-            ->all();
-
+        $model_question = VendorItemQuestion::findAll(['item_id' => $id]);
         $imagedata = Image::find()
-            ->where('item_id = :id', [':id' => $id])
+            ->item($id)
             ->orderby(['vendorimage_sort_order' => SORT_ASC])
             ->all();
 
         $categories = VendorItemToCategory::find()
             ->with('category')
-            ->Where(['item_id' => $id])
+            ->item($id)
             ->all();
 
-        $arr_menu = VendorItemMenu::findAll([
-            'item_id' => $id,
-            'menu_type' => 'options'
-        ]);
+        $arr_menu = VendorItemMenu::find()->item($id)->menu('options')->all();
+        $arr_addon_menu = VendorItemMenu::find()->item($id)->menu('addons')->all();
 
-        $arr_addon_menu = VendorItemMenu::findAll([
-            'item_id' => $id,
-            'menu_type' => 'addons'
-        ]);
 
         return $this->render('view', [
             'model' => $this->findModel($id), 
             'dataProvider1' => $dataProvider1, 
-            'model_question' => $model_question, 
+            'questions' => $model_question,
             'imagedata' => $imagedata,
             'categories' => $categories,
             'arr_menu' => $arr_menu,
@@ -191,19 +180,15 @@ class VendorItemController extends Controller
 
         //main
         $main_categories = Category::find()
-            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-            ->where([
-                '{{%category}}.trash' => 'Default',
-                '{{%category_path}}.level' => 0
-            ])
+            ->joinCategoryPath()
+            ->defaultCategories()
+            ->topLevel()
             ->all();
 
         $sub_categories = Category::find()
-            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-            ->where([
-                '{{%category}}.trash' => 'Default',
-                '{{%category_path}}.level' => 1
-            ])
+            ->joinCategoryPath()
+            ->defaultCategories()
+            ->categoryPathLevel(1)
             ->all();
 
         $vendors = ArrayHelper::map(Vendor::findAll(['trash' => 'Default']), 'vendor_id', 'vendor_name');
@@ -267,6 +252,9 @@ class VendorItemController extends Controller
                 $vic->save();
             }
 
+            //clear draft 
+            VendorDraftItem::clearDraft($model->item_id);
+
             $complete = Yii::$app->request->post('complete');
 
             if($complete) {
@@ -284,31 +272,25 @@ class VendorItemController extends Controller
 
         //main
         $main_categories = Category::find()
-            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-            ->where([
-                '{{%category}}.trash' => 'Default',
-                '{{%category_path}}.level' => 0
-            ])
+            ->joinCategoryPath()
+            ->defaultCategories()
+            ->categoryPathLevel(0)
             ->all();
 
         $sub_categories = Category::find()
-            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-            ->where([
-                '{{%category}}.trash' => 'Default',
-                '{{%category_path}}.level' => 1
-            ])
+            ->joinCategoryPath()
+            ->defaultCategories()
+            ->categoryPathLevel(1)
             ->all();
 
         //child 
         $item_child_categories = VendorItemToCategory::find()
             ->select('{{%category}}.category_name, {{%category}}.category_id')
-            ->leftJoin('{{%category}}', '{{%category}}.category_id = {{%vendor_item_to_category}}.category_id')
-            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-            ->where([
-                '{{%category}}.trash' => 'Default',
-                '{{%category_path}}.level' => 2,
-                '{{%vendor_item_to_category}}.item_id' => $model->item_id
-            ])
+            ->joinCategory()
+            ->joinCategoryPath()
+            ->defaultCategory()
+            ->categoryPathLevel(2)
+            ->item($model->item_id)
             ->groupBy('{{%vendor_item_to_category}}.category_id')
             ->all();
 
@@ -336,7 +318,10 @@ class VendorItemController extends Controller
         $model->scenario = 'ItemDescription';
 
         if($model->load(Yii::$app->request->post()) && $model->save()) {
-                    
+
+            //clear draft 
+            VendorDraftItem::clearDraft($model->item_id);
+  
             $complete = Yii::$app->request->post('complete');
 
             if($complete) {
@@ -368,6 +353,9 @@ class VendorItemController extends Controller
         $model->scenario = 'ItemPrice';
 
         if($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            //clear draft 
+            VendorDraftItem::clearDraft($model->item_id);
 
             //remove old price chart
             VendorItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
@@ -422,13 +410,13 @@ class VendorItemController extends Controller
         $model->scenario = 'MenuItems';
 
         if($model->load(Yii::$app->request->post()) && $model->save()) 
-        {
+        {            
+            //clear draft 
+            VendorDraftItem::clearDraft($model->item_id);
+
             //remove old menu and menu items 
-            
-            $old_menues = VendorItemMenu::findALL([
-                'item_id' => $model->item_id,
-                'menu_type' => 'options'
-            ]);
+
+            $old_menues = VendorItemMenu::find()->item($id)->menu('options')->all();
 
             foreach ($old_menues as $key => $value) {
                 VendorItemMenuItem::deleteALL(['menu_id' => $value->menu_id]);
@@ -500,10 +488,7 @@ class VendorItemController extends Controller
             return $this->redirect(['vendor-item/addon-menu-items', 'id' => $id,'_u'=>$_u]);
         }
 
-        $arr_menu = VendorItemMenu::findAll([
-            'item_id' => $id,
-            'menu_type' => 'options'
-        ]);
+        $arr_menu = VendorItemMenu::find()->item($id)->menu('options')->all();
 
         return $this->render('steps/menu-items', [
             'model' => $model,
@@ -521,13 +506,13 @@ class VendorItemController extends Controller
         $model = $this->findModel($id);
 
         if(Yii::$app->request->isPost) 
-        {           
+        {                     
+            //clear draft 
+            VendorDraftItem::clearDraft($model->item_id);
+  
             //remove old menu and menu items 
 
-            $old_menues = VendorItemMenu::findALL([
-                'item_id' => $model->item_id,
-                'menu_type' => 'addons'
-            ]);
+            $old_menues = VendorItemMenu::find()->item($id)->menu('addons')->all();
 
             foreach ($old_menues as $key => $value) {
                 VendorItemMenuItem::deleteALL(['menu_id' => $value->menu_id]);
@@ -599,10 +584,7 @@ class VendorItemController extends Controller
             return $this->redirect(['vendor-item/item-approval', 'id' => $id,'_u'=>$_u]);
         }
 
-        $arr_addon_menu = VendorItemMenu::findAll([
-            'item_id' => $id,
-            'menu_type' => 'addons'
-        ]);
+        $arr_addon_menu = VendorItemMenu::find()->item($id)->menu('addons')->all();
 
         return $this->render('steps/addon-menu-items', [
             'model' => $model,
@@ -622,6 +604,9 @@ class VendorItemController extends Controller
         $model->scenario = 'ItemApproval';
 
         if($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            //clear draft 
+            VendorDraftItem::clearDraft($model->item_id);
 
             $complete = Yii::$app->request->post('complete');
 
@@ -652,7 +637,10 @@ class VendorItemController extends Controller
         $model = $this->findModel($id);
 
         if(Yii::$app->request->isPost) 
-        {
+        {            
+            //clear draft 
+            VendorDraftItem::clearDraft($model->item_id);
+
             $images = Yii::$app->request->post('images');
 
             if(!$images) {
@@ -726,7 +714,11 @@ class VendorItemController extends Controller
     {
         $model = $this->findModel($id);
 
-        if(Yii::$app->request->isPost) {
+        if(Yii::$app->request->isPost) 
+        {            
+            //clear draft 
+            VendorDraftItem::clearDraft($model->item_id);
+
             $vendor_item = Yii::$app->request->post('VendorItem');
             // save themes
 
@@ -848,7 +840,8 @@ class VendorItemController extends Controller
         $groups = FeatureGroup::loadfeaturegroup();
 
         $themes = Themes::find()
-                    ->where(['theme_status' => 'Active', 'trash' => 'Default'])
+                    ->active()
+                    ->defaultCategory()
                     ->orderBy('theme_name')
                     ->all();
 
@@ -879,12 +872,18 @@ class VendorItemController extends Controller
         VendorItemPricing::deleteAll(['item_id' => $id]);
         VendorItemThemes::deleteAll(['item_id' => $id]);
         VendorItemToCategory::deleteAll(['item_id' => $id]);
+        VendorItemQuestion::deleteAll(['item_id' => $id]);
         CustomerCart::deleteAll(['item_id' => $id]);
         PriorityItem::deleteAll(['item_id' => $id]);
         EventItemlink::deleteAll(['item_id' => $id]);
         FeatureGroupItem::deleteAll(['item_id' => $id]);
         VendorDraftItem::deleteAll(['item_id' => $id]);
+        
+        //clear draft 
+        VendorDraftItem::clearDraft($model->item_id);
+
         $model->delete();
+        
         Yii::$app->session->setFlash('success', 'Vendor item deleted successfully!');
         return $this->redirect(['index']);
     }
@@ -1105,7 +1104,8 @@ class VendorItemController extends Controller
             }
         }
     }
-    
+
+    // todo remove method if not in use
     public function actionGuideimage()
     {
         $base = Yii::$app->basePath;
@@ -1147,6 +1147,7 @@ class VendorItemController extends Controller
         }
     }
 
+    // todo remove method if not in use
     public function actionRenderquestion()
     {
         if (Yii::$app->request->isAjax) {
@@ -1163,6 +1164,7 @@ class VendorItemController extends Controller
         }
     }
 
+    // todo remove method if not in use
     public function actionViewrenderquestion()
     {
         if (Yii::$app->request->isAjax) {
@@ -1179,6 +1181,7 @@ class VendorItemController extends Controller
         }
     }
 
+    // todo remove method if not in use
     public function actionRenderanswer()
     {
         if (Yii::$app->request->isAjax) {
@@ -1237,6 +1240,7 @@ class VendorItemController extends Controller
         return $this->render('gallery');
     }
 
+    // todo remove method if not in use
     public function actionSalesguideimage($id = '')
     {
         $base = Yii::$app->basePath;
@@ -1293,7 +1297,8 @@ class VendorItemController extends Controller
     }
 
         // Delete item type sales image
-    
+
+    // todo remove method if not in use
     public function actionDeletesalesimage()
     {
         $model1 = new Image();
@@ -1310,7 +1315,7 @@ class VendorItemController extends Controller
         }
     }
         // Delete item image
-
+    // todo remove method if not in use
     public function actionDeleteitemimage()
     {
         if (Yii::$app->request->isAjax) {
@@ -1327,7 +1332,7 @@ class VendorItemController extends Controller
             }
         }
     }
-
+    // todo remove method if not in use
     // Delete item type service or rental image
     public function actionDeleteserviceguideimage()
     {
@@ -1345,6 +1350,7 @@ class VendorItemController extends Controller
         }
     }
 
+    // todo remove method if not in use
     public function actionItemnamecheck()
     {
         if (!Yii::$app->request->isAjax) {
@@ -1418,6 +1424,73 @@ class VendorItemController extends Controller
                 'errors' => $model->getErrors()
             ];
         }        
+    }
+
+    /**
+     * upload croped image 
+     * @param base64 image data 
+     * @return json containing image url and image name 
+     */
+    public function actionUploadMenuImage() {
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $temp_folder = sys_get_temp_dir().'/'; 
+
+        // Set max execution time 3 minutes.
+        set_time_limit(3 * 60); 
+
+        $model = new UploadForm;
+        
+        if(!$model->validate()) {
+            return [
+                'error' => 'Invalid file!'
+            ];
+        }
+
+        $image = UploadedFile::getInstance($model, 'file');
+
+        $image_name = Yii::$app->security->generateRandomString() .'.' .$image->extension;
+
+        $imagine = new \Imagine\Gd\Imagine();
+
+        //resize to 70 x 70 
+
+        $thumbnail = $imagine->open($image->tempName);
+        $thumbnail->resize($thumbnail->getSize()->widen(70));
+        $thumbnail->save($temp_folder . $image_name); 
+
+        //save thumbnail to s3
+        $awsResult = Yii::$app->resourceManager->save(
+            null, //file upload object  
+            VendorItem::UPLOADFOLDER_MENUITEM_THUMBNAIL . $image_name, // name
+            [], //options 
+            $temp_folder . $image_name, // source file
+            $image->type
+        ); 
+
+        if (!$awsResult) {
+            return [
+                'error' => 'File not uploaded successfully!'
+            ];    
+        }
+
+        //save original image to s3
+        $awsResult = Yii::$app->resourceManager->save(
+            $image, //file upload object  
+            VendorItem::UPLOADFOLDER_MENUITEM . $image_name// name
+        ); 
+
+        //delete temp file 
+        unlink($temp_folder . $image_name);
+        unlink($image->tempName);
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        return [
+            'image_url' => Yii::getAlias("@s3/") . VendorItem::UPLOADFOLDER_MENUITEM_THUMBNAIL . $image_name,
+            'image' => $image_name
+        ];
     }
 
     /**
@@ -1586,5 +1659,47 @@ class VendorItemController extends Controller
         ]);
 
         return $this->render('inventory',['provider'=>$provider,'date'=>$date,'item_id'=>$item_id]);
+    }
+
+    public function actionItemQuestions($id, $_u = null)
+    {
+        $model = VendorItemQuestion::find()->item($id)->all();
+        $item = VendorItem::findOne($id);
+        if(Yii::$app->request->isPost) {
+
+            VendorItemQuestion::deleteAll(['item_id' => $id]);
+            if (Yii::$app->request->post('VendorDraftItemQuestion')) {
+                foreach (Yii::$app->request->post('VendorDraftItemQuestion') as $question) {
+
+                    if ($question['question'] && !empty($question['question'])) {
+                        $modelQuestion = new VendorItemQuestion;
+                        $modelQuestion->item_id = $id;
+                        $modelQuestion->question = $question['question'];
+                        $modelQuestion->required = $question['required'];
+                        $modelQuestion->created_datetime = date('Y-m-d H:i:s');
+                        $modelQuestion->modified_datetime = date('Y-m-d H:i:s');
+                        $modelQuestion->trash = 'Default';
+                        $modelQuestion->save(false);
+                    }
+                }
+            }
+
+            $complete = Yii::$app->request->post('complete');
+
+            if($complete) {
+
+                Yii::$app->session->setFlash('success', 'Vendor item With ID ' . $item->item_id . ' updated successfully!');
+
+                Yii::info('[Item Updated] Admin updated ' . addslashes($item->item_name) . ' item information', __METHOD__);
+
+                return $this->redirect(['index']);
+            }
+            return $this->redirect(['vendor-item/item-themes-groups', 'id' => $id,'_u'=>$_u]);
+        }
+
+        return $this->render('steps/item-questions', [
+            'item_id' => $id,
+            'model' => $model,
+        ]);
     }
 }

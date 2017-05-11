@@ -15,6 +15,7 @@ use frontend\models\Customer;
 use common\models\Events;
 use common\models\ItemType;
 use common\models\Category;
+use common\models\Themes;
 use common\models\Location;
 use common\models\CategoryPath;
 use common\models\VendorPhoneNo;
@@ -61,6 +62,10 @@ class BrowseController extends BaseController
         $data = Yii::$app->request->get();
         $themes = [];
 
+        if(isset($data['themes'][0]) && $data['themes'][0] == 'all') {
+            unset($data['themes'][0]);
+        }
+
         if ($slug != 'all') {
             $Category = Category::findOne(['slug' => $slug]);
 
@@ -76,13 +81,13 @@ class BrowseController extends BaseController
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => (isset($Category->category_meta_keywords)) ? $Category->category_meta_keywords : Yii::$app->params['META_KEYWORD']]);
 
         if (!empty($data['location'])) {
-            $session->set('deliver-location', $data['location']);
+            $session->set('delivery-location', $data['location']);
         } else {
-            unset($_SESSION['deliver-location']);
+            unset($_SESSION['delivery-location']);
         }
 
         if (!empty($data['date'])) {
-            $session->set('deliver-date', $data['date']);
+            $session->set('delivery-date', $data['date']);
             $date = date('Y-m-d', strtotime($data['date']));
             $block_date = $date;
         }else{
@@ -113,22 +118,21 @@ class BrowseController extends BaseController
             ->priorityItemJoin()
             ->vendorJoin()
             ->defaultItems()
-            ->approvedItems()
-            ->activeItems();
+            ->approved()
+            ->active();
 
         if (isset($data['for_sale']) && $data['for_sale'] != '') {
-            $item_query->saleItems();
+            $item_query->sale();
         }
 
-
-        $item_query->byVendorIDs($ActiveVendors);
+        $item_query->vendorIDs($ActiveVendors);
 
         //price filter
         if (isset($data['price']) && $data['price'] != '') {
 
             $price_condition = [];
             $arr_min_max = explode('-', $data['price']);
-            $item_query->byPrice($arr_min_max[0],$arr_min_max[1]);
+            $item_query->price($arr_min_max[0],$arr_min_max[1]);
         }
 
         //theme filter
@@ -136,7 +140,7 @@ class BrowseController extends BaseController
 
             $item_query->itemThemeJoin();
             $item_query->themeJoin();
-            $item_query->byThemeSlug($data['themes']);
+            $item_query->themeSlug($data['themes']);
 
         }//if themes
 
@@ -160,41 +164,41 @@ class BrowseController extends BaseController
 
         if($cats)
         {
-            $item_query->byCategoryIDs($cats);
+            $item_query->categoryIDs($cats);
         }
         
-        if ($session->has('deliver-location')) {
+        if ($session->has('delivery-location')) {
 
-            if (is_numeric($session->get('deliver-location'))) {
-                $location = $session->get('deliver-location');
+            if (is_numeric($session->get('delivery-location'))) {
+                $location = $session->get('delivery-location');
             } else {
-                $end = strlen($session->get('deliver-location'));
-                $from = strpos($session->get('deliver-location'), '_') + 1;
-                $address_id = substr($session->get('deliver-location'), $from, $end);
+                $end = strlen($session->get('delivery-location'));
+                $from = strpos($session->get('delivery-location'), '_') + 1;
+                $address_id = substr($session->get('delivery-location'), $from, $end);
 
                 $location = CustomerAddress::findOne($address_id)->area_id;
             }
 
-            $item_query->byDeliveryLocation($location);
+            $item_query->deliveryLocation($location);
         }
 
-        if ($session->has('deliver-date')) {
-            $date = date('Y-m-d', strtotime($session->get('deliver-date')));
-            $item_query->byDeliveryDate($date);
+        if ($session->has('delivery-date')) {
+            $date = date('Y-m-d', strtotime($session->get('delivery-date')));
+            $item_query->deliveryDate($date);
         }
 
         if (!empty($session->get('event_time'))) {
             
-            $delivery_date = $session->get('deliver-date');
+            $delivery_date = $session->get('delivery-date');
 
             if($delivery_date)
-                $working_day = date('D', strtotime($delivery_date));
+                $working_day = date('l', strtotime($delivery_date));
             else 
-                $working_day = date('D');
+                $working_day = date('l');
 
             $event_time = date('H:i:s', strtotime($session->get('event_time')));
             
-            $item_query->byEventTime($event_time,$working_day);
+            $item_query->eventTime($event_time, $working_day);
         }
 
         $item_query_result = $item_query
@@ -256,33 +260,24 @@ class BrowseController extends BaseController
             ],
         ]);
 
-        $get_unique_themes = array();
+        //get themes 
 
-        if (!empty($items)) {
+        $q = Themes::find()
+            ->where(['trash' => 'Default']);
 
-            $item_ids = ArrayHelper::map($items, 'item_id', 'item_id');
-
-            $q = VendorItemThemes::find()
-                ->select(['{{%vendor_item_theme}}.theme_id'])
-                ->joinWith('themeDetail')
-                ->defaultItemThemes()
-                ->byItemIDs(implode(',', array_keys($item_ids)))
-                ->groupBy('{{%vendor_item_theme}}.theme_id');
-            
-            if (Yii::$app->language == 'en') {
-                $q->orderBy('theme_name');
-            } else {
-                $q->orderBy('theme_name_ar');
-            }
-
-            $themes = $q->asArray()->all();
+        if (Yii::$app->language == 'en') {
+            $q->orderBy('theme_name');
+        } else {
+            $q->orderBy('theme_name_ar');
         }
+
+        $themes = $q->all();
 
         //get available vendor in item query result 
 
         $vendor = Vendor::find()
             ->select('{{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%vendor}}.slug')
-            ->byVendorID($vendor_ids)
+            ->vendorIDs($vendor_ids)
             ->asArray()
             ->all();
 
@@ -324,8 +319,8 @@ class BrowseController extends BaseController
     {
         $model = VendorItem::find()
                     ->leftJoin('{{%vendor}}', '{{%vendor}}.vendor_id = {{%vendor_item}}.vendor_id')
-                    ->bySlug($slug)->defaultItems()->activeItems()
-                    ->approvedItems()->byActiveVendor()->approvedVendor()
+                    ->slug($slug)->defaultItems()->active()
+                    ->approved()->activeVendor()->approvedVendor()
                     ->defaultVendor()
                     ->one();
 
@@ -358,7 +353,7 @@ class BrowseController extends BaseController
         }
 
         $output = \common\models\Image::find()->select(['image_path'])
-            ->itemID($model['item_id'])
+            ->item($model['item_id'])
             ->orderby(['vendorimage_sort_order' => SORT_ASC])
             ->asArray()
             ->one();
@@ -415,10 +410,10 @@ class BrowseController extends BaseController
             $vendor_detail->vendor_website = 'http://'.$vendor_detail->vendor_website;
         }
 
-        $price_table = VendorItemPricing::find()->byItemID($model->item_id)->defaultItem()->all();
+        $price_table = VendorItemPricing::find()->item($model->item_id)->defaultItem()->all();
 
-        $menu = VendorItemMenu::find()->byItemID($model->item_id)->optionMenu()->all();
-        $addons = VendorItemMenu::find()->byItemID($model->item_id)->addonMenu()->all();
+        $menu = VendorItemMenu::find()->item($model->item_id)->menu('options')->all();
+        $addons = VendorItemMenu::find()->item($model->item_id)->menu('addons')->all();
 
         $vendor_area = VendorLocation::findAll(['vendor_id' => $model->vendor_id]);
         $vendor_area_list =  \yii\helpers\ArrayHelper::map($vendor_area, 'area_id', 'locationName','cityName' );
@@ -431,9 +426,9 @@ class BrowseController extends BaseController
             $my_addresses =  \common\models\CustomerAddress::find()
                 ->select(['{{%location}}.id,{{%customer_address}}.address_id, {{%customer_address}}.address_name'])
                 ->joinLocation()
-                ->byDefaultAddress()
-                ->byCustomer(Yii::$app->user->getId())
-                ->byLocation($area_ids)
+                ->defaultAddress()
+                ->customer(Yii::$app->user->getId())
+                ->location($area_ids)
                 ->groupby(['{{%location}}.id'])
                 ->asArray()
                 ->all();
@@ -560,7 +555,7 @@ class BrowseController extends BaseController
             } else {
                 $name = 'location_ar';
             }
-            $area = \common\models\Location::find()->byCityID($_POST['city_id'])->activeLocations()->defaultLocations()->orderBy('city_id')->all();
+            $area = \common\models\Location::find()->city($_POST['city_id'])->active()->defaultLocations()->orderBy('city_id')->all();
             if ($area) {
                 echo \yii\helpers\Html::dropDownList('Location','',\yii\helpers\ArrayHelper::map($area ,'id',$name),['prompt'=>'Please Select Location','class'=>'selectpicker required trigger','id'=>'Location']);
             } else {
@@ -570,101 +565,14 @@ class BrowseController extends BaseController
         }
     }
 
-    /*
-     *  function use for ajax call and
-     *  return product availbility on the base of
-     *  area and date
-     */
-    public function actionProductAvailable()
-    {
-        if (!Yii::$app->request->isAjax) {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-        }
-
-        $data = Yii::$app->request->post();
-
-        $AreaName = '';
-        
-        $location = Location::findOne($data['area_id']);
-        
-        if ($location) {
-            if (Yii::$app->language == "en") {
-                $AreaName = $location->location;
-            } else {
-                $AreaName = $location->location_ar;
-            }
-        }
-
-        if ($data['delivery_date'] == '') {
-            $selectedDate = date('Y-m-d');
-        } else {
-            $selectedDate = $data['delivery_date'];
-        }
-
-        $item = VendorItem::findOne($data['item_id']);
-        
-        if ($item) {
-            
-            $exist = \common\models\BlockedDate::find()->byVendor($item->vendor_id)->byBlockedDate($selectedDate)->one();
-
-            $date = date('d-m-Y', strtotime($selectedDate));
-            
-            if ($exist) {
-                echo "<i class='fa fa-warning' style='color: Red; font-size: 19px;' aria-hidden='true'></i> Item Not Available for on this date '$date' for this location '$AreaName' ";
-            } else {
-                echo "<i class='fa fa-check-circle' style='color: Green; font-size: 19px;' aria-hidden='true'></i> Item Available on this date '$date' for this location '$AreaName' ";
-            }
-        }
-    }
-
     public function actionFinalPrice() 
     {
-        $item_id = Yii::$app->request->post('item_id');
+        $total = VendorItem::itemFinalPrice(
+            Yii::$app->request->post('item_id'), 
+            Yii::$app->request->post('quantity'), 
+            Yii::$app->request->post('menu_item')
+        );
 
-        $item = VendorItem::findOne($item_id);
-
-        if (empty($item)) {
-           throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-        }
-        
-        $total = ($item->item_base_price) ? $item->item_base_price : 0;
-
-        $price_chart = VendorItemPricing::find()
-            ->byItemID($item['item_id'])
-            ->defaultItem()
-            ->byQuantityRange(Yii::$app->request->post('quantity'))
-            ->orderBy('pricing_price_per_unit DESC')
-            ->one();
-
-        if ($item->item_minimum_quantity_to_order > 0) {
-            $min_quantity_to_order = $item->item_minimum_quantity_to_order;
-        } else {
-            $min_quantity_to_order = 1;
-        }
-
-        if ($price_chart) {
-            $unit_price = $price_chart->pricing_price_per_unit;
-        } else {
-            $unit_price = $item->item_price_per_unit;
-        }
-
-        $actual_item_quantity = Yii::$app->request->post('quantity') - $min_quantity_to_order;
-
-        $total += $unit_price * $actual_item_quantity;
-
-        $menu_items = Yii::$app->request->post('menu_item');
-
-        if(!is_array($menu_items)) {
-            $menu_items = [];
-        }
-
-        foreach ($menu_items as $key => $value) {
-            
-            $menu_item = VendorItemMenuItem::findOne($key);
-
-            $total += $menu_item->price * $value;
-        }
-        
         Yii::$app->response->format = 'json';
 
         return [
@@ -682,8 +590,8 @@ class BrowseController extends BaseController
             exit;
         } else {
             $session = Yii::$app->session;
-            $session->set('deliver-location', $location_name);
-            $session->set('deliver-date', $delivery_date);
+            $session->set('delivery-location', $location_name);
+            $session->set('delivery-date', $delivery_date);
         }
     }
 }

@@ -32,8 +32,18 @@ class ThemesQuery extends \yii\db\ActiveQuery
         return parent::one($db);
     }
 
+    public function theme($id) {
+        return $this->andWhere(['theme_id' => $id]);
+    }
 
-    public function byThemeID($id) {
-        return $this->where(['theme_id' => $id]);
+    public function active() {
+        return $this->andWhere([
+                'theme_status' => 'Active',
+                'trash' => 'Default'
+            ]);
+    }
+
+    public function defaultCategory() {
+        return $this->andWhere(['trash' => 'Default']);
     }
 }

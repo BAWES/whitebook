@@ -8,6 +8,7 @@ use common\models\Location;
 use api\models\CustomerAddress;
 use common\models\CustomerAddressResponse;
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\rest\Controller;
 /**
  * Auth controller provides the initial access token that is required for further requests
@@ -69,10 +70,9 @@ class AddressController extends Controller
 
         return AddressType::find()
             ->select(['type_id', 'type_name'])
-            ->where([
-                'status' => 'Active',
-                'trash' => 'Default'
-            ])->all();
+            ->active()
+            ->defaultTrash()
+            ->all();
     }
 
     /*
@@ -125,17 +125,38 @@ class AddressController extends Controller
     public function actionAddressAdd() {
 
         $customer_id = Yii::$app->user->getId();
-        $questions = Yii::$app->request->getBodyParam("questions");
 
         $address_name = Yii::$app->request->getBodyParam("address_name");
         $address_data = Yii::$app->request->getBodyParam("address_data");
         $address_type_id = Yii::$app->request->getBodyParam("address_type_id");
         $address_archived = Yii::$app->request->getBodyParam("address_archived");
+        $questions_answers = Yii::$app->request->getBodyParam("questions_answers");
+
         $area_id = Yii::$app->request->getBodyParam("area_id");
 
-        if(!$questions) {
-            $questions = array();
+        $QuestionsList = AddressQuestion::find()
+            ->select(['ques_id','question','required'])
+            ->where([
+                'address_type_id'=>$address_type_id,
+                'trash' => 'Default',
+                'status' => 'Active'
+            ])
+            ->asArray()
+            ->all();
+
+        foreach ($QuestionsList as $question) {
+            if ($question['required']) {
+                if(!isset($questions_answers[$question['ques_id']])) {
+                    return [
+                        "operation" => "error",
+                        "message" => "Please provide answer of question ".$question['question'],
+                        'detail' => $question['question']
+                    ];
+                    exit;
+                }
+            }
         }
+
 
         //save address
         $customer_address = new CustomerAddress();
@@ -157,14 +178,12 @@ class AddressController extends Controller
             $address_id = $customer_address->address_id;
 
             //save address questions
-            if ($questions && count($questions) > 0) {
-                foreach ($questions as $key => $value) {
-                    $customer_address_response = new CustomerAddressResponse();
-                    $customer_address_response->address_id = $address_id;
-                    $customer_address_response->address_type_question_id = $value['address_type_question_id'];
-                    $customer_address_response->response_text = $value['response_text'];
-                    $customer_address_response->save();
-                }
+            foreach ($QuestionsList as $question) {
+                $customer_address_response = new CustomerAddressResponse();
+                $customer_address_response->address_id = $address_id;
+                $customer_address_response->address_type_question_id = $question['ques_id'];
+                $customer_address_response->response_text = $questions_answers[$question['ques_id']];
+                $customer_address_response->save(false);
             }
 
             return [
@@ -186,20 +205,39 @@ class AddressController extends Controller
      */
     public function actionAddressUpdate()
     {
-        $customer_id = Yii::$app->user->getId();
-        $questions  = Yii::$app->request->getBodyParam('questions');
-        $address_id = Yii::$app->request->getBodyParam('address_id');
-
-        $address_name = Yii::$app->request->getBodyParam("address_name");
-        $address_data = Yii::$app->request->getBodyParam("address_data");
-        $address_type_id = Yii::$app->request->getBodyParam("address_type_id");
+        $customer_id        = Yii::$app->user->getId();
+        $address_id         = Yii::$app->request->getBodyParam('address_id');
+        $address_name       = Yii::$app->request->getBodyParam("address_name");
+        $address_data       = Yii::$app->request->getBodyParam("address_data");
+        $address_type_id    = Yii::$app->request->getBodyParam("address_type_id");
+        $questions_answers  = Yii::$app->request->getBodyParam("questions_answers");
 
         $area_id = Yii::$app->request->getBodyParam("area_id");
 
-        if(!$questions) {
-            $questions = array();
-        }
+        $QuestionsList = AddressQuestion::find()
+            ->select(['ques_id','question','required'])
+            ->where([
+                'address_type_id'=>$address_type_id,
+                'trash' => 'Default',
+                'status' => 'Active'
+            ])
+            ->asArray()
+            ->all();
 
+
+        foreach ($QuestionsList as $question) {
+              if ($question['required']) {
+                if(!isset($questions_answers[$question['ques_id']]) || $questions_answers[$question['ques_id']] == '') {
+                    return [
+                        "operation" => "error",
+                        "code" => "0",
+                        "message" => "Please provide answer of question ".$question['question'],
+                        'detail' => $question['question']
+                    ];
+                    exit;
+                }
+            }
+        }
         $customer_address = CustomerAddress::findone([
             'address_id' => $address_id,
             'customer_id' => $customer_id
@@ -219,19 +257,18 @@ class AddressController extends Controller
             $customer_address->country_id = $location->country_id;
             if ($customer_address->save(false)) {
 
-                if ($questions && count($questions) > 0) {
                     //remove old questions
                     CustomerAddressResponse::deleteAll(['address_id' => $address_id]);
 
                     //save address questions
-                    foreach ($questions as $key => $value) {
+                    foreach ($QuestionsList as $question) {
                         $customer_address_response = new CustomerAddressResponse();
                         $customer_address_response->address_id = $address_id;
-                        $customer_address_response->address_type_question_id = $value['address_type_question_id'];
-                        $customer_address_response->response_text = $value['response_text'];
-                        $customer_address_response->save();
+                        $customer_address_response->address_type_question_id = $question['ques_id'];
+                        $customer_address_response->response_text = $questions_answers[$question['ques_id']];
+                        $customer_address_response->save(false);
                     }
-                }
+
                 return [
                     "operation" => "success",
                     "message" => "Address Updated Successfully",
@@ -265,7 +302,7 @@ class AddressController extends Controller
         ]);
 
          $address = CustomerAddressResponse::find()
-            ->select('aq.question_ar, aq.question, whitebook_customer_address_response.*')
+            ->select('aq.question_ar, aq.question,aq.required, whitebook_customer_address_response.*')
             ->innerJoin('whitebook_address_question aq', 'aq.ques_id = address_type_question_id')
             ->where('address_id = :address_id', [':address_id' => $address_id])
             ->asArray()
@@ -280,10 +317,9 @@ class AddressController extends Controller
     /*
      * To delete address and question/response
      */
-    public function actionAddressRemove()
+    public function actionAddressRemove($address_id = 0)
     {
         $customer_id = Yii::$app->user->getId();
-        $address_id = Yii::$app->request->getBodyParam('address_id');
 
         $exist = CustomerAddress::find()
             ->where(['address_id' => $address_id, 'customer_id' => $customer_id])
@@ -296,13 +332,13 @@ class AddressController extends Controller
             return [
                 "operation" => "success",
                 "message" => "Address Deleted Successfully",
-                'address-list' => $this->listing()
+                'code' => '1'
             ];
         } else {
             return [
                 "operation" => "error",
                 "message" => "Address Doesn't exist",
-                'address-list' => $this->listing()
+                'code' => '0'
             ];
         }
     }
@@ -313,7 +349,7 @@ class AddressController extends Controller
     public function actionAddressQuestions($address_type_id)
     {
         $questions = AddressQuestion::find()
-            ->select(['ques_id','address_type_id','question'])
+            ->select(['ques_id','address_type_id','question','required'])
             ->where([
                 'address_type_id' => $address_type_id,
                 'trash' => 'Default',

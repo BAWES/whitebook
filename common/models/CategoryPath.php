@@ -56,10 +56,10 @@ class CategoryPath extends \yii\db\ActiveRecord
 
     /**
      * @inheritdoc
-     * @return BookingQuery the active query used by this AR class.
+     * @return query\CategoryPathQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new \common\models\query\CategoryPathQuery(get_called_class());
+        return new query\CategoryPathQuery(get_called_class());
     }
 }

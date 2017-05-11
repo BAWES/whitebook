@@ -77,9 +77,10 @@ $this->params['breadcrumbs'][] = $model->item_name;
         <li><a href="#2" data-toggle="tab">Priority Log</a></li>
         <li><a href="#3" data-toggle="tab">Options</a></li>
         <li><a href="#4" data-toggle="tab">Addon</a></li>
-        <li><a href="#5" data-toggle="tab">Gallery</a></li>
+        <li><a href="#5" data-toggle="tab">Question</a></li>
+        <li><a href="#6" data-toggle="tab">Gallery</a></li>
         <?php if($price_table) { ?>
-        <li><a href="#6" data-toggle="tab">Price Table</a></li>
+        <li><a href="#7" data-toggle="tab">Price Table</a></li>
         <?php } ?>
     </ul>
     <div class="tab-content">
@@ -205,8 +206,12 @@ $this->params['breadcrumbs'][] = $model->item_name;
                             'value' => strip_tags($model->item_how_long_to_make),
                         ],
                         [
-                            'label' => ($vendor_item->item_minimum_quantity_to_order != $model->item_minimum_quantity_to_order) ? 'Included Quantity *' : 'Included Quantity',
+                            'label' => ($vendor_item->item_minimum_quantity_to_order != $model->item_minimum_quantity_to_order) ? 'Minimum quantity to order *' : 'Minimum quantity to order',
                             'value' => strip_tags($model->item_minimum_quantity_to_order),
+                        ],
+                        [
+                            'label' => ($vendor_item->included_quantity != $model->included_quantity) ? 'Included Quantity *' : 'Included Quantity',
+                            'value' => strip_tags($model->included_quantity),
                         ],
                         [
                             'label' => $vendor_item->item_approved != $model->item_approved ? 'ITEM APPROVED *' : 'ITEM APPROVED',
@@ -482,7 +487,7 @@ $this->params['breadcrumbs'][] = $model->item_name;
           </ul>
         </div>
 
-        <div class="tab-pane" id="5">
+        <div class="tab-pane" id="6">
             <ul class="row">
                 <?php foreach ($imagedata as $key => $image) {
                     
@@ -505,7 +510,23 @@ $this->params['breadcrumbs'][] = $model->item_name;
             </ul>
         </div>
 
-        <div class="tab-pane" id="6">
+        <div class="tab-pane" id="5">
+            <table class="table table-striped table-bordered detail-view">
+                <tbody>
+                <?php if ($questions) {
+                    $i=1;
+                    foreach ($questions as $question) { ?>
+                        <tr><th>Question <?=$i?></th><td><?=$question->question?></td></tr>
+                        <?php
+                        $i++;
+                    }
+                } else { ?>
+                    <tr><td colspan="2" align="center">No Question Found</td></tr>
+                <?php } ?>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane" id="7">
             <table class="table table-striped table-bordered detail-view">
                 <thead>
                     <tr>

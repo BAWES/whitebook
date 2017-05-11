@@ -3,7 +3,7 @@
 namespace common\models\query;
 use Yii;
 /**
- * This is the ActiveQuery class for [[VendorItemThemes]].
+ * This is the ActiveQuery class for [[query\VendorWorkingTiming]].
  *
  * @see Booking
  */
@@ -16,7 +16,7 @@ class VendorWorkingTimingQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return VendorItemThemes[]|array
+     * @return VendorWorkingTiming[]|array
      */
     public function all($db = null)
     {
@@ -25,19 +25,19 @@ class VendorWorkingTimingQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return VendorItemThemes|array|null
+     * @return VendorWorkingTiming|array|null
      */
     public function one($db = null)
     {
         return parent::one($db);
     }
 
-    public function byVendorID($id)
+    public function vendor($id)
     {
         return $this->andWhere(['vendor_id'=>$id]);
     }
 
-    public function byWorkingDay($id)
+    public function workingDay($id)
     {
         return $this->andWhere(['working_day'=>$id]);
     }

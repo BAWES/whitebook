@@ -15,6 +15,7 @@ use common\models\CustomerCartMenuItem;
         <?= Yii::t('frontend', 'Please Confirms Booking Requests') ?>
     </h4>
 <hr />
+
 <?php if($items) { ?>
 
 <form method="post" action="<?= Url::to(['cart/update']) ?>" id="cart-form">	
@@ -23,28 +24,17 @@ use common\models\CustomerCartMenuItem;
         <thead>
         	<tr>
         		<td align="center"><?= Yii::t('frontend', 'Image') ?></th>
-        		<td align="left"><?= Yii::t('frontend', 'Item Name') ?></th>
-        		<td align="left"><?= Yii::t('frontend', 'Delivery') ?></th>
-        		<td aligh="left">
-                    <span class="visible-md visible-lg">
-                        <?= Yii::t('frontend', 'Quantity') ?>
-                    </span>
-                    <span class="visible-xs visible-sm">
-                        <?= Yii::t('frontend', 'Qty') ?>
-                    </span>
-                </td>
-        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Unit Price') ?></th>
-                <td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Base Price') ?></th>
+        		<td align="left"><?= Yii::t('frontend', 'Item') ?></th>
         		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Total') ?></th>
         	</tr>
         </thead>
         <tbody>
-        	<?php 
-
+        	<?php
         	$sub_total = $delivery_charge = 0;
-
+            $vendors = [];
         	foreach ($items as $item) {
-
+                $vendor_name = CustomerCart::getVendorDetail($item['vendor_id'])->vendor_name;
+                $vendors[$item['vendor_id']] = $vendor_name;
         	    // base price
         	    $row_total = ($item['item']['item_base_price']) ? $item['item']['item_base_price'] : 0;
 
@@ -62,8 +52,8 @@ use common\models\CustomerCartMenuItem;
                     $unit_price = $item['item_price_per_unit'];
                 }
 
-                if ($item['item']['item_minimum_quantity_to_order'] > 0) {
-                    $min_quantity_to_order = $item['item']['item_minimum_quantity_to_order'];
+                if ($item['item']['included_quantity'] > 0) {
+                    $min_quantity_to_order = $item['item']['included_quantity'];
                 } else {
                     $min_quantity_to_order = 1;
                 }
@@ -126,7 +116,14 @@ use common\models\CustomerCartMenuItem;
                         </a>
 
                         <br />
+                        <!-- Quantity -->
+                        <i><small><strong><?=Yii::t('frontend','Quantity').':</strong> '. $item['cart_quantity']?></small></i>
+                        <!-- Quantity -->
+                        <br/>
 
+                        <i><small><strong><?=Yii::t('frontend','Vendor Name').':</strong> '. $vendor_name?></small></i>
+                        <!-- Quantity -->
+                        <br/>
                         <?php
 
                             if($menu_option_items)
@@ -191,54 +188,39 @@ use common\models\CustomerCartMenuItem;
                                 </div>
                             <?php } ?>
                     </td>
-                    <td>
-                        <?= Booking::getPurchaseDeliveryAddress(Yii::$app->session->get('address_id')); ?>
-                    </td>
-                    <td align="left">
-                        <?= $item['cart_quantity'] ?>
-                        </div>
-                    </td>
-                    <td align="right" class="visible-md visible-lg">
-                        <?= CFormatter::format($unit_price); ?>
-                    </td>
-                    <td align="right" class="visible-md visible-lg">
-                        <?=($item['item']['item_base_price']) ?
-                            CFormatter::format($item['item']['item_base_price']) :
-                            Yii::t('frontend','Price based <br/>on selection');
-                        ?>
-                    </td>
                     <td align="right" class="visible-md visible-lg">
                         <?= CFormatter::format($row_total) ?>
                     </td>
                 </tr>
-        	<?php } ?>
+        	<?php
+        	}
+        	?>
+            <tr>
+                <td colspan="2" class="text-right"><strong><?= Yii::t('frontend', 'Sub-Total') ?></strong></td>
+                <td class="text-right"><?= CFormatter::format($sub_total) ?></td>
+            </tr>
+            <?php
+                foreach ($vendors as $key => $vendor) {
+                    $charge = Booking::getDeliveryCharges(Yii::$app->session->get('address_id'),$key);
+                    $delivery_charge += (int) $charge;
+            ?>
+            <tr>
+                <td colspan="2" class="text-right"><strong><?= Yii::t('frontend', 'Delivery Charge') ?></strong> <small>( <?=$vendor?> )</small></td>
+                <td class="text-right"><?= CFormatter::format($charge) ?></td>
+            </tr>
+            <?php } ?>
+            <tr>
+                <td colspan="2"  class="text-right"><strong><?= Yii::t('frontend', 'Total') ?></strong></td>
+                <td class="text-right"><?= CFormatter::format($sub_total + $delivery_charge) ?></td>
+            </tr>
+
         </tbody>        	
     </table>
 
+    <h3><?= Yii::t('frontend', 'Delivery Address') ?></h3>
+    <?= Booking::getPurchaseDeliveryAddress(Yii::$app->session->get('address_id')); ?>
 </form>
 
-<?php /* ?>
-<div class="row">
-    <div class="col-sm-4 pull-right">
-      <table class="table table-bordered">
-        <tbody>
-        <tr>
-          <td class="text-right"><strong><?= Yii::t('frontend', 'Sub-Total') ?></strong></td>
-          <td class="text-right"><?= CFormatter::format($sub_total) ?></td>
-        </tr>
-        <tr>
-          <td class="text-right"><strong><?= Yii::t('frontend', 'Delivery Charge') ?></strong></td>
-          <td class="text-right"><?= CFormatter::format($delivery_charge) ?></td>
-        </tr>
-        <tr>
-          <td class="text-right"><strong><?= Yii::t('frontend', 'Total') ?></strong></td>
-          <td class="text-right"><?= CFormatter::format($sub_total + $delivery_charge) ?></td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-</div>
-<?php */ ?>
 <div class="row checkout-confirm-btn-set">
 
     <div class="col-sm-4">
@@ -265,7 +247,13 @@ use common\models\CustomerCartMenuItem;
         </a>
     </div>
 </div>
+
 <br />
+
+<div style="position: relative;" class="alert alert-info"><?= Yii::t('frontend', 'By confirming you agree to The White Book\'s terms and conditions') ?></div>
+
+<div style="position: relative;" class="alert alert-info"><?= Yii::t('frontend', 'A payment link will be sent to you for your order once your booking is confirmed') ?></div>
+
 <br />
 <br />
 <?php } else { ?>

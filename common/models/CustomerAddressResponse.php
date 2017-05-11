@@ -34,6 +34,10 @@ class CustomerAddressResponse extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getAddressQuestion() {
+        return $this->hasOne(AddressQuestion::className(),['ques_id'=>'address_type_question_id']);
+    }
+
     /**
      * @inheritdoc
      */
@@ -45,5 +49,15 @@ class CustomerAddressResponse extends \yii\db\ActiveRecord
             'address_type_question_id' => 'Address Type Question ID',
             'response_text' => 'Response Text',
         ];
+    }
+
+
+    /**
+     * @inheritdoc
+     * @return query\CustomerAddressResponseQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new query\CustomerAddressResponseQuery(get_called_class());
     }
 }

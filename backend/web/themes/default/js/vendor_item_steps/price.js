@@ -22,6 +22,19 @@ $(function() {
 			$error += '<p><i class="fa fa-exclamation"></i> Item Minimum Quantity to Order field require.</p>';	    		
     	}
 
+        if ($('#vendordraftitem-item_minimum_quantity_to_order').val() <= 0) {
+            $('.field-vendordraftitem-item_minimum_quantity_to_order').addClass('has-error');
+            $('.field-vendordraftitem-item_minimum_quantity_to_order .help-block').html('Minimum Quantity To Order must be greater than or equal to 1.');
+            return false;
+        }
+
+    	if (parseInt($('#vendordraftitem-included_quantity').val()) > parseInt($('#vendordraftitem-item_minimum_quantity_to_order').val())) {
+			$('.form-group.field-vendordraftitem-item_minimum_quantity_to_order').addClass('has-error');
+			$('.form-group.field-vendordraftitem-item_minimum_quantity_to_order .help-block').html('Minimum Quantity To Order must be greater than or equal to "Included Quantity"');
+			console.log('Minimum Quantity To Order must be greater than or equal to "Included Quantity"');
+			return false;
+		}
+
 	    if($error) {
 
 		    e.preventDefault();

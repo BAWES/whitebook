@@ -7,6 +7,7 @@ use common\models\Image;
 use common\models\CustomerCart;
 use common\components\CFormatter;
 use common\components\LangFormat;
+use common\models\VendorItem;
 use common\models\VendorItemPricing;
 use common\models\CustomerCartMenuItem;
 use yii\helpers\ArrayHelper;
@@ -14,8 +15,8 @@ use yii\helpers\ArrayHelper;
 $this->title = Yii::t('frontend', 'Shopping Cart | Whitebook'); 
 
 $session = $session = Yii::$app->session;
-$deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
-$deliver_date  = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
+$delivery_location   = ($session->has('delivery-location')) ? $session->get('delivery-location') : null;
+$delivery_date  = ($session->has('delivery-date')) ? $session->get('delivery-date') : '';
 $event_time  = ($session->has('event_time')) ? $session->get('event_time') : '';
 
 $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00',
@@ -40,7 +41,7 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
                     <label><?=Yii::t('frontend', 'Event Area'); ?></label>
                     <div class="select_boxes">
                         <?php
-                            echo Html::dropDownList('area_id', $deliver_location,
+                            echo Html::dropDownList('area_id', $delivery_location,
                             $vendor_area,
                             ['data-height'=>"100px",'data-live-search'=>"true",'id'=>"area_id", 'class'=>"selectpicker", 'data-size'=>"10", 'data-style'=>"btn-primary"]);
                         ?>
@@ -51,7 +52,7 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
                 <div class="form-group">
                     <label><?=Yii::t('frontend', 'Event Date'); ?></label>
                     <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" class="input-append date">
-                        <input value="<?= $deliver_date ?>" readonly="true" name="delivery_date" class="date-picker-box form-control required"  placeholder="<?php echo Yii::t('frontend', 'Date'); ?>" >
+                        <input value="<?= $delivery_date ?>" readonly="true" name="delivery_date" class="date-picker-box form-control required"  placeholder="<?php echo Yii::t('frontend', 'Date'); ?>" >
                         <i class="fa fa-calendar" aria-hidden="true"></i>
                     </div>
                 </div>
@@ -92,9 +93,7 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 	        <thead>
 	        	<tr>
 	        		<td align="center"><?= Yii::t('frontend', 'Image') ?></th>
-	        		<td align="left"><?= Yii::t('frontend', 'Item Name') ?></th>
-	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Unit Price') ?></th>
-	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Base Price') ?></th>
+	        		<td align="left"><?= Yii::t('frontend', 'Item') ?></th>
 	        		<td align="right" class="visible-md visible-lg"><?= Yii::t('frontend', 'Total') ?></th>
 	        	</tr>
 	        </thead>
@@ -102,71 +101,52 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 	        	<?php
 	        	
 	        	$sub_total = $delivery_charge = 0;
-
 	        	foreach ($items as $item) {
+                    $vendor_name = CustomerCart::getVendorDetail($item['vendor_id'])->vendor_name;
                     
+                    $vendors[$item['vendor_id']] = [
+                            'vendor' => $vendor_name,
+                            'area_id' => $delivery_location
+                        ];
+
                     $row_total = ($item['item']['item_base_price']) ? $item['item']['item_base_price'] : 0;
 	        		
 	        		$menu_option_items = CustomerCartMenuItem::find()
 	    				->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_id, {{%vendor_item_menu_item}}.menu_id, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
-	    				->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')	    				
-	    				->innerJoin('{{%vendor_item_menu}}', '{{%vendor_item_menu}}.menu_id = {{%customer_cart_menu_item}}.menu_id')
-	    				->where(['cart_id' => $item['cart_id'], 'menu_type' => 'options'])
+                        ->joinVendorItemMenuItem()
+                        ->joinVendorItemMenu()
+                        ->cartID($item['cart_id'])
+                        ->andWhere(['menu_type' => 'options'])
 	    				->asArray()
 	    				->all();
 
 	    			$menu_addon_items = CustomerCartMenuItem::find()
 	    				->select('{{%vendor_item_menu_item}}.price, {{%vendor_item_menu_item}}.menu_item_id, {{%vendor_item_menu_item}}.menu_id, {{%vendor_item_menu_item}}.menu_item_name, {{%vendor_item_menu_item}}.menu_item_name_ar, {{%customer_cart_menu_item}}.quantity')
-	    				->innerJoin('{{%vendor_item_menu_item}}', '{{%vendor_item_menu_item}}.menu_item_id = {{%customer_cart_menu_item}}.menu_item_id')
-	    				->innerJoin('{{%vendor_item_menu}}', '{{%vendor_item_menu}}.menu_id = {{%customer_cart_menu_item}}.menu_id')
-	    				->where(['cart_id' => $item['cart_id'], 'menu_type' => 'addons'])
+                        ->joinVendorItemMenuItem()
+                        ->joinVendorItemMenu()
+                        ->cartID($item['cart_id'])
+	    				->andWhere(['menu_type' => 'addons'])
 	    				->asArray()
 	    				->all();
 
 	        		$errors = CustomerCart::validate_item([
 	        			'item_id' => $item['item_id'],
-	        			'time_slot' => $item['time_slot'],
-	        			'delivery_date' => $item['cart_delivery_date'],
-	        			'area_id' => $item['area_id'],
+			        	'time_slot' => Yii::$app->session->get('event_time'),
+		    			'delivery_date' => Yii::$app->session->get('delivery-date'),
+		                'area_id' => Yii::$app->session->get('delivery-location'),
 	        			'quantity' => $item['cart_quantity'],
 	        			'menu_item' => ArrayHelper::map(
 	        					array_merge($menu_option_items, $menu_addon_items), 'menu_item_id', 'quantity'
 	        				)
 	        		], true);
 
-					$delivery_area = CustomerCart::geLocation($item['area_id'], $item['vendor_id']);
+					$delivery_area = CustomerCart::geLocation($delivery_location, $item['vendor_id']);
 
-					//check quantity fall in price chart 
-					$price_chart = VendorItemPricing::find()
-						->where(['item_id' => $item['item_id'], 'trash' => 'Default'])
-						->andWhere(['<=', 'range_from', $item['cart_quantity']])
-						->andWhere(['>=', 'range_to', $item['cart_quantity']])
-						->orderBy('pricing_price_per_unit DESC')
-						->one();
-
-					if ($price_chart) {
-						$unit_price = $price_chart->pricing_price_per_unit;
-					} else {
-					    $unit_price = $item['item_price_per_unit'];
-					}
-
-                    if ($item['item']['item_minimum_quantity_to_order'] > 0) {
-                        $min_quantity_to_order = $item['item']['item_minimum_quantity_to_order'];
-                    } else {
-                        $min_quantity_to_order = 1;
-                    }
-
-                    $actual_item_quantity = $item['cart_quantity'] - $min_quantity_to_order;
-
-                    $row_total += $unit_price * $actual_item_quantity;
-
-	    			foreach ($menu_option_items as $key => $value) {
-	    				$row_total += $value['quantity'] * $value['price'];
-	    			}
-
-	    			foreach ($menu_addon_items as $key => $value) {
-	    				$row_total += $value['quantity'] * $value['price'];
-	    			}
+					$row_total = VendorItem::itemFinalPrice(
+			            $item['item_id'], 
+			            $item['cart_quantity'], 
+			            array_merge($menu_option_items, $menu_addon_items)
+			        );
 
 	    			$sub_total += $row_total; // not in use
 
@@ -176,7 +156,7 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 		        			<?php
 
 		        			$image_row = Image::find()->select(['image_path'])
-	                                ->where(['item_id' => $item['item_id']])
+	                                ->item($item['item_id'])
 	                                ->orderby(['vendorimage_sort_order' => SORT_ASC])
 	                                ->asArray()
 	                                ->one();
@@ -200,10 +180,18 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 
 		        			<a href="<?= Url::to(["browse/detail", 'slug' => $item['slug'], 'cart_id' => $item['cart_id']]) ?>" style="cursor: pointer;">[<?= Yii::t('frontend', 'Edit') ?>]
 	        				</a>
-	        				
-		        			<br />
 
-		        			<?php 
+		        			<br />
+                            <!-- Quantity -->
+                            <i><small><?=Yii::t('frontend','Quantity').': '. $item['cart_quantity']?></small></i>
+                            <!-- Quantity -->
+                            <br/>
+
+
+                            <i><small><strong><?=Yii::t('frontend','Vendor Name').':</strong> '. CustomerCart::getVendorDetail($item['vendor_id'])->vendor_name?></small></i>
+                            <!-- Quantity -->
+                            <br/>
+		        			<?php
 
 		        			$arr_menu_id = [];
 
@@ -257,7 +245,18 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 		        				//get distinct menu_id 
 
 		        				$arr_menu_id[$menu_item['menu_id']] = $menu_item['menu_id'];
-		        			} 
+		        			}
+                            $questionAnswers = \common\models\CustomerCartItemQuestionAnswer::getCartQuestionAnswer($item['cart_id']);
+                            if($questionAnswers)
+                            {
+                                echo '<b>'.Yii::t('frontend', 'Customs').'</b><br />';
+                                $q =1;
+                                foreach($questionAnswers as $answer) {
+                                    echo "<b>Question $q: </b>".$answer->question->question;
+                                    echo "<br/><b>answer $q: </b>".$answer->answer.'<br/>';
+                                    $q++;
+                                }
+                            }
 
 	                        if($item['female_service']) {
 	                            echo '<i class="cart_menu_item">'.Yii::t('frontend', 'Female service').'</i>';
@@ -339,20 +338,30 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
                             	<i class="fa fa-trash"></i>
                             </a>
 		        		</td>
-                        <td align="right" class="visible-md visible-lg">
-                            <?= CFormatter::format($unit_price)  ?>
-                        </td>
-		        		<td align="right" class="visible-md visible-lg">
-		        			<?=($item['item']['item_base_price']) ?
-                                CFormatter::format($item['item']['item_base_price']) :
-                                    Yii::t('frontend','Price based <br/>on selection');
-                            ?>
-		        		</td>
+
 		        		<td align="right" class="visible-md visible-lg">
 		        			<?= CFormatter::format($row_total)  ?>
 		        		</td>
 		        	</tr>
 	        	<?php } ?>
+                <tr>
+                    <td colspan="2" class="text-right"><strong><?= Yii::t('frontend', 'Sub-Total') ?></strong></td>
+                    <td class="text-right"><?= CFormatter::format($sub_total) ?></td>
+                </tr>
+                <?php
+                foreach ($vendors as $key => $vendor) {
+                    $charge = \common\models\Booking::getDeliveryCharges('',$key,$vendor['area_id']);
+                    $delivery_charge += (int) $charge;
+                    ?>
+                    <tr>
+                        <td colspan="2" class="text-right"><strong><?= Yii::t('frontend', 'Delivery Charge') ?></strong> <small>( <?=$vendor['vendor']?> )</small></td>
+                        <td class="text-right"><?= CFormatter::format($charge) ?></td>
+                    </tr>
+                <?php } ?>
+                <tr>
+                    <td colspan="2"  class="text-right"><strong><?= Yii::t('frontend', 'Total') ?></strong></td>
+                    <td class="text-right"><?= CFormatter::format($sub_total + $delivery_charge) ?></td>
+                </tr>
 	        </tbody>        	
         </table>
 

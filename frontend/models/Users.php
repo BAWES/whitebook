@@ -284,13 +284,16 @@ class Users extends Model
         $category, 
         $price, 
         $vendor, 
-        $avail_sale)
+        $avail_sale,
+        $limit = 100,
+        $offset = 0
+    )
     {
 
         $today = date('Y-m-d H:i:s');
 
         $item_query = Wishlist::find()
-            ->select('{{%vendor_item}}.slug, {{%vendor_item}}.item_base_price, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%image}}.image_path')
+            ->select('{{%wishlist}}.wishlist_id, {{%vendor_item}}.slug, {{%vendor_item}}.item_base_price, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%image}}.image_path')
             ->leftJoin(
                 '{{%vendor_item}}',
                 '{{%vendor_item}}.item_id = {{%wishlist}}.item_id'
@@ -335,6 +338,8 @@ class Users extends Model
 
         return $item_query
             ->groupBy('item_id')
+            ->offset($offset)
+            ->limit($limit)
             ->asArray()
             ->all();
     }

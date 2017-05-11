@@ -143,4 +143,14 @@ class PriorityItem extends \yii\db\ActiveRecord
         return 'Activate';
         return 'Deactivate';
     }
+
+
+    /**
+     * @inheritdoc
+     * @return \common\models\query\PriorityItemQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new \common\models\query\PriorityItemQuery(get_called_class());
+    }
 }

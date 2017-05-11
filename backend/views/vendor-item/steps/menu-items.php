@@ -51,6 +51,11 @@ $this->params['breadcrumbs'][] = 'Update';
 	    		Addons
 	    	</a>
 	    </li>
+        <li>
+            <a href="<?= Url::to(['vendor-item/item-questions', 'id' => $model->item_id]) ?>">
+                <?=Yii::t('app','Questions')?>
+            </a>
+        </li>
 	    <li>
 	    	<a href="<?= Url::to(['vendor-item/item-images', 'id' => $model->item_id]) ?>">
 	    		Images
@@ -121,9 +126,10 @@ $this->params['breadcrumbs'][] = 'Update';
 					<table class="table table-bordered">
 						<thead>
 							<tr>
-								<th colspan="6" class="heading">Menu Items</th>
+								<th colspan="7" class="heading">Menu Items</th>
 							</tr>
 							<tr>
+								<th>Image</th>
 								<th>Name</th>
 								<th>Name - Ar</th>
 								<th>Price</th>
@@ -141,6 +147,16 @@ $this->params['breadcrumbs'][] = 'Update';
 
 							foreach ($arr_menu_item as $key => $menu_item) { ?>
 							<tr>
+								<td>									
+									<a id="thumb-image<?= $menu_count; ?>" data-toggle="image" class="thumbnail">
+										<?php if($menu_item->image) { ?>
+										<img src="<?= Yii::getAlias("@s3/vendor_menu_item/thumbnail/").$menu_item->image; ?>" />
+										<?php } else { ?>
+										<img src="<?= Url::to("@web/themes/default/img/no_image.jpg") ?>" />
+										<?php } ?>
+									</a>
+                      				<input type="hidden" name="menu_item[<?= $menu_count ?>][image]" value="<?php echo $menu_item->image; ?>" id="input-image<?= $menu_count; ?>" />
+								</td>
 								<td class="required">
 
 									<input name="menu_item[<?= $menu_count ?>][menu_item_id]" value="<?= $menu_item->menu_item_id ?>" type="hidden" />
@@ -169,7 +185,7 @@ $this->params['breadcrumbs'][] = 'Update';
 						</tbody>
 						<tfoot>
 							<tr>
-								<td colspan="6">
+								<td colspan="7">
 									<button type="button" class="btn btn-primary btn-add-menu-item">
 										<i class="fa fa-plus"></i> Add Item
 									</button>
@@ -210,11 +226,15 @@ $this->params['breadcrumbs'][] = 'Update';
 
 ActiveForm::end(); 
 
+echo Html::hiddenInput('no_image', Url::to("@web/themes/default/img/no_image.jpg"), ['id' => 'no_image']);
+
+echo Html::hiddenInput('image_upload_url', Url::to(['vendor-item/upload-menu-image']), ['id' => 'image_upload_url']);
+
 echo Html::hiddenInput('menu_count', $menu_count, ['id' => 'menu_count']);
 
 echo Html::hiddenInput('isNewRecord', 0, ['id'=>'isNewRecord']);
 echo Html::hiddenInput('item_id', $model->item_id, ['id'=>'item_id']);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.24", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.25", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_steps/menu.js?v=1.3", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_steps/menu.js?v=1.4", ['depends' => [\yii\web\JqueryAsset::className()]]);

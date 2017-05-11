@@ -251,14 +251,14 @@ class SubCategory extends \yii\db\ActiveRecord
             }
         }
 
-        if ($session->has('deliver-location')) {
+        if ($session->has('delivery-location')) {
 
-            if (is_numeric($session->get('deliver-location'))) {
-                $location = $session->get('deliver-location');
+            if (is_numeric($session->get('delivery-location'))) {
+                $location = $session->get('delivery-location');
             } else {
-                $end = strlen($session->get('deliver-location'));
-                $from = strpos($session->get('deliver-location'), '_') + 1;
-                $address_id = substr($session->get('deliver-location'), $from, $end);
+                $end = strlen($session->get('delivery-location'));
+                $from = strpos($session->get('delivery-location'), '_') + 1;
+                $address_id = substr($session->get('delivery-location'), $from, $end);
 
                 $location = CustomerAddress::findOne($address_id)->area_id;
             }
@@ -266,8 +266,8 @@ class SubCategory extends \yii\db\ActiveRecord
             $subQuery->andWhere('EXISTS (SELECT 1 FROM {{%vendor_location}} WHERE {{%vendor_location}}.area_id="'.$location.'" AND {{%vendor_item}}.vendor_id = {{%vendor_location}}.vendor_id)');
         }
 
-        if ($session->has('deliver-date')) {
-            $date = date('Y-m-d', strtotime($session->get('deliver-date')));
+        if ($session->has('delivery-date')) {
+            $date = date('Y-m-d', strtotime($session->get('delivery-date')));
             $subQuery->andWhere("({{%vendor}}.vendor_id NOT IN(SELECT vendor_id FROM `whitebook_vendor_blocked_date` where block_date = '".$date."'))");
         }
 

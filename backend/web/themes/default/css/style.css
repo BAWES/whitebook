@@ -8539,3 +8539,14 @@ ul>li.orange{background:#f8a31f}ul>li.red{background:#e51400}ul>li.green{backgro
    padding: 3px 5px;
    margin-left: 10px;
  }
+
+ .margin-top-30{
+   margin-top:30px;
+ }
+ 
+#item_addon_menu_list .thumbnail,
+#item_menu_list .thumbnail {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 0;
+}

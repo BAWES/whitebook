@@ -51,12 +51,10 @@ class ThingsILikeController extends BaseController
         $customer_wishlist = Users::get_customer_wishlist($customer_id, $category_id, $price, $vendor, $avail_sale);
 
         $categories = \frontend\models\Category::find()
-            ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-            ->where([
-                '{{%category_path}}.level' => 0,
-                'trash' =>'Default'
-            ])
-            ->orderBy(new \yii\db\Expression('FIELD (category_name, "Venues", "Invitations", "Food & Beverages", "Decor", "Supplies", "Entertainment", "Services", "Others", "Gift favors")'))
+            ->joinCategoryPath()
+            ->defaultCategories()
+            ->topLevel()
+            ->orderByExpression()
             ->all();
 
         if (Yii::$app->request->isAjax) {

@@ -37,13 +37,22 @@ class VendorItemThemesQuery extends \yii\db\ActiveQuery
         return $this->andWhere(['vendor_id'=>$id]);
     }
 
+    public function vendor($id)
+    {
+        return $this->andWhere(['vendor_id'=>$id]);
+    }
+
     public function defaultItemThemes()
     {
         return $this->andWhere("{{%vendor_item_theme}}.trash='default'");
     }
 
-    public function byItemIDs($ids)
+    public function itemIDs($ids)
     {
         return $this->andWhere("{{%vendor_item_theme}}.item_id IN(".$ids.")");
+    }
+
+    public function theme($ID) {
+        return $this->andWhere(['theme_id' => $ID]);
     }
 }

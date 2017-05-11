@@ -23,7 +23,7 @@ return [
             ]
         ],
         'user' => [
-            'identityClass' => 'api\models\customer',
+            'identityClass' => 'api\models\Customer',
             'enableAutoLogin' => false,
             'enableSession' => false,
             'loginUrl' => null
@@ -63,7 +63,7 @@ return [
                     'controller' => 'v1/cart',
                     'pluralize' => false,
                     'patterns' => [
-                        'GET' => 'listing',
+                        'GET' => 'list',
                         'GET count' => 'cart-count',
                         'POST' => 'add',
                         'PATCH' => 'update',
@@ -79,9 +79,17 @@ return [
                     'pluralize' => false,
                     'patterns' => [
                         'GET' => 'index',
+                        'GET logout' => 'logout',
                         'PATCH' => 'update',
+                        'POST contact' => 'contact',
+                        'POST vendor-request' => 'vendor-request',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
+                        'OPTIONS vendor-request' => 'options',
+                        'OPTIONS index' => 'options',
+                        'OPTIONS update' => 'options',
+                        'OPTIONS contact' => 'options',
+                        'OPTIONS logout' => 'options',
                     ]
                 ],
                 [ // CategoryController
@@ -107,6 +115,7 @@ return [
                         'GET theme' => 'load-all-themes',
                         'GET vendors' => 'load-all-vendor',
                         'POST event' => 'add-product-to-event',
+                        'POST final-price' => 'final-price',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
                         'OPTIONS detail' => 'options',
@@ -116,6 +125,7 @@ return [
                         'OPTIONS capacity' => 'options',
                         'OPTIONS theme' => 'options',
                         'OPTIONS vendors' => 'options',
+                        'OPTIONS final-price' => 'options',
                     ]
                 ],
                 [ // EventController
@@ -181,6 +191,8 @@ return [
                         'GET address' => 'address',
                         'GET success' => 'success',
                         'GET list-with-address' => 'cart-item-with-address',
+                        'GET delivery-area' => 'delivery-area',
+                        'GET confirm' => 'confirm',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
                         'OPTIONS payment-getaway' => 'options',
@@ -189,16 +201,73 @@ return [
                         'OPTIONS list-with-address' => 'options'
                     ]
                 ],
-                [ // OrderController
+                [ // BookingController
                     'class' => 'yii\rest\UrlRule',
-                    'controller' => 'v1/orders',
-                    'pluralize' => false,
+                    'controller' => 'v1/booking',
                     'patterns' => [
-                        'GET' => 'list-order',
-                        'GET detail' => 'order-detail',
+                        'GET' => 'list',
+                        'GET <id>' => 'view',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
-                        'OPTIONS detail' => 'options',
+                        'OPTIONS <id>' => 'options',
+                    ]
+                ],
+                [ // TapController
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/tap',
+                    'pluralize' => false,
+                    'patterns' => [
+                        'GET' => 'index',
+                        'GET success' => 'success',
+                        'GET error' => 'error',
+                        'GET callback' => 'callback',
+                        // OPTIONS VERBS
+                        'OPTIONS' => 'options',
+                        'OPTIONS success' => 'options',
+                        'OPTIONS error' => 'options',
+                        'OPTIONS callback' => 'options',
+                    ]
+                ],
+                [ // PackageController
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/package',
+                    'pluralize' => false,
+                    'patterns' => [
+                        'GET' => 'list',
+                        'GET <id>' => 'view',
+                        // OPTIONS VERBS
+                        'OPTIONS' => 'options',
+                        'OPTIONS <id>' => 'options'
+                    ]
+                ],
+                [ // ThemeController
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/theme',
+                    'patterns' => [
+                        'GET' => 'list',
+                        // OPTIONS VERBS
+                        'OPTIONS' => 'options'
+                    ]
+                ],
+                [ // DirectoryController
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/directory',
+                    'pluralize' => false,
+                    'patterns' => [
+                        'GET' => 'list',
+                        'GET view' => 'view',
+                        // OPTIONS VERBS
+                        'OPTIONS' => 'options',
+                        'OPTIONS view' => 'options'
+                    ]
+                ],
+                [ // CmsController
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/cms',
+                    'patterns' => [
+                        'GET <id>' => 'view',
+                        // OPTIONS VERBS
+                        'OPTIONS <id>' => 'options'
                     ]
                 ],
             ],

@@ -38,7 +38,7 @@ class BookingQuery extends \yii\db\ActiveQuery
     }
 
     // create by current record
-    public function createdByCurrentUser() {
+    public function currentUser() {
         return $this->andWhere('customer_id='.Yii::$app->user->getId());
     }
 
@@ -47,7 +47,27 @@ class BookingQuery extends \yii\db\ActiveQuery
         return $this->orderBy('created_datetime DESC');
     }
 
-    public function byBookingToken($booking_token) {
-        return $this->where("booking_token='$booking_token'");
+    public function token($booking_token) {
+        return $this->where(["booking_token"=>$booking_token]);
+    }
+
+    public function nonEmptyTransactionID(){
+        return $this->andWhere('transaction_id is not NULL');
+    }
+
+    public function vendor($vendor_id) {
+        return $this->andWhere(['vendor_id' => $vendor_id]);
+    }
+
+    public function activeBooking() {
+        return $this->andWhere(['booking_status'=>1]);
+    }
+
+    public function inactiveBooking() {
+        return $this->andWhere(['booking_status'=>0]);
+    }
+
+    public function joinVendorPayment() {
+        return $this->leftJoin('{{%vendor_payment}}', '{{%vendor_payment}}.booking_id = {{%booking}}.booking_id');
     }
 }

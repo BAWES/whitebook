@@ -62,6 +62,11 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 	    		Images
 	    	</a>
 	    </li>
+        <li>
+            <a href="<?= Url::to(['vendor-item/item-questions', 'id' => $model->item_id]) ?>">
+                <?=Yii::t('app','Questions')?>
+            </a>
+        </li>
 	    <li>
 	    	<a href="<?= Url::to(['vendor-item/item-themes-groups', 'id' => $model->item_id]) ?>">
 	    		Other
@@ -97,6 +102,8 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 				<?= $form->field($model, 'item_price_description')->textarea(['maxlength' => 128]); ?>
 
 				<?= $form->field($model, 'item_price_description_ar')->textarea(['maxlength' => 128]); ?>
+				
+				<?= $form->field($model, 'hide_price_chart')->checkbox(); ?>
 
 				<div class="form-group multiple_price" style="padding: 5px;  font-size: 14px;"><div class="multi_pricing">Price Chart </div>
 
@@ -128,8 +135,12 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 						'Guests' => 'Guests'
 					]); ?>
 
-				<?= $form->field($model, 'item_minimum_quantity_to_order')
+				<?= $form->field($model, 'included_quantity')
 					->label('Included Quantity'.Html::tag('span', '*',['class'=>'required mandatory']))
+					->textInput(['maxlength' => 128]); ?>
+
+				<?= $form->field($model, 'item_minimum_quantity_to_order')
+					->label('Minimum Quantity to Order'.Html::tag('span', '*',['class'=>'required mandatory']))
 					->textInput(['maxlength' => 128]); ?>
 
 				<?= $form->field($model, 'item_default_capacity')

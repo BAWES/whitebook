@@ -141,7 +141,19 @@ use common\components\CFormatter;
                             }
                             
                             echo '</i>';
-	                    } 
+	                    }
+
+                        if($booking->bookingItemAnswers)
+                        {
+                            echo '<div class="clearfix"></div><b>Custom</b><br/>';
+
+                            $q =1;
+                            foreach($booking->bookingItemAnswers as $answer) {
+                                echo "Question $q: <i>".$answer->question.'</i>';
+                                echo "<br/>answer $q: <i>".$answer->answer.'</i><br/>';
+                                $q++;
+                            }
+                        }
 
                         if($item['female_service']) {
                             echo '<div class="clearfix"></div> - <i class="cart_menu_item">'.Yii::t('frontend', 'Female service').'</i>';

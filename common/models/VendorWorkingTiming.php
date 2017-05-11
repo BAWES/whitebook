@@ -60,8 +60,8 @@ class VendorWorkingTiming extends \yii\db\ActiveRecord
         $end_time = strtotime($this->working_end_time);
 
         $timeslots = VendorWorkingTiming::find()
-            ->byVendorID($this->vendor_id)
-            ->byWorkingDay($this->working_day)
+            ->vendor($this->vendor_id)
+            ->workingDay($this->working_day)
             ->defaultTiming()->all();
 
         foreach ($timeslots as $key => $value) {
@@ -82,8 +82,8 @@ class VendorWorkingTiming extends \yii\db\ActiveRecord
         $end_time = strtotime($this->working_end_time);
 
         $timeslots = VendorWorkingTiming::find()
-            ->byVendorID($this->vendor_id)
-            ->byWorkingDay($this->working_day)
+            ->vendor($this->vendor_id)
+            ->workingDay($this->working_day)
             ->defaultTiming()->all();
         
         foreach ($timeslots as $key => $value) {
@@ -100,7 +100,7 @@ class VendorWorkingTiming extends \yii\db\ActiveRecord
 
     /**
      * @inheritdoc
-     * @return BookingQuery the active query used by this AR class.
+     * @return query\VendorWorkingTimingQuery the active query used by this AR class.
      */
     public static function find()
     {

@@ -2,7 +2,7 @@
 
 use yii\grid\GridView;
 use yii\web\View;
-
+use yii\helpers\Html;
 $this->title = Yii::t('app', 'Booking');
 
 $this->params['breadcrumbs'][] = $this->title;
@@ -33,8 +33,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Delivery Date',
                 'format' => 'html',
                 'value' => function ($model) {
-                    return date('d/m/Y', strtotime($model->bookingItems[0]->delivery_date))
-                    .'<br/>'.$model->bookingItems[0]->timeslot;
+                    if (isset($model->bookingItems[0]->delivery_date) && isset($model->bookingItems[0]->timeslot)) {
+                        return date('d/m/Y', strtotime($model->bookingItems[0]->delivery_date))
+                            . '<br/>' . $model->bookingItems[0]->timeslot;
+                    }
                 }
             ],
             [
@@ -59,7 +61,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' =>'{view}'
+                'template' => '{view} {invoice}',
+                'buttons' => [
+                    'invoice' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-print"></span>', $url, [
+                            'title' => Yii::t('yii', 'Invoice'),
+                        ]);
+                    }
+                ]
             ],
         ],
     ]); ?>

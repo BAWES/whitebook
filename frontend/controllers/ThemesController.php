@@ -85,50 +85,39 @@ class ThemesController extends BaseController
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
         $theme_result  = VendorItemThemes::find()->select('item_id')
-            ->where(['trash' => "Default"])
-            ->andWhere(['theme_id' => $theme->theme_id])
+            ->defaultItemThemes()
+            ->theme($theme->theme_id)
             ->asArray()
             ->all();
 
         $theme_items = ArrayHelper::map($theme_result,'item_id','item_id');
 
         if ($slug != 'all') {
-            $category = Category::find()->select('category_id')->where(['slug' => $slug])->asArray()->one();
+            $category = Category::find()->select('category_id')->slug($slug)->asArray()->one();
             $active_vendors = Vendor::loadvalidvendorids($category['category_id']);
         } else {
             $active_vendors = Vendor::loadvalidvendorids();
         }
 
         $items_query = CategoryPath::find()
-            ->select('{{%vendor_item}}.item_base_price, {{%vendor_item}}.min_order_amount, {{%vendor_item}}.item_status,{{%vendor_item}}.trash,{{%vendor_item}}.item_approved,{{%vendor_item}}.item_how_long_to_make, {{%vendor_item}}.slug, {{%vendor_item}}.item_id, {{%vendor_item}}.item_id, {{%vendor_item}}.item_name, {{%vendor_item}}.item_name_ar, {{%vendor_item}}.item_price_per_unit, {{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar')
-            ->leftJoin(
-                '{{%vendor_item_to_category}}', 
-                '{{%vendor_item_to_category}}.category_id = {{%category_path}}.category_id'
-            )
-            ->leftJoin(
-                '{{%vendor_item}}',
-                '{{%vendor_item}}.item_id = {{%vendor_item_to_category}}.item_id'
-            )
-            ->leftJoin(
-                '{{%priority_item}}',
-                '{{%priority_item}}.item_id = {{%vendor_item}}.item_id'
-            )
-            ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
-            ->where([
-                '{{%vendor_item}}.trash' => 'Default',
-                '{{%vendor_item}}.item_approved' => 'Yes',
-                '{{%vendor_item}}.item_status' => 'Active',
-                '{{%vendor}}.vendor_status' => 'Active',
-                '{{%vendor}}.approve_status' => 'Yes',
-                '{{%vendor}}.trash' => 'Default',
-                '{{%vendor_item}}.item_id' => $theme_items,
-            ]);
+            ->selectedFields()
+            ->categoryJoin()
+            ->itemJoin()
+            ->priorityItemJoin()
+            ->vendorJoin()
+            ->defaultItems()
+            ->approved()
+            ->active()
+            ->activeVendor()
+            ->approvedVendor()
+            ->defaultVendor()
+            ->vendorItems($theme_items);
 
         $cats = '';
 
         if ($slug != 'all') 
         {
-            $category = Category::findOne(['slug' => $slug]);
+            $category = Category::find()->slug($slug)->one();
 
             if (empty($category)) {
                 throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
@@ -143,13 +132,12 @@ class ThemesController extends BaseController
 
         if ($cats) 
         {
-            $q = "{{%category_path}}.path_id IN ('".$cats."')";
-            $items_query->andWhere($q);
+            $items_query->categoryIDs($cats);
         }
 
         if (isset($data['vendor']) && $data['vendor'] != '') 
         {
-            $items_query->andWhere(['in', '{{%vendor}}.slug', $data['vendor']]);
+            $items_query->vendorSlug($data['vendor']);
         }
 
         //price filter
@@ -158,31 +146,13 @@ class ThemesController extends BaseController
             $price_condition = [];
 
             $arr_min_max = explode('-', $data['price']);
-            
-            $price_condition[] = '{{%vendor_item}}.item_price_per_unit IS NULL';
-            $price_condition[] = '{{%vendor_item}}.item_price_per_unit between '.$arr_min_max[0].' and '.$arr_min_max[1];
 
-
-            $items_query->andWhere(implode(' OR ', $price_condition));
+            $items_query->price($arr_min_max[0],$arr_min_max[1]);
         }
-
-        $expression = new Expression(
-            "CASE 
-                WHEN
-                    `whitebook_priority_item`.priority_level IS NULL 
-                    OR whitebook_priority_item.status = 'Inactive' 
-                    OR whitebook_priority_item.trash = 'Deleted' 
-                    OR DATE(whitebook_priority_item.priority_start_date) > DATE(NOW()) 
-                    OR DATE(whitebook_priority_item.priority_end_date) < DATE(NOW()) 
-                THEN 2 
-                WHEN `whitebook_priority_item`.priority_level = 'Normal' THEN 1 
-                WHEN `whitebook_priority_item`.priority_level = 'Super' THEN 0 
-                ELSE 2 
-            END, {{%vendor_item}}.sort");
 
         $item_query_result = $items_query
             ->groupBy('{{%vendor_item}}.item_id')
-            ->orderBy($expression)
+            ->orderByExpression()
             ->asArray()
             ->all();
 
@@ -239,7 +209,7 @@ class ThemesController extends BaseController
        
         $vendor = Vendor::find()
             ->select('{{%vendor}}.vendor_id,{{%vendor}}.vendor_name,{{%vendor}}.vendor_name_ar,{{%vendor}}.slug')
-            ->where(['in', '{{%vendor}}.vendor_id', $active_vendors])
+            ->vendorIDs($active_vendors)
             ->asArray()
             ->all();
 

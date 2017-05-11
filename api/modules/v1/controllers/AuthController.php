@@ -2,6 +2,7 @@
 
 namespace api\modules\v1\controllers;
 
+use common\models\CustomerToken;
 use Yii;
 use yii\rest\Controller;
 use yii\filters\auth\HttpBasicAuth;
@@ -38,13 +39,7 @@ class AuthController extends Controller
         $behaviors['authenticator'] = [
             'class' => HttpBasicAuth::className(),
             'except' => ['options'],
-            'auth' => function ($email, $password) {
-                $user = Customer::findOne(['customer_email'=>$email]);
-                if ($user && $user->validatePassword($password)) {
-                    return $user;
-                }
-                return null;
-            }
+            'auth' => [$this, 'auth']
         ];
         // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
         // also avoid for public actions like registration and password reset
@@ -75,6 +70,14 @@ class AuthController extends Controller
         return $actions;
     }
 
+    public function Auth($email, $password)
+    {
+        $user = Customer::findOne(['customer_email'=>$email]);
+        if ($user && $user->validatePassword($password)) {
+            return $user;
+        }
+        return null;
+    }
 
     /**
      * Perform validation on the agent account (check if he's allowed login to platform)
@@ -127,11 +130,10 @@ class AuthController extends Controller
 
             //Send Email to user
             Yii::$app->mailer->htmlLayout = 'layouts/empty';
-
             Yii::$app->mailer->compose("customer/confirm",
                 [
                     "user" => $model->customer_name,
-                    "confirm_link" => \Yii::$app->params['@RootPath'].'/users/confirm_email?key='.$model->customer_activation_key,
+                    "confirm_link" => Url::to(['/users/confirm_email', 'key' => $model->customer_activation_key], true),
                     "logo_1" => Url::to("@web/images/twb-logo-horiz-white.png", true),
                     "logo_2" => Url::to("@web/images/twb-logo-trans.png", true),
                 ])
@@ -145,9 +147,13 @@ class AuthController extends Controller
 
             $message_admin = $model->customer_name.' registered in TheWhiteBook';
 
-            $send_admin = Yii::$app->mailer->compose(
-                ["html" => "customer/user-register"],
-                ["message" => $message_admin]
+            $send_admin = Yii::$app->mailer->compose("customer/user-register",
+                [
+                    'confirm_link' => Url::to(['/users/confirm_email', 'key' => $model->customer_activation_key], true),
+                    'logo_1' => Url::to("@web/images/twb-logo-horiz-white.png", true),
+                    'logo_2' => Url::to("@web/images/twb-logo-trans.png", true),
+                    'model' => $model
+                ]
             );
 
             $send_admin
@@ -158,12 +164,14 @@ class AuthController extends Controller
 
             return [
                 "operation" => "success",
+                "code" => "1",
                 "message" => "Please click on the link sent to you by email to verify your account"
             ];
 
         } else {
             return [
                 "operation" => "error",
+                "code" => "0",
                 "message" => $model->getErrorMessage($model->errors)
             ];
 
@@ -181,6 +189,7 @@ class AuthController extends Controller
         if ($email == ' ') {
             return [
                 'operation' => 'error',
+                'code' => '0',
                 'message' => 'Invalid Email'
             ];
         }
@@ -192,8 +201,7 @@ class AuthController extends Controller
             $model->modified_datetime = $time;
             $model->save();
 
-            $message = 'Your requested password reset.</br><a href=' . Yii::$app->params['@RootPath'].'/users/reset_confirm?cust_id='.$model->customer_activation_key. ' title="Click Here">Click here </a> to reset your password';
-
+            $message = 'Your requested password reset.</br><a href='.Url::to(["/users/reset_confirm", "cust_id" => $model->customer_activation_key], true).' title="Click Here">Click here </a> to reset your password';
             $send = Yii::$app->mailer->compose("customer/password-reset",
                 ["message" => $message, "user" => "Customer"])
                 ->setFrom(Yii::$app->params['supportEmail'])
@@ -203,17 +211,20 @@ class AuthController extends Controller
             if ($send) {
                 return [
                     'operation' => 'success',
+                    'code' => '1',
                     'message' => 'Password reset link sent, please check your email for further instructions.'
                 ];
             } else {
                 return [
                     'operation' => 'error',
+                    'code' => '0',
                     'message' => 'Server issue. Please try again'
                 ];
             }
         } else {
             return [
                 'operation' => 'error',
+                'code' => '0',
                 'message' => 'Email Does Not Exist'
             ];
         }

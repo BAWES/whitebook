@@ -7,6 +7,7 @@ use common\models\VendorItemPricing;
 use common\models\VendorItemMenuItem;
 use common\models\CustomerCart;
 use common\models\CustomerCartMenuItem;
+use common\models\VendorItem;
 use common\components\LangFormat;
 use common\components\CFormatter;
 
@@ -25,14 +26,8 @@ $this->title = 'Whitebook - ' . $item_name;
 $this->params['breadcrumbs'][] = ' '.$item_name;
 
 $session = $session = Yii::$app->session;
-$deliver_location   = ($session->has('deliver-location')) ? $session->get('deliver-location') : null;
-$deliver_date  = ($session->has('deliver-date')) ? $session->get('deliver-date') : '';
-
-if($model->item_minimum_quantity_to_order > 0) {
-    $quantity = $model->item_minimum_quantity_to_order;
-} else {
-    $quantity = 1;
-}
+$deliver_location   = ($session->has('delivery-location')) ? $session->get('delivery-location') : null;
+$deliver_date  = ($session->has('delivery-date')) ? $session->get('delivery-date') : '';
 
 if($model->type) {
     $item_type_name = $model->type->type_name;
@@ -40,11 +35,17 @@ if($model->type) {
     $item_type_name = 'Product';
 }
 
+$min_quantity_to_order = 1;
+
 if($model['item_minimum_quantity_to_order'] > 0) {
     $min_quantity_to_order = $model['item_minimum_quantity_to_order'];
-}else{
-    $min_quantity_to_order = 1;
+} 
+    
+if($model['included_quantity'] > $min_quantity_to_order) {
+    $min_quantity_to_order = $model['included_quantity'];
 }
+
+$quantity = $min_quantity_to_order;
 
 $capacity = $model->item_default_capacity;
 
@@ -73,14 +74,15 @@ if($cart)
 {
     $quantity = $cart->cart_quantity;
     $txt_cart_btn = Yii::t('frontend', 'Update Cart');
-    $cart_url = Yii::$app->urlManager->createAbsoluteUrl('cart/update-cart-item');   
+    $cart_url = Yii::$app->urlManager->createAbsoluteUrl('cart/update-cart-item');
+    echo Html::hiddenInput('update_cart', 1, ['id' => 'update_cart']);
 }
 else
 {
     $txt_cart_btn = Yii::t('frontend', 'Add To Cart');
     $cart_url = Yii::$app->urlManager->createAbsoluteUrl('cart/add');
+    echo Html::hiddenInput('update_cart', 0, ['id' => 'update_cart']);
 }
-
 ?>
 
 <script type="application/ld+json">
@@ -210,7 +212,7 @@ else
                                 ->where(['item_id'=> $model->item_id])
                                 ->all();
 
-                            if($pricing) { ?>
+                            if($pricing && !$model->hide_price_chart) { ?>
 
                                 <a class="lnk-price-chart">
                                     <i class="fa fa-plus-square-o"></i>
@@ -274,15 +276,28 @@ else
 
                                 if($model['notice_period_type'] == 'Day')
                                 {
-                                    echo Yii::t('frontend', 'Notice: {count} day(s)', [
-                                        'count' => $model['item_how_long_to_make']
-                                    ]);
+                                    if ($model['item_how_long_to_make'] >= 7) {
+                                        echo Yii::t('frontend', 'Notice: {count} week(s)', [
+                                            'count' => substr(($model['item_how_long_to_make'] / 7),0,3)
+                                        ]);
+                                    } else {
+                                        echo Yii::t('frontend', 'Notice: {count} day(s)', [
+                                            'count' => $model['item_how_long_to_make']
+                                        ]);
+                                    }
                                 }
                                 else
                                 {
-                                    echo Yii::t('frontend', 'Notice: {count} hours', [
-                                        'count' => $model['item_how_long_to_make']
-                                    ]);
+                                    if ($model['item_how_long_to_make'] >= 24) {
+                                        echo Yii::t('frontend', 'Notice: {count} day(s)', [
+                                            'count' => substr(($model['item_how_long_to_make'] / 24),0,3)
+                                        ]);
+                                    } else {
+                                        echo Yii::t('frontend', 'Notice: {count} hours', [
+                                            'count' => $model['item_how_long_to_make']
+                                        ]);
+                                    }
+
                                 } ?>
                             </span>
                         </div>
@@ -361,7 +376,7 @@ else
                                         ->where(['item_id'=> $model->item_id])
                                         ->all();
 
-                                    if($pricing) { ?>
+                                    if($pricing && !$model->hide_price_chart) { ?>
 
                                         <a class="lnk-price-chart">
                                             <i class="fa fa-plus-square-o"></i>
@@ -460,6 +475,7 @@ else
                                                 </div>
                                                 <span class=" col-lg-12 error cart_quantity text-center"></span>
                                                 <span id="available"></span>
+                                            <span class="quantity_remain" style="clear: both;display: block;color: brown;text-align: center;padding-top: 6px;display: block;"></span>
                                         <?php } // END if item available ?>
                                         </div>
 
@@ -709,6 +725,10 @@ else
                                                                 <?php } ?>
 
                                                                 <span class="error menu_item_<?= $menu_item->menu_item_id ?>"></span>
+
+                                                                <?php if($menu_item->image) { ?>
+                                                                <a href="<?= Yii::getAlias("@s3/"). VendorItem::UPLOADFOLDER_MENUITEM. $menu_item->image ?>" data-lightbox="menu-items" data-title="<?= Yii::$app->language == 'en'?$menu_item->menu_item_name:$menu_item->menu_item_name_ar; ?>"><img src="<?= Yii::getAlias("@s3/"). VendorItem::UPLOADFOLDER_MENUITEM_THUMBNAIL. $menu_item->image ?>"></a>
+                                                                <?php } ?>
                                                             </li>
                                                         <?php } ?>
                                                         </ul>
@@ -842,6 +862,10 @@ else
                                                                 <?php } ?>
 
                                                                 <span class="error menu_item_<?= $menu_item->menu_item_id ?>"></span>
+
+                                                                <?php if($menu_item->image) { ?>
+                                                                <a href="<?= Yii::getAlias("@s3/"). VendorItem::UPLOADFOLDER_MENUITEM. $menu_item->image ?>" data-lightbox="menu-items" data-title="<?= Yii::$app->language == 'en'?$menu_item->menu_item_name:$menu_item->menu_item_name_ar; ?>"><img src="<?= Yii::getAlias("@s3/"). VendorItem::UPLOADFOLDER_MENUITEM_THUMBNAIL. $menu_item->image ?>"></a>
+                                                                <?php } ?>
                                                             </li>
                                                         <?php } ?>
                                                         </ul>
@@ -860,6 +884,50 @@ else
                                           </div>
                                         </div>
                                     </div><!-- END .panel -->
+                                    <?php } ?>
+
+                                    <?php if($model->itemQuestions) { ?>
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse"  aria-expanded="true" href="#collapse-customs">
+                                                        <?= Yii::t('frontend', 'Customs') ?>
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapse-customs" class="panel-collapse collapse in">
+                                                <div class="panel-body">
+                                                    <div class="menu-item-detail">
+                                                        <?php foreach ($model->itemQuestions as $key => $question) {
+                                                            $answer = '';
+                                                            if ($cart) {
+                                                                $answerData = \common\models\CustomerCartItemQuestionAnswer::findOne(
+                                                                        [
+                                                                                'question_id'=>$question->item_question_id,
+                                                                                'item_id' => $cart->item_id,
+                                                                                'cart_id' => $cart->cart_id
+                                                                        ]);
+                                                                if ($answerData) {
+                                                                    $answer = $answerData->answer;
+                                                                }
+                                                            }
+
+                                                            ?>
+                                                            <div class="row margin-bottom-10" style="margin-bottom: 20px">
+                                                                <div class="col-lg-12 col-md-12 question">
+                                                                    <span style="text-transform: capitalize"><?=$question->question?></span> <?=($question->required) ? '<span style="color: brown;">*</span>' : '';?>
+                                                                </div>
+                                                                <div class="col-lg-12 col-md-12 answer">
+                                                                    <input type="text" name="answer[<?=$question->item_question_id?>]" id="answer-<?=$question->item_question_id?>" class="form-control input-lg" value="<?=$answer ?>"/>
+                                                                </div>
+                                                                <span class="col-lg-12 col-md-12 error question-<?=$question->item_question_id?>"></span>
+                                                            </div>
+
+                                                        <?php } ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- END .panel -->
                                     <?php } ?>
 
                                     <?php if($model->allow_special_request) { ?>
@@ -991,23 +1059,39 @@ else
                                                     </p>
                                                 </div>
 
-                                                <?php if($s['item_how_long_to_make'] > 0) { ?>
+                                                <?php
+
+                                                if($s['item_how_long_to_make'] > 0) { ?>
                                                 <div class="callout-container" style="top: 170px; bottom: auto; right: 5px;">
                                                     <span class="callout light">
                                                         <?php
 
                                                         if($s['notice_period_type'] == 'Day')
                                                         {
-                                                            echo Yii::t('frontend', 'Notice: {count} day(s)', [
-                                                                'count' => $s['item_how_long_to_make']
-                                                            ]);
+                                                            if ($s['item_how_long_to_make'] >= 7) {
+                                                                echo Yii::t('frontend', 'Notice: {count} week(s)', [
+                                                                    'count' => substr(($s['item_how_long_to_make'] / 7),0,3)
+                                                                ]);
+                                                            } else {
+                                                                echo Yii::t('frontend', 'Notice: {count} day(s)', [
+                                                                    'count' => $s['item_how_long_to_make']
+                                                                ]);
+                                                            }
                                                         }
                                                         else
                                                         {
-                                                            echo Yii::t('frontend', 'Notice: {count} hours', [
-                                                                'count' => $s['item_how_long_to_make']
-                                                            ]);
-                                                        } ?>
+                                                            if ($s['item_how_long_to_make'] >= 24) {
+                                                                echo Yii::t('frontend', 'Notice: {count} day(s)', [
+                                                                    'count' => substr(($s['item_how_long_to_make'] / 24),0,3)
+                                                                ]);
+                                                            } else {
+                                                                echo Yii::t('frontend', 'Notice: {count} hours', [
+                                                                    'count' => $s['item_how_long_to_make']
+                                                                ]);
+                                                            }
+
+                                                        }
+                                                        ?>
                                                     </span>
                                                 </div>
                                                 <?php } ?>
@@ -1187,4 +1271,8 @@ $this->registerCss("
     }
 ");
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.27', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerCssFile('@web/css/lightbox.css', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerJsFile('@web/js/lightbox.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerJsFile('@web/js/product_detail.js?v=1.28', ['depends' => [\yii\web\JqueryAsset::className()]]);

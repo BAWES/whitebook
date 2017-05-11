@@ -17,7 +17,6 @@ $this->title = 'The White Book | Ideas for your event in Kuwait!';
 
 $model = new Website();
 
-
 // Facebook Pixel
 $this->registerJs("
 fbq('track', 'ViewContent', {

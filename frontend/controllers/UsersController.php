@@ -879,8 +879,26 @@ class UsersController extends BaseController
                 ->all();
         }        
 
+        //get area 
+
+        $delivery_location = Yii::$app->session->get('delivery-location');
+
+        $area = Location::findOne($delivery_location);
+
+        //get area name 
+
+        if(Yii::$app->language == 'en')
+        {
+            $area_name = $area->location;
+        }
+        else
+        {
+            $area_name = $area->location_ar;
+        }
+
         return $this->renderPartial('questions', [
-            'questions' => $questions
+            'questions' => $questions,
+            'area_name' => $area_name
         ]);
     }
 

@@ -50,6 +50,11 @@ $this->params['breadcrumbs'][] = 'Update';
 	    		Addons
 	    	</a>
 	    </li>
+        <li>
+            <a href="<?= Url::to(['vendor-item/item-questions', 'id' => $model->item_id]) ?>">
+                <?=Yii::t('app','Questions')?>
+            </a>
+        </li>
 	    <li>
 	    	<a href="<?= Url::to(['vendor-item/item-images', 'id' => $model->item_id]) ?>">
 	    		Images
@@ -78,6 +83,8 @@ $this->params['breadcrumbs'][] = 'Update';
 				<?= $form->field($model, 'item_price_description_ar')->textarea([
 						'id' => 'vendoritem-item_price_description_ar'
 					]) ?>
+
+				<?= $form->field($model, 'hide_price_chart')->checkbox(); ?>
 
 				<?php if($model->isNewRecord) { ?>
 					<div class="form-group multiple_price" style="padding: 5px;  font-size: 14px;">
@@ -123,14 +130,17 @@ $this->params['breadcrumbs'][] = 'Update';
 						'Guests' => 'Guests'
 					]); ?>
 
-				<?= $form->field($model, 'item_minimum_quantity_to_order')
-						->label('Included Quantity'.Html::tag('span', '*',['class'=>'required mandatory']))
-						->textInput(['maxlength' => 128, 'id' => 'vendoritem-item_minimum_quantity_to_order']); ?>
+                <?= $form->field($model, 'included_quantity')
+                    ->label('Included Quantity '.Html::tag('span', '*',['class'=>'required mandatory']))
+                    ->textInput(['maxlength' => 128]); ?>
 
-				<?= $form->field($model, 'item_default_capacity')
-						->label('Maximum quantity ordered per day '.Html::tag('span', '*',['class'=>'required mandatory']))
-						->textInput(['maxlength' => 128, 'id' => 'vendoritem-item_default_capacity']); ?>
+                <?= $form->field($model, 'item_minimum_quantity_to_order')
+                    ->label('Minimum quantity to order'.Html::tag('span', '*',['class'=>'required mandatory']))
+                    ->textInput(['maxlength' => 128]); ?>
 
+                <?= $form->field($model, 'item_default_capacity')
+                    ->label('Maximum quantity ordered per day '.Html::tag('span', '*',['class'=>'required mandatory']))
+                    ->textInput(['maxlength' => 128]); ?>
 
 			</fieldset>
 

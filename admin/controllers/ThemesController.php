@@ -236,13 +236,9 @@ class ThemesController extends Controller
                 'trash' => 'Default'
             ]);
 
-        $old_theme = Themes::find()
-            ->where(['theme_id' => $old_theme_id])
-            ->one();
+        $old_theme = Themes::findOne($old_theme_id);
 
-        $new_theme = Themes::find()
-            ->where(['theme_id' => $new_theme_id])
-            ->one();
+        $new_theme = Themes::findOne($new_theme_id);
             
         Yii::$app->response->format = 'json';
 
@@ -252,5 +248,33 @@ class ThemesController extends Controller
                     'new_theme' => $new_theme->theme_name
                 ])
         ];
+    }
+
+    public function actionAssign($id){
+        $model = Themes::findOne($id);
+        $themes = Themes::find()->active()->all();
+
+        if (!$model) {
+            Yii::$app->session->setFlash('danger', 'Invalid Theme');
+            return $this->redirect(['index']);
+        }
+
+        if (Yii::$app->request->isPost) {
+
+            VendorItemThemes::deleteAll(['theme_id'=>$id]);
+            $items = Yii::$app->request->post('items');
+            foreach($items as $item) {
+                $vendorItemTheme = new VendorItemThemes;
+                $vendorItemTheme->item_id = $item;
+                $vendorItemTheme->theme_id = $id;
+                $vendorItemTheme->trash = 'Default';
+                $vendorItemTheme->save();
+            }
+            Yii::$app->session->setFlash('success','Theme item changes.');
+            return $this->redirect(['index']);
+        }
+
+
+        return $this->render('assign',['model'=>$model,'allThemes'=>$themes]);
     }
 }
