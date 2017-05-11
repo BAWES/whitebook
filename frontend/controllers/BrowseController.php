@@ -62,6 +62,10 @@ class BrowseController extends BaseController
         $data = Yii::$app->request->get();
         $themes = [];
 
+        if(isset($data['themes'][0]) && $data['themes'][0] == 'all') {
+            unset($data['themes'][0]);
+        }
+
         if ($slug != 'all') {
             $Category = Category::findOne(['slug' => $slug]);
 
