@@ -1,14 +1,25 @@
 
+$(document).delegate('#chk_all', 'change', function() {
+    if($(this).prop('checked')) 
+    {
+        $('.themes-assign table input').prop('checked', true);    
+    }
+    else
+    {
+        $('.themes-assign table input').prop('checked', false);    
+    }
+});
+
 $(document).delegate('#search', 'change', function() {
 
     $query = $(this).val();
 
     if(!$query) {
-        $('.item-listing label').show();
+        $('#tbl_items tbody tr').show();
         return true;
     }
 
-    $('.item-listing label').each(function() {
+    $('#tbl_items tbody tr').each(function() {
 
         if($(this).text().indexOf($query) !== -1) {
             $(this).show();
