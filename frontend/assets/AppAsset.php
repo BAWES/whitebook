@@ -21,7 +21,7 @@ class AppAsset extends AssetBundle
         'css/style.css?v=1.43',
         'fonts/flaticon/flaticon.css',
         'css/demo.css?v=1.2',
-        'css/media_style.css?v=1.10',
+        'css/media_style.css?v=1.11',
         'css/owl.carousel.css',
         'css/ma5-mobile-menu.css',
         'css/bootstrap-select.min.css',
@@ -35,7 +35,7 @@ class AppAsset extends AssetBundle
         'js/bootstrap.min.js',
         'js/jquery.flexslider.js',
         'js/classie.js',
-        'js/main.js?v=1.25',
+        'js/main.js?v=1.26',
         'js/owl.carousel.js',
         'js/bootstrap-datepicker.js',
         'js/bootstrap-select.js'
