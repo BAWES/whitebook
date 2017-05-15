@@ -7,7 +7,9 @@
     </div>
     <div class="panel-collapse">
         <div class="panel-body">
-            <select name="themes[]" id="theme_filter" class="selectpicker" data-title="<?= Yii::t('frontend', 'All') ?>" data-live-search="true" data-size="10" multiple>
+            <select name="themes[]" id="theme_filter" class="selectpicker" data-title="<?= Yii::t('frontend', 'All') ?>" data-live-search="true" data-size="10">
+
+            <option value="all" <?= in_array('all', $selected_themes)?'selected':'' ?>><?= Yii::t('frontend', 'All') ?></option>
 
             <?php 
             foreach ($themes as $key => $value) 

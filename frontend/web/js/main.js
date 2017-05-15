@@ -1541,7 +1541,6 @@ function show_event_modal_true($message)
 
 function show_password_reset_modal_true()
 {
-
     $('#login_success').modal('show');
     $('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+pwd_success_msg+'</span>');
     window.setTimeout(function() {$('#login_success').modal('hide');}, 2000);
