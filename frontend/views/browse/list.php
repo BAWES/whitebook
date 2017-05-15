@@ -56,7 +56,7 @@ else
             </div>
             <div class="plan_venues" id="wrapper">
                 <div class="overlay"></div>
-                <div class="overlay_filter clearfix hidden-xs hidden-sm">
+                <div class="overlay_filter clearfix">
 
                     <div class="col-lg-3 padding-left-0 theme-filter">
                         <?= $this->render('@frontend/views/common/filter/themes.php', [
@@ -78,8 +78,16 @@ else
                     <div class="col-lg-3 padding-left-0 location-filter">
                         <?= $this->render('@frontend/views/common/filter/locations.php', [
                             'deliver_location' => $deliver_location
-                        ]);  ?>
+                        ]); ?>
                     </div>
+
+                    <div class="col-lg-3 padding-left-0 mobile-category-filter visible-xs visible-sm">
+                        <?= $this->render('@frontend/views/common/filter/mobile-category.php', [
+                            'TopCategories' => $TopCategories,
+                            'Category' => $Category
+                        ]); ?>
+                    </div>  
+
                 </div>
 
                 <span class="filter_butt visible-xs visible-sm">

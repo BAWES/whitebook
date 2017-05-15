@@ -3,7 +3,7 @@ function resize()
 {
     if($(document).width() < 992) 
     {
-        $contents  = '<div class="col-lg-3 padding-left-0 theme-filter">' + $('.overlay_filter .date-filter').html() + '</div>';
+        $contents  = '<div class="col-lg-3 padding-left-0 date-filter">' + $('.overlay_filter .date-filter').html() + '</div>';
         $contents += '<div class="col-lg-3 padding-left-0 event-filter">' + $('.overlay_filter .event-filter').html() + '</div>';
         $contents += '<div class="col-lg-3 padding-left-0 location-filter">' + $('.overlay_filter .location-filter').html() + '</div>';
 
@@ -18,6 +18,9 @@ function resize()
             $('.overlay_filter .event-filter').remove();
             $('.overlay_filter .location-filter').remove();
             //$('.overlay_filter .theme-filter').remove();
+
+            //move category block 
+            //$('.listing_sub_cat1').contents().appendTo('.overlay_filter');
         }
     }
     else
@@ -27,6 +30,10 @@ function resize()
         if($contents.indexOf("<div") >= 0)
         {
             $('.mobile_only_filter').contents().appendTo('.overlay_filter');
+
+            //move category block 
+            // $('.filter_title').after('<div class="listing_sub_cat1">' + $('.listing_sub_cat1').html() + '</div>');
+            //$('.overlay_filter .listing_sub_cat1').remove();
         }
     }
 }
@@ -100,8 +107,8 @@ $(document).delegate('#main-category', 'change', function(){
 
 //mobile - filter button 
 $(document).delegate('.filter_butt', 'click', function(){
-    $('#left_side_cate, .overlay_filter').toggleClass('hidden-sm');
-    $('#left_side_cate, .overlay_filter').toggleClass('hidden-xs');
+    $('#left_side_cate').toggleClass('hidden-sm');
+    $('#left_side_cate').toggleClass('hidden-xs');
 
     if($('.vendor-filter').length > 0) {
         $('html, body').animate({ scrollTop: $('.vendor-filter').offset().top - 120 }, 'slow');

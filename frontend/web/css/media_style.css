@@ -1438,3 +1438,16 @@ div#mobile_search_fail {
         margin: 0 auto 10px auto;
     }
 }
+
+#top_panel_category .panel-heading {
+	border: none;
+}
+
+#top_panel_category .btn {
+    padding: 10px !important;
+    height: 40px;
+}
+
+.overlay_filter .panel {
+	box-shadow: none;	
+}
