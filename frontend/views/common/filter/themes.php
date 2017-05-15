@@ -1,8 +1,7 @@
 <div class="panel panel-default" id="top_panel_theme">
     <div class="panel-heading">
         <p>
-            <?= Yii::t('frontend', 'Themes') ?>
-            <a href="javascript:void(0)" style="<?=(sizeof($selected_themes) > 0)?'display:inline':'';?>" class="filter-clear" id="filter-clear-date" title="Clear">- <?= Yii::t('frontend', 'Clear') ?></a>        
+            <?= Yii::t('frontend', 'Themes') ?>     
         </p>
     </div>
     <div class="panel-collapse">
