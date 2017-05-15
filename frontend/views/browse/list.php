@@ -156,13 +156,13 @@ $(document).delegate('#theme_filter', 'change', function() {
         });
 
         $('#theme_filter').selectpicker('val', a);
-    }*/
+    }
 
     if($('#theme_filter option:selected').length > 0 && $('#theme_filter option:selected').val() != 'all') {
         $('#top_panel_theme .filter-clear').css('display', 'inline');
     }else{
         $('#top_panel_theme .filter-clear').css('display', 'none');
-    }
+    }*/
 
     filter();
 });
