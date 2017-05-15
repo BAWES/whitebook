@@ -56,7 +56,7 @@ else
             </div>
             <div class="plan_venues" id="wrapper">
                 <div class="overlay"></div>
-                <div class="overlay_filter clearfix">
+                <div class="overlay_filter clearfix hidden-xs hidden-sm">
 
                     <div class="col-lg-3 padding-left-0 theme-filter">
                         <?= $this->render('@frontend/views/common/filter/themes.php', [
@@ -80,37 +80,6 @@ else
                             'deliver_location' => $deliver_location
                         ]);  ?>
                     </div>
-                    <!--
-                    <div class="mid-space">
-                        &nbsp;
-                    </div>
-                    <div class="col-lg-2 padding-left-0 available-filter">
-                        <div class="panel panel-default" id="top_panel_location">
-                            <div class="panel-heading clearfix" id="top_panel_heading">
-                                <div class=""><p><?=Yii::t('frontend','Product Type')?></p></div>
-                            </div>
-                            <div id="available-for-sale" class="panel-collapse " aria-expanded="false">
-                                <div class="">
-                                    <div class="form-group margin-0">
-                                        <?php
-                                        $checked1 = '';
-                                        if (isset($get['for_sale'])) {
-                                            $checked1 = 'checked=checked';
-                                        }
-                                        ?>
-                                        <label class="label_check margin-0" for="checkbox-available-for-sale">
-                                        <input name="for_sale" data-element="input" class="items"
-                                               id="checkbox-available-for-sale"
-                                               value="sale"
-                                               type="checkbox" <?php echo (isset($checked1) && $checked1 != "") ? $checked1 : ''; ?> >
-                                                <span><?=Yii::t('frontend','Available For Sale')?></span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    -->
                 </div>
 
                 <span class="filter_butt visible-xs visible-sm">

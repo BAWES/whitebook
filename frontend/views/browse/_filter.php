@@ -10,7 +10,7 @@ use common\components\LangFormat;
     <div class="filter_section">
 
         <div class=""><!-- responsive-category-top -->
-            <div class="filter_title">
+            <div class="filter_title hidden-xs hidden-sm">
                 <span class="title_filter color_yellow"><?= Yii::t('frontend', 'Filter by') ?></span>
             </div>
 
@@ -117,6 +117,10 @@ use common\components\LangFormat;
                 </div>
             </nav>
         </div>
+
+        <br class="visible-sm visible-xs" />
+
+        <div class="mobile_only_filter"></div>
 
         <button class="btn btn-close-filter visible-sm visible-xs"><?=Yii::t('frontend','Close filter')?></button>
     </div>
