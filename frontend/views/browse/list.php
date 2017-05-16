@@ -29,7 +29,7 @@ if(isset($get['themes']))
 }
 else
 {
-    $selected_themes = ['all'];
+    $selected_themes = [];//['all'];
 } 
 ?>
     <!-- coniner start -->
@@ -78,39 +78,16 @@ else
                     <div class="col-lg-3 padding-left-0 location-filter">
                         <?= $this->render('@frontend/views/common/filter/locations.php', [
                             'deliver_location' => $deliver_location
-                        ]);  ?>
+                        ]); ?>
                     </div>
-                    <!--
-                    <div class="mid-space">
-                        &nbsp;
-                    </div>
-                    <div class="col-lg-2 padding-left-0 available-filter">
-                        <div class="panel panel-default" id="top_panel_location">
-                            <div class="panel-heading clearfix" id="top_panel_heading">
-                                <div class=""><p><?=Yii::t('frontend','Product Type')?></p></div>
-                            </div>
-                            <div id="available-for-sale" class="panel-collapse " aria-expanded="false">
-                                <div class="">
-                                    <div class="form-group margin-0">
-                                        <?php
-                                        $checked1 = '';
-                                        if (isset($get['for_sale'])) {
-                                            $checked1 = 'checked=checked';
-                                        }
-                                        ?>
-                                        <label class="label_check margin-0" for="checkbox-available-for-sale">
-                                        <input name="for_sale" data-element="input" class="items"
-                                               id="checkbox-available-for-sale"
-                                               value="sale"
-                                               type="checkbox" <?php echo (isset($checked1) && $checked1 != "") ? $checked1 : ''; ?> >
-                                                <span><?=Yii::t('frontend','Available For Sale')?></span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    -->
+
+                    <div class="col-lg-3 padding-left-0 mobile-category-filter visible-xs visible-sm">
+                        <?= $this->render('@frontend/views/common/filter/mobile-category.php', [
+                            'TopCategories' => $TopCategories,
+                            'Category' => $Category
+                        ]); ?>
+                    </div>  
+
                 </div>
 
                 <span class="filter_butt visible-xs visible-sm">
@@ -179,13 +156,13 @@ $(document).delegate('#theme_filter', 'change', function() {
         });
 
         $('#theme_filter').selectpicker('val', a);
-    }*/
+    }
 
-    if($('#theme_filter option:selected').length > 0) {
+    if($('#theme_filter option:selected').length > 0 && $('#theme_filter option:selected').val() != 'all') {
         $('#top_panel_theme .filter-clear').css('display', 'inline');
     }else{
         $('#top_panel_theme .filter-clear').css('display', 'none');
-    }
+    }*/
 
     filter();
 });

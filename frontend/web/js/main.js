@@ -1,4 +1,56 @@
+
+function resize() 
+{
+    //only for browse page 
+    
+    if($('.mobile_only_filter').length == 0)
+        return true;
+
+    if($(document).width() < 992) 
+    {
+        $contents  = '<div class="col-lg-3 padding-left-0 date-filter">' + $('.overlay_filter .date-filter').html() + '</div>';
+        $contents += '<div class="col-lg-3 padding-left-0 event-filter">' + $('.overlay_filter .event-filter').html() + '</div>';
+        $contents += '<div class="col-lg-3 padding-left-0 location-filter">' + $('.overlay_filter .location-filter').html() + '</div>';
+
+        if($('.overlay_filter .date-filter').length > 0)
+        {
+            $('.mobile_only_filter').html($contents);
+
+            //$a = '<div class="col-lg-3 padding-left-0 theme-filter">' + $('.overlay_filter .theme-filter').html() + '</div>';
+            //$('.filter_title').after($a);
+
+            $('.overlay_filter .date-filter').remove();
+            $('.overlay_filter .event-filter').remove();
+            $('.overlay_filter .location-filter').remove();
+            //$('.overlay_filter .theme-filter').remove();
+
+            //move category block 
+            //$('.listing_sub_cat1').contents().appendTo('.overlay_filter');
+        }
+    }
+    else
+    {
+        $contents = $('.mobile_only_filter').html();
+
+        if($contents.indexOf("<div") >= 0)
+        {
+            $('.mobile_only_filter').contents().appendTo('.overlay_filter');
+
+            //move category block 
+            // $('.filter_title').after('<div class="listing_sub_cat1">' + $('.listing_sub_cat1').html() + '</div>');
+            //$('.overlay_filter .listing_sub_cat1').remove();
+        }
+    }
+}
+
+$(window).resize(function() {
+    resize();
+});
+
 $(document).ready(function(){
+
+    resize();
+
     $('body').append('<div class="ma5-mobile-menu-container"/>');
     $('.ma5-menu-mobile').find('ul').clone().addClass('ma5-menu-panel').appendTo('.ma5-mobile-menu-container').find('ul').remove();
 
@@ -1541,7 +1593,6 @@ function show_event_modal_true($message)
 
 function show_password_reset_modal_true()
 {
-
     $('#login_success').modal('show');
     $('#success').html('<span class="sucess_close">&nbsp;</span><span class="msg-success" style="margin-top: 5px; width: 320px; float: left; text-align: left;">'+pwd_success_msg+'</span>');
     window.setTimeout(function() {$('#login_success').modal('hide');}, 2000);

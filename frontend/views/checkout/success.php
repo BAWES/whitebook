@@ -1,5 +1,5 @@
 <?php
-    
+
 $this->title = Yii::t('frontend', 'Success | Whitebook');
 
 $ids = [];

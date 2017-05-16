@@ -276,7 +276,7 @@ else
 
                                 if($model['notice_period_type'] == 'Day')
                                 {
-                                    if ($model['item_how_long_to_make'] >= 7) {
+                                    if ($model['item_how_long_to_make'] % 7 == 0) {
                                         echo Yii::t('frontend', 'Notice: {count} week(s)', [
                                             'count' => substr(($model['item_how_long_to_make'] / 7),0,3)
                                         ]);
@@ -1068,7 +1068,7 @@ else
 
                                                         if($s['notice_period_type'] == 'Day')
                                                         {
-                                                            if ($s['item_how_long_to_make'] >= 7) {
+                                                            if ($s['item_how_long_to_make'] % 7 == 0) {
                                                                 echo Yii::t('frontend', 'Notice: {count} week(s)', [
                                                                     'count' => substr(($s['item_how_long_to_make'] / 7),0,3)
                                                                 ]);

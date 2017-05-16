@@ -10,11 +10,11 @@ use common\components\LangFormat;
     <div class="filter_section">
 
         <div class=""><!-- responsive-category-top -->
-            <div class="filter_title">
+            <div class="filter_title hidden-xs hidden-sm">
                 <span class="title_filter color_yellow"><?= Yii::t('frontend', 'Filter by') ?></span>
             </div>
 
-            <div class="listing_sub_cat1">
+            <div class="listing_sub_cat1 hidden-sm hidden-xs">
                 <span class="title_filter"><?= Yii::t('frontend', 'Categories') ?></span>
                 <select class="selectpicker" id="main-category" placeholder="test"> 
                     
@@ -86,7 +86,7 @@ use common\components\LangFormat;
 
         <div class="responsive-category-bottom">
 
-            <nav class="row-offcanvas row-offcanvas-left">
+            <nav class="row-offcanvas row-offcanvas-left hidden-sm hidden-xs">
                 <div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
                     <div id="accordion" class="panel-group">
                         <?=$this->render('@frontend/views/common/filter/category.php',['slug' => $slug]); ?>
@@ -117,6 +117,10 @@ use common\components\LangFormat;
                 </div>
             </nav>
         </div>
+
+        <br class="visible-sm visible-xs" />
+
+        <div class="mobile_only_filter"></div>
 
         <button class="btn btn-close-filter visible-sm visible-xs"><?=Yii::t('frontend','Close filter')?></button>
     </div>
