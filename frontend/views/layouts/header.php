@@ -66,37 +66,6 @@ $action = Yii::$app->controller->action->id;
                             </a>
                         </div>
 
-                        <div class="navbar-collapse collapse">
-                            <ul class="nav navbar-nav">
-                                <li class="">
-                                    <?= Html::a(Yii::t('frontend', 'Browse'), ['browse/list','slug'=>'all'], ['title' => Yii::t('frontend', 'Product')]); ?>
-                                </li>
-
-                                <?php if(Yii::$app->params['feature.packages.enabled'] == true){ ?>
-                                    <li class="<?php if ($action == "packages") { echo "active";} ?>">
-                                        <a href="<?= Url::toRoute('packages/index', true); ?>" title="<?php echo Yii::t('frontend', 'Packages'); ?>">
-                                            <?php echo Yii::t('frontend', 'Packages'); ?>
-                                        </a>
-                                    </li>
-                                <?php } ?>
-
-                                <li  class="<?php if ($action == "experience") { echo "active";} ?>">
-                                    <a href="<?= Url::toRoute('site/experience', true); ?>" title="<?php echo Yii::t('frontend', 'Experience'); ?>">
-                                        <?php echo Yii::t('frontend', 'Experience'); ?>
-                                    </a>
-                                </li>
-                                <li  class="<?php if ($action == "themes") { echo "active";} ?>">
-                                    <a href="<?= Url::toRoute('/themes/index', true); ?>" title="<?php echo Yii::t('frontend', 'Themes'); ?>">
-                                        <?php echo Yii::t('frontend', 'Themes'); ?>
-                                    </a>
-                                </li>
-                                <li class="<?php if ($action == "directory") { echo "active";} ?>">
-                                    <a href="<?= Url::toRoute('/directory/index', true); ?>" title="<?php echo Yii::t('frontend', 'Directory'); ?>">
-                                        <?php echo Yii::t('frontend', 'Directory'); ?>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
                     </div>
                     <div class="col-md-3 col-xs-12 col-sm-6 padding-right0 padding-left0 <?php if (!Yii::$app->user->isGuest) { echo 'new_user_name'; } ?>">
                         <?php if (!Yii::$app->user->isGuest) { ?>
@@ -203,7 +172,7 @@ $action = Yii::$app->controller->action->id;
                 </div>
 
                 <div class="clearfix"></div>
-                
+
                 <div class="category_listing_nav plan_menu
                     <?php if(Yii::$app->language == 'ar') echo 'rtl'; ?>">
 
@@ -266,7 +235,7 @@ $action = Yii::$app->controller->action->id;
                 </div>
 
             </div><!-- END .desktop-menu -->
-        
+
     </div>
 </div>
 </header>
@@ -453,7 +422,7 @@ $action = Yii::$app->controller->action->id;
                     <?= Yii::t('frontend', 'Track Booking'); ?>
                 </a>
             </li>
-            
+
         <?php } else { ?>
 
         <li>
