@@ -293,7 +293,7 @@ use frontend\models\Users;
                             </div>
 
                             <div class="clearfix"></div>
-                            
+
                             <div class="left-side pull-left col-md-6 col-sm-6 col-xs-12 padding-left-0  padding-right-0">
                                 <div class="form-group">
                                     <label><?= Yii::t('frontend', 'Password') ?></label>
@@ -485,10 +485,20 @@ use frontend\models\Users;
             </div>
         </div>
         <div class="bootom_footer">
-            <div class="col-md-7 padding_left0">
+            <div class="col-md-8 padding_left0">
                 <ul class="treams_of_ser margin_top">
                     <li><a href="<?= Url::toRoute('/contact-us',true);?>"> <?= Yii::t("frontend", "About and Contact") ?></a></li>
+                    <li class="">
+                        <a href="" data-toggle="modal"  onclick="show_login_modal('-5');" data-target="#vendor-sign-up">
+                            <?= Yii::t('frontend', 'Become a Vendor'); ?>
+                        </a>
+                    </li>
                     <li><a href="<?= Url::toRoute('/directory/index', true); ?>"> <?= Yii::t("frontend", "Directory") ?></a></li>
+                    <li><a href="<?= Url::toRoute('site/experience', true); ?>"> <?= Yii::t("frontend", "Experience") ?></a></li>
+                    <li><a href="<?= Url::toRoute('/themes/index', true); ?>"> <?= Yii::t("frontend", "Themes") ?></a></li>
+                    <?php if(Yii::$app->params['feature.packages.enabled'] == true){ ?>
+                        <li><a href="<?= Url::toRoute('packages/index', true); ?>"> <?= Yii::t("frontend", "Packages") ?></a></li>
+                    <?php } ?>
                 </ul>
                 <ul class="treams_of_ser">
                     <li> &COPY;2016 - The White Book </li>
@@ -496,7 +506,7 @@ use frontend\models\Users;
                     <li><a href="<?= Url::toRoute('/privacy-policy',true);?>"><?= Yii::t("frontend", "Privacy Policy") ?></a></li>
                 </ul>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <div class="social_icons desktop">
                     <span>Check out our Instagram</span>
                     <a target="_blank" href="https://www.instagram.com/thewhitebookkw/">
@@ -516,9 +526,21 @@ use frontend\models\Users;
                     <ul class="treams_of_ser margin_top">
 
                         <li><a href="<?= Url::toRoute('/contact-us',true);?>"> <?= Yii::t("frontend", "About and Contact") ?></a></li>
-                        <li><a href="<?= Url::toRoute('/brands-product',true); ?>/"> <?= Yii::t("frontend", "Directory") ?></a></li>
+                        <li class="">
+                            <a href="" data-toggle="modal"  onclick="show_login_modal('-5');" data-target="#vendor-sign-up">
+                                <?= Yii::t('frontend', 'Become a Vendor'); ?>
+                            </a>
+                        </li>
+                        <li><a href="<?= Url::toRoute('/directory/index',true); ?>/"> <?= Yii::t("frontend", "Directory") ?></a></li>
+
+                        <li><a href="<?= Url::toRoute('site/experience', true); ?>"> <?= Yii::t("frontend", "Experience") ?></a></li>
+                        <li><a href="<?= Url::toRoute('/themes/index', true); ?>"> <?= Yii::t("frontend", "Themes") ?></a></li>
+                        <?php if(Yii::$app->params['feature.packages.enabled'] == true){ ?>
+                            <li><a href="<?= Url::toRoute('packages/index', true); ?>"> <?= Yii::t("frontend", "Packages") ?></a></li>
+                        <?php } ?>
                         <li><a href="<?= Url::toRoute('/terms-conditions',true);?>"><?= Yii::t("frontend", "Terms and Conditions") ?></a></li>
                         <li><a href="<?= Url::toRoute('/privacy-policy',true);?>"><?= Yii::t("frontend", "Privacy Policy") ?></a></li>
+
                     </ul>
                 </div>
             </div>
@@ -537,7 +559,7 @@ use frontend\models\Users;
                 </div>
             </div>
             <ul class="treams_of_ser copyright col-md-7 col-sm-12 padding_left0">
-                <li>   &COPY;2015 - The White Book </li>
+                <li>   &COPY;2017 - The White Book </li>
             </ul>
         </div>
     </div>
@@ -575,14 +597,14 @@ if(!empty($event)){
     {
         $message = Yii::t('frontend', 'Event {event} created successfully!', [
                 'event' => $event
-            ]);        
-    } 
-    else 
+            ]);
+    }
+    else
     {
         $message = Yii::t('frontend', 'Event {event} created and {item_name} added successfully!', [
                 'event' => $event,
                 'item_name' => $item_name
-            ]); 
+            ]);
     }
 
     $this->registerJs('
