@@ -1,13 +1,13 @@
 <?php
-	
+
 $this->title = Yii::t('frontend', 'Success | Whitebook');
 
 $ids = [];
 
 foreach ($arr_booking_id as $key => $value) 
 {
-    if(strlen($value) < 5) {
-        $ids[] = '#'.str_repeat(0, 5 - strlen($value)).$value;
+    if(strlen($value) < 4) {
+        $ids[] = '#'.str_repeat(0, 4 - strlen($value)).$value;
     } else {
         $ids[] = '#'.$value;
     }
@@ -17,12 +17,12 @@ foreach ($arr_booking_id as $key => $value)
 <section id="inner_pages_white_back">
     <div class="container paddng0">
         <div class="title_main">
-			<h1><?= Yii::t('frontend', 'Success'); ?></h1>
-		</div>
-		<center>
-			<h2><?= Yii::t('frontend', 'Congratulation! Your Booking Request Sent To Admin Successfully!') ?></h2>
-			<br />
-			<p>
+            <h1><?= Yii::t('frontend', 'Success'); ?></h1>
+        </div>
+        <center>
+            <h2><?= Yii::t('frontend', 'Congratulation! Your Booking Request Sent To Admin Successfully!') ?></h2>
+            <br />
+            <p>
                 <?php
                 if (Yii::$app->user->isGuest) {
                     $booking_page = \yii\helpers\Url::to(['booking/view'],true);
@@ -47,9 +47,9 @@ foreach ($arr_booking_id as $key => $value)
                 }
                 ?></p>
 
-		</center>
-		<br />
-		<br />
-		<br />
-	</div>
+        </center>
+        <br />
+        <br />
+        <br />
+    </div>
 </section>
