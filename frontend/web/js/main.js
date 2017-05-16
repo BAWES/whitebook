@@ -1,6 +1,11 @@
 
 function resize() 
 {
+    //only for browse page 
+    
+    if($('.mobile_only_filter').length == 0)
+        return true;
+
     if($(document).width() < 992) 
     {
         $contents  = '<div class="col-lg-3 padding-left-0 date-filter">' + $('.overlay_filter .date-filter').html() + '</div>';
