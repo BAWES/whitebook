@@ -1,5 +1,18 @@
 <?php
-	$this->title = Yii::t('frontend', 'Success | Whitebook');
+	
+$this->title = Yii::t('frontend', 'Success | Whitebook');
+
+$ids = [];
+
+foreach ($arr_booking_id as $key => $value) 
+{
+    if(strlen($value) < 5) {
+        $ids[] = '#'.str_repeat(0, 5 - strlen($value)).$value;
+    } else {
+        $ids[] = '#'.$value;
+    }
+}
+
 ?>
 <section id="inner_pages_white_back">
     <div class="container paddng0">
@@ -17,7 +30,7 @@
                         'frontend',
                         'Product Request has been sent successfully. Your Booking ID {id}. You can track and view detail of your booking in <a href="{booking_page}">Track Bookings</a> using booking Token sent in your email. <br/>Thank You, for shopping with us.',
                         [
-                            'id' => implode(', ', $arr_booking_id),
+                            'id' => implode(', ', $ids),
                             'booking_page' => $booking_page
                         ]
                     );
@@ -27,7 +40,7 @@
                         'frontend',
                         'Product Request has been sent successfully. Your Booking ID {id}. You can track and view detail of your booking in <a href="{booking_page}">My Bookings</a>. Thank You, for shopping with us.',
                         [
-                            'id' => implode(', ', $arr_booking_id),
+                            'id' => implode(', ', $ids),
                             'booking_page' => $booking_page
                         ]
                     );
