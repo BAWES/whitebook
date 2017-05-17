@@ -56,32 +56,32 @@ else
             </div>
             <div class="plan_venues" id="wrapper">
                 <div class="overlay"></div>
-                <div class="overlay_filter clearfix">
+                <div class="overlay_filter row clearfix">
 
-                    <div class="col-lg-3 padding-left-0 theme-filter">
+                    <div class="col-lg-3 theme-filter">
                         <?= $this->render('@frontend/views/common/filter/themes.php', [
                             'themes' => $themes,
                             'selected_themes' => $selected_themes
                         ]); ?>
                     </div>  
 
-                    <div class="col-lg-3 padding-left-0 date-filter">
+                    <div class="col-lg-3 date-filter">
                         <?= $this->render('@frontend/views/common/filter/date.php', [
                             'deliver_date' => $deliver_date
                         ]); ?>
                     </div>
 
-                    <div class="col-lg-3 padding-left-0 event-filter">
+                    <div class="col-lg-3 event-filter">
                         <?= $this->render('@frontend/views/common/filter/event_time.php');  ?>
                     </div>
 
-                    <div class="col-lg-3 padding-left-0 location-filter">
+                    <div class="col-lg-3 location-filter">
                         <?= $this->render('@frontend/views/common/filter/locations.php', [
                             'deliver_location' => $deliver_location
                         ]); ?>
                     </div>
 
-                    <div class="col-lg-3 padding-left-0 mobile-category-filter visible-xs visible-sm">
+                    <div class="col-lg-3 mobile-category-filter visible-xs visible-sm">
                         <?= $this->render('@frontend/views/common/filter/mobile-category.php', [
                             'TopCategories' => $TopCategories,
                             'Category' => $Category
@@ -89,10 +89,6 @@ else
                     </div>  
 
                 </div>
-
-                <span class="filter_butt visible-xs visible-sm">
-                    <i class="fa fa-filter"></i>
-                </span>
 
                 <div class="col-md-3 paddingleft0 hidden-xs hidden-sm left-sidebar" id="left_side_cate">
 
@@ -106,7 +102,16 @@ else
                             'Category' => $Category
                     ]);  ?>
 
+                    <button class="btn filter_butt btn-close-filter visible-sm visible-xs">
+                        <?=Yii::t('frontend','Close filter')?>
+                    </button>
+
                 </div>
+
+                <button class="btn filter_butt btn-open-filter visible-sm visible-xs">
+                    <?=Yii::t('frontend','Filter')?>
+                </button>
+
                 <div class="col-md-9 paddingright0 right-sidebar">                  
                     <div class="listing_right">
                         <?= $this->render('@frontend/views/common/items', [
