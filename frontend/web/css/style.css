@@ -1698,21 +1698,18 @@ a.thing_cont:hover {
     text-align: center;
     border-radius: 0px;
 }
-.filter_butt {
-    background: black;
-    color: white;
-    padding: 14px 15px;
-    border-radius: 100%;
-    position: fixed;
-    right: 30px;
-    bottom: 40px;
-    z-index: 11;
-    border: 1px solid white;
-    cursor: pointer;
+
+.mobile_only_filter {
+    margin-bottom: -25px;
 }
-.btn-close-filter{
+
+.filter_butt:hover, .filter_butt:focus {
+    color: white;
+}
+
+.btn-close-filter, .btn-open-filter{
     width: 100%;
-    margin-top: 10px;
+    margin-bottom: 15px;
     background: black;
     color: white;
 }

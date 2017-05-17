@@ -8,9 +8,9 @@ function resize()
 
     if($(document).width() < 992) 
     {
-        $contents  = '<div class="col-lg-3 padding-left-0 date-filter">' + $('.overlay_filter .date-filter').html() + '</div>';
-        $contents += '<div class="col-lg-3 padding-left-0 event-filter">' + $('.overlay_filter .event-filter').html() + '</div>';
-        $contents += '<div class="col-lg-3 padding-left-0 location-filter">' + $('.overlay_filter .location-filter').html() + '</div>';
+        $contents  = '<div class="col-lg-3 date-filter">' + $('.overlay_filter .date-filter').html() + '</div>';
+        $contents += '<div class="col-lg-3 event-filter">' + $('.overlay_filter .event-filter').html() + '</div>';
+        $contents += '<div class="col-lg-3 location-filter">' + $('.overlay_filter .location-filter').html() + '</div>';
 
         if($('.overlay_filter .date-filter').length > 0)
         {
@@ -111,7 +111,21 @@ $(document).delegate('#main-category', 'change', function(){
 });
 
 //mobile - filter button 
-$(document).delegate('.filter_butt', 'click', function(){
+
+$(document).delegate('.btn-close-filter', 'click', function(){
+    $(this).removeClass('visible-xs').removeClass('visible-sm').hide();
+    $('.btn-open-filter').addClass('visible-xs').addClass('visible-sm');
+    toggleFilter();
+});
+
+$(document).delegate('.btn-open-filter', 'click', function(){
+    $(this).removeClass('visible-xs').removeClass('visible-sm').hide();
+    $('.btn-close-filter').addClass('visible-xs').addClass('visible-sm');
+    toggleFilter();
+});
+
+function toggleFilter() 
+{
     $('#left_side_cate').toggleClass('hidden-sm');
     $('#left_side_cate').toggleClass('hidden-xs');
 
@@ -120,12 +134,7 @@ $(document).delegate('.filter_butt', 'click', function(){
     }else{
         $('html, body').animate({ scrollTop: 0 }, 'slow');
     }    
-});
-
-//mobile - close filter button 
-$(document).delegate('.btn-close-filter', 'click', function(){
-    $('.filter_butt').trigger('click');
-});
+}
 
 //mobile search close 
 $(document).delegate('.mobile-menu #search_form .btn-close', 'click', function() {
