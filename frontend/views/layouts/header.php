@@ -25,6 +25,9 @@ $action = Yii::$app->controller->action->id;
                     <a href="<?= Url::toRoute('site/index', true); ?>" title="THEWHITEBOOK">
                         <?= Html::img('@web/images/mobile_logo.svg', ['alt' => 'Whitebook']); ?>
                     </a>
+                    <a class="cart_header col-xs-3" href="<?= Url::toRoute('cart/index', true); ?>">
+                        <label></label>
+                    </a>
                     <div class="search_header col-xs-3 ses_act">
                         <div id="label1">
                             <label for="search-terms" id="search-label" class="search-lbl-mobile"></label>
