@@ -39,6 +39,7 @@ $this->registerCss("
         border-radius: 0;
         -webkit-box-shadow: none;
         box-shadow: none;
+        margin-bottom: 0px;
     }
     #top_panel_heading {border: none;box-shadow: none;}
     #top_panel_date .form-group,#top_panel_date .clear_left{
