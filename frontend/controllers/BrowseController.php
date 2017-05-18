@@ -278,6 +278,7 @@ class BrowseController extends BaseController
         $vendor = Vendor::find()
             ->select('{{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%vendor}}.slug')
             ->vendorIDs($vendor_ids)
+            ->orderBy('vendor_name')
             ->asArray()
             ->all();
 
