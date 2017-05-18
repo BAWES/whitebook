@@ -39,16 +39,6 @@ class CmsController extends Controller
             ],
         ];
 
-        // Bearer Auth checks for Authorize: Bearer <Token> header to login the user
-        $behaviors['authenticator'] = [
-            'class' => \yii\filters\auth\HttpBearerAuth::className(),
-        ];
-        // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
-        $behaviors['authenticator']['except'] = [
-            'options',
-            'view'
-        ];
-
         return $behaviors;
     }
 

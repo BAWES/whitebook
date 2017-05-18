@@ -19,7 +19,6 @@ $get = Yii::$app->request->get();
     <div class="listing_sub_cat1">
         <span class="title_filter"><?= Yii::t('frontend', 'Categories') ?></span>
         <select class="selectpicker" id="main-category">
-            <option data-icon="venues-category" value="<?=yii\helpers\Url::toRoute([$path, 'slug' => 'all','themes'=>$theme]); ?>"><?=Yii::t('frontend','All')?></option>
             <?php
             foreach($top_categories as $category) {
 

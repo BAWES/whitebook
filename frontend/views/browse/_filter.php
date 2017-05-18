@@ -32,13 +32,6 @@ use common\components\LangFormat;
                     <?php
                     }//if category selected ?>
 
-                    <option
-                       data-icon=""
-                       value="<?= Url::toRoute(['browse/list', 'slug'=> 'all']) ?>"
-                       name="category" >
-                       <?=Yii::t('frontend','All')?>
-                   </option>
-
                     <?php 
 
                     foreach ($TopCategories as $category) {

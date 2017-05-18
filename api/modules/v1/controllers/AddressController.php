@@ -41,7 +41,12 @@ class AddressController extends Controller
             'class' => \yii\filters\auth\HttpBearerAuth::className(),
         ];
         // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
-        $behaviors['authenticator']['except'] = ['options'];
+        $behaviors['authenticator']['except'] = [
+            'address-type-list',
+            'address-questions',
+            'get-location',
+            'options'
+        ];
 
         return $behaviors;
     }

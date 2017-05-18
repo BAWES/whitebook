@@ -45,21 +45,6 @@ class ProductController extends Controller
             ],
         ];
 
-        // Bearer Auth checks for Authorize: Bearer <Token> header to login the user
-        $behaviors['authenticator'] = [
-            'class' => \yii\filters\auth\HttpBearerAuth::className(),
-        ];
-        // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
-        $behaviors['authenticator']['except'] = [
-            'options',
-            'category-products',
-            'product-detail',
-            'load-all-themes',
-            'load-all-vendor',
-            'final-price',
-            'product-delivery-time-slot'
-        ];
-
         return $behaviors;
     }
 
@@ -424,10 +409,11 @@ class ProductController extends Controller
             foreach ($my_addresses as $address) {
                 $userAddress[] = ['area_id' => 'address_' . $address['address_id'], 'location' => $address['address_name']];
             }
+            
             return $userAddress + $vendor_area;
         }
 
-        return $userAddress;
+        return $vendor_area;
     }
 
     /*
@@ -488,7 +474,10 @@ class ProductController extends Controller
                 }
             }
         }
-        return $capacity;
+
+        return [
+            'capacity' => $capacity
+        ];
     }
 
     public function actionLoadAllThemes() {
