@@ -557,6 +557,7 @@ class BrowseController extends BaseController
                 $name = 'location_ar';
             }
             $area = \common\models\Location::find()->city($_POST['city_id'])->active()->defaultLocations()->orderBy('city_id')->all();
+            
             if ($area) {
                 echo \yii\helpers\Html::dropDownList('Location','',\yii\helpers\ArrayHelper::map($area ,'id',$name),['prompt'=>'Please Select Location','class'=>'selectpicker required trigger','id'=>'Location']);
             } else {
