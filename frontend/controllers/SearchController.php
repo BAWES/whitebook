@@ -187,6 +187,7 @@ class SearchController extends BaseController
             ->defaultVendor()
             ->approved()
             ->active()
+            ->orderBy('vendor_name')
             ->limit(10)
             ->all();
 

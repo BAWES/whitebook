@@ -6,6 +6,7 @@
     height: 64px !important;
     border-left: 1px solid #ececec;
     padding: 13px 13px 13px 15px !important;
+    cursor: pointer;
 }
 
 .cart_header label {
@@ -13,6 +14,7 @@
 	height: 28px;
     margin: 6px 0px;
     background: rgba(0, 0, 0, 0) url(../images/cart.svg) no-repeat center center;
+    cursor: pointer;
 }
 
 @media screen and (min-width: 1900px) {

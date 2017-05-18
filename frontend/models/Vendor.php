@@ -54,6 +54,7 @@ class Vendor extends \common\models\Vendor
             ->select('{{%vendor}}.vendor_id,{{%vendor}}.vendor_name,{{%vendor}}.vendor_name_ar,{{%vendor}}.slug')
             ->leftJoin('{{%vendor_item}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
             ->where(['{{%vendor}}.vendor_status' => 'Active','{{%vendor}}.trash' => 'Default','{{%vendor_item}}.trash' => 'Default','{{%vendor_item}}.item_status' => 'Active', '{{%vendor_item}}.item_approved' => 'Yes'])
+            ->orderBy('vendor_name')
             ->all();
     }
 
