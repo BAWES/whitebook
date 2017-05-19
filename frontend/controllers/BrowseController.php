@@ -68,14 +68,14 @@ class BrowseController extends BaseController
 
         if ($slug != 'all') {
             $Category = Category::findOne(['slug' => $slug]);
-
-            if (empty($Category)) {
-                return $this->goBack();
-            }
         } else {
-            $Category = '';
+            $Category = Category::findOne(['slug' => 'venues']);
         }
         
+        if (empty($Category)) {
+            return $this->goBack();
+        }
+
         \Yii::$app->view->title = (isset($Category->category_meta_title)) ? $Category->category_meta_title : (isset($Category->category_name)) ? Yii::$app->params['SITE_NAME'] . ' | ' . $Category->category_name : Yii::$app->params['SITE_NAME'] .' | All Products';
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => (isset($Category->category_meta_description)) ? $Category->category_meta_description : Yii::$app->params['META_DESCRIPTION']]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => (isset($Category->category_meta_keywords)) ? $Category->category_meta_keywords : Yii::$app->params['META_KEYWORD']]);
