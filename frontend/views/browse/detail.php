@@ -183,92 +183,93 @@ else
         <div class="product_detail_section responsive-detail-section"><!--product detail start-->
             <div class="col-md-12 padding0">
                 <div class="product_detials_common normal_tables">
-                    <div class="col-md-6 paddig0 resp_hide mobile_mode">
-                        <div class="left_descrip mobile-view">
-                            <h2><?= $item_name; ?></h2>
-                            <label>
-                                <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["site/vendor_profile", 'slug' => $model->vendor->slug]) ?>" class="color-violet">
-                                    <?= $vendor_name; ?>
-                                </a>
-                            </label>
-                            <b class="font-27">
-                                <p class="item-final-price">
-                                    <i class="fa fa-spinner fa-spin"></i>
-                                </p>
-                            </b>
-
-                            <?php
-                            
-                            if ($menu) {
-                                echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; color: brown; display: none;">'.Yii::t('frontend','Price on selection of menu items').'</span>';
-                            }else{
-                                echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; display: none;">'.Yii::t('frontend','Price based on selection').'</span>'; // price warning for 0 amount
-                            }
-
-                            ?>
-                            <?php
-
-                            $pricing = VendorItemPricing::find()
-                                ->where(['item_id'=> $model->item_id])
-                                ->all();
-
-                            if($pricing && !$model->hide_price_chart) { ?>
-
-                                <a class="lnk-price-chart">
-                                    <i class="fa fa-plus-square-o"></i>
-                                    <span class="color-violet">
-                                        <?= Yii::t('frontend', 'View full price chart') ?>
-                                    </span>
-                                </a>
-
-                                <div class="price_chart_wrapper hidden text-center">
-                                    <table class="table table-striped table-bordered detail-view price_range">
-                                        <thead>
-                                            <tr>
-                                                <th><?= Yii::t('frontend', 'Quantity') ?></th>
-                                                <th><?= Yii::t('frontend', 'Price') ?></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach ($pricing as $key => $value) { ?>
-                                            <tr>
-                                                <td><?= $value['range_from'] ?>+</td>
-                                                <td>
-                                                    <?= CFormatter::format($value['pricing_price_per_unit']) ?>
-                                                </td>
-                                            </tr>
-                                            <?php } ?>
-                                        </tbody>
-                                    </table>
-                                </div><!-- END .price_chart_wrapper -->
-
-                            <?php } //if pricing ?>
-
-                        </div>
-                        <!-- Indicators responsive slider -->
-                        <div class="responsive_slider_detials">
-
-                            <!--23-10-2015 slider start-->
-                            <div class="carousel-inner owl-carousel" id="mobile-slider">
-                                <?php if(!$model->images) { ?>
-                                    <div class="item">
-                                        <?= Html::img(Url::to("@web/images/item-default.png")) ?>
-                                    </div>
-                                <?php } ?>
-                                <?php foreach ($model->images as $image) { ?>
-                                    <div class="item">
-                                        <?= Html::img(Yii::getAlias("@s3/vendor_item_images_530/"). $image->image_path) ?>
-                                    </div>
-                                <?php } ?>
-                            </div>
-                            <!--23-10-2015 slider end-->
-
-                        </div>
-                        <!-- Indicators responsive slider end -->
-                    </div>
-
+                    
                     <div id="main" role="main" class="col-md-5 padding-left-0 normal_mode left-sidebar">
 
+                        <div class="col-md-6 paddig0 resp_hide mobile_mode">
+                            <div class="left_descrip mobile-view">
+                                <h2><?= $item_name; ?></h2>
+                                <label>
+                                    <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["site/vendor_profile", 'slug' => $model->vendor->slug]) ?>" class="color-violet">
+                                        <?= $vendor_name; ?>
+                                    </a>
+                                </label>
+                                <b class="font-27">
+                                    <p class="item-final-price">
+                                        <i class="fa fa-spinner fa-spin"></i>
+                                    </p>
+                                </b>
+
+                                <?php
+                                
+                                if ($menu) {
+                                    echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; color: brown; display: none;">'.Yii::t('frontend','Price on selection of menu items').'</span>';
+                                }else{
+                                    echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; display: none;">'.Yii::t('frontend','Price based on selection').'</span>'; // price warning for 0 amount
+                                }
+
+                                ?>
+                                <?php
+
+                                $pricing = VendorItemPricing::find()
+                                    ->where(['item_id'=> $model->item_id])
+                                    ->all();
+
+                                if($pricing && !$model->hide_price_chart) { ?>
+
+                                    <a class="lnk-price-chart">
+                                        <i class="fa fa-plus-square-o"></i>
+                                        <span class="color-violet">
+                                            <?= Yii::t('frontend', 'View full price chart') ?>
+                                        </span>
+                                    </a>
+
+                                    <div class="price_chart_wrapper hidden text-center">
+                                        <table class="table table-striped table-bordered detail-view price_range">
+                                            <thead>
+                                                <tr>
+                                                    <th><?= Yii::t('frontend', 'Quantity') ?></th>
+                                                    <th><?= Yii::t('frontend', 'Price') ?></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($pricing as $key => $value) { ?>
+                                                <tr>
+                                                    <td><?= $value['range_from'] ?>+</td>
+                                                    <td>
+                                                        <?= CFormatter::format($value['pricing_price_per_unit']) ?>
+                                                    </td>
+                                                </tr>
+                                                <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    </div><!-- END .price_chart_wrapper -->
+
+                                <?php } //if pricing ?>
+
+                            </div>
+                            <!-- Indicators responsive slider -->
+                            <div class="responsive_slider_detials">
+
+                                <!--23-10-2015 slider start-->
+                                <div class="carousel-inner owl-carousel" id="mobile-slider">
+                                    <?php if(!$model->images) { ?>
+                                        <div class="item">
+                                            <?= Html::img(Url::to("@web/images/item-default.png")) ?>
+                                        </div>
+                                    <?php } ?>
+                                    <?php foreach ($model->images as $image) { ?>
+                                        <div class="item">
+                                            <?= Html::img(Yii::getAlias("@s3/vendor_item_images_530/"). $image->image_path) ?>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                                <!--23-10-2015 slider end-->
+
+                            </div>
+                            <!-- Indicators responsive slider end -->
+                        </div>
+                        
                         <?php if($model['item_how_long_to_make'] > 0) { ?>
                         <div class="callout-container">
                             <span class="callout light">
