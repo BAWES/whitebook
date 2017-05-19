@@ -667,68 +667,96 @@ else
 
                                                             <li>
 
+                                                                <table>
+                                                                <tr>
                                                                 <?php if($value->quantity_type == 'selection') { ?>
 
                                                                 <!-- qty box -->
 
-                                                                <span class="menu-item-qty-box">
+                                                                <td class="menu-item-qty-box">
                                                                     <i class="fa fa-minus"></i>
                                                                     <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="<?= isset($cart_menu_item)?$cart_menu_item->quantity:0 ?>" readonly />
                                                                     <i class="fa fa-plus"></i>
-                                                                </span>
+                                                                </td>
 
                                                                 <!-- item name -->
 
-                                                                <span class="menu-item-name">
+                                                                <td class="menu-item-name">
                                                                     <?php if(Yii::$app->language == 'en') {
                                                                             echo $menu_item->menu_item_name;
                                                                       } else {
                                                                             echo $menu_item->menu_item_name_ar;
                                                                       } ?>
-                                                                </span>
+
+                                                                    <!-- price -->
+
+                                                                    <?php if($menu_item->price > 0) { ?>
+                                                                    <span class="menu_item_price">
+                                                                        (+<?= CFormatter::format($menu_item->price) ?>)
+                                                                    </span>
+                                                                    <?php  } ?>
+
+                                                                    <!-- hint -->
+                                                                    
+                                                                    <?php
+
+                                                                    $hint =  Yii::$app->language == 'en' ? $menu_item->hint : $menu_item->hint_ar;
+
+                                                                    if($hint) { ?>
+                                                                    <span class="menu-item-hint" data-toggle="tooltip" title="<?= $hint ?>"><i class="fa fa-info-circle"></i></span>
+                                                                    <?php } ?>
+
+                                                                    <span class="error menu_item_<?= $menu_item->menu_item_id ?>"></span>
+                                                                </td>
 
                                                                 <?php } else { ?>
 
-                                                                <div class="checkbox checkbox-inline">
-                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" id="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="1" type="checkbox" <?php if(!empty($cart_menu_item)) echo 'checked'; ?> />
+                                                                <td>
+                                                                    <div  class="checkbox checkbox-inline">
+                                                                        <input name="menu_item[<?= $menu_item->menu_item_id ?>]" id="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="1" type="checkbox" <?php if(!empty($cart_menu_item)) echo 'checked'; ?> />
 
-                                                                    <label for="menu_item[<?= $menu_item->menu_item_id ?>]">
-                                                                        <?php if(Yii::$app->language == 'en') {
-                                                                                echo $menu_item->menu_item_name;
-                                                                          } else {
-                                                                                echo $menu_item->menu_item_name_ar;
-                                                                          } ?>
-                                                                    </label>
+                                                                        <label for="menu_item[<?= $menu_item->menu_item_id ?>]">
+                                                                            <?php if(Yii::$app->language == 'en') {
+                                                                                    echo $menu_item->menu_item_name;
+                                                                              } else {
+                                                                                    echo $menu_item->menu_item_name_ar;
+                                                                              } ?>
+
+                                                                            <!-- hint -->
+                                                                            
+                                                                            <?php
+
+                                                                            $hint =  Yii::$app->language == 'en' ? $menu_item->hint : $menu_item->hint_ar;
+
+                                                                            if($hint) { ?>
+                                                                            <span class="menu-item-hint" data-toggle="tooltip" title="<?= $hint ?>"><i class="fa fa-info-circle"></i></span>
+                                                                            <?php } ?>
+                                                                        </label>
+                                                                    </div>
+
+                                                                    <!-- price -->
+
+                                                                    <?php if($menu_item->price > 0) { ?>
+                                                                    <span class="menu_item_price">
+                                                                        (+<?= CFormatter::format($menu_item->price) ?>)
+                                                                    </span>
+                                                                    <?php  } ?>
+
+                                                                    <span class="error menu_item_<?= $menu_item->menu_item_id ?>"></span>
 
                                                                     &nbsp;
-                                                                </div>
+                                                                </td>
 
                                                                 <?php } ?>
-
-
-                                                                <!-- price -->
-
-                                                                <?php if($menu_item->price > 0) { ?>
-                                                                <span class="menu_item_price">
-                                                                    (+<?= CFormatter::format($menu_item->price) ?>)
-                                                                </span>
-                                                                <?php  } ?>
-
-                                                                <!-- hint -->
                                                                 
-                                                                <?php
-
-                                                                $hint =  Yii::$app->language == 'en' ? $menu_item->hint : $menu_item->hint_ar;
-
-                                                                if($hint) { ?>
-                                                                <span class="menu-item-hint" data-toggle="tooltip" title="<?= $hint ?>"><i class="fa fa-info-circle"></i></span>
-                                                                <?php } ?>
-
-                                                                <span class="error menu_item_<?= $menu_item->menu_item_id ?>"></span>
-
                                                                 <?php if($menu_item->image) { ?>
-                                                                <a href="<?= Yii::getAlias("@s3/"). VendorItem::UPLOADFOLDER_MENUITEM. $menu_item->image ?>" data-lightbox="menu-items" data-title="<?= Yii::$app->language == 'en'?$menu_item->menu_item_name:$menu_item->menu_item_name_ar; ?>"><img src="<?= Yii::getAlias("@s3/"). VendorItem::UPLOADFOLDER_MENUITEM_THUMBNAIL. $menu_item->image ?>"></a>
+                                                                <td>
+                                                                <a class="menu-item-image" href="<?= Yii::getAlias("@s3/"). VendorItem::UPLOADFOLDER_MENUITEM. $menu_item->image ?>" data-lightbox="menu-items" data-title="<?= Yii::$app->language == 'en'?$menu_item->menu_item_name:$menu_item->menu_item_name_ar; ?>"><img src="<?= Yii::getAlias("@s3/"). VendorItem::UPLOADFOLDER_MENUITEM_THUMBNAIL. $menu_item->image ?>"></a>
+                                                                </td>
                                                                 <?php } ?>
+
+                                                                </tr>
+                                                                </table>
                                                             </li>
                                                         <?php } ?>
                                                         </ul>
@@ -825,47 +853,56 @@ else
                                                             ?>
 
                                                             <li>
+                                                                <table>
+                                                                <tr>
+
                                                                 <!-- qty box -->
 
-                                                                <span class="menu-item-qty-box">
+                                                                <td class="menu-item-qty-box">
                                                                     <i class="fa fa-minus"></i>
                                                                     <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="<?= $cart_menu_item?$cart_menu_item->quantity:0 ?>" readonly />
                                                                     <i class="fa fa-plus"></i>
-                                                                </span>
+                                                                </td>
 
                                                                 <!-- item name -->
-
-                                                                <span class="menu-item-name">
+                                                                
+                                                                <td class="menu-item-name">
+                                                                    
                                                                     <?php if(Yii::$app->language == 'en') {
                                                                             echo $menu_item->menu_item_name;
                                                                       } else {
                                                                             echo $menu_item->menu_item_name_ar;
                                                                       } ?>
-                                                                </span>
+                                                                    
+                                                                    <!-- price -->
 
-                                                                <!-- price -->
+                                                                    <?php if($menu_item->price > 0) { ?>
+                                                                    <span class="menu_item_price">
+                                                                        (+<?= CFormatter::format($menu_item->price) ?>)
+                                                                    </span>
+                                                                    <?php  } ?>
 
-                                                                <?php if($menu_item->price > 0) { ?>
-                                                                <span class="menu_item_price">
-                                                                    (+<?= CFormatter::format($menu_item->price) ?>)
-                                                                </span>
-                                                                <?php  } ?>
+                                                                    <!-- hint -->
 
-                                                                <!-- hint -->
+                                                                    <?php
 
-                                                                <?php
+                                                                    $hint =  Yii::$app->language == 'en' ? $menu_item->hint : $menu_item->hint_ar;
 
-                                                                $hint =  Yii::$app->language == 'en' ? $menu_item->hint : $menu_item->hint_ar;
+                                                                    if($hint) { ?>
+                                                                    <span class="menu-item-hint" data-toggle="tooltip" title="<?= $hint ?>"><i class="fa fa-info-circle"></i></span>
+                                                                    <?php } ?>
 
-                                                                if($hint) { ?>
-                                                                <span class="menu-item-hint" data-toggle="tooltip" title="<?= $hint ?>"><i class="fa fa-info-circle"></i></span>
-                                                                <?php } ?>
-
-                                                                <span class="error menu_item_<?= $menu_item->menu_item_id ?>"></span>
+                                                                    <span class="error menu_item_<?= $menu_item->menu_item_id ?>"></span>
+                                                                </td>
 
                                                                 <?php if($menu_item->image) { ?>
-                                                                <a href="<?= Yii::getAlias("@s3/"). VendorItem::UPLOADFOLDER_MENUITEM. $menu_item->image ?>" data-lightbox="menu-items" data-title="<?= Yii::$app->language == 'en'?$menu_item->menu_item_name:$menu_item->menu_item_name_ar; ?>"><img src="<?= Yii::getAlias("@s3/"). VendorItem::UPLOADFOLDER_MENUITEM_THUMBNAIL. $menu_item->image ?>"></a>
+                                                                <td>
+                                                                    <a class="menu-item-image" href="<?= Yii::getAlias("@s3/"). VendorItem::UPLOADFOLDER_MENUITEM. $menu_item->image ?>" data-lightbox="menu-items" data-title="<?= Yii::$app->language == 'en'?$menu_item->menu_item_name:$menu_item->menu_item_name_ar; ?>"><img src="<?= Yii::getAlias("@s3/"). VendorItem::UPLOADFOLDER_MENUITEM_THUMBNAIL. $menu_item->image ?>"></a>
+                                                                </td>
                                                                 <?php } ?>
+
+                                                                </tr>
+                                                                </table>
                                                             </li>
                                                         <?php } ?>
                                                         </ul>

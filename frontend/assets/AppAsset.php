@@ -18,7 +18,7 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/style.css?v=1.44',
+        'css/style.css?v=1.45',
         'fonts/flaticon/flaticon.css',
         'css/demo.css?v=1.2',
         'css/media_style.css?v=1.13',
