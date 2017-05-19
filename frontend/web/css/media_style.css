@@ -144,6 +144,10 @@
 
 @media only screen and (max-width: 991px) {
 
+	.left-sidebar .callout-container {
+		top: 150px;
+	}
+
 	.price_chart_wrapper table {
 	    margin-left: auto;
 	    margin-right: auto;
