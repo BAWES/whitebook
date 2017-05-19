@@ -75,8 +75,8 @@ class VendorDraftItem extends \yii\db\ActiveRecord
                 'class' => SluggableBehavior::className(),
                 'slugAttribute' => 'slug',
                 'attribute' => 'item_name',
-                'immutable' => true,
-                'ensureUnique'=>true,
+                'immutable' => false,
+                'ensureUnique' => true,
             ],
             [
                 'class' => TimestampBehavior::className(),

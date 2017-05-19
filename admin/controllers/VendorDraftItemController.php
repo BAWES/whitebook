@@ -150,14 +150,27 @@ class VendorDraftItemController extends Controller
         //unset sort from draft to keep sort from vendor item list
         unset($attributes['version']);
         unset($attributes['sort']);
+        unset($attributes['slug']);
 
         //copy to item from draft
         $item = VendorItem::findOne($draft->item_id);
         $item->attributes = $attributes;
         $item->item_approved = 'Yes';
-        $item->hide_from_admin = 0;
-        $item->slug = $draft->slug;
-        $item->save(false);
+        $item->hide_from_admin = 0;        
+        if(!$item->save()) 
+        {
+            $html = '';
+
+            foreach ($item->getErrors() as $key => $value) {
+                foreach ($value as $ekey => $error) {
+                    $html .= '<li>' . $error . '</li>';    
+                }                
+            }
+
+            Yii::$app->session->setFlash('danger', $html);
+
+            return $this->redirect(['index']);    
+        }
 
         //remove old price table data
 
