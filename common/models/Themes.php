@@ -113,12 +113,20 @@ class Themes extends \yii\db\ActiveRecord
 
     public  function themevalidation($attribute_name,$params)
     {
-        if(!empty($this->theme_name) ){
-            $model = Themes::find()
-            ->where(['theme_name'=>$this->theme_name])->one();
-            if($model){
-                $this->addError('theme_name','Please enter a unique theme name');
-            }
+        $query = Themes::find()
+            ->where([
+                    'theme_name' => $this->theme_name,
+                    'trash' => 'Default'
+                ]);
+
+        if(!$this->isNewRecord)
+        {
+            $query = $query->andWhere(['!=', 'theme_id', $this->theme_id]);
+        }
+        
+        if($query->count() > 0)
+        {
+            $this->addError('theme_name', 'Please enter a unique theme name');
         }
     }
 
