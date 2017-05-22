@@ -140,45 +140,8 @@ else
         <input id="cart_id" name="cart_id" value="<?= $cart->cart_id ?>" type="hidden" />
         <?php } ?>
 
-        <div class="col-md-12 filter-bar ">
-            <div class="col-md-3 padding-right-0 area-filter">
-                <div class="form-group margin-left-0">
-                    <label><?=Yii::t('frontend', 'Event Area'); ?></label>
-                    <div class="select_boxes">
-                        <?php
-                            echo Html::dropDownList('area_id', $deliver_location,
-                            $vendor_area,
-                            ['data-height'=>"100px",'data-live-search'=>"true",'id'=>"area_id", 'class'=>"selectpicker", 'data-size'=>"10", 'data-style'=>"btn-primary"]);
-                        ?>
-                    </div>
-                    <span class="error area_id"></span>
-                </div>
-            </div>
-            <div class="col-md-2 padding-left-0 delivery-date-filter">
-                <div class="form-group">
-                    <label><?=Yii::t('frontend', 'Event Date'); ?></label>
-                    <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" class="input-append date" id="delivery_date_wrapper">
-                        <input value="<?= $deliver_date ?>" readonly="true" name="delivery_date" id="item_delivery_date" class="date-picker-box form-control required"  placeholder="<?php echo Yii::t('frontend', 'Date'); ?>" >
-                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                    </div>
-                    <span class="error cart_delivery_date"></span>
-                </div>
-            </div>
-            <div class="col-md-5 padding-left-0 timeslot_id_div timeslot-filter">
-                <div class="form-group">
-                    <label><?=Yii::t('frontend', 'Event Time'); ?></label>
-                    <div class="text padding-top-12"><?=Yii::t('frontend','Please Select Valid Event Date');?></div>
-                </div>
-            </div>
-            <div class="col-md-3 padding-left-0 timeslot_id_select timeslot-filter" style="display: none;">
-                <div class="form-group">
-                    <label><?=Yii::t('frontend', 'Event Time'); ?></label>
-                    <select name="time_slot" id="timeslot_id" class="selectpicker" data-size="10" data-style="btn-primary"></select>
-                    <span class="error timeslot_id"></span>
-                </div>
-            </div>
-        </div>
         <?php } ?>
+
         <!-- Mobile start Here-->
         <div class="product_detail_section responsive-detail-section"><!--product detail start-->
             <div class="col-md-12 padding0">
@@ -589,6 +552,9 @@ else
                                         </div>
                                     </div><!-- END .panel -->
                                     <?php } ?>
+
+
+                                    <?php require 'detail/delivery.php'; ?>
 
                                     <?php if($menu) { ?>
                                     <div class="panel panel-default">
@@ -1258,7 +1224,7 @@ $this->registerCss("
     .datepicker{border: 2px solid rgb(242, 242, 242);}
     .datepicker table{font-size: 12px;}
     .form-group{margin-bottom:15px;width: 92%;margin-left: 11px;}
-    .filter-bar{margin-top: 22px;padding-left: 0px;}
+    .filter-bar{margin-top: 5px;padding-left: 0px;}
     .date-picker-box{height: 44px;border-radius: 0px;box-shadow: none;border-color: #e6e6e6;}
     .filter-bar .fa-calendar{position: absolute;right: 8px;top: 12px;font-size: 15px;color:#e6e6e6;}
     #form_product_option .selectpicker.btn-primary {color: #555!important;}
