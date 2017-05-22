@@ -9,8 +9,9 @@ use common\models\Booking;
 
 $customer_address_modal->area_id = Yii::$app->session->get('delivery-location');
 
-?>
+require '_delivery.php';
 
+?>
 <div class="panel panel-default">
         <div class="panel-heading">
                 <h4 class="panel-title">
