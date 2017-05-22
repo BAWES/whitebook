@@ -7,12 +7,12 @@ use yii\helpers\Html;
 <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">
-        <a data-toggle="collapse"  href="#collapse-options" aria-expanded="true">
+        <a data-toggle="collapse"  href="#collapse-availability" aria-expanded="true">
             <?= Yii::t('frontend', 'Availability') ?>
         </a>
       </h4>
     </div>
-    <div id="collapse-options" class="panel-collapse collapse in">
+    <div id="collapse-availability" class="panel-collapse collapse in">
       <div class="panel-body">
         <div class="col-md-12 filter-bar ">
             <div class="col-md-4 padding-right-0 area-filter">
