@@ -8,8 +8,9 @@ use common\components\LangFormat;
 
 $customer_address_modal->area_id = Yii::$app->session->get('delivery-location');
 
-?>
+require '_delivery.php';
 
+?>
 
 <div class="col-md-12">
 
