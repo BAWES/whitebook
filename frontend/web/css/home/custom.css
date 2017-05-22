@@ -1,1 +1,5 @@
 /*! Place your custom styles here */
+
+#theme-selector option {
+	text-transform: capitalize;
+}

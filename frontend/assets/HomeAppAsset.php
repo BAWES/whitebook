@@ -24,7 +24,7 @@ class HomeAppAsset extends AssetBundle
         'css/home/flickity.css',
         'css/home/iconsmind.css',
         'css/home/theme.css',
-        'css/home/custom.css',
+        'css/home/custom.css?v=1.1',
         'https://fonts.googleapis.com/css?family=Open+Sans:200,300,400,400i,500,600,700'
     ];
     public $js = [
