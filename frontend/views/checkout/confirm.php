@@ -219,6 +219,8 @@ use common\models\CustomerCartMenuItem;
 
     <h3><?= Yii::t('frontend', 'Delivery Address') ?></h3>
     <?= Booking::getPurchaseDeliveryAddress(Yii::$app->session->get('address_id')); ?>
+
+    <?php require '_delivery.php'; ?>
 </form>
 
 <div class="row checkout-confirm-btn-set">
