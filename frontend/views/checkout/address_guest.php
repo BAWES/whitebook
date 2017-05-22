@@ -12,7 +12,7 @@ require '_delivery.php';
 
 ?>
 
-<div class="col-md-12">
+<div class="row">
 
     <?php $form = ActiveForm::begin(); ?>
 
