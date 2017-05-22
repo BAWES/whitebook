@@ -460,7 +460,7 @@ else
                                     <input type="hidden" name="quantity" id="quantity" class="form-control" data-min="<?= $quantity?>" value="<?= $quantity ?>" />
                                 <?php } ?>
 
-                                <div class="social_share">
+                                <div class="social_share hidden-xs hidden-sm">
                                     <?php
 
                                     $title = Yii::$app->name.' ' . ucfirst($vendor_name);
