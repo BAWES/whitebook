@@ -351,7 +351,12 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
                 <?php
                 foreach ($vendors as $key => $vendor) {
                     $charge = \common\models\Booking::getDeliveryCharges('',$key,$vendor['area_id']);
+                    
+                    if($charge < 1)
+                    	continue;
+
                     $delivery_charge += (int) $charge;
+
                     ?>
                     <tr>
                         <td colspan="2" class="text-right"><strong><?= Yii::t('frontend', 'Delivery Charge') ?></strong> <small>( <?=$vendor['vendor']?> )</small></td>
