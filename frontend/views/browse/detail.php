@@ -424,24 +424,12 @@ else
 <!--                                            --><?//= Yii::t('frontend', 'REQUEST BOOKING SERVICE') ?>
 <!--                                        </button>-->
 
-                                        <!-- Add to Event End here -->
-                                        <div class="buy_events">
-                                        <?php if (!$AvailableStock) {
-                                                echo Html::a(Yii::t('frontend', 'Out of stock'),'#',['class'=>'stock','id'=>$model['item_id']]);
-                                            } else { ?>
-                                                <div class="buy-btn">
-                                                    <div class="button-signin">
-                                                        <?php $disable = (!$model['item_base_price']) ? 'disabled="disabled"' : '';?>
-                                                        <button <?=$disable?> type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px;">
-                                                            <?= $txt_cart_btn ?>
-                                                        </button>&nbsp;&nbsp;&nbsp;
-                                                    </div>
-                                                </div>
-                                                <span class=" col-lg-12 error cart_quantity text-center"></span>
-                                                <span id="available"></span>
-                                            <span class="quantity_remain" style="clear: both;display: block;color: brown;text-align: center;padding-top: 6px;display: block;"></span>
-                                        <?php } // END if item available ?>
-                                        </div>
+                                        
+                                        <?php if (!$AvailableStock) { ?>
+                                            <div class="buy_events">
+                                                <?= Html::a(Yii::t('frontend', 'Out of stock'),'#',['class'=>'stock','id'=>$model['item_id']]); ?>
+                                            </div>
+                                        <?php } ?>
 
                                         <a class="color-violet lnk-company-policy" href="<?= Url::to(["directory/profile", 'slug'=>'all','vendor' => $model->vendor->slug]) ?>">
                                             <?= Yii::t('frontend', 'Company Refund Policy') ?>
@@ -731,14 +719,6 @@ else
                                                 <?php } ?>
                                              </div><!-- END .menu-item-detail -->
 
-                                            <?php if ($AvailableStock) { ?>
-
-                                                <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px; margin-top: 10px; max-width: 240px;">
-                                                        <?= $txt_cart_btn ?>
-                                                </button>
-
-                                            <?php } ?><!-- END available in stock and for sale -->
-
                                           </div>
                                         </div>
                                     </div><!-- END .panel -->
@@ -877,14 +857,6 @@ else
                                                 <?php } ?>
                                              </div><!-- END .menu-item-detail -->
 
-                                            <?php if ($AvailableStock) { ?>
-
-                                                <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px; margin-top: 10px; max-width: 240px;">
-                                                        <?= $txt_cart_btn ?>
-                                                </button>
-
-                                            <?php } ?><!-- END available in stock and for sale -->
-
                                           </div>
                                         </div>
                                     </div><!-- END .panel -->
@@ -975,6 +947,12 @@ else
                                         </div>
                                     </div>
                                     <?php } ?>
+
+                                    <?php if ($AvailableStock) { ?>
+
+                                        <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px; margin-top: 10px; max-width: 240px;"><?= $txt_cart_btn ?></button>
+
+                                    <?php } ?><!-- END available in stock and for sale -->
 
                                     <?php if (!empty($model['item_customization_description'])) { ?>
                                     <div class="panel panel-default">
