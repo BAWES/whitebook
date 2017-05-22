@@ -29,7 +29,7 @@ use yii\helpers\Url;
                         <form class="form--horizontal">
                             <div class="col-sm-12">
                                 <div class="input-select" style='color:black; font-size:1.2em;'>
-                                    <select onchange="location = this.value;">
+                                    <select onchange="location = this.value;" id="theme-selector">
                                         <option selected="selected" value="">
                                             <?= Yii::t('frontend', 'What\'s your occasion?') ?>
                                         </option>
