@@ -10,7 +10,7 @@ $customer_address_modal->area_id = Yii::$app->session->get('delivery-location');
 
 ?>
 
-<div class="col-md-12">
+<div class="row">
 
     <?php $form = ActiveForm::begin(); ?>
 

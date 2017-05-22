@@ -120,4 +120,3 @@ $this->registerCss("
     .margin-padding-0{padding-bottom:0; margin-bottom: 0;}
     .body-update{background: white; margin-top: 0;}
 ");
-

@@ -202,7 +202,11 @@ use common\models\CustomerCartMenuItem;
             <?php
                 foreach ($vendors as $key => $vendor) {
                     $charge = Booking::getDeliveryCharges(Yii::$app->session->get('address_id'),$key);
+                    
                     $delivery_charge += (int) $charge;
+
+                    if($charge < 1)
+                        continue;
             ?>
             <tr>
                 <td colspan="2" class="text-right"><strong><?= Yii::t('frontend', 'Delivery Charge') ?></strong> <small>( <?=$vendor?> )</small></td>
