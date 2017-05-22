@@ -129,8 +129,6 @@ class CheckoutController extends BaseController
         }
 
         return $this->renderPartial($template, [
-            'delivery_date' => Yii::$app->session->get('delivery-date'),
-            'event_time'  => Yii::$app->session->get('event_time'),
             'items' => $items,
             'customer_address_modal' => $customer_address_modal,
             'addresstype' => $addresstype,
@@ -381,6 +379,8 @@ class CheckoutController extends BaseController
 		$items = CustomerCart::items();
 
         return $this->renderPartial('confirm', [
+            'delivery_date' => Yii::$app->session->get('delivery-date'),
+            'event_time'  => Yii::$app->session->get('event_time'),
             'items' => $items,
             'address' => $address,
             'pg_link' => Url::to(['checkout/request-send'])
