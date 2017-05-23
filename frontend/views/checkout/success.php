@@ -13,40 +13,32 @@ foreach ($arr_booking_id as $key => $value)
     }
 }
 
+$booking_page = \yii\helpers\Url::to(['booking/view'],true);
+
 ?>
 <section id="inner_pages_white_back">
     <div class="container paddng0">
         <div class="title_main">
             <h1><?= Yii::t('frontend', 'Success'); ?></h1>
         </div>
+        
         <center>
-            <h2><?= Yii::t('frontend', 'Congratulation! Your Booking Request Sent To Admin Successfully!') ?></h2>
-            <br />
-            <p>
-                <?php
-                if (Yii::$app->user->isGuest) {
-                    $booking_page = \yii\helpers\Url::to(['booking/view'],true);
-                    echo Yii::t(
-                        'frontend',
-                        'Product Request has been sent successfully. Your Booking ID {id}. You can track and view detail of your booking in <a href="{booking_page}">Track Bookings</a> using booking Token sent in your email. <br/>Thank You, for shopping with us.',
-                        [
-                            'id' => implode(', ', $ids),
-                            'booking_page' => $booking_page
-                        ]
-                    );
-                } else {
-                    $booking_page = \yii\helpers\Url::to(['booking/index'], true);
-                    echo Yii::t(
-                        'frontend',
-                        'Product Request has been sent successfully. Your Booking ID {id}. You can track and view detail of your booking in <a href="{booking_page}">My Bookings</a>. Thank You, for shopping with us.',
-                        [
-                            'id' => implode(', ', $ids),
-                            'booking_page' => $booking_page
-                        ]
-                    );
-                }
-                ?></p>
+            <h2><?= Yii::t('frontend', 'Your Booking Requests have been sent') ?></h2>
+            
+            <h3>
+                <?= Yii::t('frontend', 'You\'ll receive a payment link once the vendors have confirmed your booking.') ?>
+            </h3>
+            <h3 style="color: #8F8F8F;">
+                <?= Yii::t('frontend', 'Booking ID: {id}', [
+                        'id' => implode(', ', $ids)
+                    ]) ?> 
+            </h3>
 
+            <Br />
+
+            <a href="<?= $booking_page ?>" class="btn btn-booking-success btn-primary btn-lg">
+                <?= Yii::t('frontend', 'Track your order') ?>
+            </a>
         </center>
         <br />
         <br />
