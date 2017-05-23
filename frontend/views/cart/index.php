@@ -351,11 +351,11 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
                 <?php
                 foreach ($vendors as $key => $vendor) {
                     $charge = \common\models\Booking::getDeliveryCharges('',$key,$vendor['area_id']);
+
+                    $delivery_charge += (int) $charge;
                     
                     if($charge < 1)
                     	continue;
-
-                    $delivery_charge += (int) $charge;
 
                     ?>
                     <tr>

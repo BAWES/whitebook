@@ -140,135 +140,99 @@ else
         <input id="cart_id" name="cart_id" value="<?= $cart->cart_id ?>" type="hidden" />
         <?php } ?>
 
-        <div class="col-md-12 filter-bar ">
-            <div class="col-md-3 padding-right-0 area-filter">
-                <div class="form-group margin-left-0">
-                    <label><?=Yii::t('frontend', 'Event Area'); ?></label>
-                    <div class="select_boxes">
-                        <?php
-                            echo Html::dropDownList('area_id', $deliver_location,
-                            $vendor_area,
-                            ['data-height'=>"100px",'data-live-search'=>"true",'id'=>"area_id", 'class'=>"selectpicker", 'data-size'=>"10", 'data-style'=>"btn-primary"]);
-                        ?>
-                    </div>
-                    <span class="error area_id"></span>
-                </div>
-            </div>
-            <div class="col-md-2 padding-left-0 delivery-date-filter">
-                <div class="form-group">
-                    <label><?=Yii::t('frontend', 'Event Date'); ?></label>
-                    <div data-date-format="dd-mm-yyyy" data-date="12-02-2012" class="input-append date" id="delivery_date_wrapper">
-                        <input value="<?= $deliver_date ?>" readonly="true" name="delivery_date" id="item_delivery_date" class="date-picker-box form-control required"  placeholder="<?php echo Yii::t('frontend', 'Date'); ?>" >
-                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                    </div>
-                    <span class="error cart_delivery_date"></span>
-                </div>
-            </div>
-            <div class="col-md-5 padding-left-0 timeslot_id_div timeslot-filter">
-                <div class="form-group">
-                    <label><?=Yii::t('frontend', 'Event Time'); ?></label>
-                    <div class="text padding-top-12"><?=Yii::t('frontend','Please Select Valid Event Date');?></div>
-                </div>
-            </div>
-            <div class="col-md-3 padding-left-0 timeslot_id_select timeslot-filter" style="display: none;">
-                <div class="form-group">
-                    <label><?=Yii::t('frontend', 'Event Time'); ?></label>
-                    <select name="time_slot" id="timeslot_id" class="selectpicker" data-size="10" data-style="btn-primary"></select>
-                    <span class="error timeslot_id"></span>
-                </div>
-            </div>
-        </div>
         <?php } ?>
+
         <!-- Mobile start Here-->
         <div class="product_detail_section responsive-detail-section"><!--product detail start-->
             <div class="col-md-12 padding0">
                 <div class="product_detials_common normal_tables">
-                    <div class="col-md-6 paddig0 resp_hide mobile_mode">
-                        <div class="left_descrip mobile-view">
-                            <h2><?= $item_name; ?></h2>
-                            <label>
-                                <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["site/vendor_profile", 'slug' => $model->vendor->slug]) ?>" class="color-violet">
-                                    <?= $vendor_name; ?>
-                                </a>
-                            </label>
-                            <b class="font-27">
-                                <p class="item-final-price">
-                                    <i class="fa fa-spinner fa-spin"></i>
-                                </p>
-                            </b>
-
-                            <?php
-                            
-                            if ($menu) {
-                                echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; color: brown; display: none;">'.Yii::t('frontend','Price on selection of menu items').'</span>';
-                            }else{
-                                echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; display: none;">'.Yii::t('frontend','Price based on selection').'</span>'; // price warning for 0 amount
-                            }
-
-                            ?>
-                            <?php
-
-                            $pricing = VendorItemPricing::find()
-                                ->where(['item_id'=> $model->item_id])
-                                ->all();
-
-                            if($pricing && !$model->hide_price_chart) { ?>
-
-                                <a class="lnk-price-chart">
-                                    <i class="fa fa-plus-square-o"></i>
-                                    <span class="color-violet">
-                                        <?= Yii::t('frontend', 'View full price chart') ?>
-                                    </span>
-                                </a>
-
-                                <div class="price_chart_wrapper hidden text-center">
-                                    <table class="table table-striped table-bordered detail-view price_range">
-                                        <thead>
-                                            <tr>
-                                                <th><?= Yii::t('frontend', 'Quantity') ?></th>
-                                                <th><?= Yii::t('frontend', 'Price') ?></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach ($pricing as $key => $value) { ?>
-                                            <tr>
-                                                <td><?= $value['range_from'] ?>+</td>
-                                                <td>
-                                                    <?= CFormatter::format($value['pricing_price_per_unit']) ?>
-                                                </td>
-                                            </tr>
-                                            <?php } ?>
-                                        </tbody>
-                                    </table>
-                                </div><!-- END .price_chart_wrapper -->
-
-                            <?php } //if pricing ?>
-
-                        </div>
-                        <!-- Indicators responsive slider -->
-                        <div class="responsive_slider_detials">
-
-                            <!--23-10-2015 slider start-->
-                            <div class="carousel-inner owl-carousel" id="mobile-slider">
-                                <?php if(!$model->images) { ?>
-                                    <div class="item">
-                                        <?= Html::img(Url::to("@web/images/item-default.png")) ?>
-                                    </div>
-                                <?php } ?>
-                                <?php foreach ($model->images as $image) { ?>
-                                    <div class="item">
-                                        <?= Html::img(Yii::getAlias("@s3/vendor_item_images_530/"). $image->image_path) ?>
-                                    </div>
-                                <?php } ?>
-                            </div>
-                            <!--23-10-2015 slider end-->
-
-                        </div>
-                        <!-- Indicators responsive slider end -->
-                    </div>
-
+                    
                     <div id="main" role="main" class="col-md-5 padding-left-0 normal_mode left-sidebar">
 
+                        <div class="col-md-6 paddig0 resp_hide mobile_mode">
+                            <div class="left_descrip mobile-view">
+                                <h2><?= $item_name; ?></h2>
+                                <label>
+                                    <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["site/vendor_profile", 'slug' => $model->vendor->slug]) ?>" class="color-violet">
+                                        <?= $vendor_name; ?>
+                                    </a>
+                                </label>
+                                <b class="font-27">
+                                    <p class="item-final-price">
+                                        <i class="fa fa-spinner fa-spin"></i>
+                                    </p>
+                                </b>
+
+                                <?php
+                                
+                                if ($menu) {
+                                    echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; color: brown; display: none;">'.Yii::t('frontend','Price on selection of menu items').'</span>';
+                                }else{
+                                    echo '<span class="small price_warning" style="font-weight: bold;font-size:18px; display: none;">'.Yii::t('frontend','Price based on selection').'</span>'; // price warning for 0 amount
+                                }
+
+                                ?>
+                                <?php
+
+                                $pricing = VendorItemPricing::find()
+                                    ->where(['item_id'=> $model->item_id])
+                                    ->all();
+
+                                if($pricing && !$model->hide_price_chart) { ?>
+
+                                    <a class="lnk-price-chart">
+                                        <i class="fa fa-plus-square-o"></i>
+                                        <span class="color-violet">
+                                            <?= Yii::t('frontend', 'View full price chart') ?>
+                                        </span>
+                                    </a>
+
+                                    <div class="price_chart_wrapper hidden text-center">
+                                        <table class="table table-striped table-bordered detail-view price_range">
+                                            <thead>
+                                                <tr>
+                                                    <th><?= Yii::t('frontend', 'Quantity') ?></th>
+                                                    <th><?= Yii::t('frontend', 'Price') ?></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($pricing as $key => $value) { ?>
+                                                <tr>
+                                                    <td><?= $value['range_from'] ?>+</td>
+                                                    <td>
+                                                        <?= CFormatter::format($value['pricing_price_per_unit']) ?>
+                                                    </td>
+                                                </tr>
+                                                <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    </div><!-- END .price_chart_wrapper -->
+
+                                <?php } //if pricing ?>
+
+                            </div>
+                            <!-- Indicators responsive slider -->
+                            <div class="responsive_slider_detials">
+
+                                <!--23-10-2015 slider start-->
+                                <div class="carousel-inner owl-carousel" id="mobile-slider">
+                                    <?php if(!$model->images) { ?>
+                                        <div class="item">
+                                            <?= Html::img(Url::to("@web/images/item-default.png")) ?>
+                                        </div>
+                                    <?php } ?>
+                                    <?php foreach ($model->images as $image) { ?>
+                                        <div class="item">
+                                            <?= Html::img(Yii::getAlias("@s3/vendor_item_images_530/"). $image->image_path) ?>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                                <!--23-10-2015 slider end-->
+
+                            </div>
+                            <!-- Indicators responsive slider end -->
+                        </div>
+                        
                         <?php if($model['item_how_long_to_make'] > 0) { ?>
                         <div class="callout-container">
                             <span class="callout light">
@@ -460,24 +424,12 @@ else
 <!--                                            --><?//= Yii::t('frontend', 'REQUEST BOOKING SERVICE') ?>
 <!--                                        </button>-->
 
-                                        <!-- Add to Event End here -->
-                                        <div class="buy_events">
-                                        <?php if (!$AvailableStock) {
-                                                echo Html::a(Yii::t('frontend', 'Out of stock'),'#',['class'=>'stock','id'=>$model['item_id']]);
-                                            } else { ?>
-                                                <div class="buy-btn">
-                                                    <div class="button-signin">
-                                                        <?php $disable = (!$model['item_base_price']) ? 'disabled="disabled"' : '';?>
-                                                        <button <?=$disable?> type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px;">
-                                                            <?= $txt_cart_btn ?>
-                                                        </button>&nbsp;&nbsp;&nbsp;
-                                                    </div>
-                                                </div>
-                                                <span class=" col-lg-12 error cart_quantity text-center"></span>
-                                                <span id="available"></span>
-                                            <span class="quantity_remain" style="clear: both;display: block;color: brown;text-align: center;padding-top: 6px;display: block;"></span>
-                                        <?php } // END if item available ?>
-                                        </div>
+                                        
+                                        <?php if (!$AvailableStock) { ?>
+                                            <div class="buy_events">
+                                                <?= Html::a(Yii::t('frontend', 'Out of stock'),'#',['class'=>'stock','id'=>$model['item_id']]); ?>
+                                            </div>
+                                        <?php } ?>
 
                                         <a class="color-violet lnk-company-policy" href="<?= Url::to(["directory/profile", 'slug'=>'all','vendor' => $model->vendor->slug]) ?>">
                                             <?= Yii::t('frontend', 'Company Refund Policy') ?>
@@ -508,7 +460,7 @@ else
                                     <input type="hidden" name="quantity" id="quantity" class="form-control" data-min="<?= $quantity?>" value="<?= $quantity ?>" />
                                 <?php } ?>
 
-                                <div class="social_share">
+                                <div class="social_share hidden-xs hidden-sm">
                                     <?php
 
                                     $title = Yii::$app->name.' ' . ucfirst($vendor_name);
@@ -589,6 +541,9 @@ else
                                     </div><!-- END .panel -->
                                     <?php } ?>
 
+
+                                    <?php require 'detail/delivery.php'; ?>
+
                                     <?php if($menu) { ?>
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
@@ -667,82 +622,102 @@ else
 
                                                             <li>
 
+                                                                <table>
+                                                                <tr>
                                                                 <?php if($value->quantity_type == 'selection') { ?>
 
                                                                 <!-- qty box -->
 
-                                                                <span class="menu-item-qty-box">
+                                                                <td class="menu-item-qty-box">
                                                                     <i class="fa fa-minus"></i>
                                                                     <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="<?= isset($cart_menu_item)?$cart_menu_item->quantity:0 ?>" readonly />
                                                                     <i class="fa fa-plus"></i>
-                                                                </span>
+                                                                </td>
 
                                                                 <!-- item name -->
 
-                                                                <span class="menu-item-name">
+                                                                <td class="menu-item-name">
                                                                     <?php if(Yii::$app->language == 'en') {
                                                                             echo $menu_item->menu_item_name;
                                                                       } else {
                                                                             echo $menu_item->menu_item_name_ar;
                                                                       } ?>
-                                                                </span>
+
+                                                                    <!-- price -->
+
+                                                                    <?php if($menu_item->price > 0) { ?>
+                                                                    <span class="menu_item_price">
+                                                                        (+<?= CFormatter::format($menu_item->price) ?>)
+                                                                    </span>
+                                                                    <?php  } ?>
+
+                                                                    <!-- hint -->
+                                                                    
+                                                                    <?php
+
+                                                                    $hint =  Yii::$app->language == 'en' ? $menu_item->hint : $menu_item->hint_ar;
+
+                                                                    if($hint) { ?>
+                                                                    <span class="menu-item-hint" data-toggle="tooltip" title="<?= $hint ?>"><i class="fa fa-info-circle"></i></span>
+                                                                    <?php } ?>
+
+                                                                    <span class="error menu_item_<?= $menu_item->menu_item_id ?>"></span>
+                                                                </td>
 
                                                                 <?php } else { ?>
 
-                                                                <div class="checkbox checkbox-inline">
-                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" id="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="1" type="checkbox" <?php if(!empty($cart_menu_item)) echo 'checked'; ?> />
+                                                                <td>
+                                                                    <div  class="checkbox checkbox-inline">
+                                                                        <input name="menu_item[<?= $menu_item->menu_item_id ?>]" id="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="1" type="checkbox" <?php if(!empty($cart_menu_item)) echo 'checked'; ?> />
 
-                                                                    <label for="menu_item[<?= $menu_item->menu_item_id ?>]">
-                                                                        <?php if(Yii::$app->language == 'en') {
-                                                                                echo $menu_item->menu_item_name;
-                                                                          } else {
-                                                                                echo $menu_item->menu_item_name_ar;
-                                                                          } ?>
-                                                                    </label>
+                                                                        <label for="menu_item[<?= $menu_item->menu_item_id ?>]">
+                                                                            <?php if(Yii::$app->language == 'en') {
+                                                                                    echo $menu_item->menu_item_name;
+                                                                              } else {
+                                                                                    echo $menu_item->menu_item_name_ar;
+                                                                              } ?>
+
+                                                                            <!-- hint -->
+                                                                            
+                                                                            <?php
+
+                                                                            $hint =  Yii::$app->language == 'en' ? $menu_item->hint : $menu_item->hint_ar;
+
+                                                                            if($hint) { ?>
+                                                                            <span class="menu-item-hint" data-toggle="tooltip" title="<?= $hint ?>"><i class="fa fa-info-circle"></i></span>
+                                                                            <?php } ?>
+                                                                        </label>
+                                                                    </div>
+
+                                                                    <!-- price -->
+
+                                                                    <?php if($menu_item->price > 0) { ?>
+                                                                    <span class="menu_item_price">
+                                                                        (+<?= CFormatter::format($menu_item->price) ?>)
+                                                                    </span>
+                                                                    <?php  } ?>
+
+                                                                    <span class="error menu_item_<?= $menu_item->menu_item_id ?>"></span>
 
                                                                     &nbsp;
-                                                                </div>
+                                                                </td>
 
                                                                 <?php } ?>
-
-
-                                                                <!-- price -->
-
-                                                                <?php if($menu_item->price > 0) { ?>
-                                                                <span class="menu_item_price">
-                                                                    (+<?= CFormatter::format($menu_item->price) ?>)
-                                                                </span>
-                                                                <?php  } ?>
-
-                                                                <!-- hint -->
                                                                 
-                                                                <?php
-
-                                                                $hint =  Yii::$app->language == 'en' ? $menu_item->hint : $menu_item->hint_ar;
-
-                                                                if($hint) { ?>
-                                                                <span class="menu-item-hint" data-toggle="tooltip" title="<?= $hint ?>"><i class="fa fa-info-circle"></i></span>
-                                                                <?php } ?>
-
-                                                                <span class="error menu_item_<?= $menu_item->menu_item_id ?>"></span>
-
                                                                 <?php if($menu_item->image) { ?>
-                                                                <a href="<?= Yii::getAlias("@s3/"). VendorItem::UPLOADFOLDER_MENUITEM. $menu_item->image ?>" data-lightbox="menu-items" data-title="<?= Yii::$app->language == 'en'?$menu_item->menu_item_name:$menu_item->menu_item_name_ar; ?>"><img src="<?= Yii::getAlias("@s3/"). VendorItem::UPLOADFOLDER_MENUITEM_THUMBNAIL. $menu_item->image ?>"></a>
+                                                                <td>
+                                                                <a class="menu-item-image" href="<?= Yii::getAlias("@s3/"). VendorItem::UPLOADFOLDER_MENUITEM. $menu_item->image ?>" data-lightbox="menu-items" data-title="<?= Yii::$app->language == 'en'?$menu_item->menu_item_name:$menu_item->menu_item_name_ar; ?>"><img src="<?= Yii::getAlias("@s3/"). VendorItem::UPLOADFOLDER_MENUITEM_THUMBNAIL. $menu_item->image ?>"></a>
+                                                                </td>
                                                                 <?php } ?>
+
+                                                                </tr>
+                                                                </table>
                                                             </li>
                                                         <?php } ?>
                                                         </ul>
                                                     </div><!-- END .menu-detail -->
                                                 <?php } ?>
                                              </div><!-- END .menu-item-detail -->
-
-                                            <?php if ($AvailableStock) { ?>
-
-                                                <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px; margin-top: 10px; max-width: 240px;">
-                                                        <?= $txt_cart_btn ?>
-                                                </button>
-
-                                            <?php } ?><!-- END available in stock and for sale -->
 
                                           </div>
                                         </div>
@@ -825,61 +800,62 @@ else
                                                             ?>
 
                                                             <li>
+                                                                <table>
+                                                                <tr>
+
                                                                 <!-- qty box -->
 
-                                                                <span class="menu-item-qty-box">
+                                                                <td class="menu-item-qty-box">
                                                                     <i class="fa fa-minus"></i>
                                                                     <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="<?= $cart_menu_item?$cart_menu_item->quantity:0 ?>" readonly />
                                                                     <i class="fa fa-plus"></i>
-                                                                </span>
+                                                                </td>
 
                                                                 <!-- item name -->
-
-                                                                <span class="menu-item-name">
+                                                                
+                                                                <td class="menu-item-name">
+                                                                    
                                                                     <?php if(Yii::$app->language == 'en') {
                                                                             echo $menu_item->menu_item_name;
                                                                       } else {
                                                                             echo $menu_item->menu_item_name_ar;
                                                                       } ?>
-                                                                </span>
+                                                                    
+                                                                    <!-- price -->
 
-                                                                <!-- price -->
+                                                                    <?php if($menu_item->price > 0) { ?>
+                                                                    <span class="menu_item_price">
+                                                                        (+<?= CFormatter::format($menu_item->price) ?>)
+                                                                    </span>
+                                                                    <?php  } ?>
 
-                                                                <?php if($menu_item->price > 0) { ?>
-                                                                <span class="menu_item_price">
-                                                                    (+<?= CFormatter::format($menu_item->price) ?>)
-                                                                </span>
-                                                                <?php  } ?>
+                                                                    <!-- hint -->
 
-                                                                <!-- hint -->
+                                                                    <?php
 
-                                                                <?php
+                                                                    $hint =  Yii::$app->language == 'en' ? $menu_item->hint : $menu_item->hint_ar;
 
-                                                                $hint =  Yii::$app->language == 'en' ? $menu_item->hint : $menu_item->hint_ar;
+                                                                    if($hint) { ?>
+                                                                    <span class="menu-item-hint" data-toggle="tooltip" title="<?= $hint ?>"><i class="fa fa-info-circle"></i></span>
+                                                                    <?php } ?>
 
-                                                                if($hint) { ?>
-                                                                <span class="menu-item-hint" data-toggle="tooltip" title="<?= $hint ?>"><i class="fa fa-info-circle"></i></span>
-                                                                <?php } ?>
-
-                                                                <span class="error menu_item_<?= $menu_item->menu_item_id ?>"></span>
+                                                                    <span class="error menu_item_<?= $menu_item->menu_item_id ?>"></span>
+                                                                </td>
 
                                                                 <?php if($menu_item->image) { ?>
-                                                                <a href="<?= Yii::getAlias("@s3/"). VendorItem::UPLOADFOLDER_MENUITEM. $menu_item->image ?>" data-lightbox="menu-items" data-title="<?= Yii::$app->language == 'en'?$menu_item->menu_item_name:$menu_item->menu_item_name_ar; ?>"><img src="<?= Yii::getAlias("@s3/"). VendorItem::UPLOADFOLDER_MENUITEM_THUMBNAIL. $menu_item->image ?>"></a>
+                                                                <td>
+                                                                    <a class="menu-item-image" href="<?= Yii::getAlias("@s3/"). VendorItem::UPLOADFOLDER_MENUITEM. $menu_item->image ?>" data-lightbox="menu-items" data-title="<?= Yii::$app->language == 'en'?$menu_item->menu_item_name:$menu_item->menu_item_name_ar; ?>"><img src="<?= Yii::getAlias("@s3/"). VendorItem::UPLOADFOLDER_MENUITEM_THUMBNAIL. $menu_item->image ?>"></a>
+                                                                </td>
                                                                 <?php } ?>
+
+                                                                </tr>
+                                                                </table>
                                                             </li>
                                                         <?php } ?>
                                                         </ul>
                                                     </div><!-- END .menu-detail -->
                                                 <?php } ?>
                                              </div><!-- END .menu-item-detail -->
-
-                                            <?php if ($AvailableStock) { ?>
-
-                                                <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px; margin-top: 10px; max-width: 240px;">
-                                                        <?= $txt_cart_btn ?>
-                                                </button>
-
-                                            <?php } ?><!-- END available in stock and for sale -->
 
                                           </div>
                                         </div>
@@ -971,6 +947,12 @@ else
                                         </div>
                                     </div>
                                     <?php } ?>
+
+                                    <?php if ($AvailableStock) { ?>
+
+                                        <button type="submit" class="btn btn-primary btn-custome-1 width-100-percent" name="submit" style="padding: 12px 5px; margin-top: 10px; max-width: 240px;"><?= $txt_cart_btn ?></button>
+
+                                    <?php } ?><!-- END available in stock and for sale -->
 
                                     <?php if (!empty($model['item_customization_description'])) { ?>
                                     <div class="panel panel-default">
@@ -1220,7 +1202,7 @@ $this->registerCss("
     .datepicker{border: 2px solid rgb(242, 242, 242);}
     .datepicker table{font-size: 12px;}
     .form-group{margin-bottom:15px;width: 92%;margin-left: 11px;}
-    .filter-bar{margin-top: 22px;padding-left: 0px;}
+    .filter-bar{margin-top: 5px;padding-left: 0px;}
     .date-picker-box{height: 44px;border-radius: 0px;box-shadow: none;border-color: #e6e6e6;}
     .filter-bar .fa-calendar{position: absolute;right: 8px;top: 12px;font-size: 15px;color:#e6e6e6;}
     #form_product_option .selectpicker.btn-primary {color: #555!important;}

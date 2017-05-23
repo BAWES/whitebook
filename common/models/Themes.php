@@ -68,7 +68,7 @@ class Themes extends \yii\db\ActiveRecord
         return [
             ['theme_name', 'themevalidation', 'on' => 'insert',],
             [['theme_name','theme_name_ar'], 'required'],
-            [['created_by', 'modified_by'], 'integer'],
+            [['sort', 'created_by', 'modified_by'], 'integer'],
             [['created_datetime', 'modified_datetime'], 'safe'],
             [['trash'], 'string'],
             [['theme_name','theme_name_ar'], 'string', 'max' => 256]
@@ -87,6 +87,7 @@ class Themes extends \yii\db\ActiveRecord
             'theme_meta_title' => 'Title',
             'theme_name' => 'Theme Name',
             'theme_name_ar' => 'Theme Name - Arabic',
+            'sort' => 'Sort Order',
             'created_by' => 'Created By',
             'modified_by' => 'Modified By',
             'created_datetime' => 'Created Datetime',

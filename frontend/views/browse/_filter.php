@@ -32,13 +32,6 @@ use common\components\LangFormat;
                     <?php
                     }//if category selected ?>
 
-                    <option
-                       data-icon=""
-                       value="<?= Url::toRoute(['browse/list', 'slug'=> 'all']) ?>"
-                       name="category" >
-                       <?=Yii::t('frontend','All')?>
-                   </option>
-
                     <?php 
 
                     foreach ($TopCategories as $category) {
@@ -120,8 +113,6 @@ use common\components\LangFormat;
 
         <br class="visible-sm visible-xs" />
 
-        <div class="mobile_only_filter"></div>
-
-        <button class="btn btn-close-filter visible-sm visible-xs"><?=Yii::t('frontend','Close filter')?></button>
+        <div class="mobile_only_filter row"></div>
     </div>
 </div>

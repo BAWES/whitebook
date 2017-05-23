@@ -68,14 +68,14 @@ class BrowseController extends BaseController
 
         if ($slug != 'all') {
             $Category = Category::findOne(['slug' => $slug]);
-
-            if (empty($Category)) {
-                return $this->goBack();
-            }
         } else {
-            $Category = '';
+            $Category = Category::findOne(['slug' => 'venues']);
         }
         
+        if (empty($Category)) {
+            return $this->goBack();
+        }
+
         \Yii::$app->view->title = (isset($Category->category_meta_title)) ? $Category->category_meta_title : (isset($Category->category_name)) ? Yii::$app->params['SITE_NAME'] . ' | ' . $Category->category_name : Yii::$app->params['SITE_NAME'] .' | All Products';
         \Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => (isset($Category->category_meta_description)) ? $Category->category_meta_description : Yii::$app->params['META_DESCRIPTION']]);
         \Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => (isset($Category->category_meta_keywords)) ? $Category->category_meta_keywords : Yii::$app->params['META_KEYWORD']]);
@@ -266,9 +266,9 @@ class BrowseController extends BaseController
             ->where(['trash' => 'Default']);
 
         if (Yii::$app->language == 'en') {
-            $q->orderBy('theme_name');
+            $q->orderBy('sort, theme_name');
         } else {
-            $q->orderBy('theme_name_ar');
+            $q->orderBy('sort, theme_name_ar');
         }
 
         $themes = $q->all();
@@ -278,6 +278,7 @@ class BrowseController extends BaseController
         $vendor = Vendor::find()
             ->select('{{%vendor}}.vendor_id, {{%vendor}}.vendor_name, {{%vendor}}.vendor_name_ar, {{%vendor}}.slug')
             ->vendorIDs($vendor_ids)
+            ->orderBy('vendor_name')
             ->asArray()
             ->all();
 
@@ -364,7 +365,8 @@ class BrowseController extends BaseController
             $baselink = Url::to("@web/images/item-default.png");
         }
 
-        \Yii::$app->view->registerMetaTag(['property' => 'og:title', 'content' => Yii::$app->name.' - ' . ucfirst($model->vendor->vendor_name)]);
+        \Yii::$app->view->registerMetaTag(['property' => 'og:title', 'content' => Yii::$app->params['SITE_NAME'] .' - '.LangFormat::format($model->item_name,$model->item_name_ar)]);
+
         \Yii::$app->view->registerMetaTag(['property' => 'fb:app_id', 'content' => 157333484721518]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:url', 'content' => Url::toRoute(["browse/detail", 'slug' => $model->slug], true)]);
         \Yii::$app->view->registerMetaTag(['property' => 'og:image', 'content' => $baselink]);
@@ -556,6 +558,7 @@ class BrowseController extends BaseController
                 $name = 'location_ar';
             }
             $area = \common\models\Location::find()->city($_POST['city_id'])->active()->defaultLocations()->orderBy('city_id')->all();
+            
             if ($area) {
                 echo \yii\helpers\Html::dropDownList('Location','',\yii\helpers\ArrayHelper::map($area ,'id',$name),['prompt'=>'Please Select Location','class'=>'selectpicker required trigger','id'=>'Location']);
             } else {

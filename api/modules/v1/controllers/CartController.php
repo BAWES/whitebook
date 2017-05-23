@@ -45,13 +45,6 @@ class CartController extends Controller
             ],
         ];
 
-        // Bearer Auth checks for Authorize: Bearer <Token> header to login the user
-        $behaviors['authenticator'] = [
-            'class' => \yii\filters\auth\HttpBearerAuth::className(),
-        ];
-        // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
-        $behaviors['authenticator']['except'] = ['options'];
-
         return $behaviors;
     }
 
@@ -87,12 +80,16 @@ class CartController extends Controller
         $cartItems['items'] = [];
         $cartItems['summary'] = [];
 
+        $area_id = Yii::$app->request->get('area_id');
+        $delivery_date = Yii::$app->request->get('delivery_date');
+        $time_slot = Yii::$app->request->get('time_slot');
+        
         foreach ($items as $key => $value) 
         {
             $vendor_name = CustomerCart::getVendorDetail($value['vendor_id'])->vendor_name;
+            
             $vendors[$value['vendor_id']] = [
-                'vendor'=>$vendor_name,
-                'area_id' => $value['area_id']
+                'vendor' => $vendor_name
             ];
 
             unset($value['item']);
@@ -154,16 +151,15 @@ class CartController extends Controller
             }
             $result[] = $value;
         }
+
         if ($result) {
             $i=0;
             foreach ($vendors as $key => $vendor) {
-                $charge = \common\models\Booking::getDeliveryCharges('', $key, $vendor['area_id']);
+                $charge = \common\models\Booking::getDeliveryCharges('', $key, $area_id);
                 $delivery_charge += (int)$charge;
                 $delivery[$i] = ['vendor'=>$vendor['vendor'],'charges'=>\common\components\CFormatter::format($charge)];
                 $i++;
             }
-
-
 
             $cartItems['items'] = $result;
             $cartItems['summary']['subtotal'] = $subTotal;
@@ -544,12 +540,8 @@ class CartController extends Controller
         if($this->validateItem($data)) {
 
             $query = CustomerCart::find()
-                ->item($data['item_id'])
-                ->area($data['area_id'])
-                ->timeSlot($data['time_slot'])
-                ->deliveryDate($data['delivery_date']);
-
-
+                ->item($data['item_id']);
+                
             if(!empty($data['female_service'])){
                 $query->femaleService($data['female_service']);
             }
@@ -631,9 +623,6 @@ class CartController extends Controller
                 $cart = new CustomerCart();
                 $cart->customer_id = Yii::$app->user->getId();
                 $cart->item_id = $data['item_id'];
-                $cart->area_id = $location;
-                $cart->time_slot  = isset($data['time_slot'])?$data['time_slot']:'';
-                $cart->cart_delivery_date = date('Y-m-d', strtotime($data['delivery_date']));
                 $cart->cart_customization_price_per_unit = 0;
                 $cart->cart_quantity = $data['quantity'];
                 $cart->cart_datetime_added = date('Y-d-m h:i:s');

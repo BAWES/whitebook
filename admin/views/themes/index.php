@@ -21,6 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             'theme_name',
+            'sort',
              [
              'label'=>'Status',
              'format'=>'raw',

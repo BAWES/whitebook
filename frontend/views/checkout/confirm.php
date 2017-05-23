@@ -203,10 +203,10 @@ use common\models\CustomerCartMenuItem;
                 foreach ($vendors as $key => $vendor) {
                     $charge = Booking::getDeliveryCharges(Yii::$app->session->get('address_id'),$key);
                     
+                    $delivery_charge += (int) $charge;
+
                     if($charge < 1)
                         continue;
-
-                    $delivery_charge += (int) $charge;
             ?>
             <tr>
                 <td colspan="2" class="text-right"><strong><?= Yii::t('frontend', 'Delivery Charge') ?></strong> <small>( <?=$vendor?> )</small></td>
@@ -227,38 +227,25 @@ use common\models\CustomerCartMenuItem;
     <?php require '_delivery.php'; ?>
 </form>
 
-<div class="row checkout-confirm-btn-set">
+<div class="checkout-confirm-btn-set">
 
-    <div class="col-sm-4">
-        <button onclick="address();" class="btn btn-primary pull-left margin-left-0">
-                <?= Yii::t('frontend', 'Back') ?>
-        </button>
+    <div class="checkbox checkbox-inline">    
+        <input type="checkbox" name="agree" value="1" id="chk_agree" />
+        <label for="chk_agree">
+            <?= Yii::t('frontend', 'I agree on the {a} terms & conditions {/a}', [
+                    'a' => '<a target="_blank" href="'.Url::toRoute('/terms-conditions',true).'">', 
+                    '/a' => '</a>'
+                ]); ?>
+        </label>
     </div>
 
-    <div class="col-sm-4 text-center">
-        <div class="checkbox checkbox-inline">    
-            <input type="checkbox" name="agree" value="1" id="chk_agree" />
-            <label for="chk_agree">
-                <?= Yii::t('frontend', 'I agree on the {a} terms & conditions {/a}', [
-                        'a' => '<a target="_blank" href="'.Url::toRoute('/terms-conditions',true).'">', 
-                        '/a' => '</a>'
-                    ]); ?>
-            </label>
-        </div>
-    </div>
+    <hr />
 
-    <div class="col-sm-4">
-        <a href="<?= $pg_link ?>" class="btn btn-primary btn-checkout btn-confirm pull-right">
-            <?= Yii::t('frontend', 'Confirm Request(s)') ?>
-        </a>
-    </div>
+    <a href="<?= $pg_link ?>" class="btn btn-primary btn-checkout btn-confirm btn-lg">
+        <?= Yii::t('frontend', 'Confirm Request(s)') ?>
+    </a>
+
 </div>
-
-<br />
-
-<div style="position: relative;" class="alert alert-info"><?= Yii::t('frontend', 'By confirming you agree to The White Book\'s terms and conditions') ?></div>
-
-<div style="position: relative;" class="alert alert-info"><?= Yii::t('frontend', 'A payment link will be sent to you for your order once your booking is confirmed') ?></div>
 
 <br />
 <br />

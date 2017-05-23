@@ -172,7 +172,6 @@ return [
                         'POST' => 'address-add',
                         'PATCH' => 'address-update',
                         'DELETE' => 'address-remove',
-
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
                         'OPTIONS type' => 'options',

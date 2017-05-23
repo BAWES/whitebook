@@ -210,6 +210,7 @@ class ThemesController extends BaseController
         $vendor = Vendor::find()
             ->select('{{%vendor}}.vendor_id,{{%vendor}}.vendor_name,{{%vendor}}.vendor_name_ar,{{%vendor}}.slug')
             ->vendorIDs($active_vendors)
+            ->orderBy('vendor_name')
             ->asArray()
             ->all();
 
