@@ -508,7 +508,7 @@ use frontend\models\Users;
             </div>
             <div class="col-md-4">
                 <div class="social_icons desktop">
-                    <span>Check out our Instagram</span>
+                    <span><?= Yii::t('frontend', 'Check out our Instagram') ?></span>
                     <a target="_blank" href="https://www.instagram.com/thewhitebookkw/">
                         <i class="fa fa-instagram"></i>
                     </a>

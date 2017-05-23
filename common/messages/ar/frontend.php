@@ -17,6 +17,11 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Check out our Instagram' => 'تحقق من إينستاجرام لدينا',
+    'Track your order' => 'أتبع طلبك',
+    'Booking ID: {id}' => 'معرف الحجز: {id}',
+    'Your Booking Requests have been sent' => 'تم إرسال طلبات الحجز',
+    'You\'ll receive a payment link once the vendors have confirmed your booking.' => 'ستحصل على رابط دفع فور تأكيد الموردين للحجز.',
     'What\'s your occasion?' => 'ما هي مناسباتك؟',
     'Book everything you need for your event' => 'احجز كل ما تحتاجه لمناسباتك',
     'You pick, we take care of the rest. Your friends will be jealous, guaranteed!' => 'إختر إلي تبيه و الباجي علينا',
