@@ -475,185 +475,46 @@ function logincheck()
 
 //Register save function ajax
 
-$(document).delegate('#register', 'click', function()
+$(document).delegate('#register_form', 'submit', function(e)
 {
-    $(this).html($('#txt_loading').val());
-    $(this).attr('disabled', 'disabled');
-    
-    var gender = $('#gender').val();
-    var bday = $('#bday').val();
-    var bmonth = $('#bmonth').val();
-    var byear = $('#byear').val();
-    var x = $("#reg_email").val();
-    var password = $('#userpassword').val();
-    var password_length = password.length;
-    var conPassword = $('#conpassword').val();
-    var _csrf = $('#_csrf1').val();
+    e.preventDefault();
+    e.stopPropagation();
 
-    var i = j = k = l = m = z = 0;
-    
-    var c = $('input[type=checkbox]:checked').length;
+    $have_errors = false;
 
-    if($('input[type=checkbox]:checked').length == 0)
+    $('#register').html($('#txt_loading').val());
+    $('#register').attr('disabled', 'disabled');
+    
+    if($('#agree_terms:checked').length == 0)
     {
-        if($('#agree_terms').val()==0)
+        $('#agree').show();
+        $('#agree').html(tick_the_terms_of_services_and_privacy_policy);
+        $have_errors = true;
+    }
+
+    if($have_errors)
+    {
+        $('#register').html($('#txt_register').val());
+        $('#register').removeAttr('disabled');
+        return false;
+    }
+
+    $.post(signup, $('#register_form').serialize(), function(json) 
+    { 
+        $('#register').html($('#txt_register').val());
+        $('#register').removeAttr('disabled');
+
+        if(json.operation == 'success')
         {
-            $('#agree').show();
-            $('#agree').html(tick_the_terms_of_services_and_privacy_policy);
+            $('#myModal1').modal('hide');
+            window.setTimeout(function() { location.reload(); });
         }
-    }
-    else
-    {
-        $('#agree').hide();
-        $('#agree').html('');
-        m = 1;
-    }
 
-    if(password_length >= 6)
-    {
-        z = 1;
-    }
-    else
-    {
-        z = 0;
-    }
-
-    if((password == conPassword) && (password != ''))
-    {
-        k = 1;
-    }
-    else
-    {
-        K = 0;
-    }
-
-    if((k==1)&&(z==1))
-    {
-        $('#con_pass').hide();
-        $('#con_pass').html('');
-    }
-    else{
-        $('#con_pass').show();
-        $('#con_pass').html(password_and_confirm_password_should_be_minimum_six_letters_and_same);
-    }
-
-    i=1;
-    j=1;
-
-    /*
-    if(gender==0)
-    {
-        $('#gen_er').show();
-        $('#gen_er').html(the_field_is_required);
-    }
-    else
-    {
-        $('#gen_er').hide();
-        i=1;
-    }
-    if(bday == '' || bmonth == '' || byear == '')
-    {
-        $('#dob_er').show();
-        $('#dob_er').text(the_field_is_required);
-    }
-    else
-    {
-        $('#dob_er').hide();
-        j=1;
-    }
-    */
-
-    if(validateEmail(x) == true){
-
-        $.ajax({
-
-            url: email_check,
-            type:"post",
-            //data:"email="+x+"&_csrf="+_csrf,
-            data:"email="+x,
-            async: false,
-            success:function(data)
-            {
-                if(data==1)
-                {
-                    $("#customer_email").show();
-                    $("#customer_email").html(entered_email_id_is_already_exists);
-                    l=0;
-                    $("#loader1").hide();
-                }
-                else if(data==0)
-                {
-                    l=1;
-                    $("#customer_email").html('');
-                    $("#customer_email").hide();
-                    $("#loader1").hide();
-                }
-            }
-        });
-    }
-    else
-    {
-        if(x != ''){
-            l=0;
-            $("#customer_email").show();
-            $("#customer_email").html(enter_a_valid_email_id);
-        }
-    }
-
-    var form = $("#register_form");
-
-    if(form.valid() && i==1 && j==1 && l==1 && m==1 && k==1&& z==1)
-    {
-        $('#register_loader').show();
-        var fname=$('#fname').val();
-        var lname=$('#lname').val();
-        var reg_email=$('#reg_email').val();
-        var phone=$('#phone').val();
-        var password=$('#userpassword').val();
-        var conPassword=$('#conpassword').val();
-        var terms=$('#terms').val();
-        var _csrf=$('#_csrf1').val();
-        var dob=bday+'-'+bmonth+'-'+byear;
-        var customer_name=fname+' '+lname;
-        $.ajax({
-            url: signup,
-            async:false,
-            type:"post",
-            data:"customer_name="+fname+"&customer_last_name="+lname+"&customer_email="+reg_email+"&bday="+bday+"&bmonth="+bmonth+"&byear="+byear+"&customer_gender="+gender+"&customer_mobile="+phone+"&customer_password="+password+"&confirm_password="+conPassword+"&_csrf="+_csrf,
-            success:function(data)
-            {
-                if(data==0)
-                {
-                    $('#myModal1').modal('hide');
-                    window.setTimeout(function(){location.reload()});
-                }
-                else if(data==2)
-                {
-                    $('#myModal1').modal('hide');
-                    window.setTimeout(function(){location.reload()})
-                }
-                else if(data==1)
-                {
-                    $('#myModal1').modal('hide');
-
-                    window.setTimeout(function(){
-                        location.reload()
-                    });
-                }
-
-                window.setTimeout(function(){
-                    $('#register').html($('#txt_register').val());
-                    $('#register').removeAttr('disabled');
-                }, 1000);
-            }
-        });
-    }else{
         window.setTimeout(function(){
             $('#register').html($('#txt_register').val());
             $('#register').removeAttr('disabled');
         }, 1000);
-        console.log('no valid form');
-    }    
+    });
 });
 
 

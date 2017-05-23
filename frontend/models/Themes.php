@@ -54,9 +54,8 @@ class Themes extends \common\models\Themes
     return $theme =  VendorItemThemes::find()
         ->select(['theme_id'])
         ->where('trash="default" and item_id IN('.$val.')')
-        ->orderBy('sort, theme_name')
-         ->asArray()
-         ->all();
+        ->asArray()
+        ->all();
 
   }
 

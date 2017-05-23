@@ -2710,3 +2710,11 @@ span.small {
     width: 100%;
     margin-left: 0px;
 }
+
+.help-block {
+    color: red !important;
+}
+
+#register_form input {
+    height: 40px !important;
+}
