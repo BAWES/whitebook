@@ -31,11 +31,11 @@ class Themes extends \common\models\Themes
 
       if(Yii::$app->language == 'en')
       {
-        $q->orderBy('theme_name');
+        $q->orderBy('sort, theme_name');
       }
       else
       {
-        $q->orderBy('theme_name_ar');
+        $q->orderBy('sort, theme_name_ar');
       }
 
       return $q->asArray()
@@ -54,6 +54,7 @@ class Themes extends \common\models\Themes
     return $theme =  VendorItemThemes::find()
         ->select(['theme_id'])
         ->where('trash="default" and item_id IN('.$val.')')
+        ->orderBy('sort, theme_name')
          ->asArray()
          ->all();
 
@@ -67,11 +68,11 @@ class Themes extends \common\models\Themes
 
       if(Yii::$app->language == 'en')
       {
-        $q->orderBy('theme_name');
+        $q->orderBy('sort, theme_name');
       }
       else
       {
-        $q->orderBy('theme_name_ar');
+        $q->orderBy('sort, theme_name_ar');
       }
 
       return $q->asArray()

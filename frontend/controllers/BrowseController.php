@@ -266,9 +266,9 @@ class BrowseController extends BaseController
             ->where(['trash' => 'Default']);
 
         if (Yii::$app->language == 'en') {
-            $q->orderBy('theme_name');
+            $q->orderBy('sort, theme_name');
         } else {
-            $q->orderBy('theme_name_ar');
+            $q->orderBy('sort, theme_name_ar');
         }
 
         $themes = $q->all();
