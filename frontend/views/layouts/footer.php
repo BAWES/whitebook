@@ -1,7 +1,13 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\widgets\ActiveForm;
 use frontend\models\Users;
+use frontend\models\Customer;
+
+$customer = new Customer;
+$customer->scenario = 'signup';
+
 ?>
 <!-- Modal Login -->
 <div class="modal fade" id="myModal" tabindex="-1" data-backdrop="static" data-keyboard="false" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -181,23 +187,28 @@ use frontend\models\Users;
                 </h4>
             </div>
             <div class="modal-body">
-                <form class="form col-md-12 center-block" id="register_form">
+                <?php $form = ActiveForm::begin([
+                        'options' => [
+                            'class' => 'form col-md-12 center-block',
+                            'id' => 'register_form'
+                         ]
+                    ]); ?>
+
+                    <input type="hidden" id="_csrf1" name="_csrf" value="<?= Yii::$app->request->csrfToken; ?>" />
+
                     <div class="login-padding">
                         <div class="clearfix">
                             <div class="left-side pull-left col-md-6 col-sm-6 col-xs-12 padding-left-0  padding-right-0">
                                 <div class="form-group">
                                     <label><?= Yii::t('frontend', 'First Name') ?></label>
-                                    <input type="text" placeholder="" name="fname" id="fname" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
-                                    <input type="hidden" id="_csrf1" name="_csrf" value="<?= Yii::$app->request->csrfToken; ?>" />
-                                    <span class="customer_fname errors"></span>
+                                    <?= $form->field($customer, 'customer_name')->label(false) ?>
                                 </div>
                             </div>
 
                             <div class="right-side pull-right col-md-6 col-sm-6 col-xs-12 padding-right-0">
                                 <div class="form-group">
                                     <label><?= Yii::t('frontend', 'Last Name') ?></label>
-                                    <input type="text" placeholder="" name="lname" id="lname" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
-                                    <span class="customer_lname errors"></span>
+                                    <?= $form->field($customer, 'customer_last_name')->label(false) ?>
                                 </div>
                             </div>
 
@@ -206,9 +217,7 @@ use frontend\models\Users;
                             <div class="left-side pull-left col-md-6 col-sm-6 col-xs-12 padding-left-0  padding-right-0">
                                 <div class="form-group">
                                     <label><?= Yii::t('frontend', 'Email') ?></label>
-                                    <input type="text" placeholder="" name="reg_email" id="reg_email" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
-                                    <span class="customer_email errors"></span>
-                                    <div id="customer_email" class="error"></div>
+                                    <?= $form->field($customer, 'customer_email')->label(false) ?>
                                 </div>
                             </div>
 
@@ -271,7 +280,7 @@ use frontend\models\Users;
                                 <div class="form-group reg_gender">
                                     <label><?= Yii::t('frontend', 'Gender') ?></label>
                                     <div class="col-md-12 padding0 gender-select">
-                                        <select class="selectpicker" data-style="btn-primary" id="gender" name="gender" style="display: none;">
+                                        <select class="selectpicker" data-style="btn-primary" id="gender" name="Customer[customer_gender]" style="display: none;">
                                             <option value=""><?= Yii::t('frontend', 'Select Gender') ?></option>
                                             <option value="Male"><?= Yii::t('frontend', 'Male') ?></option>
                                             <option value="Female"><?= Yii::t('frontend', 'Female') ?></option>
@@ -287,8 +296,7 @@ use frontend\models\Users;
                             <div class="right-side pull-right col-md-6 col-sm-6 col-xs-12 padding-right-0">
                                 <div class="form-group">
                                     <label><?= Yii::t('frontend', 'Mobile Number') ?></label>
-                                    <input type="text" placeholder="" name="phone" id="phone" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
-                                    <span class="customer_mobile errors"></span>
+                                    <?= $form->field($customer, 'customer_mobile')->label(false) ?>
                                 </div>
                             </div>
 
@@ -297,22 +305,18 @@ use frontend\models\Users;
                             <div class="left-side pull-left col-md-6 col-sm-6 col-xs-12 padding-left-0  padding-right-0">
                                 <div class="form-group">
                                     <label><?= Yii::t('frontend', 'Password') ?></label>
-                                    <input type="password" placeholder="" name="userpassword" id="userpassword" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
-                                    <span class="customer_password password errors"></span>
+                                    <?= $form->field($customer, 'customer_password')->passwordInput()->label(false) ?>
                                 </div>
                             </div>
 
                             <div class="right-side pull-right col-md-6 col-sm-6 col-xs-12 padding-right-0">
                                 <div class="form-group">
                                     <label><?= Yii::t('frontend', 'Confirm Password') ?></label>
-                                    <input type="password" placeholder="" name="conpassword" id="conpassword" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
-                                    <span class="customer_conpassword password errors"></span>
-
-                                    <div id="con_pass"  class="error"></div>
+                                    <?= $form->field($customer, 'confirm_password')->passwordInput()->label(false) ?>
                                 </div>
                             </div>
                         </div>
-<!--                        <div class="clearfix"></div>-->
+
                         <div class="form-group">
                            <div class="i-agree text-center col-xs-12">
                             <label for="checkbox-50" class="label_check c_off" id="label_check1">
@@ -324,7 +328,7 @@ use frontend\models\Users;
 
                             <div class="button-signin">
                                 <div id="loader1"><img src="<?=  Url::to('@web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
-                                <button type="button" id="register" name="register" class="btn btn-primary btn-lg btn-block login_btn"><?= Yii::t('frontend', 'Register') ?></button>
+                                <button type="submit" id="register" name="register" class="btn btn-primary btn-lg btn-block login_btn"><?= Yii::t('frontend', 'Register') ?></button>
                             </div>
                             <span class="text-center forgotpwd"><?= Yii::t('frontend', 'Already a member?') ?><a data-target="#myModal" onclick="show_mydata();" data-toggle="modal" title="<?= Yii::t('frontend', 'Sign In') ?>" class="actionButtons" href="">
                                 <?= Yii::t('frontend', 'Sign In') ?> </a></span>
@@ -333,7 +337,7 @@ use frontend\models\Users;
                         </div>
                     </div>
 
-                </form>
+                <?php ActiveForm::end(); ?>
             </div>
         </div>
     </div>

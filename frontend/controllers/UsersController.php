@@ -82,74 +82,76 @@ class UsersController extends BaseController
         $model->scenario = 'signup';
         $error = array();
 
-        if (Yii::$app->request->isAjax) {
-
-            $data = Yii::$app->request->post();
-            $model->customer_password = Yii::$app->getSecurity()->generatePasswordHash($data['customer_password']);
-            $model->confirm_password=$data['confirm_password'];
-
-            if(!empty($data['byear']) && !empty($data['bmonth']) && !empty($data['bday'])) {
-                $model->customer_dateofbirth = $data['byear'].'-'.$data['bmonth'].'-'.$data['bday'];    
-            }
-            
-            $model->customer_activation_key = Users::generateRandomString();
-            $model->created_datetime = date('Y-m-d H:i:s');
-            $model->customer_name = $data['customer_name'];
-            $model->customer_last_name = $data['customer_last_name'];
-            $model->customer_email = $data['customer_email'];
-            $model->customer_gender = $data['customer_gender'];
-            $model->customer_mobile = $data['customer_mobile'];
-
-            if ($model->validate() && $model->save()) {
-               
-                $username = $model['customer_name'];
-                
-                Yii::$app->session->set('register', '1');
-                
-                //Send Email to user
-                Yii::$app->mailer->htmlLayout = 'layouts/empty';
-
-                Yii::$app->mailer->compose("customer/confirm",
-                    [
-                        "user" => $model->customer_name,
-                        "confirm_link" => Url::to(['/users/confirm_email', 'key' => $model->customer_activation_key], true),
-                        "logo_1" => Url::to("@web/images/twb-logo-horiz-white.png", true),
-                        "logo_2" => Url::to("@web/images/twb-logo-trans.png", true),
-                    ])
-                    ->setFrom(Yii::$app->params['supportEmail'])
-                    ->setTo($model['customer_email'])
-                    ->setSubject('Welcome to The White Book')
-                    ->send();
-
-                //Send Email to admin
-                Yii::$app->mailer->htmlLayout = 'layouts/empty';
-
-                $send_admin = Yii::$app->mailer->compose("customer/user-register",
-                    [
-                        'confirm_link' => Url::to(['/users/confirm_email', 'key' => $model->customer_activation_key], true),
-                        'logo_1' => Url::to("@web/images/twb-logo-horiz-white.png", true),
-                        'logo_2' => Url::to("@web/images/twb-logo-trans.png", true),
-                        'model' => $model
-                    ]
-                );
-
-                $send_admin
-                    ->setFrom(Yii::$app->params['supportEmail'])
-                    ->setTo(Yii::$app->params['adminEmail'])
-                    ->setSubject('User registered')
-                    ->send();
-
-                return Users::SUCCESS;
-            } else {
-                
-            print_r($model->getErrors());
-            die();
-                return Users::FAILURE;
-            }
-
-        } else {
+        if (!Yii::$app->request->isAjax) 
+        {
             Yii::$app->session->set('show_login_modal', '1');
             return $this->redirect(['site/index']);
+        }
+
+        Yii::$app->response->format = 'json';
+
+        $data = Yii::$app->request->post();
+        
+        if(!empty($data['byear']) && !empty($data['bmonth']) && !empty($data['bday'])) {
+            $model->customer_dateofbirth = $data['byear'].'-'.$data['bmonth'].'-'.$data['bday'];    
+        }
+        
+        $model->customer_activation_key = Users::generateRandomString();
+        $model->created_datetime = date('Y-m-d H:i:s');
+        
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) 
+        {               
+            $model->customer_password = Yii::$app->getSecurity()->generatePasswordHash($model->customer_password);
+            
+            $model->save();
+
+            $username = $model['customer_name'];
+            
+            Yii::$app->session->set('register', '1');
+            
+            //Send Email to user
+            Yii::$app->mailer->htmlLayout = 'layouts/empty';
+
+            Yii::$app->mailer->compose("customer/confirm",
+                [
+                    "user" => $model->customer_name,
+                    "confirm_link" => Url::to(['/users/confirm_email', 'key' => $model->customer_activation_key], true),
+                    "logo_1" => Url::to("@web/images/twb-logo-horiz-white.png", true),
+                    "logo_2" => Url::to("@web/images/twb-logo-trans.png", true),
+                ])
+                ->setFrom(Yii::$app->params['supportEmail'])
+                ->setTo($model['customer_email'])
+                ->setSubject('Welcome to The White Book')
+                ->send();
+
+            //Send Email to admin
+            Yii::$app->mailer->htmlLayout = 'layouts/empty';
+
+            $send_admin = Yii::$app->mailer->compose("customer/user-register",
+                [
+                    'confirm_link' => Url::to(['/users/confirm_email', 'key' => $model->customer_activation_key], true),
+                    'logo_1' => Url::to("@web/images/twb-logo-horiz-white.png", true),
+                    'logo_2' => Url::to("@web/images/twb-logo-trans.png", true),
+                    'model' => $model
+                ]
+            );
+
+            $send_admin
+                ->setFrom(Yii::$app->params['supportEmail'])
+                ->setTo(Yii::$app->params['adminEmail'])
+                ->setSubject('User registered')
+                ->send();
+
+            return [
+                'operation' => 'success'
+            ];
+        } 
+        else 
+        {
+            return [
+                'operation' => 'error',
+                'message' => $model->getErrors()
+            ];
         }
     }
 

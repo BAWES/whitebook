@@ -24,7 +24,7 @@ class Customer extends \common\models\Customer {
     public $bmonth;
     public $byear;
     public $confirm_password;
-
+    public $agree_terms;
     public $rememberMe = true;
 
     private $_customer = false;
@@ -35,14 +35,18 @@ class Customer extends \common\models\Customer {
     public function rules() {
         return array_merge(parent::rules(), [
             [['customer_name', 'customer_last_name', 'customer_email', 'customer_password', 'customer_mobile'], 'required'],
+            ['customer_mobile', 'string', 'length' => [8]],
+
+            //[[''], 'integer', 'length' => 8],
 
             [['customer_name', 'customer_last_name', 'customer_email', 'customer_mobile'], 'required', 'on'=>'guest'],
 
-            [['customer_name', 'customer_last_name', 'customer_email', 'customer_password', 'customer_mobile'], 'required', 'on'=>'signup'],
-            
+            [['customer_name', 'customer_last_name', 'customer_email', 'customer_password', 'confirm_password', 'customer_mobile', 'agree_terms'], 'required', 'on'=>'signup'],
+
+            ['customer_password', 'compare', 'compareAttribute' => 'confirm_password', 'operator' => '==', 'on' => 'signup'],
+
             ['customer_email','email'],
             
-            //['customer_password', 'compare', 'compareAttribute' => 'confirm_password','on'=>'signup'],
             [['customer_email', 'customer_password',], 'required', 'on'=>'login'],
 
             // rememberMe must be a boolean value
