@@ -2705,3 +2705,8 @@ span.small {
 .theme-filter .panel-heading {
     border: none;
 }
+
+.btn-confirm.btn-lg {
+    width: 100%;
+    margin-left: 0px;
+}
