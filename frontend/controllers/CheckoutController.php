@@ -15,6 +15,7 @@ use common\models\Country;
 use common\models\Location;
 use common\models\PaymentGateway;
 use common\models\CustomerCartMenuItem;
+use common\models\Order;
 use frontend\models\AddressType;
 use frontend\models\Customer;
 
@@ -410,8 +411,16 @@ class CheckoutController extends BaseController
             return $this->redirect(['site/index']);
         }
 
+        //get order token from booking id 
+
+        $order = Order::find()
+            ->innerJoin('{{%booking}}', '{{%booking}}.order_id = {{%order}}.order_id')
+            ->where(['booking_id' => $arr_booking_id[0]])
+            ->one();
+
         return $this->render('success', [
-            'arr_booking_id' => $arr_booking_id
+            'arr_booking_id' => $arr_booking_id,
+            'order_token' => $order->order_token
         ]);
     }
 
