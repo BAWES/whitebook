@@ -101,7 +101,7 @@ $this->beginPage()
             <?= Alert::widget(); ?>
         </div>
 
-        <?php $this->beginContent('@app/views/layouts/header.php'); ?>
+        <?php $this->beginContent('@app/views/layouts/main/header.php'); ?>
 
         <?php $this->endContent(); ?>
         <!-- Header Section End -->
@@ -109,7 +109,7 @@ $this->beginPage()
             <?= $content ?>
         <!--Content End-->
         <!-- Footer Section Start -->
-        <?php $this->beginContent('@app/views/layouts/footer.php'); ?>
+        <?php $this->beginContent('@app/views/layouts/main/footer.php'); ?>
         <?php $this->endContent(); ?>
 
         <?php $this->registerJs(
