@@ -42,12 +42,12 @@ class CartController extends BaseController
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','update-cart-item-popup','update-cart-item','add', 'update', 'validation-product-available', 'get-delivery-timeslot', 'save-delivery-timeslot','slots', 'remove'],
+                        'actions' => ['index', 'mini-cart', 'update-cart-item-popup','update-cart-item','add', 'update', 'validation-product-available', 'get-delivery-timeslot', 'save-delivery-timeslot','slots', 'remove'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['index','update-cart-item-popup','update-cart-item','add', 'update', 'validation-product-available', 'get-delivery-timeslot', 'save-delivery-timeslot','slots', 'remove'],
+                        'actions' => ['index', 'mini-cart', 'update-cart-item-popup','update-cart-item','add', 'update', 'validation-product-available', 'get-delivery-timeslot', 'save-delivery-timeslot','slots', 'remove'],
                         'allow' => true,
                         'roles' => ['?'],
                     ]
@@ -78,6 +78,27 @@ class CartController extends BaseController
         }
 
         return $this->render('index', [
+            'items' => $items,
+            'vendor_area' => $vendor_area
+        ]);
+    }
+
+    public function actionMiniCart()
+    {
+        $items = CustomerCart::items();
+
+        $vendor_area = Location::find()->defaultLocations()->all();
+
+        if(Yii::$app->language == 'en')
+        {
+            $vendor_area =  \yii\helpers\ArrayHelper::map($vendor_area, 'id', 'location', 'cityName' );    
+        }
+        else
+        {
+            $vendor_area =  \yii\helpers\ArrayHelper::map($vendor_area, 'id', 'location_ar', 'cityName' );
+        }
+
+        return $this->renderPartial('mini_cart', [
             'items' => $items,
             'vendor_area' => $vendor_area
         ]);
@@ -205,14 +226,14 @@ class CartController extends BaseController
                         }
                     }
 
-                    Yii::$app->getSession()->setFlash('success', Yii::t(
+                    /*Yii::$app->getSession()->setFlash('success', Yii::t(
                         'frontend',
                         'Success: Product <a href="{product_link}">{product_name}</a> updated in cart successfully',
                         [
                             'product_link' => Url::to(['browse/detail', 'slug' => $cart->item->slug]),
                             'product_name' => Yii::$app->language == 'en'? $cart->item->item_name : $cart->item->item_name_ar
                         ]
-                    ));
+                    ));*/
 
                     return [
                         'success' => 1
@@ -406,14 +427,14 @@ class CartController extends BaseController
 
                 $item = VendorItem::findOne($data['item_id']);
 
-                Yii::$app->getSession()->setFlash('success', Yii::t(
+                /*Yii::$app->getSession()->setFlash('success', Yii::t(
                     'frontend', 
                     'Success: Product <a href="{product_link}">{product_name}</a> added to cart!', 
                     [
                         'product_link' => Url::to(['browse/detail', 'slug' => $item->slug]),
                         'product_name' => Yii::$app->language == 'en'? $item->item_name : $item->item_name_ar
                     ]
-                ));
+                ));*/
 
                 return [
                     'success' => 1

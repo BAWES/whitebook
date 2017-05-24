@@ -104,10 +104,10 @@ $action = Yii::$app->controller->action->id;
                                     <?= Yii::t('frontend', 'Track Booking'); ?>
                                 </a>
                             </li>
-                            <li>
-                                <a href="<?php echo Url::to(['cart/index']); ?>">
-                                    <?php echo Yii::t('frontend', 'Cart ({count})', ['count' => CustomerCart::item_count()]); ?>
-                                </a>
+                            <li class="min-cart-wrapper">
+                                <a data-toggle="dropdown">
+                                    <?php echo Yii::t('frontend', 'Cart ({count})', ['count' => 0]); ?>
+                                </a>                                
                             </li>
                             <li class="">
                                 <a href="" data-toggle="modal"  onclick="show_login_modal('-5');" data-target="#vendor-sign-up">
@@ -128,10 +128,12 @@ $action = Yii::$app->controller->action->id;
                                 <li><a href="<?php echo Url::to(['things-i-like/index'], true); ?>" title="<?php echo Yii::t('frontend', 'Things I like'); ?>"><?php echo Yii::t('frontend', 'Things I like'); ?></a></li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="<?php echo Url::to(['cart/index']); ?>">
-                                <?php echo Yii::t('frontend', 'Cart ({count})', ['count' => CustomerCart::item_count()]); ?>
-                            </a>
+                        <li>                            
+                            <li class="min-cart-wrapper">
+                                <a data-toggle="dropdown">
+                                    <?php echo Yii::t('frontend', 'Cart ({count})', ['count' => 0]); ?>
+                                </a>                                
+                            </li>
                         </li>
                         <?php
                             /*

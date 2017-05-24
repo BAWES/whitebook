@@ -47,9 +47,22 @@ $(window).resize(function() {
     resize();
 });
 
+function loadCart() 
+{    
+    $.get(mini_cart_url, function(html) {
+        $('.min-cart-wrapper').html(html);
+    });
+}
+
 $(document).ready(function(){
 
     resize();
+
+    loadCart();
+
+    $(document).delegate('.min-cart-wrapper .btn-mini-cart', 'click', function() {
+        loadCart();
+    });
 
     $('body').append('<div class="ma5-mobile-menu-container"/>');
     $('.ma5-menu-mobile').find('ul').clone().addClass('ma5-menu-panel').appendTo('.ma5-mobile-menu-container').find('ul').remove();

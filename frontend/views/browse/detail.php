@@ -1257,4 +1257,4 @@ $this->registerCssFile('@web/css/lightbox.css', ['depends' => [\yii\web\JqueryAs
 
 $this->registerJsFile('@web/js/lightbox.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.28', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.29', ['depends' => [\yii\web\JqueryAsset::className()]]);

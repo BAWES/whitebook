@@ -2718,3 +2718,232 @@ span.small {
 #register_form input {
     height: 40px !important;
 }
+
+/*---------- mini cart ---------------*/
+.min-cart-wrapper {
+    position: relative;
+}
+.minibag-dropdown {
+    z-index: 1002;
+    left: -214%;
+}
+.minibag-dropdown-content {
+    background: #fff;
+    border: 1px solid #DDD;
+    width: 320px;
+    position: absolute;
+    right: 0;
+    margin-top: 0px !important;
+    z-index: 1003;
+    box-shadow: 0 0 5px #DDD;
+    animation-duration: 0.5s;
+    animation-name: minibag-hideAway;
+}
+.minibag-overflow-container {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    display: block;
+    animation-duration: 0.5s;
+    animation-name: minibag-slideAway;
+    cursor: initial;
+}
+.minibag-dropdown-content--double .minibag-item-list {
+    overflow: auto;
+}
+.minibag-item-list {
+    width: 100%;
+    display: block;
+    overflow: hidden;
+}
+.bag-items {
+    padding: 0;
+    height: 100%;
+    display: block;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.bag-items .bag-item-holder {
+    position: relative;
+    padding: 0 20px;
+    margin: 0;
+    overflow: hidden;
+    font-size: 1.1em;
+    width: 100%;
+}
+.bag-items .bag-item-holder .bag-item-padding {
+    text-align: left;
+    padding: 20px 0;
+    border-bottom: 1px solid #EEE;
+}
+.bag-items .bag-item-holder .bag-item-padding .bag-item-border .bag-item .bag-item-image {
+    display: inline-block;
+    float: left;
+}
+.bag-items .bag-item-holder .bag-item-padding .bag-item-border .bag-item .bag-item-image>img, .bag-items .bag-item-holder .bag-item-padding .bag-item-border .bag-item .bag-item-image>a>img {
+    width: 100px;
+    height: 126px;
+    vertical-align: top;
+}
+.bag-items .bag-item-holder .bag-item-padding .bag-item-border .bag-item .bag-item-descriptions {
+    display: inline-block;
+    width: 160px;
+    padding: 0 15px 0 0;
+    vertical-align: top;
+    text-align: left;
+    -ms-transform: translateX(15px);
+    transform: translateX(15px);
+    min-height: 126px;
+    letter-spacing: 0.4px;
+    font-family: "futura-pt-n4", "futura-pt", "Futura PT", "Futura", Tahoma, Geneva, Verdana, Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+}
+.bag-items .bag-item-holder p {
+    padding: 0 0 0.3em 0;
+    margin: 0;
+    line-height: 1.2em;
+}
+.bag-item-price-holder .bag-item-price--current {
+    color: #2D2D2D;
+    font-family: "futura-pt-n7", "futura-pt", "Futura PT", "Futura Book", Tahoma, Geneva, Verdana, Arial, sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: 1.7px;
+}
+.bag-items .bag-item-holder .bag-item-padding .bag-item-border .bag-item .bag-item-descriptions .bag-item-name {
+    color: #2D2D2D;
+    margin: 0 0 0.5em;
+    max-height: 45px;
+    overflow: hidden;
+}
+.bag-items .bag-item-holder .bag-item-padding .bag-item-border .bag-item .bag-item-descriptions .bag-item-name>a {
+    color: #2D2D2D;
+    text-decoration: none;
+}
+.bag-items .bag-item-holder .bag-item-padding .bag-item-border .bag-item .bag-item-descriptions .bag-item-variants, .bag-items .bag-item-holder .bag-item-padding .bag-item-border .bag-item .bag-item-descriptions .bag-item-quantity {
+    color: #666;
+    letter-spacing: 1.5px;
+}
+.bag-items .bag-item-holder p {
+    padding: 0 0 0.3em 0;
+    margin: 0;
+    line-height: 1.2em;
+}
+
+.bag-items .bag-item-holder .bag-item-padding .bag-item-border .bag-item .bag-item-descriptions .bag-item-variants .bag-item-variant, .bag-items .bag-item-holder .bag-item-padding .bag-item-border .bag-item .bag-item-descriptions .bag-item-quantity .bag-item-variant {
+    font-family: "futura-pt-n7", "futura-pt", "Futura PT", "Futura Book", Tahoma, Geneva, Verdana, Arial, sans-serif;
+    font-style: normal;
+    font-weight: 700;
+}
+.bag-items .bag-item-holder .bag-item-padding .bag-item-border .bag-item .bag-item-descriptions .bag-item-variants>.bag-item-variant {
+    margin-right: 6px;
+}
+.bag-items .bag-item-holder .bag-item-padding {
+    text-align: left;
+    padding: 20px 0;
+    border-bottom: 1px solid #EEE;
+}
+.bag-item-remove {
+    background-image: url(data:image/svg+xml;charset=US-ASCII,%3C%3Fxml%20version%3D%221.0%22%20encod…2Fg%3E%20%20%20%20%20%20%20%20%3C%2Fg%3E%20%20%20%20%3C%2Fg%3E%3C%2Fsvg%3E);
+    background-repeat: no-repeat;
+    background-color: transparent;
+    background-position: center center;
+    background-size: 10px 10px;
+    border: none;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 17px;
+    right: 28px;
+    cursor: pointer;
+}
+.bag-item-remove:after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-image: url(data:image/svg+xml;charset=US-ASCII,%3C%3Fxml%20version%3D%221.0%22%20encod…2Fg%3E%20%20%20%20%20%20%20%20%3C%2Fg%3E%20%20%20%20%3C%2Fg%3E%3C%2Fsvg%3E);
+    background-repeat: no-repeat;
+    background-color: transparent;
+    background-position: center center;
+    background-size: 10px 10px;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.4s ease-in;
+}
+.minibag-meta-container {
+    background: #EEE;
+}
+.minibag-subtotal {
+    display: block;
+    position: static;
+    width: 100%;
+    height: 100%;
+}
+.minibag-subtotal-holder {
+    text-align: left;
+    margin: 0;
+    padding: 1px 18px;
+    background: #EEE;
+    letter-spacing: 0.5px;
+}
+.minibag-subtotal-holder .minibag-subtotal-subtotal {
+    font-style: normal;
+    font-weight: 400;
+    color: #2D2D2D;
+    font-size: 16px;
+}
+
+.minibag-bag-buttons {
+    text-align: left;
+    margin: 0;
+    padding: 0 18px 18px;
+    display: table;
+    width: 100%;
+}
+.minibag-button-holder--view-bag {
+    padding-right: 8px;
+}
+.minibag-button-holder {
+    display: table-cell;
+    box-sizing: border-box;
+    width: 50%;
+    height: 48px;
+}
+.minibag-subtotal-price {
+    float: right;    
+}
+.minibag-button {
+    width: 100%;
+    height: 48px;
+    display: block;
+    text-transform: uppercase;
+    font-size: 1.2em !important;
+    line-height: 40px;
+    letter-spacing: 1.3px;
+    font-style: normal;
+    text-decoration: underline;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+.minibag-button--view-bag {
+    border: 2px solid black;
+}
+.minibag-button-holder--checkout {
+    padding-left: 8px;
+}
+.minibag-button--checkout {
+    background: black;
+    color: #fff !important;
+    border: 2px solid black;
+}
+.empty-cart-msg i:before {
+    font-size: 61px;
+}
+.empty-cart-msg h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}

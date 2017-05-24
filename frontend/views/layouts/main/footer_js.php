@@ -5,6 +5,7 @@ use Yii\helpers\Url;
 use yii\helpers\Html;
 
 $this->registerJs("
+    var mini_cart_url = '".Url::toRoute(['/cart/mini-cart'])."'; 
     var password_reset_link = '".Url::toRoute(['/users/password_reset'])."';
     var pwd_reset_msg = '".Yii::t('frontend','Your password has been reset and you are now logged in')."';
     var user_login = '".Url::toRoute('/users/login')."';
