@@ -42,10 +42,25 @@ class BookingController extends BaseController
 		\Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->params['META_KEYWORD']]);
 
 		$booking_token = Yii::$app->request->get('booking_token');
+		
+		if($booking_token)
+		{
+			$bookings = Booking::find()
+				->token($booking_token)
+				->all();	
+		}
 
-		$booking = Booking::find()->token($booking_token)->one();
+		$order_token = Yii::$app->request->get('order_token');
 
-        return ($booking) ? $this->render('view', ['booking' => $booking]) : $this->render('track');
+		if($order_token)
+		{
+			$bookings = Booking::find()
+				->innerJoin('{{%order}}', '{{%order}}.order_id = {{%booking}}.order_id')
+				->where(['order_token' => $order_token])
+				->all();	
+		}
+
+        return !empty($bookings) ? $this->render('view', ['bookings' => $bookings]) : $this->render('track');
 	}
 
 	public function actionMail() {

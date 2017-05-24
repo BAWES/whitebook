@@ -39,7 +39,7 @@ $this->title = Yii::t('frontend', 'View Booking | Whitebook');
             ?>
 
             <div class="<?= $class; ?>">
-
+            <?php foreach ($bookings as $key => $booking) { ?>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -223,6 +223,7 @@ $this->title = Yii::t('frontend', 'View Booking | Whitebook');
                     </tbody>
 
                 </table>
+            <?php } ?>
             </div>
         </div>
     </div>
