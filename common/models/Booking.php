@@ -18,6 +18,7 @@ use common\models\CustomerAddressResponse;
 use common\models\CustomerCartMenuItem;
 use common\models\CustomerCart;
 use common\models\VendorPayment;
+use common\models\Order;
 
 /**
  * This is the model class for table "whitebook_booking".
@@ -222,6 +223,10 @@ class Booking extends \yii\db\ActiveRecord
         $cart_delivery_date = date('Y-m-d', strtotime(Yii::$app->session->get('delivery-date')));
         $time_slot = Yii::$app->session->get('event_time');
 
+        //to group bookings 
+        $order = new Order();
+        $order->save();
+
         //default commision
 
         $default_commision = Siteinfo::info('commission');
@@ -306,6 +311,7 @@ class Booking extends \yii\db\ActiveRecord
             );
 
             $booking = new Booking;
+            $booking->order_id = $order->order_id;
             $booking->vendor_id = $item['vendor_id'];
             $booking->customer_id = $customer_id;
             $booking->customer_name = $customer_name;

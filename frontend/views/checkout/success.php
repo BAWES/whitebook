@@ -13,7 +13,7 @@ foreach ($arr_booking_id as $key => $value)
     }
 }
 
-$booking_page = \yii\helpers\Url::to(['booking/view'],true);
+$booking_page = \yii\helpers\Url::to(['booking/view', 'order_token' => $order_token],true);
 
 ?>
 <section id="inner_pages_white_back">
