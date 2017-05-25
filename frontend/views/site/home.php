@@ -37,9 +37,9 @@ use yii\helpers\Url;
                                         <?php foreach ($themes as $key => $value) { ?>
                                             <option value="<?= Url::to('browse/all?filter=1&themes[]='.$value['slug']) ?>">
                                                 <?php if(Yii::$app->language == 'en') { 
-                                                        echo $value['theme_name'];
+                                                        echo ucwords($value['theme_name']);
                                                       } else { 
-                                                        echo $value['theme_name_ar'];
+                                                        echo ucwords($value['theme_name_ar']);
                                                       } ?>
                                             </option>
                                         <?php } ?>
