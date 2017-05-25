@@ -33,7 +33,7 @@ $get = Yii::$app->request->get();
                 ?>
                 <option
                     data-icon="<?= $category['icon'] ?>"
-                    value="<?php
+                    data-href="<?php
                     if (isset($theme)) {
                         echo yii\helpers\Url::toRoute([$path, 'slug' => $category['slug'],'themes'=>$theme]); // for theme page
                     } else {
@@ -41,7 +41,7 @@ $get = Yii::$app->request->get();
                     }
 
                     ?>"
-                    name="category" 
+                    value="<?= $category['slug'] ?>"
                     <?= $data . ' ' .$selected ?>>
                     <?= $category_name ?>
                 </option>

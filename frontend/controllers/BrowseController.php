@@ -53,6 +53,13 @@ class BrowseController extends BaseController
         return $this->render('categories',['city'=>$city]);
     }
 
+    public function actionSubCategoryFilter() 
+    {
+        return $this->renderPartial('@frontend/views/common/filter/category.php', [
+                'slug' => Yii::$app->request->get('slug')
+            ]);
+    }
+
     public function actionList($slug)
     {
         $slug = strtolower($slug);
