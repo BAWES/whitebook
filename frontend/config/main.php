@@ -68,6 +68,7 @@ return [
                   'browse/booking' => 'browse/booking',
                   'browse/final-price' => 'browse/final-price',
                   'browse/save-note' => 'browse/save-note',
+                  'browse/sub-category-filter' => 'browse/sub-category-filter',
                   'browse/<slug:[A-Za-z0-9\_-]+>' => 'browse/list',
                   'browse/detail/<slug:[A-Za-z0-9\_-]+>' => 'browse/detail',
                   'themes/<slug:[A-Za-z0-9\_-]+>/<themes:[A-Za-z0-9\_-]+>' => 'themes/detail',

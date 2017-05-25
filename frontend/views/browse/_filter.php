@@ -68,7 +68,8 @@ use common\components\LangFormat;
                         ?>
                         <option
                             data-icon="<?= $category['icon'] ?>"
-                            value="<?= Url::toRoute(['browse/list', 'slug'=> $category['slug']]) ?>"
+                            data-href="<?= Url::toRoute(['browse/list', 'slug'=> $category['slug']]) ?>"
+                            value="<?= $category['slug'] ?>"
                             name="category">
                             <?= $category_name ?>
                         </option>
@@ -81,7 +82,7 @@ use common\components\LangFormat;
 
             <nav class="row-offcanvas row-offcanvas-left hidden-sm hidden-xs">
                 <div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
-                    <div id="accordion" class="panel-group">
+                    <div id="accordion" class="panel-group sub-category-wrapper">
                         <?=$this->render('@frontend/views/common/filter/category.php',['slug' => $slug]); ?>
                     </div>
                 </div>

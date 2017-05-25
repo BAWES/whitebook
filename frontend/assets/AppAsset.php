@@ -35,7 +35,7 @@ class AppAsset extends AssetBundle
         'js/bootstrap.min.js',
         'js/jquery.flexslider.js',
         'js/classie.js',
-        'js/main.js?v=1.29',
+        'js/main.js?v=1.32',
         'js/owl.carousel.js',
         'js/bootstrap-datepicker.js',
         'js/bootstrap-select.js'
