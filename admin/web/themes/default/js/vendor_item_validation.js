@@ -24,6 +24,10 @@ var renderquestion_url = $('#renderquestion_url').val();
 var csrfToken = $('meta[name="csrf-token"]').attr("content");
 
 $(function (){
+	
+	$(window).bind('beforeunload', function(){
+	  return 'Are you sure you want to leave without saving?';
+	});
 
  	/* For themes and groups list checkbox alignment*/
  	$(".themelists:last-child").css({"clear" : "both","float" :"inherit"});
