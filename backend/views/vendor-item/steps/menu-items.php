@@ -235,6 +235,6 @@ echo Html::hiddenInput('menu_count', $menu_count, ['id' => 'menu_count']);
 echo Html::hiddenInput('isNewRecord', 0, ['id'=>'isNewRecord']);
 echo Html::hiddenInput('item_id', $model->item_id, ['id'=>'item_id']);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.25", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.26", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerJsFile("@web/themes/default/js/vendor_item_steps/menu.js?v=1.4", ['depends' => [\yii\web\JqueryAsset::className()]]);
