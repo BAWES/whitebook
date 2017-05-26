@@ -495,6 +495,24 @@ class ProductController extends Controller
             ->all();
     }
 
+    public function actionPriceRange()
+    {
+        $result = VendorItem::find()
+            ->select('MIN(item_price_per_unit) as minRange, MAX(item_price_per_unit) as maxRange')
+            ->where([
+                'item_status' => 'Active',
+                'trash' => 'default',
+                'item_approved' => 'Yes'
+            ])
+            ->asArray()
+            ->one();
+
+        return [
+            'minRange' => floor($result['minRange']),
+            'maxRange' => ceil($result['maxRange'])
+        ];
+    }
+
     public function actionFinalPrice()
     {
         $total = VendorItem::itemFinalPrice(
@@ -502,8 +520,6 @@ class ProductController extends Controller
             Yii::$app->request->getBodyParam('quantity'), 
             Yii::$app->request->getBodyParam('menu_item')
         );
-
-        Yii::$app->response->format = 'json';
 
         return [
             'total' => CFormatter::format($total)
