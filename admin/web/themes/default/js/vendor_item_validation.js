@@ -25,6 +25,10 @@ var csrfToken = $('meta[name="csrf-token"]').attr("content");
 
 $(function (){
 	
+	$('form').submit(function(){
+		$(window).unbind('beforeunload');
+	})
+
 	$(window).bind('beforeunload', function(){
 	  return 'Are you sure you want to leave without saving?';
 	});

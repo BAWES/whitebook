@@ -111,6 +111,10 @@ var ck_customization_description_ar = '';
  
 $(function() {
 
+	$('form').submit(function(){
+		$(window).unbind('beforeunload');
+	})
+
 	$(window).bind('beforeunload', function(){
 	  return 'Are you sure you want to leave without saving?';
 	});
