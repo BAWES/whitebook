@@ -513,12 +513,13 @@ $(document).delegate('#register_form', 'submit', function(e)
         {
             $('#myModal1').modal('hide');
             window.setTimeout(function() { location.reload(); });
+        }else {
+            json.message.each(function(index, value) {
+                value.each(function(error){
+                    $('.field-customer-' + index + ' .help-block').html(error);
+                });
+            });
         }
-
-        window.setTimeout(function(){
-            $('#register').html($('#txt_register').val());
-            $('#register').removeAttr('disabled');
-        }, 1000);
     });
 });
 
