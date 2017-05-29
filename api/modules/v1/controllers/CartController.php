@@ -45,6 +45,13 @@ class CartController extends Controller
             ],
         ];
 
+        // Bearer Auth checks for Authorize: Bearer <Token> header to login the user
+        $behaviors['authenticator'] = [
+            'class' => \yii\filters\auth\HttpBearerAuth::className(),
+        ];
+        // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
+        $behaviors['authenticator']['except'] = ['options'];
+
         return $behaviors;
     }
 
@@ -626,7 +633,8 @@ class CartController extends Controller
                 $cart->cart_customization_price_per_unit = 0;
                 $cart->cart_quantity = $data['quantity'];
                 $cart->cart_datetime_added = date('Y-d-m h:i:s');
-                $cart->cart_session_id = (!Yii::$app->user->getId()) ? \common\models\Customer::currentUser() : '';
+                $cart->cart_session_id = Yii::$app->user->getId();
+                //(!Yii::$app->user->getId()) ? \common\models\Customer::currentUser() : '';
                 $cart->cart_valid = 'yes';
                 $cart->trash = 'Default';
 
