@@ -167,6 +167,7 @@ return [
                     'pluralize' => false,
                     'patterns' => [
                         'GET' => 'address-list',
+                        'GET all' => 'address-list-all',
                         'GET type' => 'address-type-list',
                         'GET view' => 'address-view',
                         'GET questions' => 'address-questions',
@@ -176,6 +177,7 @@ return [
                         'DELETE' => 'address-remove',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
+                        'OPTIONS all' => 'options',
                         'OPTIONS type' => 'options',
                         'OPTIONS view' => 'options',
                         'OPTIONS questions' => 'options',

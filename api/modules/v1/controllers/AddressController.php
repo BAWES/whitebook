@@ -81,6 +81,14 @@ class AddressController extends Controller
     }
 
     /*
+     * Listing of all address without pagination
+     */
+    public function actionAddressListAll() 
+    {
+        return $this->listing(0, true);
+    }
+
+    /*
      * Listing of all address
      */
     public function actionAddressList($offset) {
@@ -91,22 +99,27 @@ class AddressController extends Controller
     /*
      * Common method to call for Listing of all address
      */
-    private function listing($offset = 0){
+    private function listing($offset = 0, $listAll = false){
 
         $customer_id = Yii::$app->user->getId();
         $addresses = array();
         $limit = Yii::$app->params['limit'];
-        $result = CustomerAddress::find()
+        $query = CustomerAddress::find()
             ->select('whitebook_city.city_name, whitebook_city.city_name_ar, whitebook_location.location,
                 whitebook_location.location_ar, whitebook_customer_address.*')
             ->leftJoin('whitebook_location', 'whitebook_location.id = whitebook_customer_address.area_id')
             ->leftJoin('whitebook_city', 'whitebook_city.city_id = whitebook_customer_address.city_id')
             ->where('customer_id = :customer_id', [':customer_id' => $customer_id])
             ->asArray()
-            ->orderBy('address_id DESC')
-            ->limit($limit)
-            ->offset($offset)
-            ->all();
+            ->orderBy('address_id DESC');
+
+        if(!$listAll)
+        {
+            $query->limit($limit)
+                ->offset($offset);
+        }
+            
+        $result = $query->all();
 
         if ($result) {
             foreach ($result as $row) {
