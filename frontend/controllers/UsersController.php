@@ -103,7 +103,7 @@ class UsersController extends BaseController
         {               
             $model->customer_password = Yii::$app->getSecurity()->generatePasswordHash($model->customer_password);
             
-            $model->save();
+            $model->save(false);
 
             $username = $model['customer_name'];
             
