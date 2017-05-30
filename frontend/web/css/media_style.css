@@ -19,8 +19,6 @@
 
 @media screen and (min-width: 1900px) {
 	.mega-dropdown-menu{ width:1900px;}
-	.dropdown-menu{ left:-1169%;}
-	.shop-menu .dropdown-menu{ left:-1215%}
 	.bootstrap-select .dropdown-menu{left:0;}
 
 	input[type="text"],input[type="submit"],input[type="button"],select{ outline:none!important;}
@@ -35,26 +33,6 @@
 	.left_slider.focus div#search_list_fail1 {padding-top: 3px;}
 }
 
-@media screen and (max-width: 1360px) {
-	.dropdown-menu{ left:-762%}
-	.bootstrap-select .dropdown-menu{left:0;}
-	.shop-menu .dropdown-menu{ left:-825%}
-}
-
-@media screen and (max-width: 1300px) {
-	.mega-dropdown-menu {    width:1283px;}
-	.dropdown-menu {     left: -707%;}
-	.shop-menu .dropdown-menu{ left:-777%}
-	.bootstrap-select .dropdown-menu{left:0;}
-}
-
-@media screen and (max-width: 1280px) {
-	.dropdown-menu {    left: -691%;}
-	.mega-dropdown-menu {    width: 1262px;}
-	.bootstrap-select .dropdown-menu{left:0;}
-	.shop-menu .dropdown-menu{ left:-765%}
-}
-
 @media screen and (max-width: 1024px) {
 	.main-nav .site-search{top:65px;}
 	div#search_list_fail1{padding-top:0;}
@@ -66,7 +44,6 @@
 
 
 	.flex-direction-nav .flex-prev,.flex-direction-nav .flex-next{ display:none;}
-	.shop-menu .dropdown-menu {left: -816%;}
 	.flex-direction-nav .flex-next{ right:0px; background:#fff url("../images/aero_right.png") no-repeat scroll center center;}
 	.flex-direction-nav .flex-prev{ left:0px; background:#fff url("../images/left_aero.png") no-repeat scroll center center}
 	.container_plan{ width: 100%;}
@@ -81,7 +58,6 @@
 	.plan_sections ul li{ width: 32.6%;}
 	.inner_content_plan{ padding: 40px 57px;}
 	.mega-dropdown-menu {    width: 1013px;}
-	.dropdown-menu {    left: -771%;}
 	.fetu_product_list img {    width: 95%;}
 	.fetu_product_list{ width: 100%; text-align:center;}
 	.top_footer .col-md-1{ display: none;}
@@ -200,8 +176,6 @@
 	.left_slider.focus input{height: 50px;}
 	.respo_hidde{ display:none;}
 	.mega-dropdown-menu{ width:950px;}
-	.dropdown-menu {    left: -339%;}
-	.shop-menu .dropdown-menu { left: -409%;}
 
 	.plan_sections ul li{margin:0 10px 0 0;width: 32.4%;}
 	.margin-rightnone{margin:0 !important;}
@@ -323,20 +297,16 @@
 
 @media only screen and (max-width: 920px){
 	.mega-dropdown-menu {    width: 913px;}
-	.dropdown-menu {    left: -302%;}
 	.plan_sections ul li {    width: 32.4%;}
 	.respo_hidde{ display: none;}
 	.container_plan{ width: 750px;}
 	.inner_content_plan {    padding: 3px 17px;}
-	.shop-menu .dropdown-menu {left: -372%;}
 }
 
 @media only screen and (max-width: 991px){
 	.mega-dropdown-menu {width: 791px;}
-	.dropdown-menu {left: -175%;}
 
 	.contact_us_sec{width:100%;}
-	.shop-menu .dropdown-menu {left: -254%;}
 	#dp1,#dp2,#datepicker{margin-bottom:0;background-position:98.2% 55%;}
 
 	.datepicker.dropdown-menu{position:absolute !important;}
@@ -365,8 +335,6 @@
 	.search_header{ margin:6px 0 0 0;}
 	.navbar-collapse.in{ width:100%;}
 	.mega-dropdown-menu {    width: 759px;}
-	.dropdown-menu {   left: -79%;}
-	.shop-menu .dropdown-menu {left: -162%;}
 
 	/*footer*/
 	.top_footer {text-align: center;}
@@ -432,8 +400,7 @@
 
 	.ma5-mobile-menu-container ul.ma5-ul-1.ma5-menu-panel ul li{padding:0 0 10px;}
 	.ma5-mobile-menu-container ul.ma5-ul-2.ma5-menu-panel ul li{padding:0 0 10px;}
-	.shop-menu .dropdown-menu {left: 0;}
-
+	
 	/*19-9-15*/
 	.flexslider2 .flex-direction-nav{display:none;}
 

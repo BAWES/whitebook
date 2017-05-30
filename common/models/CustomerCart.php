@@ -309,9 +309,8 @@ class CustomerCart extends \yii\db\ActiveRecord
 
             $no_of_available = $capacity - $purchased;
 
-            $errors['cart_quantity'][] = [
-                Yii::t('frontend', 'Item is Out of stock')
-            ];
+            $errors['cart_quantity'][] = Yii::t('frontend', 'Item is Out of stock');
+
             $errors['cart_quantity_remain']= ($purchased + $in_cart) - $capacity;
 //            $errors['cart_quantity'][] = [
 //                Yii::t('frontend', 'Max item available for selected date is "{no_of_available}".', [
@@ -332,9 +331,7 @@ class CustomerCart extends \yii\db\ActiveRecord
 //                ])
 //            ];
 
-            $errors['cart_quantity'][] = [
-                Yii::t('frontend', 'Item is Out of stock')
-            ];
+            $errors['cart_quantity'][] = Yii::t('frontend', 'Item is Out of stock');
         }
 
         //-------------- END Item Capacity -----------------//
@@ -429,7 +426,7 @@ class CustomerCart extends \yii\db\ActiveRecord
             }
             
             if($max && $qty_ordered > $max) {
-                $errors['menu_'.$menu->menu_id]['max'] = Yii::t(
+                $errors['menu_'.$menu->menu_id][] = Yii::t(
                     'frontend', 
                     'Quantity must be less than or equal to {qty} in "{menu_name}"', [
                         'qty' => $max,
@@ -439,7 +436,7 @@ class CustomerCart extends \yii\db\ActiveRecord
             }
 
             if($qty_ordered < $min) {
-                $errors['menu_'.$menu->menu_id]['min'] = Yii::t(
+                $errors['menu_'.$menu->menu_id][] = Yii::t(
                     'frontend', 
                     'Quantity must be greater than or equal to {qty} in "{menu_name}"', [
                         'qty' => $min, 
