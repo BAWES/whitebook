@@ -187,7 +187,6 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
                             <!-- Quantity -->
                             <br/>
 
-
                             <i><small><strong><?=Yii::t('frontend','Vendor Name').':</strong> '. CustomerCart::getVendorDetail($item['vendor_id'])->vendor_name?></small></i>
                             <!-- Quantity -->
                             <br/>
@@ -246,6 +245,7 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 
 		        				$arr_menu_id[$menu_item['menu_id']] = $menu_item['menu_id'];
 		        			}
+
                             $questionAnswers = \common\models\CustomerCartItemQuestionAnswer::getCartQuestionAnswer($item['cart_id']);
                             if($questionAnswers)
                             {
@@ -280,20 +280,7 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 
 		        			<!-- display error for each menu --> 
 		        			
-		        			<?php foreach ($arr_menu_id as $key => $menu_id) { 
-		        				if(isset($errors['menu_'.$menu_id])) { 
-			        				foreach($errors['menu_'.$menu_id] as $error) { 
-
-				        				if(is_array($error)) {
-		        							foreach ($error as $value) {
-		        								echo '<span class="label label-danger">' . $value . '</span>';
-		        							}	
-		        						} else {
-		        							echo '<span class="label label-danger">' . $error . '</span>';
-		        						}     
-			        				} //foreach errors 
-		        				}//if menu have error   
-		        			} 
+		        			<?php 
 
                             if(isset($errors['area_id'])) { 
                                 foreach($errors['area_id'] as $key => $error) { 
@@ -306,9 +293,26 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
                                         echo '<span class="label label-danger">' . $error . '</span>';
                                     }     
                                 } 
+                                unset($errors['area_id']);
                             }
 
-                            if(isset($errors['cart_delivery_date'])) {                            
+
+                            if(isset($errors['cart_quantity'])) { 
+                                foreach($errors['cart_quantity'] as $key => $error) { 
+
+                                    if(is_array($error)) {
+                                        foreach ($error as $value) {
+                                            echo '<span class="label label-danger">' . $value . '</span>';
+                                        }   
+                                    } else {
+                                        echo '<span class="label label-danger">' . $error . '</span>';
+                                    }     
+                                } 
+                                unset($errors['cart_quantity']);
+                            }
+
+                            if(isset($errors['cart_delivery_date'])) 
+                            {                            
                                 foreach($errors['cart_delivery_date'] as $key => $error) {
                                     if(is_array($error)) {
                                         foreach ($error as $value) {
@@ -318,6 +322,7 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
                                         echo '<span class="label label-danger">' . $error . '</span>';
                                     }     
                                 } 
+                                unset($errors['cart_delivery_date']);
                             } 
 
                             if(isset($errors['time_slot'])) {                             
@@ -330,7 +335,24 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
                                         echo '<span class="label label-danger">' . $error . '</span>';
                                     }     
                                 } 
-                            } ?>
+                                unset($errors['time_slot']);
+                            } 
+
+                            // display remaining errors 
+
+                            unset($errors['cart_quantity_remain']);
+
+	        				foreach($errors as $error) { 
+		        				if(is_array($error)) {
+	    							foreach ($error as $value) {
+	    								echo '<span class="label label-danger">' . $value . '</span>';
+	    							}	
+	    						} else {
+	    							echo '<span class="label label-danger">' . $error . '</span>';
+	    						}     
+	        				} //foreach errors 
+
+                            ?>
 
                             <div class="clearfix"></div>
                             
