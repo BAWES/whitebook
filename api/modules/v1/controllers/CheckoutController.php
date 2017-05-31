@@ -9,7 +9,10 @@ use common\models\CustomerCart;
 use common\models\CustomerAddress;
 use common\models\Country;
 use common\models\PaymentGateway;
+use common\models\CustomerCartMenuItem;
 use frontend\models\AddressType;
+
+
 
 /**
  * Class CheckoutController
@@ -265,10 +268,9 @@ class CheckoutController extends Controller
     
         $arr_booking_id = Booking::checkoutConfirm();
 
-        Yii::$app->session->set('arr_booking_id', $arr_booking_id);
-
         return [
-        	'operation' => 'success'
-        ]
+        	'operation' => 'success',
+        	'arr_booking_id' => $arr_booking_id
+        ];
     }
 }
