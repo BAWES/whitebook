@@ -85,7 +85,7 @@ class AddressController extends Controller
      */
     public function actionAddressListAll() 
     {
-        return $this->listing(0, true);
+        return $this->listing(0, true, Yii::$app->request->get('area_id'));
     }
 
     /*
@@ -99,7 +99,7 @@ class AddressController extends Controller
     /*
      * Common method to call for Listing of all address
      */
-    private function listing($offset = 0, $listAll = false){
+    private function listing($offset = 0, $listAll = false, $area_id = 0){
 
         $customer_id = Yii::$app->user->getId();
         $addresses = array();
@@ -109,9 +109,12 @@ class AddressController extends Controller
                 whitebook_location.location_ar, whitebook_customer_address.*')
             ->leftJoin('whitebook_location', 'whitebook_location.id = whitebook_customer_address.area_id')
             ->leftJoin('whitebook_city', 'whitebook_city.city_id = whitebook_customer_address.city_id')
-            ->where('customer_id = :customer_id', [':customer_id' => $customer_id])
-            ->asArray()
-            ->orderBy('address_id DESC');
+            ->where('customer_id = :customer_id', [':customer_id' => $customer_id]);
+
+        if($area_id) 
+        {
+            $query->andWhere(['area_id' => $area_id]);
+        }
 
         if(!$listAll)
         {
@@ -119,7 +122,9 @@ class AddressController extends Controller
                 ->offset($offset);
         }
             
-        $result = $query->all();
+        $result = $query->asArray()
+            ->orderBy('address_id DESC')
+            ->all();
 
         if ($result) {
             foreach ($result as $row) {
