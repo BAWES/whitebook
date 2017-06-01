@@ -173,7 +173,8 @@ class CartController extends Controller
 
             $value['errors'] = $this->formateErrors($item_errors);
 
-            $errors[] = $item_errors;
+            if($item_errors)
+                $errors[] = $item_errors;
 
             $result[] = $value;
         }
