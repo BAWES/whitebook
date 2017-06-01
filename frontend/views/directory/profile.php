@@ -171,6 +171,17 @@ var product_slug = '".$slug."';
 var vendor_profile = '".$get['vendor']."';
 var current_page = 'vendor';
 
+$(document).delegate('.category_listing_nav a', 'click', function(e) {
+    //product_slug = $(this).attr('data-slug');
+    $('#sub_categories input').prop('checked', false);
+    var a = $('#sub_categories input[data-slug=\"' + $(this).attr('data-slug') + '\"]');
+    if(a.prop('checked') != true) {
+        a.trigger('click');
+    }
+    filter();
+    e.preventDefault();
+});
+
 jQuery(function()
 {
     //open return policy tab 
