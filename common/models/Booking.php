@@ -217,12 +217,17 @@ class Booking extends \yii\db\ActiveRecord
     /**
      * Add new bookings on checkout confirm
      */
-    public function checkoutConfirm()
-    {
-        $area_id = Yii::$app->session->get('delivery-location');
-        $cart_delivery_date = date('Y-m-d', strtotime(Yii::$app->session->get('delivery-date')));
-        $time_slot = Yii::$app->session->get('event_time');
-
+    public function checkoutConfirm(
+        $area_id,
+        $cart_delivery_date,
+        $time_slot,
+        $customer_id,
+        $customer_name,
+        $customer_lastname,
+        $customer_email,
+        $customer_mobile,
+        $address_id
+    ) {       
         //to group bookings 
         $order = new Order();
         $order->save();
@@ -232,25 +237,6 @@ class Booking extends \yii\db\ActiveRecord
         $default_commision = Siteinfo::info('commission');
 
         $items = CustomerCart::items();
-
-        if(Yii::$app->user->isGuest)
-        {
-            $customer_id = 0;
-            $customer_name = Yii::$app->session->get('customer_name');
-            $customer_lastname = Yii::$app->session->get('customer_lastname');
-            $customer_email = Yii::$app->session->get('customer_email');
-            $customer_mobile = Yii::$app->session->get('customer_mobile');
-        }
-        else
-        {
-            $customer = Customer::findOne(Yii::$app->user->getId());
-
-            $customer_id = $customer->customer_id;
-            $customer_name = $customer->customer_name;
-            $customer_lastname = $customer->customer_last_name;
-            $customer_email = $customer->customer_email;
-            $customer_mobile = $customer->customer_mobile;
-        }
 
         //check if quantity fall in price chart
 
@@ -273,10 +259,6 @@ class Booking extends \yii\db\ActiveRecord
 
             $price_chart[$item['item_id']]['base_price'] = $item['item']['item_base_price'];
         }
-
-        //address
-
-        $address_id = Yii::$app->session->get('address_id');
 
         $address = Booking::getPurchaseDeliveryAddress($address_id);
 
