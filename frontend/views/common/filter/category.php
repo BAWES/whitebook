@@ -82,17 +82,17 @@ $get = Yii::$app->request->get();
 
 										$_category_name = \common\components\LangFormat::format(strtolower($_value['category_name']),strtolower($_value['category_name_ar']));
 										?>
-										<li class="subcat" for="<?= "class_" . $value['slug'] ?>">
+										<li class="subcat" for="<?= "class_" . $_value['slug'] ?>">
 											<label class="label_check"
 												   for="checkbox-filter-cat-<?= $_value['category_id'] ?>"
-												   data-class="<?= "class_" . $value['slug'] ?>">
+												   data-class="<?= "class_" . $_value['slug'] ?>">
 												<input name="category" data-element="input"
-													   class="items <?=$value['slug'] ?>"
+													   class="items <?=$_value['slug'] ?>"
 													   id="checkbox-filter-cat-<?= $_value['category_id'] ?>"
 													   step="<?= $_value['category_id'] ?>"
 													   value="<?= $_value['category_id'] ?>"
 													   type="checkbox"
-													   data-slug="<?= $value['slug'] ?>"
+													   data-slug="<?= $_value['slug'] ?>"
 													<?php echo (in_array($_value['slug'], array_values($val))) ? 'checked="checked"' : ''; ?> >
 												<?= $_category_name ?>
 											</label>

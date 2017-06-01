@@ -146,6 +146,12 @@ jQuery(document).delegate('a#filter-clear-date', 'click', function() {
     filter();
 });
 
+$(document).delegate('.category_listing_nav a', 'click', function(e) {
+    product_slug = $(this).attr('data-slug');
+    filter();
+    e.preventDefault();
+});
+
 $(document).delegate('#theme_filter', 'change', function() {
     
     /*if($('#theme_filter option[value=\"all\"]:selected').length > 0) {
