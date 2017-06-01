@@ -5,10 +5,14 @@ namespace api\modules\v1\controllers;
 use Yii;
 use yii\rest\Controller;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
+use common\models\Customer;
 use common\models\CustomerCart;
 use common\models\CustomerAddress;
 use common\models\Country;
 use common\models\PaymentGateway;
+use common\models\CustomerCartMenuItem;
+use common\models\Booking;
 use frontend\models\AddressType;
 
 /**
@@ -240,17 +244,21 @@ class CheckoutController extends Controller
     }
 
     public function actionConfirm() 
-    {
-    	$items = CustomerCart::items();
+    {    	
+        $area_id = Yii::$app->request->getBodyParam('delivery-location');
+        $cart_delivery_date = date('Y-m-d', strtotime(Yii::$app->request->getBodyParam('delivery-date')));
+        $time_slot = Yii::$app->request->getBodyParam('event_time');
+
+        $items = CustomerCart::items();
 		
 		foreach ($items as $item) {
             $menu_items = CustomerCartMenuItem::find()->cartID($item['cart_id'])->all();
 
 			$error = CustomerCart::validate_item([
     			'item_id' => $item['item_id'],
-                'time_slot' => Yii::$app->session->get('event_time'),
-    			'delivery_date' => Yii::$app->session->get('delivery-date'),
-                'area_id' => Yii::$app->session->get('delivery-location'),
+                'time_slot' => $time_slot,
+    			'delivery_date' => $cart_delivery_date,
+                'area_id' => $area_id,
     			'quantity' => $item['cart_quantity'],
                 'menu_item' => ArrayHelper::map($menu_items, 'menu_item_id', 'quantity')
     		], true);
@@ -258,17 +266,65 @@ class CheckoutController extends Controller
     		if($error) {
     			return [
     				'operation' => 'error',
-    				'message' => 'Please check cart',
+    				'message' => 'Can not proceed as cart item(s) not valid',
     			];
     		}
 		}
-    
-        $arr_booking_id = Booking::checkoutConfirm();
+    	
+        if(Yii::$app->user->isGuest)
+        {
+            $customer_id = 0;
+            $customer_name = Yii::$app->request->getBodyParam('customer_name');
+            $customer_lastname = Yii::$app->request->getBodyParam('customer_lastname');
+            $customer_email = Yii::$app->request->getBodyParam('customer_email');
+            $customer_mobile = Yii::$app->request->getBodyParam('customer_mobile');
+        }
+        else
+        {
+            $customer = Customer::findOne(Yii::$app->user->getId());
 
-        Yii::$app->session->set('arr_booking_id', $arr_booking_id);
+            $customer_id = $customer->customer_id;
+            $customer_name = $customer->customer_name;
+            $customer_lastname = $customer->customer_last_name;
+            $customer_email = $customer->customer_email;
+            $customer_mobile = $customer->customer_mobile;
+        }
+
+        //address
+
+        $address_id = Yii::$app->request->getBodyParam("address_id");
+
+        if(empty($address_id) || empty($area_id) || empty($cart_delivery_date) || empty($time_slot))
+        {
+        	return [
+				'operation' => 'error',
+				'message' => 'Delivery info missing',
+			];
+        }
+
+        if(Yii::$app->user->isGuest && (empty($customer_name) || empty($customer_lastname) || empty($customer_email) || empty($customer_mobile)))
+        {
+        	return [
+				'operation' => 'error',
+				'message' => 'Customer info missing',
+			];
+        }
+
+        $arr_booking_id = Booking::checkoutConfirm(
+        	$area_id,
+            $cart_delivery_date,
+            $time_slot,
+            $customer_id,
+            $customer_name,
+            $customer_lastname,
+            $customer_email,
+            $customer_mobile,
+            $address_id
+        );
 
         return [
-        	'operation' => 'success'
-        ]
+        	'operation' => 'success',
+        	'arr_booking_id' => $arr_booking_id
+        ];
     }
 }

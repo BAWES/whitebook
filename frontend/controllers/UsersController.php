@@ -889,11 +889,14 @@ class UsersController extends BaseController
 
         //get area name 
 
-        if(Yii::$app->language == 'en')
+        $area_name = '';
+
+        if($area && Yii::$app->language == 'en')
         {
             $area_name = $area->location;
         }
-        else
+
+        if($area && Yii::$app->language == 'ar')
         {
             $area_name = $area->location_ar;
         }

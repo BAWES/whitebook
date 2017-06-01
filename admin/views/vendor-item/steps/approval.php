@@ -104,6 +104,12 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 
 ActiveForm::end(); 
 
+
+echo Html::hiddenInput('isNewRecord', 0, ['id'=>'isNewRecord']);
+echo Html::hiddenInput('item_id', $model->item_id, ['id'=>'item_id']);
+
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.23", ['depends' => [\yii\web\JqueryAsset::className()]]);
+
 ?>
 
 </div>

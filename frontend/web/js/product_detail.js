@@ -313,10 +313,13 @@ jQuery(document).delegate('#form_product_option', 'submit', function(e) {
         {
             jQuery('#form_product_option .error').html('');
 
-            if(data['success']) {
-                location = location;
-            } else {
-
+            if(data['success']) 
+            {
+                $('.min-cart-wrapper .btn-mini-cart').trigger('click');
+                $('html, body').animate({ scrollTop: $('#form_product_option').offset().top - 300 }, 'slow');        
+            } 
+            else 
+            {
                 $.each(data.errors, function(index, errors) {
                     $.each(errors, function(key, value) {
                         jQuery('#form_product_option .error.' + index).append('<p>' + this + '</p>');

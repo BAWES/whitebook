@@ -104,10 +104,10 @@ $action = Yii::$app->controller->action->id;
                                     <?= Yii::t('frontend', 'Track Booking'); ?>
                                 </a>
                             </li>
-                            <li>
-                                <a href="<?php echo Url::to(['cart/index']); ?>">
-                                    <?php echo Yii::t('frontend', 'Cart ({count})', ['count' => CustomerCart::item_count()]); ?>
-                                </a>
+                            <li class="min-cart-wrapper">
+                                <a data-toggle="dropdown">
+                                    <?php echo Yii::t('frontend', 'Cart ({count})', ['count' => 0]); ?>
+                                </a>                                
                             </li>
                             <li class="">
                                 <a href="" data-toggle="modal"  onclick="show_login_modal('-5');" data-target="#vendor-sign-up">
@@ -128,10 +128,12 @@ $action = Yii::$app->controller->action->id;
                                 <li><a href="<?php echo Url::to(['things-i-like/index'], true); ?>" title="<?php echo Yii::t('frontend', 'Things I like'); ?>"><?php echo Yii::t('frontend', 'Things I like'); ?></a></li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="<?php echo Url::to(['cart/index']); ?>">
-                                <?php echo Yii::t('frontend', 'Cart ({count})', ['count' => CustomerCart::item_count()]); ?>
-                            </a>
+                        <li>                            
+                            <li class="min-cart-wrapper">
+                                <a data-toggle="dropdown">
+                                    <?php echo Yii::t('frontend', 'Cart ({count})', ['count' => 0]); ?>
+                                </a>                                
+                            </li>
                         </li>
                         <?php
                             /*
@@ -181,56 +183,54 @@ $action = Yii::$app->controller->action->id;
 
                     <ul class="nav-list list-inline">
                         <li>
-                            <a title="<?php echo Yii::t('frontend', 'Venues'); ?>  " href="<?= Url::to(["browse/list", 'slug' => 'venues']); ?>">
+                            <a title="<?php echo Yii::t('frontend', 'Venues'); ?>" href="<?= Url::to(["browse/list", 'slug' => 'venues']); ?>" data-slug="venues">
                                 <span class="venus_icon"></span>
                                 <span> <?php echo Yii::t('frontend', 'Venues'); ?></span>
                             </a>
                         </li>
                         <li>
-                            <a title=" <?php echo Yii::t('frontend', 'Invitations'); ?>" href="<?= Url::to(["browse/list", 'slug' => 'invitations']); ?>">
+                            <a title=" <?php echo Yii::t('frontend', 'Invitations'); ?>" href="<?= Url::to(["browse/list", 'slug' => 'invitations']); ?>" data-slug="invitations">
                                 <span class="invit_icon"></span>
                                 <span> <?php echo Yii::t('frontend', 'Invitations'); ?></span>
                             </a>
                         </li>
                         <li>
-                            <a title="<?php echo Yii::t('frontend', 'Food & Beverage'); ?>" href="<?= Url::to(["browse/list", 'slug' => 'food-beverage']); ?>">
+                            <a title="<?php echo Yii::t('frontend', 'Food & Beverage'); ?>" href="<?= Url::to(["browse/list", 'slug' => 'food-beverage']); ?>" data-slug="food-beverage">
                                 <span class="food_map"></span>
                                 <span><?php echo Yii::t('frontend', 'Food & Beverage') ?></span>
                             </a>
                         </li>
                         <li>
-                            <a title="<?php echo Yii::t('frontend', 'Decor'); ?>" href="<?= Url::to(["browse/list", 'slug' => 'decor']); ?>">
+                            <a title="<?php echo Yii::t('frontend', 'Decor'); ?>" href="<?= Url::to(["browse/list", 'slug' => 'decor']); ?>" data-slug='decor'>
                                 <span class="decor"></span>
                                 <span><?php echo Yii::t('frontend', 'Decor'); ?> </span>
                             </a>
                         </li>
                         <li>
-                            <a title="<?php echo Yii::t('frontend', 'Supplies'); ?>" href="<?= Url::to(["browse/list", 'slug' => 'supplies']); ?>">
+                            <a title="<?php echo Yii::t('frontend', 'Supplies'); ?>" href="<?= Url::to(["browse/list", 'slug' => 'supplies']); ?>" data-slug='supplies'>
                                 <span class="supplies"></span>
                                 <span><?php echo Yii::t('frontend', 'Supplies'); ?> </span>
                             </a>
                         </li>
-
-
                         <li>
-                            <a title="<?php echo Yii::t('frontend', 'Entertainment'); ?>" href="<?= Url::to(["browse/list", 'slug' => 'entertainment']); ?>">
+                            <a title="<?php echo Yii::t('frontend', 'Entertainment'); ?>" href="<?= Url::to(["browse/list", 'slug' => 'entertainment']); ?>" data-slug='entertainment'>
                                 <span class="entert"></span>
                                 <span><?php echo Yii::t('frontend', 'Entertainment'); ?></span>
                             </a>
                         </li>
                         <li>
-                            <a title=" <?php echo Yii::t('frontend', 'Services'); ?>" href="<?= Url::to(["browse/list", 'slug' => 'services']); ?>">
+                            <a title=" <?php echo Yii::t('frontend', 'Services'); ?>" href="<?= Url::to(["browse/list", 'slug' => 'services']); ?>" data-slug='services'>
                                 <span class="serv"></span>
                                 <span> <?php echo Yii::t('frontend', 'Services'); ?></span>
                             </a>
                         </li>
                         <li>
-                            <a title="<?php echo Yii::t('frontend', 'Other'); ?>" href="<?= Url::to(["browse/list", 'slug' => 'others']); ?>">
+                            <a title="<?php echo Yii::t('frontend', 'Other'); ?>" href="<?= Url::to(["browse/list", 'slug' => 'others']); ?>" data-slug'others'>
                                 <span class="other"></span>
                                 <span><?php echo Yii::t('frontend', 'Other'); ?></span>
                             </a>
                         </li>
-                        <li><a title="<?php echo Yii::t('frontend', 'Gift Favors'); ?>" href="<?= Url::to(["browse/list", 'slug' => 'gift-favors']); ?>">
+                        <li><a title="<?php echo Yii::t('frontend', 'Gift Favors'); ?>" href="<?= Url::to(["browse/list", 'slug' => 'gift-favors']); ?>" data-slug="'gift-favors'>
                                 <span class="say_thank"></span>
                                 <span><?php echo Yii::t('frontend', 'Gift Favors'); ?></span>
                             </a></li>

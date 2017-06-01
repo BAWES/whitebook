@@ -278,7 +278,7 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
 			        			</div>
 		        			<?php } ?>
 
-		        			<!-- display error for each menu --> 
+		        			<!-- display errors --> 
 		        			
 		        			<?php 
 

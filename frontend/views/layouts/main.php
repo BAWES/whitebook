@@ -51,7 +51,7 @@ $this->beginPage()
         <?= Html::csrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
-
+        <base href="<?= Yii::getAlias('@web') ?>/" />
         <link rel="apple-touch-icon" sizes="180x180" href="<?= Url::to('@web/apple-touch-icon.png') ?>">
         <link rel="icon" type="image/png" href="<?= Url::to('@web/favicon-32x32.png') ?>" sizes="32x32">
         <link rel="icon" type="image/png" href="<?= Url::to('@web/favicon-16x16.png') ?>" sizes="16x16">
@@ -101,7 +101,7 @@ $this->beginPage()
             <?= Alert::widget(); ?>
         </div>
 
-        <?php $this->beginContent('@app/views/layouts/header.php'); ?>
+        <?php $this->beginContent('@app/views/layouts/main/header.php'); ?>
 
         <?php $this->endContent(); ?>
         <!-- Header Section End -->
@@ -109,7 +109,7 @@ $this->beginPage()
             <?= $content ?>
         <!--Content End-->
         <!-- Footer Section Start -->
-        <?php $this->beginContent('@app/views/layouts/footer.php'); ?>
+        <?php $this->beginContent('@app/views/layouts/main/footer.php'); ?>
         <?php $this->endContent(); ?>
 
         <?php $this->registerJs(

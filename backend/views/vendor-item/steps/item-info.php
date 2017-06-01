@@ -242,6 +242,6 @@ echo Html::hiddenInput('item_id', $model->item_id, ['id'=>'item_id']);
 
 echo Html::hiddenInput('category_list_url', Url::to(['vendor-item/category-list']), ['id' => 'category_list_url']);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.22", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.26", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerJsFile("@web/themes/default/js/vendor_item_steps/info.js", ['depends' => [\yii\web\JqueryAsset::className()]]);

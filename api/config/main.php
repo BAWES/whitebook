@@ -41,6 +41,7 @@ return [
                         'GET login' => 'login',
                         'POST create-account' => 'create-account',
                         'POST request-reset-password' => 'request-reset-password',
+                        'POST resend-verification-email' => 'resend-verification-email',
                         // OPTIONS VERBS
                         'OPTIONS login' => 'options',
                         'OPTIONS create-account' => 'options',
@@ -85,11 +86,9 @@ return [
                         'POST vendor-request' => 'vendor-request',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
-                        'OPTIONS vendor-request' => 'options',
-                        'OPTIONS index' => 'options',
-                        'OPTIONS update' => 'options',
-                        'OPTIONS contact' => 'options',
                         'OPTIONS logout' => 'options',
+                        'OPTIONS contact' => 'options',
+                        'OPTIONS vendor-request' => 'options'
                     ]
                 ],
                 [ // CategoryController
@@ -114,6 +113,7 @@ return [
                         'GET capacity' => 'item-capacity',
                         'GET theme' => 'load-all-themes',
                         'GET vendors' => 'load-all-vendor',
+                        'GET price-range' => 'price-range',
                         'POST event' => 'add-product-to-event',
                         'POST final-price' => 'final-price',
                         // OPTIONS VERBS
@@ -125,7 +125,9 @@ return [
                         'OPTIONS capacity' => 'options',
                         'OPTIONS theme' => 'options',
                         'OPTIONS vendors' => 'options',
-                        'OPTIONS final-price' => 'options',
+                        'OPTIONS price-range' => 'options',
+                        'OPTIONS event' => 'options',
+                        'OPTIONS final-price' => 'options'
                     ]
                 ],
                 [ // EventController
@@ -165,6 +167,7 @@ return [
                     'pluralize' => false,
                     'patterns' => [
                         'GET' => 'address-list',
+                        'GET all' => 'address-list-all',
                         'GET type' => 'address-type-list',
                         'GET view' => 'address-view',
                         'GET questions' => 'address-questions',
@@ -174,6 +177,7 @@ return [
                         'DELETE' => 'address-remove',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
+                        'OPTIONS all' => 'options',
                         'OPTIONS type' => 'options',
                         'OPTIONS view' => 'options',
                         'OPTIONS questions' => 'options',
@@ -191,13 +195,15 @@ return [
                         'GET success' => 'success',
                         'GET list-with-address' => 'cart-item-with-address',
                         'GET delivery-area' => 'delivery-area',
-                        'GET confirm' => 'confirm',
+                        'POST confirm' => 'confirm',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
                         'OPTIONS payment-getaway' => 'options',
                         'OPTIONS address' => 'options',
                         'OPTIONS success' => 'options',
-                        'OPTIONS list-with-address' => 'options'
+                        'OPTIONS list-with-address' => 'options',
+                        'OPTIONS delivery-area' => 'options',
+                        'OPTIONS confirm' => 'options'
                     ]
                 ],
                 [ // BookingController

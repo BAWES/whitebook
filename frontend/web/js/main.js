@@ -47,9 +47,22 @@ $(window).resize(function() {
     resize();
 });
 
+function loadCart() 
+{    
+    $.get(mini_cart_url, function(html) {
+        $('.min-cart-wrapper').html(html);
+    });
+}
+
 $(document).ready(function(){
 
     resize();
+
+    loadCart();
+
+    $(document).delegate('.min-cart-wrapper .btn-mini-cart', 'click', function() {
+        loadCart();
+    });
 
     $('body').append('<div class="ma5-mobile-menu-container"/>');
     $('.ma5-menu-mobile').find('ul').clone().addClass('ma5-menu-panel').appendTo('.ma5-mobile-menu-container').find('ul').remove();
@@ -100,14 +113,6 @@ $(document).delegate('a#filter-clear', 'click', function(){
 
 $(document).delegate('[data-toggle="offcanvas"]', 'click', function () {
     $('#wrapper').toggleClass('toggled');
-});
-
-// load category and reload the page 
-$(document).delegate('#main-category', 'change', function(){
-    var s = $('#main-category :selected').val();
-    var hostname = window.location.href;
-    var newUrl1 = url.substring(0, url.indexOf('plan'));
-    window.location.href = $(this).val();
 });
 
 //mobile - filter button 
@@ -508,12 +513,13 @@ $(document).delegate('#register_form', 'submit', function(e)
         {
             $('#myModal1').modal('hide');
             window.setTimeout(function() { location.reload(); });
+        }else {
+            json.message.each(function(index, value) {
+                value.each(function(error){
+                    $('.field-customer-' + index + ' .help-block').html(error);
+                });
+            });
         }
-
-        window.setTimeout(function(){
-            $('#register').html($('#txt_register').val());
-            $('#register').removeAttr('disabled');
-        }, 1000);
     });
 });
 
@@ -1582,21 +1588,29 @@ $(document).delegate('button#loadmore', 'click', function(event) {
     });
 });
 
-$(document).delegate('#main-category', 'change', function(){
-    var s = $('#main-category :selected').val();
-    var hostname = window.location.href;
-    var newUrl1 = url.substring(0, url.indexOf('plan'));
-    window.location.href = $(this).val();
+
+// load category and reload the page 
+$(document).delegate('#main-category', 'change', function() {
+
+    $slug = $(this).find('option:selected').val();
+    
+    //load child categories 
+    $.get('browse/sub-category-filter?slug=' + $slug, function(html) {
+        $('.sub-category-wrapper').html(html);
+
+        //load items from selected cat 
+        filter($slug);
+    });
 });
+
 
 var loadmore = 0;
 
-function filter(){
+function filter(slug = '') {
     var ajax_data = {},
         date = '',
         event_time = '',
         areas = 'All',
-        slug = '',
         search = '',
         category_name = '',
         theme_name = '',
@@ -1649,8 +1663,10 @@ function filter(){
         var areas = $('#delivery_area_filter').val();
     }
 
-    if (typeof product_slug !== "undefined") {
+    if (!slug && typeof product_slug !== "undefined") {
         slug = product_slug;
+    }else{
+        product_slug = slug;//update slug on top cat change
     }
 
     if (typeof search_keyword !== "undefined") {
@@ -1946,7 +1962,7 @@ $(function() {
     //trigger filter changes in item listing 
     setupLabel();
 
-    $('.label_check input').on('change',function() {
+    $(document).delegate('.label_check input', 'change', function() {
         filter();
     });
 
