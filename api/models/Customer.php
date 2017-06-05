@@ -11,6 +11,21 @@ use Yii;
  */
 class Customer extends \common\models\Customer
 {
+    public function rules() {
+        return array_merge(parent::rules(), [
+            [['customer_name', 'customer_last_name', 'customer_email', 'customer_mobile'], 'required', 'on'=>'guest']
+           ]);
+    }
+    
+    /**
+    * Scenarios for validation and massive assignment
+    */
+    public function scenarios() {
+        $scenarios = parent::scenarios();
+        $scenarios['guest'] = ['customer_name', 'customer_last_name', 'customer_email', 'customer_mobile'];
+        return $scenarios;
+    }
+
     /**
      * @inheritdoc
      */

@@ -198,6 +198,7 @@ return [
                         'GET list-with-address' => 'cart-item-with-address',
                         'GET delivery-area' => 'delivery-area',
                         'POST confirm' => 'confirm',
+                        'POST save-guest-address' => 'save-guest-address',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
                         'OPTIONS payment-getaway' => 'options',
@@ -205,7 +206,8 @@ return [
                         'OPTIONS success' => 'options',
                         'OPTIONS list-with-address' => 'options',
                         'OPTIONS delivery-area' => 'options',
-                        'OPTIONS confirm' => 'options'
+                        'OPTIONS confirm' => 'options',
+                        'OPTIONS save-guest-address' => 'options'
                     ]
                 ],
                 [ // BookingController

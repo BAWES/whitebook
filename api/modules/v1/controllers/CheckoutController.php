@@ -6,14 +6,18 @@ use Yii;
 use yii\rest\Controller;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
-use common\models\Customer;
 use common\models\CustomerCart;
-use common\models\CustomerAddress;
 use common\models\Country;
 use common\models\PaymentGateway;
 use common\models\CustomerCartMenuItem;
 use common\models\Booking;
-use frontend\models\AddressType;
+use common\models\AddressQuestion;
+use common\models\AddressType;
+use common\models\Location;
+use common\models\CustomerAddressResponse;
+use common\models\CustomerAddress;
+use api\models\Customer;
+
 
 /**
  * Class CheckoutController
@@ -44,15 +48,23 @@ class CheckoutController extends Controller
 			],
 		];
 
-		// Bearer Auth checks for Authorize: Bearer <Token> header to login the user
-		$behaviors['authenticator'] = [
-			'class' => \yii\filters\auth\HttpBearerAuth::className(),
-		];
-		// avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
-		$behaviors['authenticator']['except'] = ['options'];
-
 		return $behaviors;
 	}
+
+    public function __construct($id, $module, $config = [])
+    {
+        parent::__construct($id, $module, $config);
+        
+        //for guest
+        Yii::$app->session->set('_user', Yii::$app->request->get('cart-session-id'));
+
+        //for login customer 
+        $authHeader = Yii::$app->request->getHeaders()->get('Authorization');
+        if ($authHeader !== null && preg_match('/^Bearer\s+(.*?)$/', $authHeader, $matches)) {
+            $customer = Customer::findIdentityByAccessToken($matches[1]);
+            Yii::$app->user->loginByAccessToken($customer);
+        }
+    }
 
 	/**
 	 * @inheritdoc
@@ -274,10 +286,10 @@ class CheckoutController extends Controller
         if(Yii::$app->user->isGuest)
         {
             $customer_id = 0;
-            $customer_name = Yii::$app->request->getBodyParam('customer_name');
-            $customer_lastname = Yii::$app->request->getBodyParam('customer_lastname');
-            $customer_email = Yii::$app->request->getBodyParam('customer_email');
-            $customer_mobile = Yii::$app->request->getBodyParam('customer_mobile');
+            $customer_name = Yii::$app->request->getBodyParam('firstname');
+            $customer_lastname = Yii::$app->request->getBodyParam('lastname');
+            $customer_email = Yii::$app->request->getBodyParam('email');
+            $customer_mobile = Yii::$app->request->getBodyParam('mobile');
         }
         else
         {
@@ -336,5 +348,101 @@ class CheckoutController extends Controller
         	'operation' => 'success',
         	'arr_booking_id' => $arr_booking_id
         ];
+    }
+
+    /** 
+     * Save guest info + address 
+     */ 
+    public function actionSaveGuestAddress() 
+    {
+        $errors = [];
+
+        $area_id = Yii::$app->request->getBodyParam('area_id');
+        $questions = Yii::$app->request->getBodyParam('questions');
+
+        //save address 
+
+        if(!$questions) {
+            $questions = array();
+        }
+
+        $customer_address = new CustomerAddress();          
+        $customer_address->address_type_id = Yii::$app->request->getBodyParam('address_type_id'); 
+        $customer_address->address_name = Yii::$app->request->getBodyParam('address_name');
+        $customer_address->address_data = Yii::$app->request->getBodyParam('address_data'); 
+        $customer_address->trash = 'Default';
+            
+        //get are id from cart_id 
+        $cart_item = CustomerCart::find()
+            ->sessionUser()
+            ->one();
+
+        $customer_address->area_id = $area_id;
+
+        //get city & country from area 
+        $location = Location::findOne($customer_address->area_id);
+
+        if(!$location) 
+        {
+            return [
+                'operation' => 'error',
+                'messsage' => ['area_id' => ['Area not found']]
+            ];
+        }
+        
+        $customer_address->city_id = $location->city_id;
+        $customer_address->country_id = $location->country_id;
+
+        if ($customer_address->save()) {
+            
+            $address_id = $customer_address->address_id;
+
+            //save customer address response 
+            foreach ($questions as $key => $value) {
+
+                if(!$value) 
+                    continue;
+                
+                $customer_address_response = new CustomerAddressResponse();
+                $customer_address_response->address_id = $address_id;
+                $customer_address_response->address_type_question_id = $key;
+                $customer_address_response->response_text = $value;                                        
+                $customer_address_response->save();
+            }
+
+        } else {
+            $errors = $customer_address->getErrors();
+        }
+
+        // save customer info 
+        $customer = new Customer();
+        $customer->scenario = 'guest';
+        $customer->customer_name = Yii::$app->request->getBodyParam('firstname');
+        $customer->customer_last_name = Yii::$app->request->getBodyParam('lastname');
+        $customer->customer_email = Yii::$app->request->getBodyParam('email');
+        $customer->customer_mobile = Yii::$app->request->getBodyParam('mobile');
+
+        if(!$customer->validate()) {
+            $errors = array_merge($errors, $customer->getErrors());
+        }
+
+        if(!$errors) 
+        {
+            return [
+                'operation' => 'success',
+                'address_id' => $customer_address->address_id,
+                'firstname' => $customer->customer_name,
+                'lastname' => $customer->customer_last_name,
+                'mobile' => $customer->customer_mobile,
+                'email' => $customer->customer_email                
+            ];
+        }
+        else
+        {
+            return [
+                'operation' => 'error',
+                'messsage' => $errors
+            ];
+        }
     }
 }
