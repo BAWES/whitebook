@@ -9,6 +9,7 @@ use common\models\CustomerCart;
 use common\models\CustomerCartMenuItem;
 use common\models\VendorItem;
 use common\models\VendorItemPricing;
+use api\models\Customer;
 
 /**
  * Auth controller provides the initial access token that is required for further requests
@@ -45,12 +46,14 @@ class CartController extends Controller
             ],
         ];
 
+        /*
         // Bearer Auth checks for Authorize: Bearer <Token> header to login the user
-        $behaviors['authenticator'] = [
+        ($behaviors['authenticator'] = [
             'class' => \yii\filters\auth\HttpBearerAuth::className(),
         ];
         // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
         $behaviors['authenticator']['except'] = ['options'];
+        */
 
         return $behaviors;
     }
@@ -72,6 +75,21 @@ class CartController extends Controller
         return $actions;
     }
 
+    public function __construct($id, $module, $config = [])
+    {
+        parent::__construct($id, $module, $config);
+        
+        //for guest
+        Yii::$app->session->set('_user', Yii::$app->request->get('cart-session-id'));
+
+        //for login customer 
+        $authHeader = Yii::$app->request->getHeaders()->get('Authorization');
+        if ($authHeader !== null && preg_match('/^Bearer\s+(.*?)$/', $authHeader, $matches)) {
+            $customer = Customer::findIdentityByAccessToken($matches[1]);
+            Yii::$app->user->loginByAccessToken($customer);
+        }
+    }
+        
     /**
      * Return list of all cart items
      * in cart table
@@ -664,14 +682,19 @@ class CartController extends Controller
                     $location = '';
                 }
 
+                if(Yii::$app->user->isGuest) {
+                    $cart_session_id = \common\models\Customer::currentUser();
+                } else {
+                    $cart_session_id = null;
+                }
+
                 $cart = new CustomerCart();
                 $cart->customer_id = Yii::$app->user->getId();
                 $cart->item_id = $data['item_id'];
                 $cart->cart_customization_price_per_unit = 0;
                 $cart->cart_quantity = $data['quantity'];
                 $cart->cart_datetime_added = date('Y-d-m h:i:s');
-                $cart->cart_session_id = Yii::$app->user->getId();
-                //(!Yii::$app->user->getId()) ? \common\models\Customer::currentUser() : '';
+                $cart->cart_session_id = $cart_session_id;
                 $cart->cart_valid = 'yes';
                 $cart->trash = 'Default';
 
@@ -830,5 +853,15 @@ class CartController extends Controller
             ->all();
 
         return $result;
+    }
+
+    /**
+     * Get cart session id to perform cart operations 
+     */
+    public function actionCartSessionId() 
+    {        
+        return [
+            'cart_session_id' => \common\models\Customer::currentUser()
+        ];
     }
 }

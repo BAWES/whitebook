@@ -25,7 +25,7 @@ return [
         'user' => [
             'identityClass' => 'api\models\Customer',
             'enableAutoLogin' => false,
-            'enableSession' => false,
+            'enableSession' => true,
             'loginUrl' => null
         ],
         'urlManager' => [
@@ -66,11 +66,13 @@ return [
                     'patterns' => [
                         'GET' => 'list',
                         'GET count' => 'cart-count',
+                        'GET cart-session-id' => 'cart-session-id',
                         'POST' => 'add',
                         'PATCH' => 'update',
                         'DELETE' => 'remove',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
+                        'OPTIONS actionCartSessionId' => 'options',
                         'OPTIONS count' => 'options',
                     ]
                 ],
