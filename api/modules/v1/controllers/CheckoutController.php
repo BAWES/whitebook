@@ -322,6 +322,16 @@ class CheckoutController extends Controller
             $address_id
         );
 
+        //clear cart after checkout 
+        if(Yii::$app->user->isGuest) 
+        {
+        //    CustomerCart::deleteAll('cart_session_id = "'.Customer::currentUser().'"');
+        }
+        else
+        {
+            CustomerCart::deleteAll('customer_id = "'.Yii::$app->user->getId().'"');
+        }
+
         return [
         	'operation' => 'success',
         	'arr_booking_id' => $arr_booking_id
