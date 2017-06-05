@@ -73,7 +73,7 @@ use common\components\LangFormat;
                     ?>
                     <option
                         data-icon="<?= $category['icon'] ?>"
-                        value="<?= $Category['slug'] ?>"
+                        value="<?= $category['slug'] ?>"
                         name="category">
                         <?= $category_name ?>
                     </option>
