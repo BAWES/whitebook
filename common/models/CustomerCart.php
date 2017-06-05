@@ -118,12 +118,12 @@ class CustomerCart extends \yii\db\ActiveRecord
             $errors['warning'] = [
                 Yii::t('frontend', 'Item not available for sell!')
             ];
-            return $errors;  
+            return $errors;
         }
 
         $vendor_id = $item->vendor_id;
 
-        //get item type 
+        //get item type
         $item_type = ItemType::findOne($item->type_id);
 
         if($item_type) {
@@ -150,7 +150,7 @@ class CustomerCart extends \yii\db\ActiveRecord
             $in_cart = $query->sum('cart_quantity');
 
         /*
-            Check if deliery availabel in selected area 
+            Check if deliery availabel in selected area
         */
         if(!empty($data['area_id'])) {
 
@@ -164,7 +164,7 @@ class CustomerCart extends \yii\db\ActiveRecord
                     $from = strpos($deliverlocation, '_') + 1;
                     $address_id = substr($deliverlocation, $from, $end);
                     $address = CustomerAddress::findOne($address_id);
-                    
+
                     if($address)
                         $location = $address->area_id;
                 }
@@ -172,48 +172,48 @@ class CustomerCart extends \yii\db\ActiveRecord
 
             if(!empty($location))
             {
-                $delivery_area = CustomerCart::checkLocation($location, $vendor_id);    
+                $delivery_area = CustomerCart::checkLocation($location, $vendor_id);
             }
             else
             {
                 $delivery_area = false;
-            }            
+            }
 
             if(!$delivery_area) {
-                
+
                 $errors['area_id'] = [
                     Yii::t('frontend', 'Delivery not available on selected area!')
                 ];
             }
-        } 
+        }
 
         //item_minimum_quantity_to_order
 
         if($data['quantity'] < $item->item_minimum_quantity_to_order) {
 
             $errors['cart_quantity'][] = [
-                
+
                 Yii::t('yii', '{attribute} must be greater than or equal to "{compareValueOrAttribute}".', [
                     'attribute' => Yii::t('frontend', 'Quantity'),
                     'compareValueOrAttribute' => $item->item_minimum_quantity_to_order
                 ])
             ];
         }
-        
+
         if(!$data['delivery_date'])  {
-            $errors['cart_delivery_date'][] = Yii::t('frontend','Select Delivery date!');     
-            
+            $errors['cart_delivery_date'][] = Yii::t('frontend','Select Delivery date!');
+
             /**
-             * all validation after this loop require delivery date, so 
-             * we returning delivery date require error 
-             */ 
+             * all validation after this loop require delivery date, so
+             * we returning delivery date require error
+             */
             return $errors;
         }
-            
+
         // to check with old delivery date
 
-        if ($data['delivery_date'] && strtotime($data['delivery_date']) < strtotime(date('Y-m-d'))) { 
-            $errors['cart_delivery_date'][] = Yii::t('frontend','Invalid delivery date');     
+        if ($data['delivery_date'] && strtotime($data['delivery_date']) < strtotime(date('Y-m-d'))) {
+            $errors['cart_delivery_date'][] = Yii::t('frontend','Invalid delivery date');
         }
 
         //get timeslot
@@ -222,9 +222,9 @@ class CustomerCart extends \yii\db\ActiveRecord
             $errors['time_slot'][] = Yii::t('frontend', 'Select Delivery time!');
         }
 
-        //check if time available 
+        //check if time available
 
-        if(!empty($data['time_slot']) && !empty($data['delivery_date'])) 
+        if(!empty($data['time_slot']) && !empty($data['delivery_date']))
         {
             $vendor_timeslot = VendorWorkingTiming::find()
                 ->where([
@@ -236,7 +236,7 @@ class CustomerCart extends \yii\db\ActiveRecord
 
             $time = strtotime($data['time_slot']);
 
-            $time_available = false; 
+            $time_available = false;
 
             foreach ($vendor_timeslot as $key => $value) {
 
@@ -257,13 +257,13 @@ class CustomerCart extends \yii\db\ActiveRecord
             }
         }
 
-        // delivery datetime < current time + notice period hours 
+        // delivery datetime < current time + notice period hours
 
-        if($item->notice_period_type == 'Hour' && !empty($data['time_slot'])) 
+        if($item->notice_period_type == 'Hour' && !empty($data['time_slot']))
         {
             $min_delivery_time = strtotime('+'.$item->item_how_long_to_make.' hours');
             $delivery_time = strtotime($data['delivery_date'].' '.$data['time_slot']);
-            
+
             if($delivery_time < $min_delivery_time)
             {
                 $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item notice period {count} hour(s)!', [
@@ -275,7 +275,7 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         if($item->notice_period_type == 'Day' && !empty($data['delivery_date']))
         {
-            //compare timestamp of date 
+            //compare timestamp of date
 
             $min_delivery_time = strtotime(date('Y-m-d', strtotime('+'.$item->item_how_long_to_make.' days')));
             $delivery_time = strtotime(date('Y-m-d', strtotime($data['delivery_date'])));
@@ -291,7 +291,7 @@ class CustomerCart extends \yii\db\ActiveRecord
         //-------------- Start Item Capacity -----------------//
         //default capacity is how many of it they can process per day
 
-        //1) get capacity exception for selected date 
+        //1) get capacity exception for selected date
         $capacity_exception = VendorItemCapacityException::findOne([
             'item_id' => $data['item_id'],
             'exception_date' => date('Y-m-d', strtotime($data['delivery_date']))
@@ -303,7 +303,7 @@ class CustomerCart extends \yii\db\ActiveRecord
             $capacity = $item->item_default_capacity;
         }
 
-        //2) get no of item purchased for selected date 
+        //2) get no of item purchased for selected date
 
         $purchased_result = Booking::totalPurchasedItem($data['item_id'],$data['delivery_date']);
 
@@ -313,7 +313,7 @@ class CustomerCart extends \yii\db\ActiveRecord
             $purchased = 0;
         }
 
-        //3) campare capacity 
+        //3) campare capacity
 
         if($valid_for_cart_item && ($purchased + $in_cart) > $capacity) {
 
@@ -346,25 +346,25 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         //-------------- END Item Capacity -----------------//
 
-        //current date should not in blocked date 
+        //current date should not in blocked date
         $block_date = BlockedDate::findOne([
             'vendor_id' => $vendor_id,
             'block_date' => date('Y-m-d', strtotime($data['delivery_date']))
         ]);
-        
+
         if($block_date) {
-            $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item is not available on selected date');    
+            $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item is not available on selected date');
         }
 
-        //day should not in week off 
-        $blocked_days = explode(',', Vendor::findOne($vendor_id)->blocked_days); 
+        //day should not in week off
+        $blocked_days = explode(',', Vendor::findOne($vendor_id)->blocked_days);
         $day = date('N', strtotime($data['delivery_date']));//7-sunday, 1-monday
 
         if(!$block_date && in_array($day, $blocked_days)) {
             $errors['cart_delivery_date'][] = Yii::t('frontend', 'Item is not available on selected date');
         }
 
-        //item total 
+        //item total
 
         $price_chart = VendorItemPricing::find()
             ->where(['item_id' => $item['item_id'], 'trash' => 'Default'])
@@ -389,7 +389,7 @@ class CustomerCart extends \yii\db\ActiveRecord
 
         $total = $item->item_base_price + ($unit_price * $actual_item_quantity);
 
-        //get quantity ordered per menu 
+        //get quantity ordered per menu
 
         $menu_qty_ordered = [];
 
@@ -412,32 +412,32 @@ class CustomerCart extends \yii\db\ActiveRecord
             $total += $mi->price * $value;// * $data['quantity'];
         }
 
-        //item menu 
+        //item menu
 
         $item_menues = VendorItemMenu::findAll(['item_id' => $item->item_id]);
 
-        //menu quantity validation 
+        //menu quantity validation
 
         foreach ($item_menues as $key => $menu) {
 
-            $max = $menu->max_quantity; 
+            $max = $menu->max_quantity;
             $min = $menu->min_quantity;
 
             if(isset($menu_qty_ordered[$menu->menu_id])) {
                 $qty_ordered = $menu_qty_ordered[$menu->menu_id];
             }else{
-                $qty_ordered = 0;    
+                $qty_ordered = 0;
             }
-            
+
             if(Yii::$app->language == 'en') {
                 $menu_name = $menu->menu_name;
             }else{
                 $menu_name = $menu->menu_name_ar;
             }
-            
+
             if($max && $qty_ordered > $max) {
                 $errors['menu_'.$menu->menu_id][] = Yii::t(
-                    'frontend', 
+                    'frontend',
                     'Quantity must be less than or equal to {qty} in "{menu_name}"', [
                         'qty' => $max,
                         'menu_name' => $menu_name
@@ -447,9 +447,9 @@ class CustomerCart extends \yii\db\ActiveRecord
 
             if($qty_ordered < $min) {
                 $errors['menu_'.$menu->menu_id][] = Yii::t(
-                    'frontend', 
+                    'frontend',
                     'Quantity must be greater than or equal to {qty} in "{menu_name}"', [
-                        'qty' => $min, 
+                        'qty' => $min,
                         'menu_name' => $menu_name
                     ]
                 );
@@ -467,24 +467,25 @@ class CustomerCart extends \yii\db\ActiveRecord
         }
 
         //min_order_amount
-        
+
         if($total < $item->min_order_amount) {
-            $errors['cart_quantity'][] = [
-                Yii::t('frontend', 'Min. order amount "{min_order_amount}".', [
+            $errors['cart_quantity'][] = Yii::t(
+                'frontend',
+                'Min. order amount "{min_order_amount}".',
+                [
                    'min_order_amount' => CFormatter::format($item->min_order_amount)
-                ])
-            ];
+                ]);
         }
 
-        return $errors;       
+        return $errors;
     }
 
-    //return customer items 
+    //return customer items
     public static function items() {
 
         $query = CustomerCart::find()
             ->select('
-                {{%customer_cart}}.*, 
+                {{%customer_cart}}.*,
                 {{%image}}.image_path,
                 {{%vendor_item}}.item_price_per_unit,
                 {{%vendor_item}}.type_id,
@@ -514,7 +515,7 @@ class CustomerCart extends \yii\db\ActiveRecord
         $items = $query->asArray()
             ->all();
 
-        return $items;    
+        return $items;
     }
 
     public static function item_count() {
@@ -540,16 +541,16 @@ class CustomerCart extends \yii\db\ActiveRecord
     }
 
     /*
-        Get location info 
+        Get location info
     */
     public static function geLocation($area_id, $vendor_id){
-        
+
         $result = VendorLocation::find()
             ->joinWith('location')
             ->where([
                 '{{%location}}.status' => 'Active',
                 '{{%location}}.trash' => 'Default',
-                '{{%vendor_location}}.vendor_id' => $vendor_id, 
+                '{{%vendor_location}}.vendor_id' => $vendor_id,
                 '{{%vendor_location}}.area_id' => $area_id])
             ->one();
 
@@ -557,16 +558,16 @@ class CustomerCart extends \yii\db\ActiveRecord
     }
 
     /*
-        Check if delivery availble on selected area 
+        Check if delivery availble on selected area
     */
     public static function checkLocation($area_id, $vendor_id){
-        
+
         $result = VendorLocation::find()
             ->joinWith('location')
             ->where([
                 '{{%location}}.status' => 'Active',
                 '{{%location}}.trash' => 'Default',
-                '{{%vendor_location}}.vendor_id' => $vendor_id, 
+                '{{%vendor_location}}.vendor_id' => $vendor_id,
                 '{{%vendor_location}}.area_id' => $area_id])
             ->count();
 
@@ -574,12 +575,12 @@ class CustomerCart extends \yii\db\ActiveRecord
     }
 
     public static function customerAddress(){
-        
-        if(Yii::$app->user->isGuest) 
+
+        if(Yii::$app->user->isGuest)
         {
             return [];
         }
-                
+
         $area_id  = Yii::$app->session->get('delivery-location');
 
         if(!$area_id)
@@ -601,10 +602,10 @@ class CustomerCart extends \yii\db\ActiveRecord
             ->asArray()
             ->all();
 
-        return $result;    
+        return $result;
     }
 
-    public static function getAddressData($address_id) 
+    public static function getAddressData($address_id)
     {
         return Booking::getPurchaseDeliveryAddress($address_id);
     }
