@@ -24,7 +24,7 @@ use common\components\LangFormat;
                     <option
                         data-hidden="true"
                         data-icon="<?= $Category['icon'] ?>"
-                        value="<?= Url::toRoute(['browse/list', 'slug'=> $Category['slug']]) ?>"
+                        value="<?= $Category['slug'] ?>"
                         name="category"><?= $category_name ?>
                     </option>                        
                 <?php
@@ -32,8 +32,8 @@ use common\components\LangFormat;
 
                 <option
                    data-icon=""
-                   value="<?= Url::toRoute(['browse/list', 'slug'=> 'all']) ?>"
-                   name="category" >
+                   value="all"
+                   name="category">
                    <?=Yii::t('frontend','All')?>
                </option>
 
@@ -73,7 +73,7 @@ use common\components\LangFormat;
                     ?>
                     <option
                         data-icon="<?= $category['icon'] ?>"
-                        value="<?= Url::toRoute(['browse/list', 'slug'=> $category['slug']]) ?>"
+                        value="<?= $Category['slug'] ?>"
                         name="category">
                         <?= $category_name ?>
                     </option>
