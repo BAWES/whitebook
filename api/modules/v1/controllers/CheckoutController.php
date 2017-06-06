@@ -337,7 +337,7 @@ class CheckoutController extends Controller
         //clear cart after checkout 
         if(Yii::$app->user->isGuest) 
         {
-        //    CustomerCart::deleteAll('cart_session_id = "'.Customer::currentUser().'"');
+            CustomerCart::deleteAll('cart_session_id = "'.Customer::currentUser().'"');
         }
         else
         {
