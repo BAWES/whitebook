@@ -56,7 +56,9 @@ a:focus, a:hover{text-decoration:none;}
 .category_listing_nav ul li a:hover .entert{background: url("../images/sprit.png")  -345px -66px no-repeat; }
 .category_listing_nav ul li a:hover .serv{background: url("../images/sprit.png")  -436px -68px no-repeat ; }
 .category_listing_nav ul li a:hover .other{background:url("../images/sprit.png")  -521px -71px no-repeat ; }
-.category_listing_nav ul li a:hover .say_thank{background:url("../images/sprit.png")  -578px -69px no-repeat; }
+.category_listing_nav ul li a:hover .say_thank{
+    background:url("../images/sprit.png")  -578px -69px no-repeat; 
+}
 .nav .open > a, .nav .open > a:focus, .nav .open > a:hover{ background: transparent;}
 .slider_new_up{ margin:0 auto; width:1060px;}
 .search_header input[type="text"]:focus{ border:1px solid #333; }
