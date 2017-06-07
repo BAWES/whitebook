@@ -2293,7 +2293,7 @@ span.small {
     line-height: 40px;
 }
 .menu-item-qty-box {
-    width: 70px;
+    width: 90px;
 }
 .menu-item-detail .menu-items li img {
     float: right;
@@ -2325,16 +2325,18 @@ span.small {
 .menu-item-qty {
     background-color: transparent;
     background: none !important;
-    border: none !important;
-    border-width: 0 !important;
-    border-color: transparent;
+    border: 1px solid black;
     box-shadow: none;
     cursor: default;
     font-size: 18px;
-    width: 20px;
+    width: 33px;
     text-align: center;
     height: 26px;
 }
+.checkbox .menu-item-qty {
+    border: none;
+}
+
 .menu-item-qty-box .fa {
     cursor: pointer;
 }

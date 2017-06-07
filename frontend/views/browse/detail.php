@@ -630,7 +630,7 @@ else
 
                                                                 <td class="menu-item-qty-box">
                                                                     <i class="fa fa-minus"></i>
-                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="<?= isset($cart_menu_item)?$cart_menu_item->quantity:0 ?>" readonly />
+                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="<?= isset($cart_menu_item)?$cart_menu_item->quantity:0 ?>" />
                                                                     <i class="fa fa-plus"></i>
                                                                 </td>
 
@@ -807,7 +807,7 @@ else
 
                                                                 <td class="menu-item-qty-box">
                                                                     <i class="fa fa-minus"></i>
-                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="<?= $cart_menu_item?$cart_menu_item->quantity:0 ?>" readonly />
+                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="<?= $cart_menu_item?$cart_menu_item->quantity:0 ?>" />
                                                                     <i class="fa fa-plus"></i>
                                                                 </td>
 
