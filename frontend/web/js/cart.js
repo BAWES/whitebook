@@ -114,7 +114,7 @@ function update_cart_option_menu_item_qty() {
         });
     });
 }
-        
+
 $(document).delegate('input[name="quantity"]', 'change', function() {
     update_cart_option_menu_title_hint();
     update_cart_option_menu_item_qty();
