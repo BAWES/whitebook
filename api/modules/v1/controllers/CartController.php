@@ -9,6 +9,7 @@ use common\models\CustomerCart;
 use common\models\CustomerCartMenuItem;
 use common\models\VendorItem;
 use common\models\VendorItemPricing;
+use api\models\Customer;
 
 /**
  * Auth controller provides the initial access token that is required for further requests
@@ -45,6 +46,15 @@ class CartController extends Controller
             ],
         ];
 
+        /*
+        // Bearer Auth checks for Authorize: Bearer <Token> header to login the user
+        ($behaviors['authenticator'] = [
+            'class' => \yii\filters\auth\HttpBearerAuth::className(),
+        ];
+        // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
+        $behaviors['authenticator']['except'] = ['options'];
+        */
+
         return $behaviors;
     }
 
@@ -65,6 +75,21 @@ class CartController extends Controller
         return $actions;
     }
 
+    public function __construct($id, $module, $config = [])
+    {
+        parent::__construct($id, $module, $config);
+        
+        //for guest
+        Yii::$app->session->set('_user', Yii::$app->request->get('cart-session-id'));
+
+        //for login customer 
+        $authHeader = Yii::$app->request->getHeaders()->get('Authorization');
+        if ($authHeader !== null && preg_match('/^Bearer\s+(.*?)$/', $authHeader, $matches)) {
+            $customer = Customer::findIdentityByAccessToken($matches[1]);
+            Yii::$app->user->loginByAccessToken($customer);
+        }
+    }
+        
     /**
      * Return list of all cart items
      * in cart table
@@ -77,12 +102,13 @@ class CartController extends Controller
         $result = [];
         $delivery = [];
         $options = [];
+        $errors = [];
         $cartItems['items'] = [];
         $cartItems['summary'] = [];
 
         $area_id = Yii::$app->request->get('area_id');
-        $delivery_date = Yii::$app->request->get('delivery_date');
         $time_slot = Yii::$app->request->get('time_slot');
+        $delivery_date = Yii::$app->request->get('delivery_date');
         
         foreach ($items as $key => $value) 
         {
@@ -149,6 +175,25 @@ class CartController extends Controller
             } else {
                 $value['customs'] = [];
             }
+
+            //get item errors
+
+            $menu_items = array_merge($value['options'], $value['addons']);
+
+            $item_errors = CustomerCart::validate_item([
+                'item_id' => $value['item_id'],
+                'time_slot' => $time_slot,
+                'delivery_date' => $delivery_date,
+                'area_id' => $area_id,
+                'quantity' => $value['cart_quantity'],
+                'menu_item' => ArrayHelper::map($menu_items, 'menu_item_id', 'quantity')
+            ], true);
+
+            $value['errors'] = $this->formateErrors($item_errors);
+
+            if($item_errors)
+                $errors[] = $item_errors;
+
             $result[] = $value;
         }
 
@@ -162,6 +207,7 @@ class CartController extends Controller
             }
 
             $cartItems['items'] = $result;
+            $cartItems['errors'] = $errors;
             $cartItems['summary']['subtotal'] = $subTotal;
             $cartItems['summary']['delivery_vendors'] = $delivery;
             $cartItems['summary']['delivery_charges'] = $delivery_charge;
@@ -169,6 +215,22 @@ class CartController extends Controller
         }
 
         return $cartItems;
+    }
+
+    private function formateErrors($item_errors) 
+    {   
+        unset($item_errors['cart_quantity_remain']);
+        
+        $result = [];
+
+        foreach ($item_errors as $key => $value) 
+        {
+            foreach ($value as $ek => $err) {
+                $result[] = $err;
+            }            
+        }
+
+        return $result;
     }
 
     /**
@@ -620,13 +682,19 @@ class CartController extends Controller
                     $location = '';
                 }
 
+                if(Yii::$app->user->isGuest) {
+                    $cart_session_id = \common\models\Customer::currentUser();
+                } else {
+                    $cart_session_id = null;
+                }
+
                 $cart = new CustomerCart();
                 $cart->customer_id = Yii::$app->user->getId();
                 $cart->item_id = $data['item_id'];
                 $cart->cart_customization_price_per_unit = 0;
                 $cart->cart_quantity = $data['quantity'];
                 $cart->cart_datetime_added = date('Y-d-m h:i:s');
-                $cart->cart_session_id = (!Yii::$app->user->getId()) ? \common\models\Customer::currentUser() : '';
+                $cart->cart_session_id = $cart_session_id;
                 $cart->cart_valid = 'yes';
                 $cart->trash = 'Default';
 
@@ -785,5 +853,15 @@ class CartController extends Controller
             ->all();
 
         return $result;
+    }
+
+    /**
+     * Get cart session id to perform cart operations 
+     */
+    public function actionCartSessionId() 
+    {        
+        return [
+            'cart_session_id' => \common\models\Customer::currentUser()
+        ];
     }
 }
