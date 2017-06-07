@@ -370,6 +370,7 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
                     <td colspan="2" class="text-right"><strong><?= Yii::t('frontend', 'Sub-Total') ?></strong></td>
                     <td class="text-right"><?= CFormatter::format($sub_total) ?></td>
                 </tr>
+
                 <?php
                 foreach ($vendors as $key => $vendor) {
                     $charge = \common\models\Booking::getDeliveryCharges('',$key,$vendor['area_id']);
@@ -380,11 +381,24 @@ $arr_time = ['12:00', '12:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:
                     	continue;
 
                     ?>
-                    <tr>
+                    <tr class="delivery-charge-detail">
                         <td colspan="2" class="text-right"><strong><?= Yii::t('frontend', 'Delivery Charge') ?></strong> <small>( <?=$vendor['vendor']?> )</small></td>
                         <td class="text-right"><?= CFormatter::format($charge) ?></td>
                     </tr>
                 <?php } ?>
+                
+                <?php if($delivery_charge > 0) { ?>
+                <tr class="delivery-charge-total">
+                    <td colspan="2" class="text-right">
+                        <strong><?= Yii::t('frontend', 'Delivery Charge') ?></strong>
+                        <button class="btn btn-xs" type="button">
+                            <i class="fa fa-plus"></i> <?= Yii::t('frontend', 'Expand') ?>
+                        </button>
+                    </td>
+                    <td class="text-right"><?= CFormatter::format($delivery_charge) ?></td>
+                </tr>
+                <?php } ?>
+
                 <tr>
                     <td colspan="2"  class="text-right"><strong><?= Yii::t('frontend', 'Total') ?></strong></td>
                     <td class="text-right"><?= CFormatter::format($sub_total + $delivery_charge) ?></td>
@@ -486,7 +500,7 @@ $this->registerJs("
 </div>
 <?php
 
-$this->registerJsFile('@web/js/cart.js?v=1.7', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/cart.js?v=1.8', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 echo Html::hiddenInput('txt-select', Yii::t('frontend', 'Select '), ['id' => 'txt-select']);
 echo Html::hiddenInput('txt-min', Yii::t('frontend', 'atleast {qty} '), ['id' => 'txt-min']);

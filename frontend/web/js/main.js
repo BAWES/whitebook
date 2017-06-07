@@ -1,3 +1,9 @@
+       
+$(document).delegate('.delivery-charge-total .btn', 'click', function() {
+    $('.delivery-charge-total').hide();
+    $('.delivery-charge-detail').show();
+});
+
 
 function resize() 
 {
