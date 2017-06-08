@@ -148,7 +148,15 @@ jQuery(document).delegate('a#filter-clear-date', 'click', function() {
 
 $(document).delegate('.category_listing_nav a', 'click', function(e) {
     product_slug = $(this).attr('data-slug');
-    filter();
+    
+    //load child categories 
+    $.get('browse/sub-category-filter?slug=' + product_slug, function(html) {
+        $('.sub-category-wrapper').html(html);
+        $('.left-main-cat').val(product_slug).change();
+        
+        //load items from selected cat 
+        filter();
+    });
     e.preventDefault();
 });
 

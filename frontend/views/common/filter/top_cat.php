@@ -18,7 +18,7 @@ $get = Yii::$app->request->get();
 <div class="responsive-category-top">
     <div class="listing_sub_cat1">
         <span class="title_filter"><?= Yii::t('frontend', 'Categories') ?></span>
-        <select class="selectpicker" id="main-category">
+        <select class="selectpicker left-main-cat" id="main-category">
             <?php
             foreach($top_categories as $category) {
 
