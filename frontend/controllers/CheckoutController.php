@@ -420,7 +420,7 @@ class CheckoutController extends BaseController
 
         return $this->render('success', [
             'arr_booking_id' => $arr_booking_id,
-            'order_token' => $order->order_token
+            'order' => $order
         ]);
     }
 

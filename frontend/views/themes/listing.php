@@ -40,7 +40,7 @@ $get = Yii::$app->request->get();
 						<div class="responsive-category-bottom">
 							<nav class="row-offcanvas row-offcanvas-left">
 								<div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
-									<div id="accordion" class="panel-group sub-category-wrapper"">
+									<div id="accordion" class="panel-group sub-category-wrapper">
 										<?=$this->render('@frontend/views/common/filter/category.php',['slug'=>$slug]); ?>
 										<!-- END FILTER  -->
 									</div><!-- END -->
