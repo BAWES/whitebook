@@ -34,7 +34,7 @@ class CategoryQuery extends \yii\db\ActiveQuery
 
     public function defaultCategories()
     {
-        return $this->andWhere(['{{%category}}.trash'=>"Default"]);
+        return $this->andWhere(['{{%category}}.trash' => "Default"]);
     }
 
     public function allParents()
