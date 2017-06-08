@@ -45,7 +45,7 @@ use common\components\CFormatter;
         <table class="table table-bordered" style="width:100%;">
 	        <tr>
 	            <td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; border-top: 1px solid #ddd;">
-	                Booking ID: #<?= $model->booking_id ?> 
+	                Order ID: #<?= $model->order->order_id ?> 
 	            </td>
 	            <td style="border-bottom: 1px solid #ddd; border-top: 1px solid #ddd;">
 	                Booking Token : <?= $model->booking_token ?>
