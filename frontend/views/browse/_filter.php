@@ -16,7 +16,7 @@ use common\components\LangFormat;
 
             <div class="listing_sub_cat1 hidden-sm hidden-xs">
                 <span class="title_filter"><?= Yii::t('frontend', 'Categories') ?></span>
-                <select class="selectpicker" id="main-category" placeholder="test"> 
+                <select class="selectpicker left-main-cat" id="main-category" placeholder="test"> 
                     
                     <?php
 
