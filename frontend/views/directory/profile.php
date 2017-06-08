@@ -173,12 +173,26 @@ var current_page = 'vendor';
 
 $(document).delegate('.category_listing_nav a', 'click', function(e) {
     //product_slug = $(this).attr('data-slug');
-    $('#sub_categories input').prop('checked', false);
+    /*$('#sub_categories input').prop('checked', false);
     var a = $('#sub_categories input[data-slug=\"' + $(this).attr('data-slug') + '\"]');
     if(a.prop('checked') != true) {
         a.trigger('click');
     }
-    filter();
+    //load child categories 
+    $.get('browse/sub-category-filter?slug=' + $(this).attr('data-slug'), function(html) {
+        $('.sub-category-wrapper').html(html);
+        $('.left-main-cat').val($(this).attr('data-slug')).change();
+        
+        //load items from selected cat 
+        filter();
+    });
+
+    */
+
+    $('.left-main-cat').val($(this).attr('data-slug')).change();
+
+    $('html, body').animate({ scrollTop: $('.listing_right').offset().top }, 'slow');
+
     e.preventDefault();
 });
 

@@ -40,7 +40,7 @@ $get = Yii::$app->request->get();
 						<div class="responsive-category-bottom">
 							<nav class="row-offcanvas row-offcanvas-left">
 								<div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
-									<div id="accordion" class="panel-group">
+									<div id="accordion" class="panel-group sub-category-wrapper">
 										<?=$this->render('@frontend/views/common/filter/category.php',['slug'=>$slug]); ?>
 										<!-- END FILTER  -->
 									</div><!-- END -->
@@ -89,4 +89,23 @@ $get = Yii::$app->request->get();
 	var product_slug = '".$get['slug']."';
 	var current_page = 'theme';
 	", \yii\web\View::POS_BEGIN);
+
+$this->registerJs("
+
+	$(document).delegate('.category_listing_nav a', 'click', function(e) {
+	    product_slug = $(this).attr('data-slug');
+	    
+	    //load child categories 
+	    $.get('browse/sub-category-filter?slug=' + product_slug, function(html) {
+	        $('.sub-category-wrapper').html(html);
+	        $('.left-main-cat').val(product_slug).change();
+	        
+	        //load items from selected cat 
+	        //filter();
+	    });
+	    e.preventDefault();
+	});
+
+", \yii\web\View::POS_END);
+
 ?>
