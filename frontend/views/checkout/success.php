@@ -2,18 +2,13 @@
 
 $this->title = Yii::t('frontend', 'Success | Whitebook');
 
-$ids = [];
-
-foreach ($arr_booking_id as $key => $value) 
-{
-    if(strlen($value) < 4) {
-        $ids[] = '#'.str_repeat(0, 4 - strlen($value)).$value;
-    } else {
-        $ids[] = '#'.$value;
-    }
+if(strlen($order->order_id) < 4) {
+    $id = '#'.str_repeat(0, 4 - strlen($order->order_id)).$order->order_id;
+} else {
+    $id = '#'.$order->order_id;
 }
 
-$booking_page = \yii\helpers\Url::to(['booking/view', 'order_token' => $order_token],true);
+$booking_page = \yii\helpers\Url::to(['booking/view', 'order_token' => $order->order_token],true);
 
 ?>
 <section id="inner_pages_white_back">
@@ -29,8 +24,8 @@ $booking_page = \yii\helpers\Url::to(['booking/view', 'order_token' => $order_to
                 <?= Yii::t('frontend', 'You\'ll receive a payment link once the vendors have confirmed your booking.') ?>
             </h3>
             <h3 style="color: #8F8F8F;">
-                <?= Yii::t('frontend', 'Booking ID: {id}', [
-                        'id' => implode(', ', $ids)
+                <?= Yii::t('frontend', 'Order ID: {id}', [
+                        'id' => $id
                     ]) ?> 
             </h3>
 

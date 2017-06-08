@@ -156,6 +156,14 @@ class Booking extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getOrder()
+    {
+        return $this->hasOne(Order::className(), ['order_id' => 'order_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getCustomer()
     {
         return $this->hasOne(Customer::className(), ['customer_id' => 'customer_id']);
