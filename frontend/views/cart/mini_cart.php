@@ -30,7 +30,15 @@ $event_time  = ($session->has('event_time')) ? $session->get('event_time') : '';
             <minibag-item-list class="minibag-item-list">
                 <ul class="bag-items">
                     <?php 
+                    $have_more = false;
                     $sub_total = $delivery_charge = 0;
+
+                    if(sizeof($items) > 2) 
+                    {
+                        $items = array_slice($items, -2, 2);
+                        $have_more = true;
+                    }
+
                     foreach ($items as $item) { 
                         
                         $vendor_name = CustomerCart::getVendorDetail($item['vendor_id'])->vendor_name;
@@ -182,6 +190,12 @@ $event_time  = ($session->has('event_time')) ? $session->get('event_time') : '';
                         </minibag-remove>
                     </div>
                     </div>
+                    </li>
+                    <?php } ?>
+
+                    <?php if($have_more) { ?>
+                    <li class="bag-item-holder" style="padding: 10px;color: #ccc;">
+                        <center><?= Yii::t('frontend', 'View cart to see all item(s)') ?></center>
                     </li>
                     <?php } ?>
                 </ul>   
