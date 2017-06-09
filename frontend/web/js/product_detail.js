@@ -316,7 +316,12 @@ jQuery(document).delegate('#form_product_option', 'submit', function(e) {
             if(data['success']) 
             {
                 $('.min-cart-wrapper .btn-mini-cart').trigger('click');
-                $('html, body').animate({ scrollTop: $('#form_product_option').offset().top - 300 }, 'slow');        
+                $('html, body').animate({ scrollTop: $('#form_product_option').offset().top - 300 }, 'slow');   
+
+                //close after 3 second 
+                setTimeout(function() { 
+                    $('.btn-mini-cart').trigger('click'); 
+                }, 3000);
             } 
             else 
             {
