@@ -30,6 +30,7 @@ $event_time  = ($session->has('event_time')) ? $session->get('event_time') : '';
             <minibag-item-list class="minibag-item-list">
                 <ul class="bag-items">
                     <?php 
+
                     $have_more = false;
                     $sub_total = $delivery_charge = 0;
 
@@ -241,7 +242,7 @@ $event_time  = ($session->has('event_time')) ? $session->get('event_time') : '';
                     <span class="minibag-button-holder minibag-button-holder--view-bag">
                         <a class="minibag-button minibag-button--view-bag" href="<?= Url::to(['cart/index']) ?>">
                             <span class="minibag-button-text-content">
-                                <?= Yii::t('frontend', 'VIEW BAG') ?>
+                                <?= Yii::t('frontend', 'VIEW CART') ?>
                             </span>
                         </a>
                     </span>

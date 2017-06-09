@@ -17,6 +17,9 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'VIEW CART' => 'عرض العربة',
+    'CHECKOUT' => 'الدفع',
+    'View cart to see all item(s)' => 'عرض العربة لرؤية كل بند',
     'Check out our Instagram' => 'تحقق من إينستاجرام لدينا',
     'Track your order' => 'أتبع طلبك',
     'Booking ID: {id}' => 'معرف الحجز: {id}',
