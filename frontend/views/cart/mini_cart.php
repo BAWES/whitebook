@@ -30,7 +30,16 @@ $event_time  = ($session->has('event_time')) ? $session->get('event_time') : '';
             <minibag-item-list class="minibag-item-list">
                 <ul class="bag-items">
                     <?php 
+
+                    $have_more = false;
                     $sub_total = $delivery_charge = 0;
+
+                    if(sizeof($items) > 2) 
+                    {
+                        $items = array_slice($items, -2, 2);
+                        $have_more = true;
+                    }
+
                     foreach ($items as $item) { 
                         
                         $vendor_name = CustomerCart::getVendorDetail($item['vendor_id'])->vendor_name;
@@ -184,6 +193,12 @@ $event_time  = ($session->has('event_time')) ? $session->get('event_time') : '';
                     </div>
                     </li>
                     <?php } ?>
+
+                    <?php if($have_more) { ?>
+                    <li class="bag-item-holder" style="padding: 10px;color: #ccc;">
+                        <center><?= Yii::t('frontend', 'View cart to see all item(s)') ?></center>
+                    </li>
+                    <?php } ?>
                 </ul>   
             </minibag-item-list>
             <div class="minibag-meta-container">
@@ -227,7 +242,7 @@ $event_time  = ($session->has('event_time')) ? $session->get('event_time') : '';
                     <span class="minibag-button-holder minibag-button-holder--view-bag">
                         <a class="minibag-button minibag-button--view-bag" href="<?= Url::to(['cart/index']) ?>">
                             <span class="minibag-button-text-content">
-                                <?= Yii::t('frontend', 'VIEW BAG') ?>
+                                <?= Yii::t('frontend', 'VIEW CART') ?>
                             </span>
                         </a>
                     </span>

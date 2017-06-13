@@ -454,6 +454,7 @@ else
                                             <input type="text" name="quantity" id="quantity" class="form-control" data-min="<?= $quantity ?>" value="<?=$quantity ?>"/>
                                             <a href="#" class="btn-stepper" data-case="1">+</a>
                                         </div>
+                                        <span class="error cart_quantity"></span>
                                     </div>
                                 </div>
                                 <?php } else { ?>
@@ -630,7 +631,7 @@ else
 
                                                                 <td class="menu-item-qty-box">
                                                                     <i class="fa fa-minus"></i>
-                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="<?= isset($cart_menu_item)?$cart_menu_item->quantity:0 ?>" readonly />
+                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="<?= isset($cart_menu_item)?$cart_menu_item->quantity:0 ?>" />
                                                                     <i class="fa fa-plus"></i>
                                                                 </td>
 
@@ -807,7 +808,7 @@ else
 
                                                                 <td class="menu-item-qty-box">
                                                                     <i class="fa fa-minus"></i>
-                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="<?= $cart_menu_item?$cart_menu_item->quantity:0 ?>" readonly />
+                                                                    <input name="menu_item[<?= $menu_item->menu_item_id ?>]" class="menu-item-qty" value="<?= $cart_menu_item?$cart_menu_item->quantity:0 ?>" />
                                                                     <i class="fa fa-plus"></i>
                                                                 </td>
 
@@ -1257,4 +1258,4 @@ $this->registerCssFile('@web/css/lightbox.css', ['depends' => [\yii\web\JqueryAs
 
 $this->registerJsFile('@web/js/lightbox.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.29', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.30', ['depends' => [\yii\web\JqueryAsset::className()]]);

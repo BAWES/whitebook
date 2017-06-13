@@ -43,7 +43,10 @@ use common\components\CFormatter;
 			<tbody>
 				<tr>
 					<td style="border-right: 1px solid #ddd; border-bottom: 1px solid #ddd;">
+						<!--
 						<b><?= Yii::t('frontend', 'Bookng ID') ?>:</b> <?= $booking->booking_id ?> <br />
+						-->
+						<b><?= Yii::t('frontend', 'Order ID') ?>:</b> <?= $booking->order->order_id ?> <br />
 						<b><?= Yii::t('frontend', 'Bookng Token') ?>:</b> <?= $booking->booking_token ?> <br />
 						<b><?= Yii::t('frontend', 'Date Added') ?>:</b> <?= date('d/m/Y', strtotime($booking->created_datetime)) ?>
 

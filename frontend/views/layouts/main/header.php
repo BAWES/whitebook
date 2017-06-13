@@ -230,7 +230,7 @@ $action = Yii::$app->controller->action->id;
                                 <span><?php echo Yii::t('frontend', 'Other'); ?></span>
                             </a>
                         </li>
-                        <li><a title="<?php echo Yii::t('frontend', 'Gift Favors'); ?>" href="<?= Url::to(["browse/list", 'slug' => 'gift-favors']); ?>" data-slug='gift-favors'>
+                        <li><a title="<?php echo Yii::t('frontend', 'Gift Favors'); ?>" href="<?= Url::to(["browse/list", 'slug' => 'gift-favors']); ?>" data-slug="gift-favors">
                                 <span class="say_thank"></span>
                                 <span><?php echo Yii::t('frontend', 'Gift Favors'); ?></span>
                             </a></li>

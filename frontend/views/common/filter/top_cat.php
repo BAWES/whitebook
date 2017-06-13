@@ -1,12 +1,8 @@
 <?php
 
 $top_categories = \common\models\Category::find()
-    ->select('{{%category}}.*')
-    ->leftJoin('{{%category_path}}', '{{%category}}.category_id = {{%category_path}}.path_id')
-    ->where([
-        '{{%category_path}}.level' => 0,
-        'trash' =>'Default'
-    ])
+    ->allParents()
+    ->defaultCategories()
     ->orderBy('sort')
     ->asArray()
     ->all();
@@ -18,7 +14,7 @@ $get = Yii::$app->request->get();
 <div class="responsive-category-top">
     <div class="listing_sub_cat1">
         <span class="title_filter"><?= Yii::t('frontend', 'Categories') ?></span>
-        <select class="selectpicker" id="main-category">
+        <select class="selectpicker left-main-cat" id="main-category">
             <?php
             foreach($top_categories as $category) {
 

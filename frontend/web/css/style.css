@@ -56,7 +56,9 @@ a:focus, a:hover{text-decoration:none;}
 .category_listing_nav ul li a:hover .entert{background: url("../images/sprit.png")  -345px -66px no-repeat; }
 .category_listing_nav ul li a:hover .serv{background: url("../images/sprit.png")  -436px -68px no-repeat ; }
 .category_listing_nav ul li a:hover .other{background:url("../images/sprit.png")  -521px -71px no-repeat ; }
-.category_listing_nav ul li a:hover .say_thank{background:url("../images/sprit.png")  -578px -69px no-repeat; }
+.category_listing_nav ul li a:hover .say_thank{
+    background:url("../images/sprit.png")  -578px -69px no-repeat; 
+}
 .nav .open > a, .nav .open > a:focus, .nav .open > a:hover{ background: transparent;}
 .slider_new_up{ margin:0 auto; width:1060px;}
 .search_header input[type="text"]:focus{ border:1px solid #333; }
@@ -2293,7 +2295,7 @@ span.small {
     line-height: 40px;
 }
 .menu-item-qty-box {
-    width: 70px;
+    width: 90px;
 }
 .menu-item-detail .menu-items li img {
     float: right;
@@ -2325,16 +2327,18 @@ span.small {
 .menu-item-qty {
     background-color: transparent;
     background: none !important;
-    border: none !important;
-    border-width: 0 !important;
-    border-color: transparent;
+    border: 1px solid black;
     box-shadow: none;
     cursor: default;
     font-size: 18px;
-    width: 20px;
+    width: 33px;
     text-align: center;
     height: 26px;
 }
+.checkbox .menu-item-qty {
+    border: none;
+}
+
 .menu-item-qty-box .fa {
     cursor: pointer;
 }
@@ -2946,4 +2950,7 @@ span.small {
 .empty-cart-msg h2 {
     margin-top: 0;
     margin-bottom: 20px;
+}
+.delivery-charge-detail {
+    display: none;
 }

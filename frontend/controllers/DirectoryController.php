@@ -111,7 +111,7 @@ class DirectoryController extends BaseController
         ]);
     }
 
-    public function actionProfile($vendor,$slug='all'){
+    public function actionProfile($vendor, $slug='all'){
         $website_model = new Website();
         $vendor_details = Vendor::findOne(['slug'=>$vendor]);
 
@@ -156,7 +156,7 @@ class DirectoryController extends BaseController
         {
             $category = Category::findOne(['slug' => $slug]);
 
-            if (empty($Category)) {
+            if (empty($category)) {
                 throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
             }
 
