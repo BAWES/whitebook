@@ -10,6 +10,7 @@ use common\models\CustomerCartMenuItem;
 use common\models\VendorItem;
 use common\models\VendorItemPricing;
 use api\models\Customer;
+use common\components\CFormatter;
 
 /**
  * Auth controller provides the initial access token that is required for further requests
@@ -208,10 +209,10 @@ class CartController extends Controller
 
             $cartItems['items'] = $result;
             $cartItems['errors'] = $errors;
-            $cartItems['summary']['subtotal'] = $subTotal;
+            $cartItems['summary']['subtotal'] = CFormatter::format($subTotal);
             $cartItems['summary']['delivery_vendors'] = $delivery;
-            $cartItems['summary']['delivery_charges'] = $delivery_charge;
-            $cartItems['summary']['total'] = $subTotal + $delivery_charge;
+            $cartItems['summary']['delivery_charges'] = CFormatter::format($delivery_charge);
+            $cartItems['summary']['total'] = CFormatter::format($subTotal + $delivery_charge);
         }
 
         return $cartItems;
