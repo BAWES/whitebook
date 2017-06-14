@@ -17,7 +17,7 @@ use common\models\Location;
 use common\models\CustomerAddressResponse;
 use common\models\CustomerAddress;
 use api\models\Customer;
-
+use yii\web\UnauthorizedHttpException;
 
 /**
  * Class CheckoutController
@@ -60,9 +60,9 @@ class CheckoutController extends Controller
 
         //for login customer 
         $authHeader = Yii::$app->request->getHeaders()->get('Authorization');
+
         if ($authHeader !== null && preg_match('/^Bearer\s+(.*?)$/', $authHeader, $matches)) {
-            $customer = Customer::findIdentityByAccessToken($matches[1]);
-            Yii::$app->user->loginByAccessToken($customer);
+            Yii::$app->user->loginByAccessToken($matches[1]);            
         }
     }
 
