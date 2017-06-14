@@ -11,6 +11,7 @@ use common\models\VendorItem;
 use common\models\VendorItemPricing;
 use api\models\Customer;
 use common\components\CFormatter;
+use yii\web\UnauthorizedHttpException;
 
 /**
  * Auth controller provides the initial access token that is required for further requests
@@ -86,8 +87,7 @@ class CartController extends Controller
         //for login customer 
         $authHeader = Yii::$app->request->getHeaders()->get('Authorization');
         if ($authHeader !== null && preg_match('/^Bearer\s+(.*?)$/', $authHeader, $matches)) {
-            $customer = Customer::findIdentityByAccessToken($matches[1]);
-            Yii::$app->user->loginByAccessToken($customer);
+            Yii::$app->user->loginByAccessToken($matches[1]);
         }
     }
         
