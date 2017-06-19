@@ -77,7 +77,7 @@ class ProductController extends Controller
      * @param string $requestedCategories
      * @param string $requestedVendor
      * @param string $requestedTheme
-     * @param string $event_time
+     * @param string $requestedDeliverTime
      * @return array
      */
     public function actionCategoryProducts(
@@ -89,7 +89,7 @@ class ProductController extends Controller
         $requestedMaxPrice = 0,
         $requestedVendor = '',
         $requestedTheme = '',
-        $event_time = ''
+        $requestedDeliverTime = ''
     )
     {
         $products = [];
@@ -143,7 +143,7 @@ class ProductController extends Controller
         }//if themes
         
         //event time
-        if($event_time) {
+        if($requestedDeliverTime) {
             $item_query->workingTimeJoin();
         }
         
@@ -177,14 +177,17 @@ class ProductController extends Controller
             $item_query->deliveryDate($date);
         }
 
-        if (!empty($event_time)) {
-            $delivery_date = $requestedDeliverDate;
-            if($delivery_date)
-                $working_day = date('D', strtotime($delivery_date));
-            else
-                $working_day = date('D');
-            $event_time = date('H:i:s', strtotime($event_time));
-            $item_query->eventTime($event_time,$working_day);
+
+        if ($requestedDeliverTime) {
+            
+            if($requestedDeliverDate)
+                $working_day = date('l', strtotime($requestedDeliverDate));
+            else 
+                $working_day = date('l');
+
+            $event_time = date('H:i:s', strtotime($requestedDeliverTime));
+            
+            $item_query->eventTime($event_time, $working_day);
         }
 
         $item_query_result = $item_query
