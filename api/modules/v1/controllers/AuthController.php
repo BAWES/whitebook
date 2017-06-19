@@ -201,7 +201,8 @@ class AuthController extends Controller
             $model->modified_datetime = $time;
             $model->save();
 
-            $message = 'Your requested password reset.</br><a href='.Url::to(["/users/reset_confirm", "cust_id" => $model->customer_activation_key], true).' title="Click Here">Click here </a> to reset your password';
+            $message = 'Your requested password reset.</br><a href='.Yii::$app->urlManagerFrontend->createUrl(['/users/reset_confirm', "cust_id" => $model->customer_activation_key]).' title="Click Here">Click here </a> to reset your password';
+
             $send = Yii::$app->mailer->compose("customer/password-reset",
                 ["message" => $message, "user" => "Customer"])
                 ->setFrom(Yii::$app->params['supportEmail'])
