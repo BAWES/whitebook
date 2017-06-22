@@ -2,12 +2,13 @@
 
 namespace api\modules\v1\controllers;
 
-use common\models\CustomerToken;
 use Yii;
 use yii\rest\Controller;
 use yii\filters\auth\HttpBasicAuth;
 use yii\helpers\Url;
 use api\models\Customer;
+use common\models\CustomerToken;
+use common\models\CustomerCart;
 
 /**
  * Auth controller provides the initial access token that is required for further requests
@@ -101,6 +102,9 @@ class AuthController extends Controller
 
         // Return agent access token if everything valid
         $accessToken = $user->accessToken->token_value;
+
+        CustomerCart::updateAll(['customer_id' => Yii::$app->user->getId() ], ['cart_session_id' => Yii::$app->request->get('cart_session_id')]);
+
         return [
             "operation" => "success",
             "token" => $accessToken
