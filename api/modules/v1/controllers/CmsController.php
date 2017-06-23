@@ -60,17 +60,13 @@ class CmsController extends Controller
     /**
      * Return CMS Detail
      */
-    public function actionView($id)
+    public function actionView($slug)
     {
-        $page = Cms::findOne($id);
+        $page = Cms::findOne(['slug' => $slug]);
 
         if(!$page)
-        {
-            return [
-                "operation" => "error",
-                "message" => "Invalid Page",
-            ];
-        }
+            throw new \yii\web\NotFoundHttpException;
+        
         return $page;
     }
 }
