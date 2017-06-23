@@ -173,7 +173,8 @@ return [
                         'GET type' => 'address-type-list',
                         'GET view' => 'address-view',
                         'GET questions' => 'address-questions',
-                        'GET location' => 'get-location',
+                        'GET location' => 'area-list',
+                        'GET location/<id>' => 'area-detail',
                         'POST' => 'address-add',
                         'PATCH' => 'address-update',
                         'DELETE' => 'address-remove',
@@ -184,6 +185,7 @@ return [
                         'OPTIONS view' => 'options',
                         'OPTIONS questions' => 'options',
                         'OPTIONS location' => 'options',
+                        'OPTIONS location/<id>' => 'options'
                     ]
                 ],
                 [ // CheckoutController

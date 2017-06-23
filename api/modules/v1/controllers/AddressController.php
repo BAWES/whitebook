@@ -44,7 +44,8 @@ class AddressController extends Controller
         $behaviors['authenticator']['except'] = [
             'address-type-list',
             'address-questions',
-            'get-location',
+            'area-list',
+            'area-detail',
             'options'
         ];
 
@@ -382,7 +383,19 @@ class AddressController extends Controller
         return $questions;
     }
 
-    public function actionGetLocation(){
+    public function actionAreaList()
+    {
         return Location::find()->where(['status'=>'Active', 'trash' => 'Default'])->all();
+    }
+
+    public function actionAreaDetail($id) 
+    {
+        return Location::find()
+            ->where([
+                'status' => 'Active', 
+                'trash' => 'Default',
+                'id' => $id
+            ])
+            ->one();    
     }
 }
