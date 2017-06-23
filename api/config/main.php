@@ -276,9 +276,9 @@ return [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'v1/cms',
                     'patterns' => [
-                        'GET <id>' => 'view',
+                        'GET <slug>' => 'view',
                         // OPTIONS VERBS
-                        'OPTIONS <id>' => 'options'
+                        'OPTIONS <slug>' => 'options'
                     ]
                 ],
             ],
