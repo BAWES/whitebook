@@ -48,7 +48,6 @@ class ProductController extends Controller
         return $behaviors;
     }
 
-
     /**
      * @inheritdoc
      */
@@ -383,14 +382,14 @@ class ProductController extends Controller
 
         if ($vendor_id) {
             $vendor_area = VendorLocation::find()
-                ->select(['{{%vendor_location}}.area_id,{{%location}}.location'])
+                ->select(['{{%vendor_location}}.area_id, {{%location}}.location, {{%location}}.location_ar'])
                 ->leftJoin('{{%location}}', '{{%location}}.id = {{%vendor_location}}.area_id')
                 ->where(['{{%vendor_location}}.vendor_id' => $vendor_id])
                 ->asArray()
                 ->all();
         } else {
             $vendor_area = VendorLocation::find()
-                ->select(['{{%vendor_location}}.area_id,{{%location}}.location'])
+                ->select(['{{%vendor_location}}.area_id,{{%location}}.location,{{%location}}.location_ar'])
                 ->leftJoin('{{%location}}', '{{%location}}.id = {{%vendor_location}}.area_id')
                 ->asArray()
                 ->all();

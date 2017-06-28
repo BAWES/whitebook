@@ -14,7 +14,6 @@ use yii\db\Query;
  */
 class WishlistController extends Controller
 {
-
     public function behaviors()
     {
         $behaviors = parent::behaviors();
@@ -89,7 +88,7 @@ class WishlistController extends Controller
                 return [
                     "operation" => "error",
                     "code" => "0",
-                    'message' => 'Invalid item ID'
+                    'message' => Yii::t('api', 'Invalid item ID')
                 ];
             }
 
@@ -102,14 +101,14 @@ class WishlistController extends Controller
                 if ($wish_modal->save()) {
                     return [
                         "operation" => "success",
-                        "message" => "Item added to wishlist Successfully",
+                        "message" => Yii::t('api', "Item added to wishlist Successfully"),
                         "code" => "1",
                         "id" => $wish_modal->wishlist_id,
                     ];
                 } else {
                     return [
                         "operation" => "error",
-                        "message" => "Error While Adding Item To Wishlist",
+                        "message" => Yii::t('api', "Error While Adding Item To Wishlist"),
                         "code" => "0",
                         "error" => $wish_modal->errors,
                     ];
@@ -117,14 +116,14 @@ class WishlistController extends Controller
             } else {
                 return [
                     "operation" => "error",
-                    "message" => "Item Already Added",
+                    "message" => Yii::t('api', "Item Already Added"),
                     "code" => "0",
                 ];
             }
         } else {
             return [
                 "operation" => "error",
-                "message" => "Please login to add item to wishlist",
+                "message" => Yii::t('api', "Please login to add item to wishlist"),
                 "code" => "0",
             ];
         }
@@ -141,7 +140,7 @@ class WishlistController extends Controller
             return [
                 "operation" => "error",
                 "code" => "0",
-                'message' => 'Invalid Wishlist ID'
+                'message' => Yii::t('api', 'Invalid Wishlist ID')
             ];
         }
 
@@ -152,13 +151,13 @@ class WishlistController extends Controller
             return [
                 "operation" => "success",
                 "code" => "1",
-                "message" => "Item remove from wishlist successfully",
+                "message" => Yii::t('api', "Item remove from wishlist successfully"),
             ];
         } else {
             return [
                 "operation" => "error",
                 "code" => "0",
-                "message" => "Error While Deleting Item From Wishlist",
+                "message" => Yii::t('api', "Error While Deleting Item From Wishlist"),
             ];
         }
     }
@@ -166,7 +165,6 @@ class WishlistController extends Controller
     /**
      * check is item is in wishlist or not
      */
-
     public function actionIsItemExist($product_id) {
         if (Yii::$app->user->getId()) {
             $exist = Wishlist::find()->where(['item_id' => $product_id, 'customer_id' => Yii::$app->user->getId()])->one();
