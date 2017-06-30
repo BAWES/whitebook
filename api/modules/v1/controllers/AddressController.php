@@ -75,7 +75,6 @@ class AddressController extends Controller
     public function actionAddressTypeList() {
 
         return AddressType::find()
-            ->select(['type_id', 'type_name'])
             ->active()
             ->defaultTrash()
             ->all();
@@ -373,13 +372,13 @@ class AddressController extends Controller
     public function actionAddressQuestions($address_type_id)
     {
         $questions = AddressQuestion::find()
-            ->select(['ques_id','address_type_id','question','required'])
             ->where([
                 'address_type_id' => $address_type_id,
                 'trash' => 'Default',
                 'status' => 'Active'])
             ->asArray()
             ->all();
+
         return $questions;
     }
 
