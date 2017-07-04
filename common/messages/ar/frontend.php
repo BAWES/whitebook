@@ -409,4 +409,8 @@ return [
     'The above error occurred while the Web server was processing your request' => 'حدث الخطأ أعلاه في حين ملقم ويب تم تجهيز طلبك',
     'Please contact us if you think this is a server error. Thank you' => 'يرجى الاتصال بنا إذا كنت تعتقد أن هذا هو خطأ في الخادم. شكرا',
     'Buy' => 'يشترى',
+    'Pending' => 'قيد الانتظار',    
+    'Accepted' => 'قبلت',
+    'Rejected' => 'مرفوض',
+    'Expired' => 'منتهية الصلاحية'
 ];

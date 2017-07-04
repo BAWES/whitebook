@@ -134,7 +134,7 @@ class PackageController extends Controller
                 if (isset($value['item_how_long_to_make']) && $value['item_how_long_to_make'] > 0) {
                     if (isset($value['notice_period_type']) && $value['notice_period_type'] == 'Day') {
                         if ($value['item_how_long_to_make'] >= 7) {
-                            $notice = Yii::t('frontend', '{count} week(s)', [
+                            $notice = Yii::t('api', '{count} week(s)', [
                                 'count' => substr(($value['item_how_long_to_make'] / 7), 0, 3)
                             ]);
                         } else {

@@ -165,9 +165,9 @@ class TapController extends Controller
         $responsehashstring = $request['hash'];
             
         if ($hashstring != $responsehashstring) {
-            $error = Yii::t('frontend', 'Unable to locate or update your booking status');
+            $error = Yii::t('api', 'Unable to locate or update your booking status');
         } else if ($request['result'] != 'SUCCESS') {
-            $error = Yii::t('frontend', 'Payment was declined by Tap');
+            $error = Yii::t('api', 'Payment was declined by Tap');
         }
    
         if ($error) 

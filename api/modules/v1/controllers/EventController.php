@@ -99,7 +99,7 @@ class EventController extends Controller
             if ($exit) {
                 return [
                     "operation" => "error",
-                    "message" => "Event Already Exist With Same Name."
+                    "message" => Yii::t('api', "Event Already Exist With Same Name.")
                 ];
             }
             $model = new Events;
@@ -112,19 +112,19 @@ class EventController extends Controller
             if ($model->save()) {
                 return [
                     "operation" => "success",
-                    "message" => "Event Created Successfully.",
+                    "message" => Yii::t('api', "Event Created Successfully."),
                 ];
             } else {
                 return [
                     "operation" => "error",
-                    "message" => "Error While Saving Error.",
+                    "message" => Yii::t('api', "Error While Saving Error."),
                     "detail" => $model->errors
                 ];
             }
         } else {
             return [
                 "operation" => "error",
-                "message" => "Empty event fields."
+                "message" => Yii::t('api', "Empty event fields.")
             ];
         }
 
@@ -151,25 +151,25 @@ class EventController extends Controller
                 if ($model->save()) {
                     return [
                         "operation" => "success",
-                        "message" => "Event Saved Successfully.",
+                        "message" => Yii::t('api', "Event Saved Successfully."),
                     ];
                 } else {
                     return [
                         "operation" => "error",
-                        "message" => "Invalid Event.",
+                        "message" => Yii::t('api', "Invalid Event."),
                         "detail" => $model->errors,
                     ];
                 }
             } else {
                 return [
                     "operation" => "error",
-                    "message" => "Invalid Event."
+                    "message" => Yii::t('api', "Invalid Event.")
                 ];
             }
         } else {
             return [
                 "operation" => "error",
-                "message" => "Invalid Event ID."
+                "message" => Yii::t('api', "Invalid Event ID.")
             ];
         }
     }
@@ -187,18 +187,18 @@ class EventController extends Controller
                 $event->delete();
                 return [
                     "operation" => "success",
-                    "message" => "Event Deleted Successfully.",
+                    "message" => Yii::t('api', "Event Deleted Successfully."),
                 ];
             } else {
                 return [
                     "operation" => "error",
-                    "message" => "Invalid Event."
+                    "message" => Yii::t('api', "Invalid Event.")
                 ];
             }
         } else {
             return [
                 "operation" => "error",
-                "message" => "Invalid Event."
+                "message" => Yii::t('api', "Invalid Event.")
             ];
         }
     }

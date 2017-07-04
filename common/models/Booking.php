@@ -103,10 +103,10 @@ class Booking extends \yii\db\ActiveRecord
     public static function statusList()
     {
         return [
-            self::STATUS_PENDING => 'Pending',
-            self::STATUS_ACCEPTED => 'Accepted',
-            self::STATUS_REJECTED => 'Rejected',
-            self::STATUS_EXPIRED => 'Expired'
+            self::STATUS_PENDING => Yii::t('frontend', 'Pending'),
+            self::STATUS_ACCEPTED => Yii::t('frontend', 'Accepted'),
+            self::STATUS_REJECTED => Yii::t('frontend', 'Rejected'),
+            self::STATUS_EXPIRED => Yii::t('frontend', 'Expired')
         ];
     }
 

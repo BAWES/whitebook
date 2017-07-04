@@ -163,7 +163,7 @@ class CheckoutController extends Controller
 		return [
 			"operation" => "success",
 			"code" => "1",
-			"message" => 'Order Successfully Completed',
+			"message" => Yii::t('api', 'Order Successfully Completed'),
 			"order_id" => $order_id,
 		];
     }
@@ -278,7 +278,7 @@ class CheckoutController extends Controller
     		if($error) {
     			return [
     				'operation' => 'error',
-    				'message' => 'Can not proceed as cart item(s) not valid',
+    				'message' => Yii::t('api', 'Can not proceed as cart item(s) not valid'),
     			];
     		}
 		}
@@ -310,7 +310,7 @@ class CheckoutController extends Controller
         {
         	return [
 				'operation' => 'error',
-				'message' => 'Delivery info missing',
+				'message' => Yii::t('api', 'Delivery info missing'),
 			];
         }
 
@@ -318,7 +318,7 @@ class CheckoutController extends Controller
         {
         	return [
 				'operation' => 'error',
-				'message' => 'Customer info missing',
+				'message' => Yii::t('api', 'Customer info missing'),
 			];
         }
 
@@ -386,7 +386,11 @@ class CheckoutController extends Controller
         {
             return [
                 'operation' => 'error',
-                'messsage' => ['area_id' => ['Area not found']]
+                'messsage' => [
+                    'area_id' => [
+                        Yii::t('api', 'Area not found')
+                    ]
+                ]
             ];
         }
         
