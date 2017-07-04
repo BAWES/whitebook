@@ -172,14 +172,15 @@ class AddressController extends Controller
                 if(!isset($questions_answers[$question['ques_id']])) {
                     return [
                         "operation" => "error",
-                        "message" => "Please provide answer of question ".$question['question'],
+                        "message" => Yii::t("api", "Please provide answer of question {question}", [
+                                'question' => $question['question']
+                            ]),
                         'detail' => $question['question']
                     ];
                     exit;
                 }
             }
         }
-
 
         //save address
         $customer_address = new CustomerAddress();
@@ -211,13 +212,13 @@ class AddressController extends Controller
 
             return [
                 "operation" => "success",
-                "message" => "Address Saved Successfully",
+                "message" => Yii::t("api", "Address Saved Successfully"),
             ];
 
         } else {
             return [
                 "operation" => "error",
-                "message" => "Error While Saving Address",
+                "message" => Yii::t("api", "Error While Saving Address"),
                 'detail' => $customer_address->errors
             ];
         }
@@ -254,7 +255,9 @@ class AddressController extends Controller
                     return [
                         "operation" => "error",
                         "code" => "0",
-                        "message" => "Please provide answer of question ".$question['question'],
+                        "message" => Yii::t("api", "Please provide answer of question {question}", [
+                                'question' => $question['question']
+                            ]),
                         'detail' => $question['question']
                     ];
                     exit;
@@ -294,20 +297,20 @@ class AddressController extends Controller
 
                 return [
                     "operation" => "success",
-                    "message" => "Address Updated Successfully",
+                    "message" => Yii::t('api', "Address Updated Successfully"),
                 ];
 
             } else {
                 return [
                     "operation" => "error",
-                    "message" => "Error While Updating Address",
+                    "message" => Yii::t('api', "Error While Updating Address"),
                     'detail' => $customer_address->errors
                 ];
             }
         } else {
             return [
                 "operation" => "error",
-                "message" => "Unable To Find Address With Address ID",
+                "message" => Yii::t('api', "Unable To Find Address With Address ID"),
             ];
         }
     }
@@ -354,13 +357,13 @@ class AddressController extends Controller
 
             return [
                 "operation" => "success",
-                "message" => "Address Deleted Successfully",
+                "message" => Yii::t('api', "Address Deleted Successfully"),
                 'code' => '1'
             ];
         } else {
             return [
                 "operation" => "error",
-                "message" => "Address Doesn't exist",
+                "message" => Yii::t('api', "Address Doesn't exist"),
                 'code' => '0'
             ];
         }

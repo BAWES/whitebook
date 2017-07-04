@@ -96,7 +96,7 @@ class AuthController extends Controller
             return [
                 "operation" => "error",
                 "errorType" => "email-not-verified",
-                "message" => "Please click the verification link sent to you by email to activate your account",
+                "message" => Yii::t('api', "Please click the verification link sent to you by email to activate your account"),
             ];
         }
 
@@ -143,7 +143,7 @@ class AuthController extends Controller
                 ])
                 ->setFrom(Yii::$app->params['supportEmail'])
                 ->setTo($model['customer_email'])
-                ->setSubject('Welcome to The White Book')
+                ->setSubject(Yii::t('api', 'Welcome to The White Book'))
                 ->send();
 
             //Send Email to admin
@@ -169,7 +169,7 @@ class AuthController extends Controller
             return [
                 "operation" => "success",
                 "code" => "1",
-                "message" => "Please click on the link sent to you by email to verify your account"
+                "message" => Yii::t('api', "Please click on the link sent to you by email to verify your account")
             ];
 
         } else {
@@ -194,7 +194,7 @@ class AuthController extends Controller
             return [
                 'operation' => 'error',
                 'code' => '0',
-                'message' => 'Invalid Email'
+                'message' => Yii::t('api', 'Invalid Email')
             ];
         }
 
@@ -211,26 +211,26 @@ class AuthController extends Controller
                 ["message" => $message, "user" => "Customer"])
                 ->setFrom(Yii::$app->params['supportEmail'])
                 ->setTo($email)
-                ->setSubject('Requested forgot Password')
+                ->setSubject(Yii::t('api', 'Requested forgot Password'))
                 ->send();
             if ($send) {
                 return [
                     'operation' => 'success',
                     'code' => '1',
-                    'message' => 'Password reset link sent, please check your email for further instructions.'
+                    'message' => Yii::t('api', 'Password reset link sent, please check your email for further instructions.')
                 ];
             } else {
                 return [
                     'operation' => 'error',
                     'code' => '0',
-                    'message' => 'Server issue. Please try again'
+                    'message' => Yii::t('api', 'Server issue. Please try again')
                 ];
             }
         } else {
             return [
                 'operation' => 'error',
                 'code' => '0',
-                'message' => 'Email Does Not Exist'
+                'message' => Yii::t('api', 'Email Does Not Exist')
             ];
         }
     }

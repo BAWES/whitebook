@@ -90,7 +90,7 @@ class BookingController extends Controller
         {
             return [
                 "operation" => "error",
-                "message" => "Booking not found",
+                "message" => Yii::t('api', "Booking not found"),
             ];
         }
 

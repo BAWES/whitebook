@@ -520,7 +520,7 @@ class CartController extends Controller
                     }
 
                     Yii::$app->getSession()->setFlash('success', Yii::t(
-                        'frontend',
+                        'api',
                         'Success: Product <a href="{product_link}">{product_name}</a> updated in cart successfully',
                         [
                             'product_link' => Url::to(['browse/detail', 'slug' => $cart->item->slug]),
@@ -533,7 +533,7 @@ class CartController extends Controller
                     ];
                 } else {
                     return [
-                        'error' => Yii::t('frontend','Error while updateing cart')
+                        'error' => Yii::t('api', 'Error while updateing cart')
                     ];
                 }
             }
@@ -564,27 +564,27 @@ class CartController extends Controller
         if (empty($data["item_id"])) {
             return [
                 "operation" => "error",
-                "message" => "Invalid Item ID"
+                "message" => Yii::t('api', "Invalid Item ID")
             ];
         } else if (empty($data["time_slot"])) {
             return [
                 "operation" => "error",
-                "message" => "Invalid Time Slot"
+                "message" => Yii::t('api', "Invalid Time Slot")
             ];
         } else if (empty($data["delivery_date"])) {
             return [
                 "operation" => "error",
-                "message" => "Invalid Delivery Date"
+                "message" => Yii::t('api', "Invalid Delivery Date")
             ];
         } else if (empty($data["quantity"])) {
             return [
                 "operation" => "error",
-                "message" => "Invalid Quantity"
+                "message" => Yii::t('api', "Invalid Quantity")
             ];
         } else if (empty($data["area_id"])) {
             return [
                 "operation" => "error",
-                "message" => "Invalid Area"
+                "message" => Yii::t('api', "Invalid Area")
             ];
         }
 
@@ -752,7 +752,7 @@ class CartController extends Controller
                 return [
                     "operation" => "success",
                     "code" => "1",
-                    "message" => "Item added to cart successfully"
+                    "message" => Yii::t('api', "Item added to cart successfully")
                 ];
 
             } else {
@@ -797,20 +797,20 @@ class CartController extends Controller
                 return [
                     "operation" => "success",
                     "code" => "1",
-                    "message" => "Cart Item Deleted Successfully"
+                    "message" => Yii::t('api', "Cart Item Deleted Successfully")
                 ];
             } else {
                 return [
                     "operation" => "error",
                     "code" => "0",
-                    "message" => "Invalid Cart ID"
+                    "message" => Yii::t('api', "Invalid Cart ID")
                 ];
             }
         } else {
             return [
                 "operation" => "error",
                 "code" => "0",
-                "message" => "Invalid Cart ID"
+                "message" => Yii::t('api', "Invalid Cart ID")
             ];
         }
     }
