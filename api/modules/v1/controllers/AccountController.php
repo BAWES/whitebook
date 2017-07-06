@@ -88,7 +88,7 @@ class AccountController extends Controller
             if ($data->customer_id != $customer_id) {
                 return [
                     "operation" => "error",
-                    "message" => "Email already in use.",
+                    "message" => Yii::t('api', "Email already in use."),
                 ];
             }
             $model = Customer::findOne($customer_id);
@@ -131,7 +131,7 @@ class AccountController extends Controller
         $email  = Yii::$app->request->getBodyParam('email');
         $msg      = Yii::$app->request->getBodyParam('msg');
 
-        $model = new \frontend\models\Contacts();
+        $model = new \api\models\Contacts();
         $model->contact_name = $name;
         $model->contact_email = $email;
         $model->created_datetime = date('Y/m/d');
@@ -178,7 +178,7 @@ class AccountController extends Controller
             return [
                 "operation" => "error",
                 "code" => "1",
-                "message" => $model->errorDetail(),
+                "message" => $model->getErrors()// errorDetail(),
             ];
         }
     }

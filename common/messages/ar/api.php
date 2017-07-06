@@ -78,5 +78,12 @@ return [
 	"Invalid Vendor ID" => "معرف المورد غير صالح",
 	"Invalid Event Date" => "تاريخ الحدث غير صالح",
 	"Payment was declined by Tap" => "تم رفض الدفعة عن طريق النقر",
-	"Unable to locate or update your booking status" => "تعذر تحديد مكان حالة الحجز أو تحديثها"
+	"Unable to locate or update your booking status" => "تعذر تحديد مكان حالة الحجز أو تحديثها",
+	"Email already in use." => "البريد الاليكتروني قيد الاستخدام.",
+	"ID" => "هوية شخصية",
+	"Contact Name" => "اسم جهة الاتصال",
+	"Contact Email" => "تواصل بالبريد الاكتروني",
+	"Contact Phone" => "الاتصال الهاتف",
+	"Subject" => "موضوع",
+	"Message" => "رسالة"
 ];
