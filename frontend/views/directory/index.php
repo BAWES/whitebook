@@ -52,10 +52,6 @@ use yii\web\view;
 				</div>
 			</div>
 
-			<div id="mobile_respon">
-				<?php echo $this->render('_m_listing',['directory'=>$directory,'first_letter'=>$first_letter]); ?>
-			</div>
-
 			<div id="filter" class="right-section">
 				<?php echo $this->render('_listing',['directory'=>$directory,'first_letter'=>$first_letter]); ?>
 			</div>
@@ -66,61 +62,25 @@ use yii\web\view;
 
 <?php 
 
-$this->registerJsFile('@web/js/jquery-listnav.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerCssFile('@web/css/listnav.css?v=1.1');
+//$this->registerJsFile('@web/js/jquery-listnav.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+//$this->registerCssFile('@web/css/listnav.css?v=1.1');
 
 $this->registerJs("
-	jQuery('#demoOne').listnav({
-		allText: '" . Yii::t('frontend', 'All') . "',
-		noMatchText: '". Yii::t('frontend', 'No matching entries') ."'
-	});
-
-	jQuery('.demo a').click(function(e) {
-		e.preventDefault();
-	});
 
 	jQuery('#filter_category').change(function(){
 
 		var x= jQuery('#filter_category').val();
-		var ajaxdata= jQuery('#ajaxdata').val();
-
 		var path = '".Url::to(['directory/index'])."';
 		
 		jQuery.ajax({
 			type:'POST',
 			url:path,
-			data:{ slug:x, ajaxdata:ajaxdata },
+			data:{ slug:x },
 			success:function(data){
-				if(ajaxdata=='1'){
-					jQuery('#mobile_respon').html(data);
-				} else {
-					jQuery('#filter').html(data);
-				}
-			}
-		}).done(function() {
-			if(ajaxdata=='1'){
-				jQuery('#demoOne').listnav({
-					allText: '" . Yii::t('frontend', 'All') . "',
-					noMatchText: '". Yii::t('frontend', 'No matching entries') ."'
-				});
-
-				jQuery('.demo a').click(function(e) {
-					e.preventDefault();
-				});
+				jQuery('#filter').html(data);
 			}
 		});
 	});
-
-	jQuery('#demoOne a').click(function(){
-		var directive_link = jQuery(this).attr('href');
-		window.location.href = directive_link;
-	});
-
-	if (jQuery(window).width() < 991) {
-		jQuery('#ajaxdata').val('1');
-	}else{
-		jQuery('#ajaxdata').val('0');
-	}
 
 ", View::POS_READY);
 

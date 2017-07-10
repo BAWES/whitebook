@@ -89,20 +89,11 @@ class DirectoryController extends BaseController
 
         if (Yii::$app->request->isAjax) {
             $request = Yii::$app->request;
-            if ($request->post('ajaxdata') == 0) {
-
-                return $this->renderPartial('_listing', [
-                    'directory' => $directory,
-                    'first_letter' => $result,
-                ]);
-
-            } else {
-
-                return $this->renderPartial('_m_listing', [
-                    'directory' => $directory,
-                    'first_letter' => $result
-                ]);
-            }
+        
+            return $this->renderPartial('_listing', [
+                'directory' => $directory,
+                'first_letter' => $result,
+            ]);
         }
 
         return $this->render('index', [

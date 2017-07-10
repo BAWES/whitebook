@@ -294,9 +294,33 @@ textarea .form-group{ min-height: 126px;}
 .title_filter{font-size:13px;font-family: 'OpenSansRegular'; color:#1d1d1d; display: inline-block; width: 100%; text-transform: uppercase; padding: 0 12px; min-height: 53px; line-height: 53px; border-bottom: 1px solid #f3f3f3;}
 .direct_list h2{ display: inline-block; width: 100%;font-size:18px;font-family: 'OpenSansRegular'; color:#000; text-transform: uppercase; margin: 0px; vertical-align: top;border-bottom: 1px solid #ccc; padding: 0 0 11px; }
 .direct_list ul{ padding: 0px; margin: 12px 0 12px 0; }
-.direct_list ul li{ padding: 0px; margin: 0px; list-style: none; margin: 0px;}
-.direct_list ul li a{font-size:12px;font-family: 'OpenSansRegular'; color:#000; text-transform: uppercase; vertical-align: top;}
-.direct_list ul li a:hover,.listing_sub_cat1 ul li a:hover{ text-decoration: none; color: #ebc000;}
+
+.direct_list ul li {
+    padding: 0px;
+    margin: 0px;
+    list-style: none;
+    margin: 0px;
+    display: block;
+}
+.direct_list ul li .vendor_thumbnail {
+    border: 1px solid #ccc;
+    margin: 0 10px 10px 0;
+}
+.direct_list ul li img {
+    width: 100%;
+}
+.direct_list ul li a {
+    font-size: 12px;
+    font-family: 'OpenSansRegular';
+    color: black;
+    text-transform: uppercase;
+    padding: 5px;
+    width: 100%;
+    display: block;
+    text-align: center;
+    border-top: 1px solid #ccc;
+}
+.listing_sub_cat1 ul li a:hover{ text-decoration: none; color: #ebc000;}
 .direct_list{ display: inline-block; width: 100%; }
 .paddingright0{ padding-right: 0px;}
 .directory_listing .title_main{ margin-bottom: 41px;}
