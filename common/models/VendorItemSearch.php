@@ -23,7 +23,7 @@ class VendorItemSearch extends VendorItem
     {
         return [
             [['item_id', 'type_id', 'vendor_id', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by','included_quantity'], 'integer'],
-            [['theme_id', 'group_id', 'item_name','vendor_name','item_description', 'item_status','item_additional_info', 'item_customization_description', 'item_price_description', 'item_approved','priority'], 'safe'],
+            [['theme_id', 'group_id', 'item_name','vendor_name','item_description', 'item_status','item_additional_info', 'item_customization_description', 'item_approved','priority'], 'safe'],
             [['item_price_per_unit'], 'number'],
            
         ];
@@ -123,7 +123,6 @@ class VendorItemSearch extends VendorItem
             ->andFilterWhere(['like', 'item_description', $this->item_description])
             ->andFilterWhere(['like', 'item_additional_info', $this->item_additional_info])
             ->andFilterWhere(['like', 'item_customization_description', $this->item_customization_description])
-            ->andFilterWhere(['like', 'item_price_description', $this->item_price_description])            
             ->andFilterWhere(['like', 'item_approved', $this->item_approved])
             ->andFilterWhere(['like', 'priority', $this->priority])
             ->andFilterWhere(['like', 'trash', $this->trash])
@@ -216,7 +215,6 @@ class VendorItemSearch extends VendorItem
         $query->andFilterWhere(['like', '{{%vendor_item}}.item_description', $this->item_description])
             ->andFilterWhere(['like', '{{%vendor_item}}.item_additional_info', $this->item_additional_info])
             ->andFilterWhere(['like', '{{%vendor_item}}.item_customization_description', $this->item_customization_description])
-            ->andFilterWhere(['like', '{{%vendor_item}}.item_price_description', $this->item_price_description])
             ->andFilterWhere(['like', '{{%vendor_item}}.item_approved', $this->item_approved])
             ->andFilterWhere(['like', '{{%vendor_item}}.priority', $this->priority])
             ->andFilterWhere(['like', '{{%vendor_item}}.trash', $this->trash]);
@@ -279,7 +277,6 @@ class VendorItemSearch extends VendorItem
             ->andFilterWhere(['like', 'item_description', $this->item_description])
             ->andFilterWhere(['like', 'item_additional_info', $this->item_additional_info])
             ->andFilterWhere(['like', 'item_customization_description', $this->item_customization_description])
-            ->andFilterWhere(['like', 'item_price_description', $this->item_price_description])
             ->andFilterWhere(['like', 'item_approved', $this->item_approved])
             ->andFilterWhere(['like', 'priority', $this->priority])
             ->andFilterWhere(['like', 'trash', $this->trash]);

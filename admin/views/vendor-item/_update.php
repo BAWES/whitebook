@@ -259,10 +259,6 @@ function cmp($a, $b)
 					<input type="button" class="add_price" name="addprice" id="addprice" value="Add more" onClick="addPrice(this);" />
 				</div>
 
-				<?= $form->field($model, 'item_price_description')->textarea(['maxlength' => 128]); ?>
-
-				<?= $form->field($model, 'item_price_description_ar')->textarea(['maxlength' => 128]); ?>
-
 				<?= $form->field($model, 'item_customization_description',
 						['options' => ['class' => 'form-group custom_description']]
 					)->textarea(

@@ -27,8 +27,6 @@ use Yii;
  * @property string $item_price_per_unit
  * @property string $item_customization_description
  * @property string $item_customization_description_ar
- * @property string $item_price_description
- * @property string $item_price_description_ar
  * @property string $item_base_price
  * @property integer $sort
  * @property integer $item_how_long_to_make
@@ -97,7 +95,7 @@ class VendorDraftItem extends \yii\db\ActiveRecord
 
             [['minimum_increment', 'hide_price_chart', 'item_id', 'type_id', 'vendor_id', 'item_default_capacity', 'sort', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by', 'is_ready','included_quantity'], 'integer'],
             
-            [['notice_period_type', 'item_name_ar', 'priority', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar', 'item_customization_description', 'item_customization_description_ar', 'item_price_description', 'item_price_description_ar', 'item_archived', 'item_approved', 'item_status', 'trash', 'set_up_time', 'max_time', 'requirements', 'requirements_ar', 'max_time_ar', 'set_up_time_ar'], 'string'],
+            [['notice_period_type', 'item_name_ar', 'priority', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar', 'item_customization_description', 'item_customization_description_ar', 'item_archived', 'item_approved', 'item_status', 'trash', 'set_up_time', 'max_time', 'requirements', 'requirements_ar', 'max_time_ar', 'set_up_time_ar'], 'string'],
 
             [['item_price_per_unit', 'item_base_price', 'item_amount_in_stock', 'have_female_service', 'allow_special_request', 'min_order_amount'], 'number'],
             
@@ -118,7 +116,7 @@ class VendorDraftItem extends \yii\db\ActiveRecord
 
             //ItemPrice
 
-            [['quantity_label', 'item_price_description','item_price_description_ar', 'item_customization_description', 'item_customization_description_ar','included_quantity'], 'string', 'on' => ['ItemPrice']],
+            [['quantity_label', 'item_customization_description', 'item_customization_description_ar','included_quantity'], 'string', 'on' => ['ItemPrice']],
 
             [['item_default_capacity', 'item_minimum_quantity_to_order'], 'integer', 'on' => ['ItemPrice']],
 
@@ -144,7 +142,7 @@ class VendorDraftItem extends \yii\db\ActiveRecord
 
         $scenarios['MenuItems'] = ['allow_special_request', 'have_female_service'];
 
-        $scenarios['ItemPrice'] = ['type_id','minimum_increment', 'min_order_amount', 'quantity_label', 'item_default_capacity', 'item_minimum_quantity_to_order', 'item_price_per_unit', 'item_base_price', 'item_price_description', 'item_price_description_ar', 'item_customization_description', 'item_customization_description_ar','included_quantity'];
+        $scenarios['ItemPrice'] = ['type_id','minimum_increment', 'min_order_amount', 'quantity_label', 'item_default_capacity', 'item_minimum_quantity_to_order', 'item_price_per_unit', 'item_base_price', 'item_customization_description', 'item_customization_description_ar','included_quantity'];
 
         $scenarios['ItemDescription'] = ['set_up_time', 'set_up_time_ar', 'max_time', 'max_time_ar', 'requirements', 'requirements_ar', 'item_how_long_to_make', 'notice_period_type', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'];
 
@@ -174,8 +172,6 @@ class VendorDraftItem extends \yii\db\ActiveRecord
             'item_price_per_unit' => Yii::t('app', 'Increment Price'),
             'item_customization_description' => Yii::t('app', 'Item Customization Description'),
             'item_customization_description_ar' => Yii::t('app', 'Item Customization Description - Arabic'),
-            'item_price_description' => Yii::t('app', 'Price Description'),
-            'item_price_description_ar' => Yii::t('app', 'Price Description - Arabic'),
             'sort' => Yii::t('app', 'Sort'),
             'item_minimum_quantity_to_order' => Yii::t('app', 'Minimum Quantity To Order'),
             'item_archived' => Yii::t('app', 'Item Archived'),

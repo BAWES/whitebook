@@ -76,14 +76,6 @@ $this->params['breadcrumbs'][] = 'Update';
 				
 				<?= $form->field($model, 'min_order_amount'); ?>
 
-				<?= $form->field($model, 'item_price_description')->textarea([
-						'id' => 'vendoritem-item_price_description'
-					]) ?>
-				
-				<?= $form->field($model, 'item_price_description_ar')->textarea([
-						'id' => 'vendoritem-item_price_description_ar'
-					]) ?>
-
 				<?= $form->field($model, 'hide_price_chart')->checkbox(); ?>
 
 				<?php if($model->isNewRecord) { ?>
