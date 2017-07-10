@@ -271,7 +271,7 @@ class SearchController extends BaseController
 
             if (!empty($vendorSearchData)) {
                 foreach ($vendorSearchData as $result) {
-                    $k .= '<li>'.Html::a($result['vendor_name'],['directory/profile','vendor'=>$result['slug']]).'</li>';
+                    $k .= '<li>'.Html::a($result['vendor_name'],['community/profile','vendor'=>$result['slug']]).'</li>';
                 }
             }
 

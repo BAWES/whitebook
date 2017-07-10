@@ -19,7 +19,7 @@ if($vendor_details['vendor_logo_path']) {
     $baselink = Yii::getAlias('@vendor_logo/').$vendor_details['vendor_logo_path'];
 }
 
-$url = \yii\helpers\Url::toRoute(["directory/profile", 'slug' => $vendor_details->slug], true);
+$url = \yii\helpers\Url::toRoute(["community/profile", 'slug' => $vendor_details->slug], true);
 \Yii::$app->view->registerMetaTag(['property' => 'og:title', 'content' => ucfirst($vendor_details->vendor_name)]);
 \Yii::$app->view->registerMetaTag(['property' => 'fb:app_id', 'content' => 157333484721518]);
 \Yii::$app->view->registerMetaTag(['property' => 'og:url', 'content' => $url]);
@@ -102,7 +102,7 @@ $return_policy = nl2br(LangFormat::format(strip_tags($vendor_detail['vendor_retu
                                 $url = urlencode(Yii::$app->homeUrl . $_SERVER['REQUEST_URI']);
                                 $summary = Yii::$app->name .' '. substr(strip_tags($vendor_detail->short_description),0,10);
                                 $image = isset($baselink) ? $baselink : '';
-                                $vendorUrl = \yii\helpers\Url::toRoute(["directory/profile", 'slug' => $vendor_detail->slug], true);
+                                $vendorUrl = \yii\helpers\Url::toRoute(["community/profile", 'slug' => $vendor_detail->slug], true);
                                 $mailbody = "Check out ".ucfirst($vendor_detail->vendor_name)." on ".Yii::$app->name." ".$vendorUrl;
                                 ?>
                                 <div class="social_share">
@@ -165,7 +165,7 @@ $get = Yii::$app->request->get();
 $slug = (isset($get['slug'])) ? $get['slug'] : 'all';
 $this->registerJs("
 var giflink = '".Url::to("@web/images/ajax-loader.gif")."';
-//var load_items = '".Url::to(['directory/profile'])."';
+//var load_items = '".Url::to(['community/profile'])."';
 var load_items = '".Url::to(['/vendor'])."';
 var product_slug = '".$slug."';
 var vendor_profile = '".$get['vendor']."';

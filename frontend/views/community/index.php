@@ -19,7 +19,7 @@ use yii\web\view;
 
 		<div class="directory_listing">
 			<div class="title_main">
-				<h1><?= Yii::t("frontend", "Directory") ?></h1>
+				<h1><?= Yii::t("frontend", "Community") ?></h1>
 			</div>
 			<div class="col-md-3 paddingleft0 left-section">
 				<div class="filter_content">
@@ -70,7 +70,7 @@ $this->registerJs("
 	jQuery('#filter_category').change(function(){
 
 		var x= jQuery('#filter_category').val();
-		var path = '".Url::to(['directory/index'])."';
+		var path = '".Url::to(['community/index'])."';
 		
 		jQuery.ajax({
 			type:'POST',

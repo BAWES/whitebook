@@ -27,7 +27,7 @@ if ($directory) { ?>
                     <li class="col-md-4 col-sm-6 col-xs-6">
                         <div class="vendor_thumbnail">
                             <img src="<?= $img ?>" />                                            
-                            <a href="<?= Url::toRoute(['directory/profile','vendor'=>$d['slug']]); ?>" title="<?php echo $vendor_name; ?>">
+                            <a href="<?= Url::toRoute(['community/profile','vendor'=>$d['slug']]); ?>" title="<?php echo $vendor_name; ?>">
                                 <?php echo $vendor_name; ?>
                             </a>
                         </div>
