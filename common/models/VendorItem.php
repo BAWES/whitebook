@@ -26,7 +26,6 @@ use common\models\VendorItemToPackage;
 * @property integer $item_default_capacity
 * @property integer $included_quantity
 * @property string $item_price_per_unit
-* @property string $item_price_description
 * @property string $item_base_price
 * @property integer $item_how_long_to_make
 * @property integer $item_minimum_quantity_to_order
@@ -116,7 +115,7 @@ class VendorItem extends \yii\db\ActiveRecord
             
             [['minimum_increment', 'hide_price_chart', 'type_id', 'vendor_id', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
             
-            [['notice_period_type', 'item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_price_description','item_price_description_ar', 'item_approved', 'trash', 'quantity_label','slug'], 'string'],
+            [['notice_period_type', 'item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_approved', 'trash', 'quantity_label','slug'], 'string'],
             
             [['item_price_per_unit', 'min_order_amount','item_base_price','included_quantity'], 'number'],
             
@@ -152,8 +151,6 @@ class VendorItem extends \yii\db\ActiveRecord
             'item_default_capacity' => 'Maximum quantity ordered per day',
             'item_price_per_unit' => 'Increment Price',
             'item_base_price' => 'Base Price',
-            'item_price_description' => 'Item Price Description',
-            'item_price_description_ar' => 'Item Price Description - Arabic',
             'item_how_long_to_make' => 'Notice Period',
             'notice_period_type' => 'Notice Period Type',
             'hide_price_chart' => 'Hide price chart from customer',
@@ -434,11 +431,7 @@ class VendorItem extends \yii\db\ActiveRecord
             $this->item_additional_info = str_replace('style="', 'inline-style-not-allowed="', $this->item_additional_info);
             
             $this->item_additional_info_ar = str_replace('style="', 'inline-style-not-allowed="', $this->item_additional_info_ar);
-            
-            $this->item_price_description = str_replace('style="', 'inline-style-not-allowed="', $this->item_price_description);
-
-            $this->item_price_description_ar = str_replace('style="', 'inline-style-not-allowed="', $this->item_price_description_ar);
-
+                        
             return true;
         } else {
             return false;

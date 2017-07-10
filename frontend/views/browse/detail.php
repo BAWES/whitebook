@@ -332,8 +332,6 @@ else
 
                                     } ?>
 
-                                    <strong><?= LangFormat::format($model['item_price_description'], $model['item_price_description_ar']); ?></strong>
-
                                     <?php
 
                                     $pricing = VendorItemPricing::find()

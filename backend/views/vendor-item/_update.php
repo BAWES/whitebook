@@ -265,14 +265,6 @@ function cmp($a, $b)
 				</div>
 				<?php } ?>
 
-				<?= $form->field($model, 'item_price_description')->textarea([
-						'id' => 'vendoritem-item_price_description'
-					]) ?>
-				
-				<?= $form->field($model, 'item_price_description_ar')->textarea([
-						'id' => 'vendoritem-item_price_description_ar'
-					]) ?>
-
 				<?= $form->field($model, 'item_customization_description')
 						->textarea([
 							'class' => 'form-group custom_description',

@@ -79,8 +79,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 </table>
                             </td>
                         </tr>
-                        <tr><th>Item price description</th><td><?= $model->item_price_description ?></td></tr>
-                        <tr><th>Item price description - Arabic</th><td><?= $model->item_price_description_ar ?></td></tr>
                     </tbody>
                 </table>
             </div>

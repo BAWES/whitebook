@@ -152,14 +152,6 @@ $this->params['breadcrumbs'][] = $model->item_name;
                             'value' => strip_tags($model->item_customization_description_ar),
                         ],
                         [
-                            'label' => $vendor_item->item_price_description != $model->item_price_description ? 'Item price description *' : 'Item price description',
-                            'value' => strip_tags($model->item_price_description),
-                        ],
-                        [
-                            'label' => $vendor_item->item_price_description_ar != $model->item_price_description_ar ? 'Item price description - Arabic*' : 'Item price description - Arabic',
-                            'value' => strip_tags($model->item_price_description_ar),
-                        ],
-                        [
                             'label' => $vendor_item->quantity_label != $model->quantity_label ? 'Quantity Label *' : 'Quantity Label',
                             'value' => $model->quantity_label,
                         ],
