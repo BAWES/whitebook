@@ -17,7 +17,7 @@ use common\models\CategoryPath;
 use common\models\VendorPhoneNo;
 use common\models\VendorItemThemes;
 
-class DirectoryController extends BaseController
+class CommunityController extends BaseController
 {
     /**
      * @inheritdoc

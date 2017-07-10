@@ -302,7 +302,7 @@ else
                                     <h2><?= $item_name; ?></h2>
 
                                     <label>
-                                        <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["directory/profile", 'slug'=>'all','vendor' => $model->vendor->slug]) ?>" class="color-violet">
+                                        <a title="<?= $model->vendor->vendor_name; ?>" href="<?= Url::to(["community/profile", 'slug'=>'all','vendor' => $model->vendor->slug]) ?>" class="color-violet">
                                             <?= $vendor_name; ?>
                                         </a>
                                     </label>
@@ -431,7 +431,7 @@ else
                                             </div>
                                         <?php } ?>
 
-                                        <a class="color-violet lnk-company-policy" href="<?= Url::to(["directory/profile", 'slug'=>'all','vendor' => $model->vendor->slug]) ?>">
+                                        <a class="color-violet lnk-company-policy" href="<?= Url::to(["community/profile", 'slug'=>'all','vendor' => $model->vendor->slug]) ?>">
                                             <?= Yii::t('frontend', 'Company Refund Policy') ?>
                                         </a>
 

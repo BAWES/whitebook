@@ -497,7 +497,7 @@ $customer->scenario = 'signup';
                             <?= Yii::t('frontend', 'Become a Vendor'); ?>
                         </a>
                     </li>
-                    <li><a href="<?= Url::toRoute('/directory/index', true); ?>"> <?= Yii::t("frontend", "Directory") ?></a></li>
+                    <li><a href="<?= Url::toRoute('/community/index', true); ?>"> <?= Yii::t("frontend", "Community") ?></a></li>
                     <li><a href="<?= Url::toRoute('site/experience', true); ?>"> <?= Yii::t("frontend", "Experience") ?></a></li>
                     <li><a href="<?= Url::toRoute('/themes/index', true); ?>"> <?= Yii::t("frontend", "Themes") ?></a></li>
                     <?php if(Yii::$app->params['feature.packages.enabled'] == true){ ?>
@@ -535,7 +535,7 @@ $customer->scenario = 'signup';
                                 <?= Yii::t('frontend', 'Become a Vendor'); ?>
                             </a>
                         </li>
-                        <li><a href="<?= Url::toRoute('/directory/index',true); ?>/"> <?= Yii::t("frontend", "Directory") ?></a></li>
+                        <li><a href="<?= Url::toRoute('/community/index',true); ?>/"> <?= Yii::t("frontend", "Community") ?></a></li>
 
                         <li><a href="<?= Url::toRoute('site/experience', true); ?>"> <?= Yii::t("frontend", "Experience") ?></a></li>
                         <li><a href="<?= Url::toRoute('/themes/index', true); ?>"> <?= Yii::t("frontend", "Themes") ?></a></li>

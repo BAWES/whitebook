@@ -406,7 +406,7 @@ $action = Yii::$app->controller->action->id;
             </li>
             <li class="ma5-li-3"><a href="<?= Url::toRoute('site/experience', true); ?>" title="<?php echo Yii::t('frontend', 'Experience'); ?>"><?php echo Yii::t('frontend', 'Experience'); ?></a></li>
             <li class="ma5-li-3"><a href="<?= Url::toRoute('/themes/index', true); ?>" title="<?php echo Yii::t('frontend', 'Themes'); ?>"><?php echo Yii::t('frontend', 'Themes'); ?></a></li>
-            <li class="ma5-li-3"><a href="<?= Url::toRoute('/directory/index', true); ?>" title="<?php echo Yii::t('frontend', 'Directory'); ?>"><?php echo Yii::t('frontend', 'Directory'); ?></a></li>
+            <li class="ma5-li-3"><a href="<?= Url::toRoute('/community/index', true); ?>" title="<?php echo Yii::t('frontend', 'Community'); ?>"><?php echo Yii::t('frontend', 'Community'); ?></a></li>
 
 
         <div class="logout_part" style="border:none;">
