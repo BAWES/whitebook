@@ -75,6 +75,7 @@ $return_policy = nl2br(LangFormat::format(strip_tags($vendor_detail['vendor_retu
                                 </div><!-- END .panel -->
                                 <?php } ?>
 
+                                <?php if($return_policy) { ?>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                       <h4 class="panel-title">
@@ -89,6 +90,7 @@ $return_policy = nl2br(LangFormat::format(strip_tags($vendor_detail['vendor_retu
                                       </div>
                                     </div>
                                 </div><!-- END .panel -->
+                                <?php } ?>
                                 
                                 <?php 
 
