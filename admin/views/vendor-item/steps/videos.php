@@ -55,12 +55,12 @@ $this->params['breadcrumbs'][] = 'Update';
 	    		Approval 
 	    	</a>
 	    </li>
-	    <li class="active">
+	    <li>
 	    	<a href="<?= Url::to(['vendor-item/item-images', 'id' => $model->item_id]) ?>">
 	    		Images
 	    	</a>
 	    </li>
-	    <li>
+	    <li class="active">
 	    	<a href="<?= Url::to(['vendor-item/item-videos', 'id' => $model->item_id]) ?>">
 	    		Videos
 	    	</a>
@@ -80,76 +80,57 @@ $this->params['breadcrumbs'][] = 'Update';
 	<div class="tab-content">
 		<div class="tab-pane clearfix active">
 
-			<div class="file-block alert alert-danger" style="color:red; display: none;"> Please upload aleast a file</div>
-
 			<div class="alert alert-info">
 				<button class="close" data-dismiss="alert"></button>
-				Steps 
-				<ul>
-					<li>Select image by clicking on "Choose File" from top left side.</li>
-					<li>Move image in image preview area to get required image area, if image bigger than 450x450.</li>
-					<li>
-						Click on Upload button below preview area to upload image, wait for seconds. Image will get listed in right size.
-					</li>
-				</ul>
+				<a href="https://docs.joeworkman.net/rapidweaver/stacks/youtube/video-id" target="_blank">
+					<u>Click here</u>
+				</a> 
+				to learn how to find your YouTube video url.	 
 			</div>
 
-			<div class="row">
-				<div class="col-lg-6">
-					
-					<p>Select, crop and upload image.</p>
-
-					<div class="image-editor">
-				        <input type="file" class="cropit-image-input" />
-				        <p style="color: red;">Minimum image size : 450 x 450</p>
-				        <div class="cropit-preview"></div>
-				        <div class="image-size-label">
-				          Resize image
-				        </div>
-				        <input type="range" class="cropit-image-zoom-input">
-				        <button type="button" class="btn btn-primary btn-crop-upload">Upload</button>
-				    </div>
-				</div>
-				<div class="col-lg-6">
-					<p>Uploaded image list</p>
-					<table class="table table-bordered table-item-image">
+			<div class="row">				
+				<div class="col-lg-12">
+					<table class="table table-bordered table-item-video">
 						<thead>
 							<tr>
-								<th>Image</th>
+								<th>YouTube Video ID</th>
 								<th>Sort order</th>
 								<th></th>
 							</tr>
 						</thead>
 						<tbody>
-						<?php $image_count = 0 ; foreach ($model->images as $key => $value) { ?>
+						<?php $video_count = 0 ; foreach ($model->videos as $key => $value) { ?>
 						<tr>
 							<td>
-								<div class="vendor_image_preview">
-									<img src="<?= Yii::getAlias("@s3/vendor_item_images_210/").$value->image_path ?>" />
-								</div>
-								<input type="hidden" name="images[<?= $image_count ?>][image_path]" value="<?= $value->image_path ?>" />
+								<input type="text" name="videos[<?= $video_count ?>][video]" value="<?= $value->video ?>" />
 							</td>
 							<td>
-								<input type="text" name="images[<?= $image_count ?>][vendorimage_sort_order]" value="<?= $value->vendorimage_sort_order ?>" />
+								<input type="text" name="videos[<?= $video_count ?>][video_sort_order]" value="<?= $value->video_sort_order ?>" />
 							</td>
 							<td>
-								<button class="btn btn-danger btn-delete-image">
+								<button class="btn btn-danger btn-delete-video" type="button">
 									<i class="fa fa-trash"></i>
 								</button>
 							</td>
 						</tr>
-						<?php $image_count++; } ?>
+						<?php $video_count++; } ?>
 						</tbody>
+						<tfoot>
+							<tr>
+								<td colspan="3">
+									<button class="btn btn-primary btn-add-video" type="button">+ Add new video</button>
+								</td>
+							</tr>
+						</tfoot>
 					</table>
 				</div>
 			</div>
 
 			<hr />
-
 			
 			<div class="row">
 				<div class="col-md-4">
-					<a href="<?= Url::to(['vendor-item/item-approval', 'id' => $model->item_id,'_u'=>Yii::$app->request->get('_u')]) ?>" class="btn btn-info pull-left">Prev</a>
+					<a href="<?= Url::to(['vendor-item/item-images', 'id' => $model->item_id,'_u'=>Yii::$app->request->get('_u')]) ?>" class="btn btn-info pull-left">Prev</a>
 				</div>
 				<div class="col-md-4 text-center">
 					<input type="submit" name="complete" class="btn btn-info" value="Complete" />
@@ -167,15 +148,9 @@ $this->params['breadcrumbs'][] = 'Update';
 
 ActiveForm::end(); 
 
-echo Html::hiddenInput('appImageUrl',Yii::getAlias('appImageUrl'),['id'=>'appImageUrl']);
-echo Html::hiddenInput('image_order_url',Url::to(['/image/imageorder']),['id'=>'image_order_url']);
 echo Html::hiddenInput('isNewRecord', 0, ['id'=>'isNewRecord']);
 echo Html::hiddenInput('item_id', $model->item_id, ['id'=>'item_id']);
 
-echo Html::hiddenInput('croped_image_upload_url', Url::to(['/vendor-item/upload-cropped-image']), ['id'=>'croped_image_upload_url']);
+echo Html::hiddenInput('video_count', $video_count, ['id' => 'video_count']);
 
-echo Html::hiddenInput('image_count', $image_count, ['id' => 'image_count']);
-
-$this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
-
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.23", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.24", ['depends' => [\yii\web\JqueryAsset::className()]]);

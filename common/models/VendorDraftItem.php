@@ -2,11 +2,11 @@
 
 namespace common\models;
 
+use Yii;
 use yii\db\Expression;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
-
-use Yii;
+use common\models\VendorDraftItemVideo;
 
 /**
  * This is the model class for table "whitebook_vendor_draft_item".
@@ -210,6 +210,14 @@ class VendorDraftItem extends \yii\db\ActiveRecord
     public function getType()
     {
         return $this->hasOne(ItemType::className(), ['type_id' => 'type_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVideos()
+    {
+        return $this->hasMany(VendorDraftItemVideo::className(), ['item_id' => 'item_id'])->orderBy(['video_sort_order' => SORT_ASC]);
     }
 
     /**

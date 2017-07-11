@@ -12,6 +12,7 @@ use yii\helpers\Url;
 use common\models\Vendor;
 use common\models\VendorDraftItem;
 use common\models\VendorItemToPackage;
+use common\models\VendorItemVideo;
 
 /**
 * This is the model class for table "whitebook_vendor_item".
@@ -242,6 +243,14 @@ class VendorItem extends \yii\db\ActiveRecord
     {
         //return $this->hasMany(Image::className(), ['item_id' => 'item_id'])->orderBy(['vendorimage_sort_order'=>SORT_ASC]);
         return $this->hasMany(Image::className(), ['item_id' => 'item_id'])->orderBy(['vendorimage_sort_order'=>SORT_ASC]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVideos()
+    {
+        return $this->hasMany(VendorItemVideo::className(), ['item_id' => 'item_id'])->orderBy(['video_sort_order' => SORT_ASC]);
     }
 
     /**
