@@ -102,6 +102,9 @@ class VendorDraftItem extends \common\models\VendorDraftItem
         return $scenarios;
     }
 
+    /**
+     *  Create draft from original item 
+     */
     public function create_from_item($id) {
 
         $model = VendorItem::findOne(['item_id' => $id, 'vendor_id'=>Yii::$app->user->getId()]);
@@ -131,6 +134,14 @@ class VendorDraftItem extends \common\models\VendorDraftItem
             $vdi = new VendorDraftImage;
             $vdi->attributes = $value->attributes;
             $vdi->save();
+        }
+
+        $videos = VendorItemVideo::findAll(['item_id' => $model->item_id]);
+
+        foreach ($videos as $key => $value) {
+            $dic = new VendorDraftItemVideo;
+            $dic->attributes = $value->attributes;
+            $dic->save();
         }
 
         $categories = VendorItemToCategory::findAll(['item_id' => $model->item_id]);

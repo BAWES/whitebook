@@ -46,6 +46,7 @@ use common\models\VendorItemMenu;
 use common\models\VendorItemMenuItem;
 use common\models\VendorDraftItemQuestion;
 use common\models\UploadForm;
+use common\models\VendorItemVideo;
 
 /**
 * VendoritemController implements the CRUD actions for VendorItem model.
@@ -118,10 +119,13 @@ class VendorItemController extends Controller
             ->all();
 
         $model_question = VendorItemQuestion::findAll(['item_id' => $id]);
+        
         $imagedata = Image::find()
             ->item($id)
             ->orderby(['vendorimage_sort_order' => SORT_ASC])
             ->all();
+
+        $videos = VendorItemVideo::findAll(['item_id' => $id]);    
 
         $categories = VendorItemToCategory::find()
             ->with('category')
@@ -129,14 +133,15 @@ class VendorItemController extends Controller
             ->all();
 
         $arr_menu = VendorItemMenu::find()->item($id)->menu('options')->all();
+        
         $arr_addon_menu = VendorItemMenu::find()->item($id)->menu('addons')->all();
-
 
         return $this->render('view', [
             'model' => $this->findModel($id), 
             'dataProvider1' => $dataProvider1, 
             'questions' => $model_question,
             'imagedata' => $imagedata,
+            'videos' => $videos,
             'categories' => $categories,
             'arr_menu' => $arr_menu,
             'arr_addon_menu' => $arr_addon_menu
@@ -697,10 +702,60 @@ class VendorItemController extends Controller
                 return $this->redirect(['index']);    
             }            
 
-            return $this->redirect(['vendor-item/item-themes-groups', 'id' => $id,'_u'=>$_u]);
+            return $this->redirect(['vendor-item/item-videos', 'id' => $id,'_u'=>$_u]);
         }
 
         return $this->render('steps/images', [
+            'model' => $model
+        ]);
+    }
+
+    /**
+    * Save item videos from update and create page
+    */
+    public function actionItemVideos($id, $_u = null)
+    {
+        $model = $this->findModel($id);
+
+        if(Yii::$app->request->isPost) 
+        {          
+            //remove old content 
+            VendorItemVideo::deleteAll(['item_id' => $id]);
+
+            //clear draft 
+            VendorDraftItem::clearDraft($model->item_id);
+
+            $videos = Yii::$app->request->post('videos');
+
+            if(!$videos) {
+                $videos = array();
+            }
+
+            //add new content 
+            foreach ($videos as $key => $value) 
+            {
+                $video = new VendorItemVideo();
+                $video->item_id = $id;
+                $video->video = $value['video'];
+                $video->video_sort_order = $value['video_sort_order'];
+                $video->save();
+            }
+
+            $complete = Yii::$app->request->post('complete');
+
+            if($complete) {
+
+                Yii::$app->session->setFlash('success', 'Vendor item With ID ' . $model->item_id . ' updated successfully!');
+
+                Yii::info('[Item Updated] Admin updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
+
+                return $this->redirect(['index']);    
+            }            
+
+            return $this->redirect(['vendor-item/item-questions', 'id' => $id, '_u'=>$_u]);
+        }
+
+        return $this->render('steps/videos', [
             'model' => $model
         ]);
     }

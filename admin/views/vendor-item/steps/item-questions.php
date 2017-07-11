@@ -59,6 +59,11 @@ $question_count = 1;
                 Images
             </a>
         </li>
+        <li>
+            <a href="<?= Url::to(['vendor-item/item-videos', 'id' => $item_id]) ?>">
+                Videos
+            </a>
+        </li>
         <li class="active">
             <a href="<?= Url::to(['vendor-item/item-questions', 'id' => $item_id]) ?>">
                 <?=Yii::t('app','Questions')?>
