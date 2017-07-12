@@ -209,28 +209,7 @@ else
                                     </div><!-- END .price_chart_wrapper -->
 
                                 <?php } //if pricing ?>
-
                             </div>
-                            <!-- Indicators responsive slider -->
-                            <div class="responsive_slider_detials">
-
-                                <!--23-10-2015 slider start-->
-                                <div class="carousel-inner owl-carousel" id="mobile-slider">
-                                    <?php if(!$model->images) { ?>
-                                        <div class="item">
-                                            <?= Html::img(Url::to("@web/images/item-default.png")) ?>
-                                        </div>
-                                    <?php } ?>
-                                    <?php foreach ($model->images as $image) { ?>
-                                        <div class="item">
-                                            <?= Html::img(Yii::getAlias("@s3/vendor_item_images_530/"). $image->image_path) ?>
-                                        </div>
-                                    <?php } ?>
-                                </div>
-                                <!--23-10-2015 slider end-->
-
-                            </div>
-                            <!-- Indicators responsive slider end -->
                         </div>
                         
                         <?php if($model['item_how_long_to_make'] > 0) { ?>
@@ -267,33 +246,40 @@ else
                         </div>
                         <?php } ?>
 
-                        <div class="slider">
-                            <div id="slider" class="flexslider display_none">
-                                <ul class="slides">
-                                    <?php if(!$model->images) { ?>
-                                        <li>
-                                            <?= Html::img(Url::to("@web/images/item-default.png")) ?>
-                                        </li>
-                                    <?php } ?>
+                        <div class="item-images">
+                            <div class="main-image">
+                                <?php  
+                                if($model->images) { 
+                                    echo Html::img(Yii::getAlias("@s3/vendor_item_images_530/"). $model->images[0]->image_path,['alt'=>'item detail image']);
+                                } else if($model->videos) { 
+                                    echo Html::img('https://img.youtube.com/vi/'.$model->videos[0]->video.'/default.jpg', ['alt'=>'item detail image']);
+                                } else {
+                                    echo Html::img(Url::to("@web/images/item-default.png"));
+                                } ?>
+                            </div>                            
+                            <?php if ($model->images || $model->videos) { ?>
+                            <div class="thumb-images">
+                                <ul>
                                     <?php foreach ($model->images as $image) { ?>
-                                        <li>
-                                            <?= Html::img(Yii::getAlias("@s3/vendor_item_images_530/"). $image->image_path,['alt'=>'item detail image']) ?>
-                                        </li>
+                                    <li>
+                                        <a data-type="image" data-src="<?= Yii::getAlias("@s3/vendor_item_images_530/"). $image->image_path ?>">
+                                            <?= Html::img(Yii::getAlias("@s3/vendor_item_images_210/"). $image->image_path, ['alt'=>'item detail image']) ?>
+                                        </a>
+                                    </li>
                                     <?php } ?>
+                                    <?php foreach ($model->videos as $video) { ?>
+                                    <li>
+                                        <a data-type="videos" data-src="<?= $video->video ?>"> 
+                                            <?= Html::img('https://img.youtube.com/vi/'.$video->video.'/default.jpg', ['alt'=>'item detail image']) ?>
+                                        </a>
+                                    </li>
+                                <?php } ?>
                                 </ul>
                             </div>
-                            <?php if (count($model->images) > 1) { ?>
-                                <div id="carousel" class="flexslider display_none_thumb">
-                                    <ul class="slides">
-                                        <?php
-
-                                        foreach ($model->images as $image) {
-                                            echo '<li>'.Html::img(Yii::getAlias("@s3/vendor_item_images_530/"). $image->image_path,['alt'=>'item detail image']).'</li>';
-                                        } ?>
-                                    </ul>
-                                </div>
                             <?php } ?>
-                        </div>
+                            <div class="clearfix"></div>
+                        </div><!-- END .item-images --> 
+
                     </div>
                     <div class="col-md-7 right-sidebar">
                         <div class="right_descr_product">
@@ -1256,4 +1242,4 @@ $this->registerCssFile('@web/css/lightbox.css', ['depends' => [\yii\web\JqueryAs
 
 $this->registerJsFile('@web/js/lightbox.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile('@web/js/product_detail.js?v=1.30', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/js/product_detail.js?v=1.32', ['depends' => [\yii\web\JqueryAsset::className()]]);

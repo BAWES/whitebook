@@ -642,4 +642,16 @@ $(document).delegate('.lnk-price-chart', 'click', function() {
 
 $(function(){
     update_price();
-})
+});
+
+$(document).delegate('.thumb-images a', 'click', function() {
+    if($(this).attr('data-type') == 'image') 
+    {
+        $('.main-image').html('<img src="' + $(this).attr('data-src') + '" />');
+    }
+    else
+    {
+        $html = '<iframe src="https://www.youtube.com/embed/' + $(this).attr('data-src') + '?rel=0&autoplay=1" frameborder="0" allowfullscreen></iframe>';
+        $('.main-image').html($html);
+    }
+});
