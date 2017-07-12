@@ -824,6 +824,8 @@ $(document).delegate('.btn-add-addon-menu-item', 'click', function(){
 	addon_menu_count++;
 });
 
+//--------------------- video ---------------------------------//
+
 $(document).delegate('.btn-delete-video', 'click', function() {
 	$(this).parents('tr').remove();
 });
@@ -847,6 +849,8 @@ $(document).delegate('.btn-add-video', 'click', function() {
 
 	video_count++;
 });
+
+//--------------------- question ---------------------------------//
 
 $('.btn-add-question').click(function(){
 

@@ -61,6 +61,11 @@ $this->params['breadcrumbs'][] = 'Update';
 	    		Images
 	    	</a>
 	    </li>
+	    <li>
+	    	<a href="<?= Url::to(['vendor-item/item-videos', 'id' => $model->item_id]) ?>">
+	    		Videos
+	    	</a>
+	    </li>
 	</ul>
 
 	<div class="tab-content">

@@ -25,6 +25,8 @@ use common\models\VendorDraftItemPricing;
 use common\models\VendorOrderAlertEmails;
 use common\models\VendorDraftItemToCategory;
 use common\models\VendorDraftItemMenuItem;
+use common\models\VendorItemVideo;
+use common\models\VendorDraftItemVideo;
 
 class VendorDraftItemController extends Controller
 {
@@ -204,6 +206,21 @@ class VendorDraftItemController extends Controller
             $vic->save();
         }
 
+        //remove old video 
+        
+        VendorItemVideo::deleteAll(['item_id' => $item->item_id]);
+        
+        //add new videos 
+
+        $videos = VendorDraftItemVideo::findAll(['item_id' => $item->item_id]);
+
+        foreach ($videos as $key => $value) 
+        {
+            $video = new VendorItemVideo;
+            $video->attributes = $value->attributes;
+            $video->save();
+        }
+
         //remove old images
 
         Image::deleteAll(['item_id' => $item->item_id]);
@@ -273,6 +290,7 @@ class VendorDraftItemController extends Controller
 
         VendorDraftItemPricing::deleteAll(['item_id' => $item->item_id]);
         VendorDraftImage::deleteAll(['item_id' => $item->item_id]);
+        VendorDraftItemVideo::deleteAll(['item_id' => $item->item_id]);
         VendorDraftItemMenu::deleteAll(['item_id' => $item->item_id]);
         VendorDraftItemToCategory::deleteAll(['item_id' => $item->item_id]);
 
