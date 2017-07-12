@@ -1,7 +1,7 @@
 var addon_menu_count = $('#addon_menu_count').val();
 var menu_count = $('#menu_count').val();
 var question_count = $('#question_count').val();
-
+var video_count = $('#video_count').val();
 var imagedata = $('#imagedata').val();
 var img  = $('#img').val();
 var action  = $('#action').val();
@@ -755,4 +755,30 @@ $(document).delegate('a[id^=\'thumb-image\']', 'click', function() {
 				}
 			});
 		});		
+});
+
+//--------------------- video ---------------------------------//
+
+$(document).delegate('.btn-delete-video', 'click', function() {
+	$(this).parents('tr').remove();
+});
+
+$(document).delegate('.btn-add-video', 'click', function() {
+	var html = '<tr>';
+	html += '<td>';
+	html += '	<input type="text" name="videos[' + video_count + '][video]" value="" />';
+	html += '</td>';
+	html += '<td>';
+	html += '	<input type="text" name="videos[' + video_count + '][video_sort_order]" value="" />';
+	html += '</td>';
+	html += '<td>';
+	html += '	<button type="button" class="btn btn-danger btn-delete-video">';
+	html += '		<i class="fa fa-trash"></i>';
+	html += '	</button>';
+	html += '</td>';
+	html += '</tr>';
+
+	$('.table-item-video tbody').append(html);
+
+	video_count++;
 });

@@ -60,6 +60,11 @@ $this->params['breadcrumbs'][] = 'Update';
 	    		Images
 	    	</a>
 	    </li>
+	    <li>
+	    	<a href="<?= Url::to(['vendor-item/item-videos', 'id' => $model->item_id]) ?>">
+	    		Videos
+	    	</a>
+	    </li>
 	</ul>
 
 	<div class="tab-content">
@@ -133,11 +138,14 @@ $this->params['breadcrumbs'][] = 'Update';
 
 			
 			<div class="row">
-				<div class="col-md-6">
-					<a href="<?= Url::to(['vendor-item/addon-menu-items', 'id' => $model->item_id]) ?>" class="btn btn-info pull-left">Prev</a>
+				<div class="col-md-4">
+					<a href="<?= Url::to(['vendor-item/item-images', 'id' => $model->item_id]) ?>" class="btn btn-info pull-left">Prev</a>
 				</div>
-				<div class="col-md-6">
-					<input type="submit" name="complete" class="btn btn-info pull-right" value="Complete" />
+				<div class="col-md-4 text-center">
+					<input type="submit" name="complete" class="btn btn-info" value="Complete" />
+				</div>
+				<div class="col-md-4">
+					<input type="submit" name="btnNext" class="btn btn-info pull-right" value="Next" />
 				</div>
 			</div>
 			

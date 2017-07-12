@@ -42,6 +42,7 @@ use common\models\VendorDraftImage;
 use common\models\VendorDraftItemMenu;
 use common\models\VendorDraftItemMenuItem;
 use common\models\UploadForm;
+use common\models\VendorDraftItemVideo;
 use backend\models\VendorItem;
 use backend\models\VendorDraftItem;
 use backend\models\VendorItemSearch;
@@ -760,6 +761,60 @@ class VendorItemController extends Controller
 
             VendorItem::notifyAdmin($id);
             
+            $complete = Yii::$app->request->post('complete');
+
+            if($complete) {
+
+                Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
+
+                Yii::info('[Item Updated] Vendor updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
+
+                return $this->redirect(['index']);    
+            }            
+
+            return $this->redirect(['vendor-item/item-videos', 'id' => $id]);
+        }
+
+        return $this->render('steps/images', [
+            'model' => $model,
+            'images' => VendorDraftImage::findAll(['item_id' => $model->item_id])
+        ]);
+    }
+
+
+    /**
+    * Save item videos from update and create page
+    */
+    public function actionItemVideos($id)
+    {
+        $model = $this->findDraftModel($id);
+
+        if(!$model) 
+        {
+            $model = VendorDraftItem::create_from_item($id);
+        }
+
+        if(Yii::$app->request->isPost) 
+        {          
+            //remove old content 
+            VendorDraftItemVideo::deleteAll(['item_id' => $id]);
+
+            $videos = Yii::$app->request->post('videos');
+
+            if(!$videos) {
+                $videos = array();
+            }
+
+            //add new content 
+            foreach ($videos as $key => $value) 
+            {
+                $video = new VendorDraftItemVideo();
+                $video->item_id = $id;
+                $video->video = $value['video'];
+                $video->video_sort_order = $value['video_sort_order'];
+                $video->save();
+            }
+
             Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
 
             Yii::info('[Item Updated] Vendor updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
@@ -773,9 +828,8 @@ class VendorItemController extends Controller
             return $this->redirect(['index']);    
         }
 
-        return $this->render('steps/images', [
-            'model' => $model,
-            'images' => VendorDraftImage::findAll(['item_id' => $model->item_id])
+        return $this->render('steps/videos', [
+            'model' => $model
         ]);
     }
 
