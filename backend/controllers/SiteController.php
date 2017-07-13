@@ -1,7 +1,7 @@
 <?php
 namespace backend\controllers;
 
-use common\models\Booking;
+use backend\models\Booking;
 use common\models\VendorLocation;
 use common\models\VendorWorkingTiming;
 use Yii;
@@ -387,5 +387,29 @@ class SiteController extends Controller
         } else {
             die('invalid Access');
         }
+    }
+
+    public function actionGraph() 
+    {        
+        $type = Yii::$app->request->get('type');
+      
+        switch ($type) {
+            case 'month':
+              $result = Booking::getMonthGrpah();
+              break;              
+            case 'year':
+              $result = Booking::getYearGrpah();
+              break;                  
+            case 'day':
+              $result = Booking::getDayGrpah();
+              break;                  
+            default:
+              $result = Booking::getDayGrpah();
+              break;
+        }  
+
+        \Yii::$app->response->format = 'json';
+        
+        return $result;
     }
 }
