@@ -1,5 +1,5 @@
 $(document).ready(function(){        
-	$('li img').on('click',function(){
+	$('.gallery-img').on('click',function(){
 		var src = $(this).attr('src');
 		var img = '<img src="' + src + '" class="img-responsive"/>';
 		
@@ -22,10 +22,6 @@ $(document).ready(function(){
 		$('#myModal').on('hidden.bs.modal', function(){
 			$('#myModal .modal-body').html('');
 		});
-		
-		
-		
-		
    });	
 })
         

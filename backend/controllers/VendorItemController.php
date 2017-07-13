@@ -42,6 +42,7 @@ use common\models\VendorDraftImage;
 use common\models\VendorDraftItemMenu;
 use common\models\VendorDraftItemMenuItem;
 use common\models\UploadForm;
+use common\models\VendorItemVideo;
 use common\models\VendorDraftItemVideo;
 use backend\models\VendorItem;
 use backend\models\VendorDraftItem;
@@ -115,6 +116,11 @@ class VendorItemController extends Controller
                 ->orderby(['vendorimage_sort_order' => SORT_ASC])
                 ->all();
 
+            $videos = VendorDraftItemVideo::find()
+                ->where(['item_id' => $model->item_id])
+                ->orderby(['video_sort_order' => SORT_ASC])
+                ->all();
+
             $price_values= VendorDraftItemPricing::loadpricevalues($model->item_id);
 
             $categories = VendorDraftItemToCategory::find()
@@ -131,6 +137,11 @@ class VendorItemController extends Controller
 
             $imagedata = Image::find()->item($model->item_id)->orderby(['vendorimage_sort_order' => SORT_ASC])->all();
 
+            $videos = VendorItemVideo::find()
+                ->where(['item_id' => $model->item_id])
+                ->orderby(['video_sort_order' => SORT_ASC])
+                ->all();
+
             $price_values= VendorItemPricing::loadpricevalues($model->item_id);
 
             $categories = VendorItemToCategory::find()
@@ -139,11 +150,14 @@ class VendorItemController extends Controller
                 ->all();
 
             $arr_menu = VendorItemMenu::find()->item($id)->menu('options')->all();
+
             $arr_addon_menu = VendorItemMenu::find()->item($id)->menu('addons')->all();
         }
         
         $item_type = ItemType::itemtypename($model->type_id);
+        
         $questions = VendorItemQuestion::findAll(['item_id' => $model->item_id]);
+
         return $this->render('view', [
             'model' => $model,
             'arr_menu' => $arr_menu,
@@ -153,6 +167,7 @@ class VendorItemController extends Controller
             'price_values' => $price_values,
             'dataProvider1' => $dataProvider1,
             'imagedata' => $imagedata,
+            'videos' => $videos,
             'questions' => $questions,
         ]);
     }
