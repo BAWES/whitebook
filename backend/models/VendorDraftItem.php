@@ -17,6 +17,7 @@ use common\models\VendorItemMenuItem;
 use common\models\VendorDraftItemMenu;
 use common\models\VendorDraftItemMenuItem;
 use common\models\VendorItemVideo;
+use common\models\VendorDraftItemVideo;
 
 use Yii;
 
