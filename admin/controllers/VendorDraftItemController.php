@@ -108,6 +108,11 @@ class VendorDraftItemController extends Controller
             ->orderby(['vendorimage_sort_order' => SORT_ASC])
             ->all();
 
+        $videos = VendorDraftItemVideo::find()
+                ->where(['item_id' => $model->item_id])
+                ->orderby(['video_sort_order' => SORT_ASC])
+                ->all();
+            
         $categories = VendorDraftItemToCategory::find()
             ->with('category')
             ->item($model->item_id)
@@ -129,6 +134,7 @@ class VendorDraftItemController extends Controller
             'vendor_item' => $vendor_item,
             'dataProvider1' => $dataProvider1,
             'imagedata' => $imagedata,
+            'videos' => $videos,
             'categories' => $categories,
             'price_table' => $price_table,
             'is_price_table_changed' => $is_price_table_changed,

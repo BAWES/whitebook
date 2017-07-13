@@ -125,7 +125,10 @@ class VendorItemController extends Controller
             ->orderby(['vendorimage_sort_order' => SORT_ASC])
             ->all();
 
-        $videos = VendorItemVideo::findAll(['item_id' => $id]);    
+        $videos = VendorItemVideo::find()
+                ->where(['item_id' => $id])
+                ->orderby(['video_sort_order' => SORT_ASC])
+                ->all();
 
         $categories = VendorItemToCategory::find()
             ->with('category')

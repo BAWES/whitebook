@@ -41,6 +41,7 @@ $this->params['breadcrumbs'][] = $model->item_name;
         <li><a href="#4" data-toggle="tab">Addons</a></li>
         <li><a href="#5" data-toggle="tab">Question</a></li>
         <li><a href="#6" data-toggle="tab">Gallery</a></li>
+        <li><a href="#7" data-toggle="tab">Videos</a></li>
     </ul>
     <div class="tab-content">
 
@@ -342,9 +343,21 @@ $this->params['breadcrumbs'][] = $model->item_name;
                     $alias = ($image->module_type == 'vendor_item') ? Yii::getAlias('@vendor_item_images_210/') : Yii::getAlias('@sales_guide_images/')
                     ?>
                     <li class="col-lg-2 col-md-2 col-sm-3 col-xs-4">
-                        <?= Html::img($alias.$image->image_path, ['style'=>'width:140px;height:140px;', 'class'=>'img-responsive','id'=>$image->image_id,'alt'=>'Gallery','data-img'=>Yii::getAlias('@web/uploads/vendor_images/').$image->image_path]);?>
+                        <?= Html::img($alias.$image->image_path, ['style'=>'width:140px;height:140px;', 'class'=>'img-gallery img-responsive','id'=>$image->image_id,'alt'=>'Gallery','data-img'=>Yii::getAlias('@web/uploads/vendor_images/').$image->image_path]);?>
                     </li>
                 <?php } ?>
+            </ul>
+        </div>
+
+        <div class="tab-pane" id="7">
+            <ul class="row">
+                <?php foreach ($videos as $video) { ?>
+                    <li class="col-lg-4 col-md-4">
+                        <a href="https://www.youtube.com/watch?v=<?= $video->video ?>" target="_blank"> 
+                            <?= Html::img('https://img.youtube.com/vi/'.$video->video.'/hqdefault.jpg', ['style' => 'width:100%;', 'alt'=>'item detail video']) ?>
+                        </a>
+                    </li>
+                <?php } ?>    
             </ul>
         </div>
 
@@ -451,4 +464,4 @@ $this->registerCss("
      
 $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile('@web/themes/default/plugins/bootstrap-modal-box/photo-gallery.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/themes/default/plugins/bootstrap-modal-box/photo-gallery.js?v=1.0', ['depends' => [\yii\web\JqueryAsset::className()]]);
