@@ -8575,3 +8575,54 @@ a.delivery_href:hover{
   float: left;
   overflow: hidden;
 }
+
+.stats {
+    list-style-type: none;
+}
+.stats .stat_box {
+    float: left;
+    margin-bottom: 15px;
+}
+.stats .stat_data {
+  padding: 20px;    
+}
+.stats .blue {
+    background: #368ee0;
+}
+.stats .details {
+    margin-left: 50px;
+}
+.stats i {
+    font-size: 30px;
+    color: #fff;
+    float: left;
+    margin: 5px 0;
+}
+.stats .details span.big {
+
+    font-size: 18px;
+}
+.stats .details span {
+    color: #fff;
+    display: block;
+    font-size: 13px;
+}
+.stats .color_1{background:#646A6E}
+.stats .color_2{background:#FF3478}
+.stats .color_3{background:#FF6B52}
+.stats .color_4{background:#09C281}
+.stats .orange{background:#f8a31f}
+.stats .red{background:#e51400}
+.stats .green{background:#393}
+.stats .lime{background:#8cbf26}
+.stats .teal{background:#00aba9}
+.stats .purple{background:#ff0097}
+.stats .brown{background:#a05000}
+.stats .pink{background:#e671b8}
+.stats .magenta{background:#a200ff}
+.stats .grey{background:#333}
+.stats .darkblue{background:#204e81}
+.stats .lightred{background:#e63a3a}
+.stats .lightgrey{background:#666}
+.stats .satblue{background:#2c5e7b}
+.stats .satgreen{background:#56af45}
