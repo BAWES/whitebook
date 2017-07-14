@@ -76,6 +76,34 @@ class SiteController extends Controller
             ->activeBooking()
             ->sum('total_vendor');
 
+        $bookingExpired = Booking::find()
+            ->where([
+                'booking_status' => Booking::STATUS_EXPIRED
+            ])
+            ->vendor($vendor_id)
+            ->count('booking_id');    
+            
+        $bookingRejected = Booking::find()
+            ->where([
+                'booking_status' => Booking::STATUS_REJECTED
+            ])
+            ->vendor($vendor_id)
+            ->count('booking_id');    
+
+        $bookingAccepted = Booking::find()
+            ->where([
+                'booking_status' => Booking::STATUS_ACCEPTED
+            ])
+            ->vendor($vendor_id)
+            ->count('booking_id');    
+
+        $bookingPending = Booking::find()
+            ->where([
+                'booking_status' => Booking::STATUS_PENDING
+            ])
+            ->vendor($vendor_id)
+            ->count('booking_id');    
+
         $vendor = Vendor::findOne($vendor_id);
 
         return $this->render('index', [
@@ -83,7 +111,11 @@ class SiteController extends Controller
             'monthitemcnt' => $monthitemcnt,
             'dateitemcnt' => $dateitemcnt,
             'earning_total' => number_format($earning_total, 3).' KD',
-            'vendor_payable' => number_format($vendor->vendor_payable, 3).' KD'
+            'vendor_payable' => number_format($vendor->vendor_payable, 3).' KD',
+            'bookingExpired' => $bookingExpired,
+            'bookingRejected' => $bookingRejected,
+            'bookingAccepted'=> $bookingAccepted,
+            'bookingPending' => $bookingPending
         ]);
     }
 

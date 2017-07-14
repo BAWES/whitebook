@@ -10,6 +10,34 @@ $this->title = 'Whitebook Application';
 <div class="row">	 
 	<div class="col-md-12">
 		<ul class="stats">
+			<li class="color_1">
+				<i class="fa fa-info"></i>
+				<div class="details">
+					<span class="big"><?php echo $bookingPending; ?></span>
+					<span>Pending Booking</span>
+				</div>
+			</li>
+			<li class="color_2">
+				<i class="fa fa-check"></i>
+				<div class="details">
+					<span class="big"><?php echo $bookingAccepted; ?></span>
+					<span>Accepted Booking</span>
+				</div>
+			</li>
+			<li class="color_3">
+				<i class="fa fa-times-circle"></i>
+				<div class="details">
+					<span class="big"><?php echo $bookingRejected; ?></span>
+					<span>Rejected Booking</span>
+				</div>
+			</li>
+			<li class="color_4">
+				<i class="fa fa-hourglass-o"></i>
+				<div class="details">
+					<span class="big"><?php echo $bookingExpired; ?></span>
+					<span>Expired Booking</span>
+				</div>
+			</li>
 			<li class="lime">
 				<i class="fa fa-archive"></i>
 				<div class="details">

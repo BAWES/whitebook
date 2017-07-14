@@ -8413,6 +8413,8 @@ label.control-label > span.required { color:red;}
     float: left;
     padding: 20px;
     margin-right: 15px;
+    margin-bottom: 15px;
+    width: 225px;
 }
 ul>li.blue {
     background: #368ee0;
@@ -8434,8 +8436,11 @@ ul>li.blue {
     display: block;
     font-size: 13px;
 }
+ul>li.color_1{background:#646A6E}
+ul>li.color_2{background:#FF3478}
+ul>li.color_3{background:#FF6B52}
+ul>li.color_4{background:#09C281}
 ul>li.orange{background:#f8a31f}ul>li.red{background:#e51400}ul>li.green{background:#393}ul>li.lime{background:#8cbf26}ul>li.teal{background:#00aba9}ul>li.purple{background:#ff0097}ul>li.brown{background:#a05000}ul>li.pink{background:#e671b8}ul>li.magenta{background:#a200ff}ul>li.grey{background:#333}ul>li.darkblue{background:#204e81}ul>li.lightred{background:#e63a3a}ul>li.lightgrey{background:#666}ul>li.satblue{background:#2c5e7b}ul>li.satgreen{background:#56af45}
-
 
 .cropit-preview {
   background-color: #f8f8f8;
@@ -8550,3 +8555,4 @@ ul>li.orange{background:#f8a31f}ul>li.red{background:#e51400}ul>li.green{backgro
   height: 48px;
   margin-bottom: 0;
 }
+

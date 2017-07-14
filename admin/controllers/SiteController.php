@@ -14,6 +14,7 @@ use yii\web\UploadedFile;
 use common\models\PasswordForm;
 use admin\models\LoginForm;
 use common\models\UploadForm;
+use common\models\Booking;
 
 /**
  * Site controller.
@@ -89,6 +90,30 @@ class SiteController extends Controller
         $customermonth = Customer::customermonthcount();
         $customerday = Customer::customerdatecount();
 
+        $bookingExpired = Booking::find()
+            ->where([
+                'booking_status' => Booking::STATUS_EXPIRED
+            ])
+            ->count('booking_id');    
+            
+        $bookingRejected = Booking::find()
+            ->where([
+                'booking_status' => Booking::STATUS_REJECTED
+            ])
+            ->count('booking_id');    
+
+        $bookingAccepted = Booking::find()
+            ->where([
+                'booking_status' => Booking::STATUS_ACCEPTED
+            ])
+            ->count('booking_id');    
+
+        $bookingPending = Booking::find()
+            ->where([
+                'booking_status' => Booking::STATUS_PENDING
+            ])
+            ->count('booking_id');    
+
         return $this->render('index', [
             'vendoritemcnt' => $vendoritemcnt, 
             'monthitemcnt' => $monthitemcnt, 
@@ -98,7 +123,11 @@ class SiteController extends Controller
             'vendorday' => $vendorday,
             'customercnt' => $customercnt, 
             'customermonth' => $customermonth, 
-            'customerday' => $customerday
+            'customerday' => $customerday,
+            'bookingExpired' => $bookingExpired,
+            'bookingRejected' => $bookingRejected,
+            'bookingAccepted'=> $bookingAccepted,
+            'bookingPending' => $bookingPending
         ]);
     }
 
