@@ -50,7 +50,7 @@ class SearchController extends BaseController
 
         $data = Yii::$app->request->get();
 
-        $items_query = CategoryPath::find()
+        $item_query = CategoryPath::find()
             ->selectedFields()
             ->categoryJoin()
             ->itemJoin()
@@ -62,7 +62,7 @@ class SearchController extends BaseController
 
         //vendor filter
         if (isset($data['vendor'])  && $data['vendor']) {
-            $items_query->vendorSlug($data['vendor']);
+            $item_query->vendorSlug($data['vendor']);
         }
 
         //price filter
@@ -75,24 +75,34 @@ class SearchController extends BaseController
                 $price_condition[] = '{{%vendor_item}}.item_price_per_unit between '.$arr_min_max[0].' and '.$arr_min_max[1];
             }
 
-            $items_query->andWhere(implode(' OR ', $price_condition));
+            $item_query->andWhere(implode(' OR ', $price_condition));
         }
 
         //theme filter
         if (isset($data['themes']) && $data['themes'] != '') {
 
 
-            $items_query->itemThemeJoin();
-            $items_query->themeJoin();
-            $items_query->themeSlug($data['themes']);
+            $item_query->itemThemeJoin();
+            $item_query->themeJoin();
+            $item_query->themeSlug($data['themes']);
         }
 
+        //notice_period 
+        if (isset($data['notice_period_from']) && ($data['notice_period_from'] >= 0 || $data['notice_period_to'] >= 0)) 
+        {
+            $item_query->filterByNoticePeriod(
+                    $data['notice_period_from'],
+                    $data['notice_period_to'],
+                    $data['notice_period_type']
+                );
+        }
+        
         //if search query given
         if ($search != 'All') {
-            $items_query->likeItemName($search);
+            $item_query->likeItemName($search);
         }
 
-        $item_query_result = $items_query
+        $item_query_result = $item_query
             ->groupBy('{{%vendor_item}}.item_id')
             ->orderByExpression()
             ->asArray()

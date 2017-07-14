@@ -49,6 +49,7 @@ $search = ($search != '') ? $search : 'All';
 								<div id="accordion" class="panel-group">
 									<?= $this->render('@frontend/views/common/filter/theme',['themes' => $themes]); ?>
 									<?= $this->render('@frontend/views/common/filter/vendor',['vendor' => $vendor]); ?>
+									<?= $this->render('@frontend/views/common/filter/notice_period'); ?>
 									<?= $this->render('@frontend/views/common/filter/price',['items' => $items]); ?>
 								</div>
 							</div>

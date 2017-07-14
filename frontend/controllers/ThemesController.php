@@ -99,7 +99,7 @@ class ThemesController extends BaseController
             $active_vendors = Vendor::loadvalidvendorids();
         }
 
-        $items_query = CategoryPath::find()
+        $item_query = CategoryPath::find()
             ->selectedFields()
             ->categoryJoin()
             ->itemJoin()
@@ -132,12 +132,12 @@ class ThemesController extends BaseController
 
         if ($cats) 
         {
-            $items_query->categoryIDs($cats);
+            $item_query->categoryIDs($cats);
         }
 
         if (isset($data['vendor']) && $data['vendor'] != '') 
         {
-            $items_query->vendorSlug($data['vendor']);
+            $item_query->vendorSlug($data['vendor']);
         }
 
         //price filter
@@ -147,10 +147,20 @@ class ThemesController extends BaseController
 
             $arr_min_max = explode('-', $data['price']);
 
-            $items_query->price($arr_min_max[0],$arr_min_max[1]);
+            $item_query->price($arr_min_max[0],$arr_min_max[1]);
+        }
+        
+        //notice_period 
+        if (isset($data['notice_period_from']) && ($data['notice_period_from'] >= 0 || $data['notice_period_to'] >= 0)) 
+        {
+            $item_query->filterByNoticePeriod(
+                    $data['notice_period_from'],
+                    $data['notice_period_to'],
+                    $data['notice_period_type']
+                );
         }
 
-        $item_query_result = $items_query
+        $item_query_result = $item_query
             ->groupBy('{{%vendor_item}}.item_id')
             ->orderByExpression()
             ->asArray()
