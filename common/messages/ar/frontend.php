@@ -412,5 +412,9 @@ return [
     'Pending' => 'قيد الانتظار',    
     'Accepted' => 'قبلت',
     'Rejected' => 'مرفوض',
-    'Expired' => 'منتهية الصلاحية'
+    'Expired' => 'منتهية الصلاحية',
+    'Notice Period' => 'فترة إشعار',
+    'Enter Value' => 'أدخل القيمة',
+    'Day' => 'يوم',
+    'Hour' => 'ساعة'
 ];

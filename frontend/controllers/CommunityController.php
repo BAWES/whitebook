@@ -132,6 +132,16 @@ class CommunityController extends BaseController
             $arr_min_max = explode('-', $data['price']);
             $item_query->price($arr_min_max[0], $arr_min_max[1]);
         }
+        
+        //notice_period 
+        if (isset($data['notice_period_from']) && ($data['notice_period_from'] >= 0 || $data['notice_period_to'] >= 0)) 
+        {
+            $item_query->filterByNoticePeriod(
+                    $data['notice_period_from'],
+                    $data['notice_period_to'],
+                    $data['notice_period_type']
+                );
+        }
 
         //theme filter
         if (isset($data['themes']) && count($data['themes'])>0) {

@@ -55,6 +55,7 @@ $get = Yii::$app->request->get();
 								<div class="listing_content_cat sidebar-offcanvas" id="sidebar" role="navigation" >
 									<div id="accordion" class="panel-group">
 										<?=$this->render('@frontend/views/common/filter/vendor.php',['vendor'=>$vendor]); ?>
+										<?=$this->render('@frontend/views/common/filter/notice_period.php');  ?>
 										<?=$this->render('@frontend/views/common/filter/price.php');  ?>
 										<!-- END FILTER  -->
 									</div><!-- END -->

@@ -151,6 +151,16 @@ class BrowseController extends BaseController
 
         }//if themes
 
+        //notice_period 
+        if (isset($data['notice_period_from']) && ($data['notice_period_from'] >= 0 || $data['notice_period_to'] >= 0)) 
+        {
+            $item_query->filterByNoticePeriod(
+                    $data['notice_period_from'],
+                    $data['notice_period_to'],
+                    $data['notice_period_type']
+                );
+        }
+
         //event time 
         if($session->has('event_time')) {
             $item_query->workingTimeJoin();

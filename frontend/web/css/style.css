@@ -3011,3 +3011,10 @@ span.small {
     height: 100%;
 }
     
+#notice_period_filter input,
+#notice_period_filter select{
+    border-radius: 0;
+} 
+#notice_period_filter select{
+    border-width: 1px 1px 1px 0;
+}
