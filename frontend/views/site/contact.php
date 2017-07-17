@@ -34,8 +34,13 @@ $this->title = 'Contact us | Whitebook';
                                 <div id="chkmessage" class="error"></div>
                             </div>
 
+                            <div class="g-recaptcha" data-sitekey="6Ld8VCkUAAAAAPh8ux86GuCymGkrv4VdFZOSorgA"></div>
+
                             <div class="form-group">
                                 <button class="btn btn-default" type="button" id="send" name="send" title="Send Email"><?= Yii::t('frontend', 'Send Email') ?></button>
+                            </div>
+
+                            <div class="contact-err-wrapper"></div>
                         </form>
                     </div>
                 </div>
@@ -79,6 +84,8 @@ $this->title = 'Contact us | Whitebook';
 
 <?php
 
+$this->registerJsFile('https://www.google.com/recaptcha/api.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
 $this->registerJs("
 
     jQuery('.show_content').click(function () {
@@ -86,6 +93,9 @@ $this->registerJs("
     });
 
     jQuery('#send').on('click', function () {
+        
+        jQuery('.contact-err-wrapper').html('');
+
         var thanks = '<span class=\'sucess_close\'>&nbsp;</span>'+'<span class=\'success-msg\'>".Yii::t('frontend', 'Thanks, we willll be in touch soon')."</span>';
         jQuery('#chkname,#chkemail,#chkmessage').html('');
 
@@ -147,10 +157,14 @@ $this->registerJs("
                     username: jQuery('#username').val(),
                     useremail: jQuery('#useremail').val(),
                     msg: jQuery('#usermessgae').val(),
+                    'g-recaptcha-response': jQuery('#g-recaptcha-response').val(),
                     csrf: csrfToken
                 },
                 success: function (data) {
-                    if (data == 1)
+
+                    console.log(data);
+
+                    if (data.operation == 'success')
                     {
                         jQuery('#login_success').modal('show');
                         jQuery('#success').html(thanks);
@@ -158,6 +172,23 @@ $this->registerJs("
                             location.reload()
                         }, 2000)
                     }
+
+                    if(data.operation == 'error') 
+                    {
+                        /*var msg = '';
+                        jQuery.each(data.message, function(i, value) {
+                            if(i instanceof Array) {
+                                jQuery.each(value, function(j, err) {
+                                    msg += err + ' ';
+                                });
+                            }else{                                
+                                msg += value + ' ';
+                            }
+                        });*/
+
+                        jQuery('.contact-err-wrapper').html('<div class=\"alert alert-warning\">'+data.message+'</div>');
+                    }
+
                     $('#send').html('".Yii::t('frontend', 'Send Email')."').removeAttr('disabled');
                 }
             });

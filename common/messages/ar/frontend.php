@@ -416,5 +416,7 @@ return [
     'Notice Period' => 'فترة إشعار',
     'Enter Value' => 'أدخل القيمة',
     'Day' => 'يوم',
-    'Hour' => 'ساعة'
+    'Hour' => 'ساعة',
+    'Please verify you are human' => 'يرجى التحقق من أنك الإنسان',
+    'Plese, check form carefully' => 'بليز، التحقق من النموذج بعناية'
 ];
