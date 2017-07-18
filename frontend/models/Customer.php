@@ -38,6 +38,8 @@ class Customer extends \common\models\Customer {
             [['customer_name', 'customer_last_name', 'customer_email', 'customer_password', 'customer_mobile'], 'required'],
             ['customer_mobile', 'string', 'length' => [8]],
 
+            [['customer_dateofbirth', 'customer_gender'], 'string'],
+
             //[[''], 'integer', 'length' => 8],
 
             [['customer_name', 'customer_last_name', 'customer_email', 'customer_mobile'], 'required', 'on'=>'guest'],
