@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
@@ -24,33 +25,34 @@ $customer->scenario = 'signup';
                 </h4>
             </div>
             <div class="modal-body">
-                <form class="form col-md-12 center-block" id="loginForm" name="loginForm" method="POST">
-                    <input type="hidden" id="_csrf" name="_csrf" value="<?= Yii::$app->request->csrfToken; ?>" />
+                <div class="col-md-12">
+                    <form class="form center-block" id="loginForm" name="loginForm" method="POST">
+                        <input type="hidden" id="_csrf" name="_csrf" value="<?= Yii::$app->request->csrfToken; ?>" />
 
-                    <div class="login-padding">
-                        <div class="form-group">
-                            <label><?= Yii::t('frontend', 'Email') ?></label>
-                            <input type="text" placeholder="" name="email" id="email" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.'); ?>">
-                            <input type="hidden" placeholder="" name="event_status" id="event_status" value="0" class="form-control input-lg">
-                            <input type="hidden" placeholder="" name="favourite_status" id="favourite_status" value="0" class="form-control input-lg">
-                            <span class="help-block"></span>
-                            <span class="customer_email errors"></span>
-                        </div>
-                        <div class="form-group">
-                            <label><?= Yii::t('frontend', 'Password') ?></label>
-                            <input type="password" placeholder="" name="password" id="password" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
-                            <span class="help-block"></span>
-                            <span class="customer_password password errors"></span>
-                        </div>
-                        <div id="login_msg"></div>
-                        <div id="result color-red"></div>
-                        <div id="loginErrorMsg color-red" ></div>
-                        <span class="customer_status errors"></span>
-                        <div class="form-group">
-                            <div class="button-signin">
-                                <button type="button" class="btn btn-primary btn-lg btn-block new_btn" id="signup_button" data-toggle="modal" data-target="#myModal1" onclick="show_register_modal();"><?= Yii::t('frontend','New User');?></button>
-                                <button type="button" class="btn btn-primary btn-lg btn-block login_btn" id="login_button">
-                                    <?= Yii::t('frontend','Login');?></button>
+                        <div class="login-padding">
+                            <div class="form-group">
+                                <label><?= Yii::t('frontend', 'Email') ?></label>
+                                <input type="text" placeholder="" name="email" id="email" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.'); ?>">
+                                <input type="hidden" placeholder="" name="event_status" id="event_status" value="0" class="form-control input-lg">
+                                <input type="hidden" placeholder="" name="favourite_status" id="favourite_status" value="0" class="form-control input-lg">
+                                <span class="help-block"></span>
+                                <span class="customer_email errors"></span>
+                            </div>
+                            <div class="form-group">
+                                <label><?= Yii::t('frontend', 'Password') ?></label>
+                                <input type="password" placeholder="" name="password" id="password" class="form-control input-lg validation required" data-msg-required="<?= Yii::t('frontend', 'This field is required.') ?>">
+                                <span class="help-block"></span>
+                                <span class="customer_password password errors"></span>
+                            </div>
+                            <div id="login_msg"></div>
+                            <div id="result color-red"></div>
+                            <div id="loginErrorMsg color-red" ></div>
+                            <span class="customer_status errors"></span>
+                            <div class="form-group">
+                                <div class="button-signin">
+                                    <button type="button" class="btn btn-primary btn-lg btn-block new_btn" id="signup_button" data-toggle="modal" data-target="#myModal1" onclick="show_register_modal();"><?= Yii::t('frontend','New User');?></button>
+                                    <button type="button" class="btn btn-primary btn-lg btn-block login_btn" id="login_button">
+                                        <?= Yii::t('frontend','Login');?></button>
                                 </div>
                                 <div id="login_loader"><img src="<?=  Url::to('@web/images/ajax-loader.gif',true);?>"  title="Loader"></div>
                                 <span class="text-center forgotpwd"><a data-target="#forgotPwdModal" onclick="forgot_modal();"  data-dismiss="modal" data-toggle="modal" title="Signup" class="actionButtons" href="#forgotPwdModal"> <?= Yii::t('frontend', 'Forgot your password') ?></a></span>
@@ -58,9 +60,16 @@ $customer->scenario = 'signup';
                         </div>
                     </form>
                 </div>
+                <div class="col-md-12 login-authclients">
+                    <div class="or"><span><?= Yii::t('frontend', 'OR') ?></span><hr /></div>
+                    <a href="<?= Url::to(['authenticate/index', 'authclient' => 'google']) ?>">
+                        <img src="<?= Url::to('@web/images/btn_google_signin_light_normal_web.png'); ?>" />
+                    </a>
+                </div>
             </div>
         </div>
     </div>
+</div>
 
     <!-- end -->
     <div class="modal fade" id="login_success" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
