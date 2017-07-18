@@ -54,14 +54,16 @@ class AuthHandler
             $customer->customer_gender = $gender;
             //$model->customer_mobile = 
             //$model->customer_dateofbirth 
-            $customer->customer_activation_key = Users::generateRandomString();
-            $customer->customer_password = Yii::$app->getSecurity()->generatePasswordHash($customer->customer_password);            
+            $customer->customer_password = Yii::$app->getSecurity()->generatePasswordHash($customer->customer_password);      
+            $customer->customer_activation_status = 1;      
             $customer->save(false);
 
             //Yii::$app->session->set('register', '1');
             
-            //Send Email to user
-            Customer::welcomeMail($customer);
+            Yii::$app->user->login($customer);
+
+            //Send Email to admin 
+            Customer::notifyAdmin($customer);
         }
     }
 }
