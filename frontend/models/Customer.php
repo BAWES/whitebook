@@ -161,6 +161,11 @@ class Customer extends \common\models\Customer {
             ->send();
 
         //Send Email to admin
+        self::notifyAdmin($model);
+    }   
+
+    public static function notifyAdmin($model) 
+    {
         Yii::$app->mailer->htmlLayout = 'layouts/empty';
 
         $send_admin = Yii::$app->mailer->compose("customer/user-register",
@@ -177,5 +182,5 @@ class Customer extends \common\models\Customer {
             ->setTo(Yii::$app->params['adminEmail'])
             ->setSubject('User registered')
             ->send();
-    }            
+    }         
 }
