@@ -923,25 +923,14 @@ class VendorItemController extends Controller
     */
     public function actionDelete($id)
     {
-        $model = $this->findModel($id);
-        $model->deleteAllFiles();
-        VendorItemCapacityException::deleteAll(['item_id' => $id]);
-        Image::deleteAll(['item_id' => $id]);
-        VendorItemPricing::deleteAll(['item_id' => $id]);
-        VendorItemThemes::deleteAll(['item_id' => $id]);
-        VendorItemToCategory::deleteAll(['item_id' => $id]);
-        VendorItemQuestion::deleteAll(['item_id' => $id]);
-        CustomerCart::deleteAll(['item_id' => $id]);
-        PriorityItem::deleteAll(['item_id' => $id]);
-        EventItemlink::deleteAll(['item_id' => $id]);
-        FeatureGroupItem::deleteAll(['item_id' => $id]);
-        VendorDraftItem::deleteAll(['item_id' => $id]);
-        
-        //clear draft 
-        VendorDraftItem::clearDraft($model->item_id);
+        //delete main version 
+        $model = $this->findModel($id);        
+        VendorItem::clear($model);
 
-        $model->delete();
-        
+        //delete draft 
+        $draft = $this->findDraftModel($id);
+        VendorDraftItem::clear($draft); 
+
         Yii::$app->session->setFlash('success', 'Vendor item deleted successfully!');
         return $this->redirect(['index']);
     }
@@ -969,6 +958,14 @@ class VendorItemController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    protected function findDraftModel($id)
+    {
+        return VendorDraftItem::findOne([
+            'item_id' => $id, 
+            'vendor_id' => Yii::$app->user->getId()
+        ]);
     }
 
     public function actionBlock()
