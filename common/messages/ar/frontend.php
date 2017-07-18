@@ -17,6 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'OR' => 'أو',
     'VIEW CART' => 'عرض العربة',
     'CHECKOUT' => 'الدفع',
     'View cart to see all item(s)' => 'عرض العربة لرؤية كل بند',

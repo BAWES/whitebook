@@ -66,7 +66,7 @@ use common\components\LangFormat;
 					foreach($first_letter as $f) {
 						if ($i < $first) {
 							?>
-						<div class="direct_list">
+						<div class="theme_list">
 							<h2><?php echo $f;?></h2>
 							<ul>
 							<?php 
@@ -80,7 +80,7 @@ use common\components\LangFormat;
 								<li><?= Html::a(strtoupper($theme_name),['detail','slug'=>'all','themes'=>$d['slug']]) ?></li>
 								<?php }  } }?>
 							</ul>
-						</div><!-- END .direct_list -->
+						</div><!-- END .theme_list -->
 						<?php }$i++; }?>
 					</div><!-- END .resposive-clearfix -->
 					<!-- first section end here-->
@@ -92,7 +92,7 @@ use common\components\LangFormat;
 					$i=0;
 					foreach($k as $f) {  ?>
 					<?php if(($i>=$first)&&($i<$second)){?>
-						<div class="direct_list">
+						<div class="theme_list">
 							<h2><?php echo $f;?></h2>
 							<ul>
 							<?php
@@ -126,7 +126,7 @@ use common\components\LangFormat;
 							
 						if(($i>=$second)&&($i<$third)){ ?>
 						
-						<div class="direct_list">
+						<div class="theme_list">
 							<h2><?php echo $f;?></h2>
 							<ul>
 							<?php
