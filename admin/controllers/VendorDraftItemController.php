@@ -291,18 +291,8 @@ class VendorDraftItemController extends Controller
         // approved questions moved from draft to real table and removed from draft
         VendorDraftItemQuestion::approved($item->item_id);
 
-
         //remove draft related data
-
-        VendorDraftItemPricing::deleteAll(['item_id' => $item->item_id]);
-        VendorDraftImage::deleteAll(['item_id' => $item->item_id]);
-        VendorDraftItemVideo::deleteAll(['item_id' => $item->item_id]);
-        VendorDraftItemMenu::deleteAll(['item_id' => $item->item_id]);
-        VendorDraftItemToCategory::deleteAll(['item_id' => $item->item_id]);
-
-        //remove from draft
-
-        $draft->delete();
+        VendorDraftItem::clear($draft);
 
         Yii::$app->session->setFlash('success', 'Item approved successfully!');
 

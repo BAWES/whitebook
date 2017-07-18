@@ -796,7 +796,6 @@ class VendorItemController extends Controller
         ]);
     }
 
-
     /**
     * Save item videos from update and create page
     */
@@ -856,34 +855,14 @@ class VendorItemController extends Controller
      */
     public function actionDelete($id)
     {
-        $model = $this->findModel($id);
-        $model->deleteAllFiles();
-        VendorItemCapacityException::deleteAll(['item_id' => $id]);
-        Image::deleteAll(['item_id' => $id]);
-        VendorItemPricing::deleteAll(['item_id' => $id]);
-        VendorItemThemes::deleteAll(['item_id' => $id]);
-        VendorItemToCategory::deleteAll(['item_id' => $id]);
-        CustomerCart::deleteAll(['item_id' => $id]);
-        PriorityItem::deleteAll(['item_id' => $id]);
-        EventItemlink::deleteAll(['item_id' => $id]);
-        FeatureGroupItem::deleteAll(['item_id' => $id]);
-        VendorItemQuestion::deleteAll(['item_id' => $id]);
-        //menu 
+        //delete main version 
+        $model = $this->findModel($id);        
+        VendorItem::clear($model);
 
-        $menues = VendorItemMenu::findAll(['item_id' => $id]);
-
-        foreach ($menues as $key => $menu) {
-            VendorItemMenuItem::deleteAll(['menu_id' => $menu->menu_id]);
-        }
-
-        VendorItemMenu::deleteAll(['item_id' => $id]);
-
-        //draft 
-        VendorDraftItem::clearDraft($id); 
+        //delete draft 
+        $draft = $this->findDraftModel($id);
+        VendorDraftItem::clear($draft); 
         
-        //main model 
-        $model->delete();
-
         Yii::$app->session->setFlash('success', "Item deleted successfully!");
 
         return $this->redirect(['index']);

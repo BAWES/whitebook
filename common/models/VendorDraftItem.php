@@ -7,6 +7,9 @@ use yii\db\Expression;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use common\models\VendorDraftItemVideo;
+use common\models\VendorDraftItemThemes;
+use common\models\VendorDraftItemMenuItem;
+use common\models\VendorDraftItemMenu;
 
 /**
  * This is the model class for table "whitebook_vendor_draft_item".
@@ -233,7 +236,23 @@ class VendorDraftItem extends \yii\db\ActiveRecord
     */
     public function getVendorItemThemes()
     {
-        return $this->hasMany(VendorItemThemes::className(), ['item_id' => 'item_id']);
+        return $this->hasMany(VendorDraftItemThemes::className(), ['item_id' => 'item_id']);
+    }
+
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+    public function getMenuItems()
+    {
+        return $this->hasMany(VendorDraftItemMenuItem::className(), ['item_id' => 'item_id']);
+    }
+
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+    public function getMenus()
+    {
+        return $this->hasMany(VendorDraftItemMenu::className(), ['item_id' => 'item_id']);
     }
 
     public function getThemeName() {
@@ -354,6 +373,53 @@ class VendorDraftItem extends \yii\db\ActiveRecord
                 return true;
         }
     }
+    
+    public function deleteAllFiles() {
+        //item images 
+        if (isset($this->images) && count($this->images)>0) {
+            foreach ($this->images as $img) {
+                Yii::$app->resourceManager->delete(VendorItem::UPLOADFOLDER_210. $img->image_path);
+                Yii::$app->resourceManager->delete(VendorItem::UPLOADFOLDER_530. $img->image_path);
+                Yii::$app->resourceManager->delete(VendorItem::UPLOADFOLDER_1000. $img->image_path);
+            }
+        }
+        //menu images 
+        foreach ($this->menuItems as $menuItem) {
+            Yii::$app->resourceManager->delete(VendorItem::UPLOADFOLDER_MENUITEM_THUMBNAIL . $menuItem->image);
+            Yii::$app->resourceManager->delete(VendorItem::UPLOADFOLDER_MENUITEM . $menuItem->image);            
+        }
+    }
+
+    /**
+     * Clear draft
+     */
+    public static function clear($model)
+    {
+        if(!$model)
+            return true;
+
+        $model->deleteAllFiles();
+
+        $menues = VendorDraftItemMenu::findAll(['item_id' => $model->item_id]);
+
+        foreach ($menues as $key => $menu) {
+            VendorDraftItemMenuItem::deleteAll(['draft_menu_id' => $menu->draft_menu_id]);
+        }
+
+        VendorDraftItemMenu::deleteAll(['item_id' => $model->item_id]);
+        
+        //draft related 
+        VendorDraftItemPricing::deleteAll(['item_id' => $model->item_id]);
+        VendorDraftImage::deleteAll(['item_id' => $model->item_id]);
+        VendorDraftItemToCategory::deleteAll(['item_id' => $model->item_id]);
+        VendorDraftItemQuestion::deleteAll(['item_id' => $model->item_id]);
+        VendorDraftItemToCategory::deleteAll(['item_id' => $model->item_id]);
+        
+        //draft 
+        VendorDraftItem::deleteAll(['item_id' => $model->item_id]); 
+
+        $model->delete();
+    }
 
     /**
      * @inheritdoc
@@ -362,29 +428,5 @@ class VendorDraftItem extends \yii\db\ActiveRecord
     public static function find()
     {
         return new query\VendorDraftItemQuery(get_called_class());
-    }
-
-    /**
-     * Clear draft
-     */
-    public static function clearDraft($id)
-    {
-        $menues = VendorDraftItemMenu::findAll(['item_id' => $id]);
-
-        foreach ($menues as $key => $menu) {
-            VendorDraftItemMenuItem::deleteAll(['draft_menu_id' => $menu->draft_menu_id]);
-        }
-
-        VendorDraftItemMenu::deleteAll(['item_id' => $id]);
-        
-        //draft related 
-        VendorDraftItemPricing::deleteAll(['item_id' => $id]);
-        VendorDraftImage::deleteAll(['item_id' => $id]);
-        VendorDraftItemToCategory::deleteAll(['item_id' => $id]);
-        VendorDraftItemQuestion::deleteAll(['item_id' => $id]);
-        VendorDraftItemToCategory::deleteAll(['item_id' => $id]);
-        
-        //draft 
-        VendorDraftItem::deleteAll(['item_id' => $id]); 
     }
 }

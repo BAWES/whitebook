@@ -301,13 +301,28 @@ class VendorItem extends \yii\db\ActiveRecord
         return $this->hasMany(VendorItemThemes::className(), ['item_id' => 'item_id']);
     }
 
-
     /**
     * @return \yii\db\ActiveQuery
     */
     public function getItemQuestions()
     {
         return $this->hasMany(VendorItemQuestion::className(), ['item_id' => 'item_id']);
+    }
+
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+    public function getMenuItems()
+    {
+        return $this->hasMany(VendorItemMenuItem::className(), ['item_id' => 'item_id']);
+    }
+
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+    public function getMenus()
+    {
+        return $this->hasMany(VendorItemMenu::className(), ['item_id' => 'item_id']);
     }
 
     public static function vendoritemcount($vid = '')
@@ -408,16 +423,6 @@ class VendorItem extends \yii\db\ActiveRecord
         Yii::$app->resourceManager->delete(self::UPLOADFOLDER_530. $image_key);
         Yii::$app->resourceManager->delete(self::UPLOADFOLDER_1000. $image_key);
         return true;
-    }
-
-    public function deleteAllFiles() {
-        if (isset($this->images) && count($this->images)>0) {
-            foreach ($this->images as $img) {
-                Yii::$app->resourceManager->delete(self::UPLOADFOLDER_210. $img->image_path);
-                Yii::$app->resourceManager->delete(self::UPLOADFOLDER_530. $img->image_path);
-                Yii::$app->resourceManager->delete(self::UPLOADFOLDER_1000. $img->image_path);
-            }
-        }
     }
 
     public static function get_featured_product() {
@@ -561,6 +566,48 @@ class VendorItem extends \yii\db\ActiveRecord
         }
 
         return $total;
+    }
+
+    public function deleteAllFiles() {
+        //item images 
+        if (isset($this->images) && count($this->images)>0) {
+            foreach ($this->images as $img) {
+                Yii::$app->resourceManager->delete(self::UPLOADFOLDER_210. $img->image_path);
+                Yii::$app->resourceManager->delete(self::UPLOADFOLDER_530. $img->image_path);
+                Yii::$app->resourceManager->delete(self::UPLOADFOLDER_1000. $img->image_path);
+            }
+        }
+        //menu images 
+        foreach ($this->menuItems as $menuItem) {
+            Yii::$app->resourceManager->delete(self::UPLOADFOLDER_MENUITEM_THUMBNAIL . $menuItem->image);
+            Yii::$app->resourceManager->delete(self::UPLOADFOLDER_MENUITEM . $menuItem->image);            
+        }
+    }
+
+    public static function clear($model)
+    {
+        $model->deleteAllFiles();
+        VendorItemCapacityException::deleteAll(['item_id' => $model->item_id]);
+        Image::deleteAll(['item_id' => $model->item_id]);
+        VendorItemPricing::deleteAll(['item_id' => $model->item_id]);
+        VendorItemThemes::deleteAll(['item_id' => $model->item_id]);
+        VendorItemToCategory::deleteAll(['item_id' => $model->item_id]);
+        CustomerCart::deleteAll(['item_id' => $model->item_id]);
+        PriorityItem::deleteAll(['item_id' => $model->item_id]);
+        EventItemlink::deleteAll(['item_id' => $model->item_id]);
+        FeatureGroupItem::deleteAll(['item_id' => $model->item_id]);
+        VendorItemQuestion::deleteAll(['item_id' => $model->item_id]);
+        //menu 
+
+        $menues = VendorItemMenu::findAll(['item_id' => $model->item_id]);
+
+        foreach ($menues as $key => $menu) {
+            VendorItemMenuItem::deleteAll(['menu_id' => $menu->menu_id]);
+        }
+
+        VendorItemMenu::deleteAll(['item_id' => $model->item_id]);
+
+        $model->delete();
     }
 
     /**
