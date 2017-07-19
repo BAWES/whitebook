@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use common\models\VendorCategory;
 use common\components\LangFormat;
+use yii\widgets\ActiveForm;
 
 $vendor_details = $vendor_detail;
 
@@ -91,6 +92,66 @@ $return_policy = nl2br(LangFormat::format(strip_tags($vendor_detail['vendor_retu
                                     </div>
                                 </div><!-- END .panel -->
                                 <?php } ?>
+
+                                <?php if($canAddReview || $reviews) { ?>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                      <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" class="collapsed">
+                                            <?php echo Yii::t('frontend', 'Review'); ?>
+                                        </a>
+                                      </h4>
+                                    </div>
+                                    <div id="collapse3" class="panel-collapse collapse">
+                                      <div class="panel-body">
+
+                                            <?php if($canAddReview) { ?>
+
+                                            <?php $form = ActiveForm::begin(['options'=> ['id' => 'review-form']]); ?>
+
+                                                <?= $form->field($modelReview, 'vendor_id')
+                                                    ->hiddenInput()
+                                                    ->label(false) ?>
+
+                                                <?= $form->field($modelReview, 'rating')
+                                                    ->hiddenInput()
+                                                    ->label(false) ?>
+
+                                                <div class="rating">
+                                                    <ul>
+                                                        <li data-value="1">
+                                                            <i class="fa fa-star"></i>
+                                                        </li>
+                                                        <li data-value="2">
+                                                            <i class="fa fa-star"></i>
+                                                        </li>
+                                                        <li data-value="3">
+                                                            <i class="fa fa-star"></i>
+                                                        </li>
+                                                        <li data-value="4">
+                                                            <i class="fa fa-star"></i>
+                                                        </li>
+                                                        <li data-value="5">
+                                                            <i class="fa fa-star"></i>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+
+                                                <?= $form->field($modelReview, 'review')
+                                                    ->textarea(['rows' => 3, 'placeholder' => Yii::t('frontend', 'Enter your review here...')])
+                                                    ->label(false) ?>
+
+                                                <button class="btn btn-default btn-submit-review">
+                                                    <?= Yii::t('frontend', 'Submit') ?>
+                                                </button>
+
+                                           <?php ActiveForm::end(); ?>
+
+                                           <?php }//if canAddReview ?>
+                                      </div>
+                                    </div>
+                                </div><!-- END .panel -->
+                                <?php } ?>
                                 
                                 <?php 
 
@@ -162,38 +223,18 @@ $this->registerCssFile("@web/css/owl.carousel.css");
 $this->registerCssFile("@web/css/jquery.mCustomScrollbar.css");
 $this->registerCssFile("@web/css/bootstrap-select.min.css");
 $this->registerJsFile("@web/js/jquery.mCustomScrollbar.concat.min.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/js/pages/profile.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $get = Yii::$app->request->get();
 $slug = (isset($get['slug'])) ? $get['slug'] : 'all';
 $this->registerJs("
-var giflink = '".Url::to("@web/images/ajax-loader.gif")."';
-//var load_items = '".Url::to(['community/profile'])."';
-var load_items = '".Url::to(['/vendor'])."';
-var product_slug = '".$slug."';
-var vendor_profile = '".$get['vendor']."';
-var current_page = 'vendor';
-
-$(document).delegate('.category_listing_nav a', 'click', function(e) {
-
-    $('.left-main-cat').val($(this).attr('data-slug')).change();
-
-    $('html, body').animate({ scrollTop: $('.listing_right').offset().top }, 'slow');
-
-    e.preventDefault();
-});
-
-jQuery(function()
-{
-    //open return policy tab 
-
-    if(location.hash == '#collapse2')
-    {
-        $('a[href=\"#collapse2\"]').trigger('click');
-
-        $('html, body').animate({ scrollTop: $('.vendor-profile-detail').offset().top }, 'slow');
-    }
-});
-
+    var giflink = '".Url::to("@web/images/ajax-loader.gif")."';
+    //var load_items = '".Url::to(['community/profile'])."';
+    var load_items = '".Url::to(['/vendor'])."';
+    var reviewUrl = '".Url::to(['/vendor/review'])."'; 
+    var product_slug = '".$slug."';
+    var vendor_profile = '".$get['vendor']."';
+    var current_page = 'vendor';
 ", yii\web\View::POS_BEGIN);
 
 $this->registerCss("

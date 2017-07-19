@@ -83,6 +83,7 @@ return [
                   'browse/detail/<slug:[A-Za-z0-9\_-]+>' => 'browse/detail',
                   'themes/<slug:[A-Za-z0-9\_-]+>/<themes:[A-Za-z0-9\_-]+>' => 'themes/detail',
                   /*'vendor/<slug:[A-Za-z0-9\_-]+>/<vendor:[A-Za-z0-9\_-]+>' => 'directory/profile',*/
+                  'vendor/review' => 'community/review',
                   'vendor/<vendor:[A-Za-z0-9\_-]+>' => 'community/profile',
                   'events/pdf/<slug:[A-Za-z0-9\_-]+>' => 'events/pdf',
                   'events/detail/<slug:[A-Za-z0-9\_-]+>' => 'events/detail',
