@@ -3075,3 +3075,24 @@ span.small {
     text-transform: uppercase;
     vertical-align: top;
 }
+
+.rating {
+    margin-top: -10px;
+}
+.rating ul {
+    padding: 0;
+    list-style: none;
+}
+.rating ul li {
+    display: inline-block;
+}
+
+.rating ul li .fa-star {
+    font-size: 20px;
+    cursor: pointer;
+    color: #ccc;
+}
+
+.rating ul li.active .fa-star { 
+    color: black;
+}
