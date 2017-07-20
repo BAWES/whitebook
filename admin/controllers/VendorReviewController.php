@@ -112,6 +112,8 @@ class VendorReviewController extends Controller
         $model->approved = 1;
         $model->save();
 
+        VendorReview::notifyVendor($model);
+
         return $this->redirect(['index']);
     }
 

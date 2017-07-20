@@ -5,6 +5,7 @@ namespace common\models;
 use Yii;
 use yii\db\Expression;
 use yii\behaviors\TimestampBehavior;
+use yii\helpers\Url;
 use common\models\Booking;
 
 /**
@@ -113,5 +114,21 @@ class VendorReview extends \yii\db\ActiveRecord
 
     public function getCustomerName() {
         return $this->customer->customer_name;
+    }
+
+    public function notifyVendor($model)
+    {
+        Yii::$app->mailer->htmlLayout = 'layouts/empty';
+        
+        Yii::$app->mailer->compose("vendor/review-added",
+            [
+                "model" => $model,
+                "image_1" => Url::to("@web/twb-logo-trans.png", true),
+                "image_2" => Url::to("@web/twb-logo-horiz-white.png", true)
+            ])
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->params['SITE_NAME']])
+            ->setTo($model->vendor->vendor_contact_email)
+            ->setSubject('New Review Added')
+            ->send();
     }
 }
