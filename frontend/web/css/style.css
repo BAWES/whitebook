@@ -3096,3 +3096,22 @@ span.small {
 .rating ul li.active .fa-star { 
     color: black;
 }
+
+.review-wrapper {
+    margin: 10px 0;
+}
+
+.review-wrapper .review-rating .fa {
+    color: #DD9B00;    
+}
+
+.review-wrapper .review-author {
+    margin: 5px 0;
+}
+
+.review-wrapper .review-rating .review-review {
+
+}
+
+
+

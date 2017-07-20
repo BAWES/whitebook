@@ -105,6 +105,21 @@ $return_policy = nl2br(LangFormat::format(strip_tags($vendor_detail['vendor_retu
                                     <div id="collapse3" class="panel-collapse collapse">
                                       <div class="panel-body">
 
+                                            <?php foreach($reviews as $review) { ?>
+                                            <div class="review-wrapper">
+                                                <div class="review-rating"><?= str_repeat('<i class="fa fa-star"></i>', $review->rating) ?></div>
+                                                <div class="review-author">
+                                                    <?= Yii::t('frontend', 'By <b>{author}</b> on <i>{time}</i>', [
+                                                            'author' => $review->customer->customer_name, 
+                                                            'time' => date('d M Y', strtotime($review->created_at))
+                                                        ]) ?>
+                                                </div>
+                                                <div class="review-review">
+                                                    <?= $review->review ?>
+                                                </div>
+                                            </div>
+                                            <?php } ?>
+
                                             <?php if($canAddReview) { ?>
 
                                             <?php $form = ActiveForm::begin(['options'=> ['id' => 'review-form']]); ?>
