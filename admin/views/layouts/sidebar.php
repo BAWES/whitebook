@@ -7,6 +7,7 @@ use admin\models\AccessControlList;
 use common\models\VendorDraftItem;
 use common\models\Booking;
 use common\models\VendorDraft;
+use common\models\VendorReview;
 
 $draft_vendor_count = VendorDraft::find()
 	->where(['is_ready' => 1])
@@ -18,6 +19,10 @@ $draft_item_count = VendorDraftItem::find()
 
 $booking_request_count = Booking::find()
 	->where(['booking_status' => Booking::STATUS_PENDING])
+	->count();
+
+$new_review_count = VendorReview::find()
+	->where('approved IS NULL OR approved = 0')
 	->count();
 
 ?>
@@ -52,6 +57,10 @@ $booking_request_count = Booking::find()
 	        [	
 	        	'label' => '<i class="glyphicon glyphicon-send"></i><span class="title">Booking Requests</span><span class="draft_item_count">'.$booking_request_count.'</span>', 
 	        	'url' => ['booking-request/index'],
+	        ],
+	        [	
+	        	'label' => '<i class="glyphicon glyphicon-send"></i><span class="title">Vendo Review</span><span class="draft_item_count">'.$new_review_count.'</span>', 
+	        	'url' => ['vendor-review/index'],
 	        ],
 	        [	
 	        	'label' => '<i class="icon-custom-extra"></i><span class="title">Booking</span>', 

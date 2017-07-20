@@ -138,6 +138,7 @@ class Role extends \yii\db\ActiveRecord
             'vendor-payment' => ['index', 'view', 'create', 'update', 'delete', 'unpaid', 'detail'],
             'vendor-payable' => ['index'],
             'vendor-draft' => ['index', 'view', 'approve'],
+            'vendor-review' => ['index', 'view', 'approve'],
         ];        
     }
 }
