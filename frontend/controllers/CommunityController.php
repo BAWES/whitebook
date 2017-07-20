@@ -301,7 +301,7 @@ class CommunityController extends BaseController
                 'vendor_id' => $vendor_details->vendor_id,
                 'approved' => 1
             ])
-            ->one();
+            ->all();
 
         return $this->render('profile', [
             'vendor_detail' => $vendor_details,
