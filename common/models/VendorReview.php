@@ -106,4 +106,12 @@ class VendorReview extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Vendor::className(), ['vendor_id' => 'vendor_id']);
     }
+
+    public function getVendorName() {
+        return $this->vendor->vendor_name;
+    }
+
+    public function getCustomerName() {
+        return $this->customer->customer_name;
+    }
 }
