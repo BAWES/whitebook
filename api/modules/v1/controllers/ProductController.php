@@ -48,7 +48,6 @@ class ProductController extends Controller
         return $behaviors;
     }
 
-
     /**
      * @inheritdoc
      */
@@ -77,7 +76,7 @@ class ProductController extends Controller
      * @param string $requestedCategories
      * @param string $requestedVendor
      * @param string $requestedTheme
-     * @param string $event_time
+     * @param string $requestedDeliverTime
      * @return array
      */
     public function actionCategoryProducts(
@@ -89,7 +88,7 @@ class ProductController extends Controller
         $requestedMaxPrice = 0,
         $requestedVendor = '',
         $requestedTheme = '',
-        $event_time = ''
+        $requestedDeliverTime = ''
     )
     {
         $products = [];
@@ -143,7 +142,7 @@ class ProductController extends Controller
         }//if themes
         
         //event time
-        if($event_time) {
+        if($requestedDeliverTime) {
             $item_query->workingTimeJoin();
         }
         
@@ -177,14 +176,17 @@ class ProductController extends Controller
             $item_query->deliveryDate($date);
         }
 
-        if (!empty($event_time)) {
-            $delivery_date = $requestedDeliverDate;
-            if($delivery_date)
-                $working_day = date('D', strtotime($delivery_date));
-            else
-                $working_day = date('D');
-            $event_time = date('H:i:s', strtotime($event_time));
-            $item_query->eventTime($event_time,$working_day);
+
+        if ($requestedDeliverTime) {
+            
+            if($requestedDeliverDate)
+                $working_day = date('l', strtotime($requestedDeliverDate));
+            else 
+                $working_day = date('l');
+
+            $event_time = date('H:i:s', strtotime($requestedDeliverTime));
+            
+            $item_query->eventTime($event_time, $working_day);
         }
 
         $item_query_result = $item_query
@@ -217,21 +219,21 @@ class ProductController extends Controller
                 if (isset($value['item_how_long_to_make']) && $value['item_how_long_to_make'] > 0) {
                     if (isset($value['notice_period_type']) && $value['notice_period_type'] == 'Day') {
                         if ($value['item_how_long_to_make'] >= 7) {
-                            $notice = Yii::t('frontend', '{count} week(s)', [
+                            $notice = Yii::t('api', '{count} week(s)', [
                                 'count' => substr(($value['item_how_long_to_make'] / 7), 0, 3)
                             ]);
                         } else {
-                            $notice = Yii::t('frontend', '{count} day(s)', [
+                            $notice = Yii::t('api', '{count} day(s)', [
                                 'count' => $value['item_how_long_to_make']
                             ]);
                         }
                     } else {
                         if ($value['item_how_long_to_make'] >= 24) {
-                            $notice = Yii::t('frontend', '{count} day(s)', [
+                            $notice = Yii::t('api', '{count} day(s)', [
                                 'count' => substr(($value['item_how_long_to_make'] / 24), 0, 3)
                             ]);
                         } else {
-                            $notice = Yii::t('frontend', '{count} hours', [
+                            $notice = Yii::t('api', '{count} hours', [
                                 'count' => $value['item_how_long_to_make']
                             ]);
                         }
@@ -264,7 +266,7 @@ class ProductController extends Controller
             return [
                 "operation" => "error",
                 "code" => "0",
-                'message' => 'Invalid Item ID'
+                'message' => Yii::t('api', 'Invalid Item ID')
             ];
         }
 
@@ -286,21 +288,21 @@ class ProductController extends Controller
         if (isset($value['item_how_long_to_make']) && $value['item_how_long_to_make'] > 0) {
             if (isset($value['notice_period_type']) && $value['notice_period_type'] == 'Day') {
                 if ($value['item_how_long_to_make'] >= 7) {
-                    $notice = Yii::t('frontend', '{count} week(s)', [
+                    $notice = Yii::t('api', '{count} week(s)', [
                         'count' => substr(($value['item_how_long_to_make'] / 7), 0, 3)
                     ]);
                 } else {
-                    $notice = Yii::t('frontend', '{count} day(s)', [
+                    $notice = Yii::t('api', '{count} day(s)', [
                         'count' => $value['item_how_long_to_make']
                     ]);
                 }
             } else {
                 if ($value['item_how_long_to_make'] >= 24) {
-                    $notice = Yii::t('frontend', '{count} day(s)', [
+                    $notice = Yii::t('api', '{count} day(s)', [
                         'count' => substr(($value['item_how_long_to_make'] / 24), 0, 3)
                     ]);
                 } else {
-                    $notice = Yii::t('frontend', '{count} hours', [
+                    $notice = Yii::t('api', '{count} hours', [
                         'count' => $value['item_how_long_to_make']
                     ]);
                 }
@@ -313,6 +315,7 @@ class ProductController extends Controller
             'type' => $model->type,
             'vendor' => $model->vendor,
             'images' => $model->images,
+            'videos' => $model->videos,
             'menu' => $menu,
             'addons' => $addons,
             'notice' => $notice
@@ -342,7 +345,7 @@ class ProductController extends Controller
                 return [
                     "operation" => "error",
                     "code" => "0",
-                    'message' => Yii::t('frontend', '{item_name} already exist with {event_name}',
+                    'message' => Yii::t('api', '{item_name} already exist with {event_name}',
                         [
                             'item_name' => $item_name,
                             'event_name' => $event_name,
@@ -362,7 +365,7 @@ class ProductController extends Controller
                     return [
                         "operation" => "success",
                         "code" => "1",
-                        'message' => Yii::t('frontend', '{item_name} has been added to {event_name}',
+                        'message' => Yii::t('api', '{item_name} has been added to {event_name}',
                             [
                                 'item_name' => $item_name,
                                 'event_name' => $event_name,
@@ -380,14 +383,14 @@ class ProductController extends Controller
 
         if ($vendor_id) {
             $vendor_area = VendorLocation::find()
-                ->select(['{{%vendor_location}}.area_id,{{%location}}.location'])
+                ->select(['{{%vendor_location}}.area_id, {{%location}}.location, {{%location}}.location_ar'])
                 ->leftJoin('{{%location}}', '{{%location}}.id = {{%vendor_location}}.area_id')
                 ->where(['{{%vendor_location}}.vendor_id' => $vendor_id])
                 ->asArray()
                 ->all();
         } else {
             $vendor_area = VendorLocation::find()
-                ->select(['{{%vendor_location}}.area_id,{{%location}}.location'])
+                ->select(['{{%vendor_location}}.area_id,{{%location}}.location,{{%location}}.location_ar'])
                 ->leftJoin('{{%location}}', '{{%location}}.id = {{%vendor_location}}.area_id')
                 ->asArray()
                 ->all();
@@ -425,7 +428,7 @@ class ProductController extends Controller
             return [
                 "operation" => "error",
                 "code" => "0",
-                'message' => 'Invalid Vendor ID'
+                'message' => Yii::t('api', 'Invalid Vendor ID')
             ];
         }
 
@@ -433,7 +436,7 @@ class ProductController extends Controller
             return [
                 "operation" => "error",
                 "code" => "0",
-                'message' => 'Invalid Event Date'
+                'message' => Yii::t('api', 'Invalid Event Date')
             ];
         }
 

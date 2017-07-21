@@ -4,6 +4,7 @@ namespace frontend\models;
 
 use Yii;
 use yii\db\Expression;
+use yii\helpers\Url;
 
 /**
 * This is the model class for table "customer".
@@ -36,6 +37,8 @@ class Customer extends \common\models\Customer {
         return array_merge(parent::rules(), [
             [['customer_name', 'customer_last_name', 'customer_email', 'customer_password', 'customer_mobile'], 'required'],
             ['customer_mobile', 'string', 'length' => [8]],
+
+            [['customer_dateofbirth', 'customer_gender'], 'string'],
 
             //[[''], 'integer', 'length' => 8],
 
@@ -142,4 +145,44 @@ class Customer extends \common\models\Customer {
     public static function findByEmail($email) {
         return static::findOne(['customer_email' => $email]);
     }
+
+    public static function welcomeMail($model)
+    {
+        Yii::$app->mailer->htmlLayout = 'layouts/empty';
+
+        Yii::$app->mailer->compose("customer/confirm",
+            [
+                "user" => $model->customer_name,
+                "confirm_link" => Url::to(['/users/confirm_email', 'key' => $model->customer_activation_key], true),
+                "logo_1" => Url::to("@web/images/twb-logo-horiz-white.png", true),
+                "logo_2" => Url::to("@web/images/twb-logo-trans.png", true),
+            ])
+            ->setFrom(Yii::$app->params['supportEmail'])
+            ->setTo($model['customer_email'])
+            ->setSubject('Welcome to The White Book')
+            ->send();
+
+        //Send Email to admin
+        self::notifyAdmin($model);
+    }   
+
+    public static function notifyAdmin($model) 
+    {
+        Yii::$app->mailer->htmlLayout = 'layouts/empty';
+
+        $send_admin = Yii::$app->mailer->compose("customer/user-register",
+            [
+                'confirm_link' => Url::to(['/users/confirm_email', 'key' => $model->customer_activation_key], true),
+                'logo_1' => Url::to("@web/images/twb-logo-horiz-white.png", true),
+                'logo_2' => Url::to("@web/images/twb-logo-trans.png", true),
+                'model' => $model
+            ]
+        );
+
+        $send_admin
+            ->setFrom(Yii::$app->params['supportEmail'])
+            ->setTo(Yii::$app->params['adminEmail'])
+            ->setSubject('User registered')
+            ->send();
+    }         
 }

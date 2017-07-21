@@ -10,6 +10,34 @@ $this->title = 'Whitebook Application';
 <div class="row">	 
 	<div class="col-md-12">
 		<ul class="stats">
+			<li class="color_1">
+				<i class="fa fa-info"></i>
+				<div class="details">
+					<span class="big"><?php echo $bookingPending; ?></span>
+					<span>Pending Booking</span>
+				</div>
+			</li>
+			<li class="color_2">
+				<i class="fa fa-check"></i>
+				<div class="details">
+					<span class="big"><?php echo $bookingAccepted; ?></span>
+					<span>Accepted Booking</span>
+				</div>
+			</li>
+			<li class="color_3">
+				<i class="fa fa-times-circle"></i>
+				<div class="details">
+					<span class="big"><?php echo $bookingRejected; ?></span>
+					<span>Rejected Booking</span>
+				</div>
+			</li>
+			<li class="color_4">
+				<i class="fa fa-hourglass-o"></i>
+				<div class="details">
+					<span class="big"><?php echo $bookingExpired; ?></span>
+					<span>Expired Booking</span>
+				</div>
+			</li>
 			<li class="lime">
 				<i class="fa fa-archive"></i>
 				<div class="details">
@@ -48,6 +76,34 @@ $this->title = 'Whitebook Application';
 		</ul>
 	</div>
 </div>
+
+<div class="row">
+    <div class="col-md-12 full-width">
+        <div class="panel panel-default no-shadow" data-widget="{&quot;draggable&quot;: &quot;false&quot;}" data-widget-static="" style="visibility: visible; opacity: 1; display: block; transform: translateY(0px);">
+            <div class="panel-body">
+               <div class="pb-md">
+                    <h4 class="mb-n" style="width: 100%;">
+                        Booking Statistics
+                        <select id="graph_type" style="max-width: 100px;float: right;position: relative;top: -8px;">
+                            <option value="day">Day</option>
+                            <option value="month">Month</option>
+                            <option value="year">Year</option>
+                        </select>
+                    </h4>
+                </div>
+                <div class="chart-holder" id="morris-chart-1" style="height: 220px!important; min-height:220px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- END DASHBOARD TILES -->
+
+<?php
+
+$this->registerCssFile('@web/themes/default/plugins/jquery-morris-chart/css/morris.min.css?v=1.0', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/themes/default/plugins/jquery-morris-chart/js/raphael-min.js?v=1.0', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/themes/default/plugins/jquery-morris-chart/js/morris.min.js?v=1.0', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('@web/themes/default/js/dashboard.js?v=1.0', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 

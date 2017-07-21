@@ -60,6 +60,11 @@ $this->params['breadcrumbs'][] = 'Update';
 	    		Images
 	    	</a>
 	    </li>
+	    <li>
+	    	<a href="<?= Url::to(['vendor-item/item-videos', 'id' => $model->item_id]) ?>">
+	    		Videos
+	    	</a>
+	    </li>
 	</ul>
 
 	<div class="tab-content">
@@ -75,14 +80,6 @@ $this->params['breadcrumbs'][] = 'Update';
 				<?= $form->field($model, 'minimum_increment'); ?>
 				
 				<?= $form->field($model, 'min_order_amount'); ?>
-
-				<?= $form->field($model, 'item_price_description')->textarea([
-						'id' => 'vendoritem-item_price_description'
-					]) ?>
-				
-				<?= $form->field($model, 'item_price_description_ar')->textarea([
-						'id' => 'vendoritem-item_price_description_ar'
-					]) ?>
 
 				<?= $form->field($model, 'hide_price_chart')->checkbox(); ?>
 

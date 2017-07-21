@@ -42,6 +42,8 @@ use common\models\VendorDraftImage;
 use common\models\VendorDraftItemMenu;
 use common\models\VendorDraftItemMenuItem;
 use common\models\UploadForm;
+use common\models\VendorItemVideo;
+use common\models\VendorDraftItemVideo;
 use backend\models\VendorItem;
 use backend\models\VendorDraftItem;
 use backend\models\VendorItemSearch;
@@ -114,6 +116,11 @@ class VendorItemController extends Controller
                 ->orderby(['vendorimage_sort_order' => SORT_ASC])
                 ->all();
 
+            $videos = VendorDraftItemVideo::find()
+                ->where(['item_id' => $model->item_id])
+                ->orderby(['video_sort_order' => SORT_ASC])
+                ->all();
+
             $price_values= VendorDraftItemPricing::loadpricevalues($model->item_id);
 
             $categories = VendorDraftItemToCategory::find()
@@ -130,6 +137,11 @@ class VendorItemController extends Controller
 
             $imagedata = Image::find()->item($model->item_id)->orderby(['vendorimage_sort_order' => SORT_ASC])->all();
 
+            $videos = VendorItemVideo::find()
+                ->where(['item_id' => $model->item_id])
+                ->orderby(['video_sort_order' => SORT_ASC])
+                ->all();
+
             $price_values= VendorItemPricing::loadpricevalues($model->item_id);
 
             $categories = VendorItemToCategory::find()
@@ -138,11 +150,14 @@ class VendorItemController extends Controller
                 ->all();
 
             $arr_menu = VendorItemMenu::find()->item($id)->menu('options')->all();
+
             $arr_addon_menu = VendorItemMenu::find()->item($id)->menu('addons')->all();
         }
         
         $item_type = ItemType::itemtypename($model->type_id);
+        
         $questions = VendorItemQuestion::findAll(['item_id' => $model->item_id]);
+
         return $this->render('view', [
             'model' => $model,
             'arr_menu' => $arr_menu,
@@ -152,6 +167,7 @@ class VendorItemController extends Controller
             'price_values' => $price_values,
             'dataProvider1' => $dataProvider1,
             'imagedata' => $imagedata,
+            'videos' => $videos,
             'questions' => $questions,
         ]);
     }
@@ -760,6 +776,59 @@ class VendorItemController extends Controller
 
             VendorItem::notifyAdmin($id);
             
+            $complete = Yii::$app->request->post('complete');
+
+            if($complete) {
+
+                Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
+
+                Yii::info('[Item Updated] Vendor updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
+
+                return $this->redirect(['index']);    
+            }            
+
+            return $this->redirect(['vendor-item/item-videos', 'id' => $id]);
+        }
+
+        return $this->render('steps/images', [
+            'model' => $model,
+            'images' => VendorDraftImage::findAll(['item_id' => $model->item_id])
+        ]);
+    }
+
+    /**
+    * Save item videos from update and create page
+    */
+    public function actionItemVideos($id)
+    {
+        $model = $this->findDraftModel($id);
+
+        if(!$model) 
+        {
+            $model = VendorDraftItem::create_from_item($id);
+        }
+
+        if(Yii::$app->request->isPost) 
+        {          
+            //remove old content 
+            VendorDraftItemVideo::deleteAll(['item_id' => $id]);
+
+            $videos = Yii::$app->request->post('videos');
+
+            if(!$videos) {
+                $videos = array();
+            }
+
+            //add new content 
+            foreach ($videos as $key => $value) 
+            {
+                $video = new VendorDraftItemVideo();
+                $video->item_id = $id;
+                $video->video = $value['video'];
+                $video->video_sort_order = $value['video_sort_order'];
+                $video->save();
+            }
+
             Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
 
             Yii::info('[Item Updated] Vendor updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
@@ -773,9 +842,8 @@ class VendorItemController extends Controller
             return $this->redirect(['index']);    
         }
 
-        return $this->render('steps/images', [
-            'model' => $model,
-            'images' => VendorDraftImage::findAll(['item_id' => $model->item_id])
+        return $this->render('steps/videos', [
+            'model' => $model
         ]);
     }
 
@@ -787,34 +855,14 @@ class VendorItemController extends Controller
      */
     public function actionDelete($id)
     {
-        $model = $this->findModel($id);
-        $model->deleteAllFiles();
-        VendorItemCapacityException::deleteAll(['item_id' => $id]);
-        Image::deleteAll(['item_id' => $id]);
-        VendorItemPricing::deleteAll(['item_id' => $id]);
-        VendorItemThemes::deleteAll(['item_id' => $id]);
-        VendorItemToCategory::deleteAll(['item_id' => $id]);
-        CustomerCart::deleteAll(['item_id' => $id]);
-        PriorityItem::deleteAll(['item_id' => $id]);
-        EventItemlink::deleteAll(['item_id' => $id]);
-        FeatureGroupItem::deleteAll(['item_id' => $id]);
-        VendorItemQuestion::deleteAll(['item_id' => $id]);
-        //menu 
+        //delete main version 
+        $model = $this->findModel($id);        
+        VendorItem::clear($model);
 
-        $menues = VendorItemMenu::findAll(['item_id' => $id]);
-
-        foreach ($menues as $key => $menu) {
-            VendorItemMenuItem::deleteAll(['menu_id' => $menu->menu_id]);
-        }
-
-        VendorItemMenu::deleteAll(['item_id' => $id]);
-
-        //draft 
-        VendorDraftItem::clearDraft($id); 
+        //delete draft 
+        $draft = $this->findDraftModel($id);
+        VendorDraftItem::clear($draft); 
         
-        //main model 
-        $model->delete();
-
         Yii::$app->session->setFlash('success', "Item deleted successfully!");
 
         return $this->redirect(['index']);

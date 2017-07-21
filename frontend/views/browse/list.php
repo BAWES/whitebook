@@ -157,6 +157,7 @@ $(document).delegate('.category_listing_nav a', 'click', function(e) {
         //load items from selected cat 
         filter();
     });
+
     e.preventDefault();
 });
 

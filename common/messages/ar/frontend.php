@@ -17,6 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'OR' => 'أو',
     'VIEW CART' => 'عرض العربة',
     'CHECKOUT' => 'الدفع',
     'View cart to see all item(s)' => 'عرض العربة لرؤية كل بند',
@@ -409,4 +410,14 @@ return [
     'The above error occurred while the Web server was processing your request' => 'حدث الخطأ أعلاه في حين ملقم ويب تم تجهيز طلبك',
     'Please contact us if you think this is a server error. Thank you' => 'يرجى الاتصال بنا إذا كنت تعتقد أن هذا هو خطأ في الخادم. شكرا',
     'Buy' => 'يشترى',
+    'Pending' => 'قيد الانتظار',    
+    'Accepted' => 'قبلت',
+    'Rejected' => 'مرفوض',
+    'Expired' => 'منتهية الصلاحية',
+    'Notice Period' => 'فترة إشعار',
+    'Enter Value' => 'أدخل القيمة',
+    'Day' => 'يوم',
+    'Hour' => 'ساعة',
+    'Please verify you are human' => 'يرجى التحقق من أنك الإنسان',
+    'Plese, check form carefully' => 'بليز، التحقق من النموذج بعناية'
 ];

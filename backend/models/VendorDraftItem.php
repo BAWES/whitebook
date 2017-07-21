@@ -16,6 +16,8 @@ use common\models\VendorDraftItemPricing;
 use common\models\VendorItemMenuItem;
 use common\models\VendorDraftItemMenu;
 use common\models\VendorDraftItemMenuItem;
+use common\models\VendorItemVideo;
+use common\models\VendorDraftItemVideo;
 
 use Yii;
 
@@ -37,8 +39,6 @@ use Yii;
  * @property string $item_price_per_unit
  * @property string $item_customization_description
  * @property string $item_customization_description_ar
- * @property string $item_price_description
- * @property string $item_price_description_ar
  * @property string $item_base_price
  * @property integer $sort
  * @property integer $item_how_long_to_make
@@ -69,7 +69,7 @@ class VendorDraftItem extends \common\models\VendorDraftItem
 
             //ItemPrice
 
-            [['quantity_label', 'item_price_description','item_price_description_ar', 'item_customization_description', 'item_customization_description_ar'], 'string', 'on' => ['ItemPrice']],
+            [['quantity_label', 'item_customization_description', 'item_customization_description_ar'], 'string', 'on' => ['ItemPrice']],
 
             [['item_default_capacity', 'item_minimum_quantity_to_order','included_quantity','hide_price_chart'], 'integer', 'on' => ['ItemPrice']],
 
@@ -95,7 +95,7 @@ class VendorDraftItem extends \common\models\VendorDraftItem
 
         $scenarios['MenuItems'] = ['allow_special_request', 'have_female_service'];
 
-        $scenarios['ItemPrice'] = ['type_id', 'hide_price_chart', 'minimum_increment', 'min_order_amount', 'quantity_label', 'item_default_capacity', 'item_minimum_quantity_to_order', 'item_price_per_unit', 'included_quantity','item_base_price', 'item_price_description', 'item_price_description_ar', 'item_customization_description', 'item_customization_description_ar'];
+        $scenarios['ItemPrice'] = ['type_id', 'hide_price_chart', 'minimum_increment', 'min_order_amount', 'quantity_label', 'item_default_capacity', 'item_minimum_quantity_to_order', 'item_price_per_unit', 'included_quantity','item_base_price', 'item_customization_description', 'item_customization_description_ar'];
 
         $scenarios['ItemDescription'] = ['set_up_time', 'set_up_time_ar', 'max_time', 'max_time_ar', 'requirements', 'requirements_ar', 'item_how_long_to_make', 'notice_period_type', 'item_description', 'item_description_ar', 'item_additional_info', 'item_additional_info_ar'];
 
@@ -104,6 +104,9 @@ class VendorDraftItem extends \common\models\VendorDraftItem
         return $scenarios;
     }
 
+    /**
+     *  Create draft from original item 
+     */
     public function create_from_item($id) {
 
         $model = VendorItem::findOne(['item_id' => $id, 'vendor_id'=>Yii::$app->user->getId()]);
@@ -133,6 +136,14 @@ class VendorDraftItem extends \common\models\VendorDraftItem
             $vdi = new VendorDraftImage;
             $vdi->attributes = $value->attributes;
             $vdi->save();
+        }
+
+        $videos = VendorItemVideo::findAll(['item_id' => $model->item_id]);
+
+        foreach ($videos as $key => $value) {
+            $dic = new VendorDraftItemVideo;
+            $dic->attributes = $value->attributes;
+            $dic->save();
         }
 
         $categories = VendorItemToCategory::findAll(['item_id' => $model->item_id]);

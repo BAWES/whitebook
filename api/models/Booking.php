@@ -46,6 +46,9 @@ class Booking extends \common\models\Booking {
             },
             'vendor' => function($model) {
                 return $model->vendor->vendor_name;
+            },
+            'vendor_ar' => function($model) {
+                return $model->vendor->vendor_name_ar;
             }
         ];
     }

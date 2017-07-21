@@ -43,16 +43,16 @@ header("Content-type: application/xml");
   <!-- vendors -->
   <?php foreach($vendors as $vendor) { ?>
   <url>
-    <loc><![CDATA[<?= Url::to(['directory/profile', 'vendor' => $vendor['slug']], true); ?>]]></loc>
+    <loc><![CDATA[<?= Url::to(['community/profile', 'vendor' => $vendor['slug']], true); ?>]]></loc>
       <xhtml:link
           rel="alternate"
           hreflang="en"
-          href="<?= Url::to(['directory/profile', 'vendor' => $vendor['slug']], true); ?>"
+          href="<?= Url::to(['community/profile', 'vendor' => $vendor['slug']], true); ?>"
       />
       <xhtml:link
           rel="alternate"
           hreflang="ar-KW"
-          href="<?= Url::to(['directory/profile', 'vendor' => $vendor['slug'],'language'=>'ar'], true); ?>"
+          href="<?= Url::to(['community/profile', 'vendor' => $vendor['slug'],'language'=>'ar'], true); ?>"
       />
     <priority>0.5</priority>
   </url>

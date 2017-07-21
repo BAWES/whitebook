@@ -25,6 +25,8 @@ use common\models\VendorDraftItemPricing;
 use common\models\VendorOrderAlertEmails;
 use common\models\VendorDraftItemToCategory;
 use common\models\VendorDraftItemMenuItem;
+use common\models\VendorItemVideo;
+use common\models\VendorDraftItemVideo;
 
 class VendorDraftItemController extends Controller
 {
@@ -106,6 +108,11 @@ class VendorDraftItemController extends Controller
             ->orderby(['vendorimage_sort_order' => SORT_ASC])
             ->all();
 
+        $videos = VendorDraftItemVideo::find()
+                ->where(['item_id' => $model->item_id])
+                ->orderby(['video_sort_order' => SORT_ASC])
+                ->all();
+            
         $categories = VendorDraftItemToCategory::find()
             ->with('category')
             ->item($model->item_id)
@@ -127,6 +134,7 @@ class VendorDraftItemController extends Controller
             'vendor_item' => $vendor_item,
             'dataProvider1' => $dataProvider1,
             'imagedata' => $imagedata,
+            'videos' => $videos,
             'categories' => $categories,
             'price_table' => $price_table,
             'is_price_table_changed' => $is_price_table_changed,
@@ -204,6 +212,21 @@ class VendorDraftItemController extends Controller
             $vic->save();
         }
 
+        //remove old video 
+        
+        VendorItemVideo::deleteAll(['item_id' => $item->item_id]);
+        
+        //add new videos 
+
+        $videos = VendorDraftItemVideo::findAll(['item_id' => $item->item_id]);
+
+        foreach ($videos as $key => $value) 
+        {
+            $video = new VendorItemVideo;
+            $video->attributes = $value->attributes;
+            $video->save();
+        }
+
         //remove old images
 
         Image::deleteAll(['item_id' => $item->item_id]);
@@ -268,17 +291,8 @@ class VendorDraftItemController extends Controller
         // approved questions moved from draft to real table and removed from draft
         VendorDraftItemQuestion::approved($item->item_id);
 
-
         //remove draft related data
-
-        VendorDraftItemPricing::deleteAll(['item_id' => $item->item_id]);
-        VendorDraftImage::deleteAll(['item_id' => $item->item_id]);
-        VendorDraftItemMenu::deleteAll(['item_id' => $item->item_id]);
-        VendorDraftItemToCategory::deleteAll(['item_id' => $item->item_id]);
-
-        //remove from draft
-
-        $draft->delete();
+        VendorDraftItem::clear($draft);
 
         Yii::$app->session->setFlash('success', 'Item approved successfully!');
 

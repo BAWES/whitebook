@@ -62,6 +62,11 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 	    		Images
 	    	</a>
 	    </li>
+	    <li>
+	    	<a href="<?= Url::to(['vendor-item/item-videos', 'id' => $model->item_id]) ?>">
+	    		Videos
+	    	</a>
+	    </li>
         <li>
             <a href="<?= Url::to(['vendor-item/item-questions', 'id' => $model->item_id]) ?>">
                 <?=Yii::t('app','Questions')?>

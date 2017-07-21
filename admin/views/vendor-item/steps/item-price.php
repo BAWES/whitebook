@@ -62,6 +62,11 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 	    		Images
 	    	</a>
 	    </li>
+	    <li>
+	    	<a href="<?= Url::to(['vendor-item/item-videos', 'id' => $model->item_id]) ?>">
+	    		Videos
+	    	</a>
+	    </li>
         <li>
             <a href="<?= Url::to(['vendor-item/item-questions', 'id' => $model->item_id]) ?>">
                 <?=Yii::t('app','Questions')?>
@@ -98,10 +103,6 @@ $model->item_status = ($model->item_status == 'Active') ? 1 : 0;
 				<?= $form->field($model, 'minimum_increment'); ?>
 
 				<?= $form->field($model, 'min_order_amount'); ?>
-
-				<?= $form->field($model, 'item_price_description')->textarea(['maxlength' => 128]); ?>
-
-				<?= $form->field($model, 'item_price_description_ar')->textarea(['maxlength' => 128]); ?>
 				
 				<?= $form->field($model, 'hide_price_chart')->checkbox(); ?>
 

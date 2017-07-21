@@ -116,6 +116,43 @@ class CategoryPathQuery extends \yii\db\ActiveQuery
         return $this->andWhere(implode(' OR ', $price_condition));
     }
 
+    public function filterByNoticePeriod($from, $to, $type) 
+    {
+        $sql1 = $sql2 = '';
+
+        if($type == 'Day') 
+        {
+            if(is_numeric($from))
+                $sql1 .= 'item_how_long_to_make >= '.$from . ' AND ';
+            if(is_numeric($to))
+                $sql1 .= 'item_how_long_to_make <= '.$to . ' AND ';
+            $sql1 .= 'notice_period_type = "Day"';   
+            
+            if(is_numeric($from))
+                $sql2 .= 'item_how_long_to_make >= '. $from * 24 . ' AND ';
+            if(is_numeric($to))
+                $sql2 .= 'item_how_long_to_make <= '. $to * 24 . ' AND ';
+            $sql2 .= 'notice_period_type = "Hour"';   
+        }
+
+        if($type == 'Hour') 
+        {
+            if(is_numeric($from))
+                $sql1 .= 'item_how_long_to_make >= '.$from . ' AND ';
+            if(is_numeric($to))
+                $sql1 .= 'item_how_long_to_make <= '.$to . ' AND ';
+            $sql1 .= 'notice_period_type = "Hour"';   
+            
+            if(is_numeric($from))
+                $sql2  .= 'item_how_long_to_make >= '. $from / 24 . ' AND ';
+            if(is_numeric($to))
+                $sql2 .= 'item_how_long_to_make <= '. $to / 24 . ' AND ';
+            $sql2 .= 'notice_period_type = "Day"';   
+        }
+
+        $this->andWhere('(' . $sql1 . ') OR (' . $sql2 . ')');        
+    }
+
     public function categoryIDs($cats)
     {
         return $this->andWhere("{{%category_path}}.path_id IN ('" . $cats . "')");

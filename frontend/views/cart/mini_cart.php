@@ -30,7 +30,7 @@ $event_time  = ($session->has('event_time')) ? $session->get('event_time') : '';
             <minibag-item-list class="minibag-item-list">
                 <ul class="bag-items">
                     <?php 
-                    
+
                     $have_more = false;
                     $sub_total = $delivery_charge = 0;
 

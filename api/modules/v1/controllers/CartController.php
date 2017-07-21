@@ -9,6 +9,9 @@ use common\models\CustomerCart;
 use common\models\CustomerCartMenuItem;
 use common\models\VendorItem;
 use common\models\VendorItemPricing;
+use api\models\Customer;
+use common\components\CFormatter;
+use yii\web\UnauthorizedHttpException;
 
 /**
  * Auth controller provides the initial access token that is required for further requests
@@ -45,12 +48,14 @@ class CartController extends Controller
             ],
         ];
 
+        /*
         // Bearer Auth checks for Authorize: Bearer <Token> header to login the user
-        $behaviors['authenticator'] = [
+        ($behaviors['authenticator'] = [
             'class' => \yii\filters\auth\HttpBearerAuth::className(),
         ];
         // avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
         $behaviors['authenticator']['except'] = ['options'];
+        */
 
         return $behaviors;
     }
@@ -72,6 +77,20 @@ class CartController extends Controller
         return $actions;
     }
 
+    public function __construct($id, $module, $config = [])
+    {
+        parent::__construct($id, $module, $config);
+        
+        //for guest
+        Yii::$app->session->set('_user', Yii::$app->request->get('cart-session-id'));
+
+        //for login customer 
+        $authHeader = Yii::$app->request->getHeaders()->get('Authorization');
+        if ($authHeader !== null && preg_match('/^Bearer\s+(.*?)$/', $authHeader, $matches)) {
+            Yii::$app->user->loginByAccessToken($matches[1]);
+        }
+    }
+        
     /**
      * Return list of all cart items
      * in cart table
@@ -190,10 +209,10 @@ class CartController extends Controller
 
             $cartItems['items'] = $result;
             $cartItems['errors'] = $errors;
-            $cartItems['summary']['subtotal'] = $subTotal;
+            $cartItems['summary']['subtotal'] = CFormatter::format($subTotal);
             $cartItems['summary']['delivery_vendors'] = $delivery;
-            $cartItems['summary']['delivery_charges'] = $delivery_charge;
-            $cartItems['summary']['total'] = $subTotal + $delivery_charge;
+            $cartItems['summary']['delivery_charges'] = CFormatter::format($delivery_charge);
+            $cartItems['summary']['total'] = CFormatter::format($subTotal + $delivery_charge);
         }
 
         return $cartItems;
@@ -501,7 +520,7 @@ class CartController extends Controller
                     }
 
                     Yii::$app->getSession()->setFlash('success', Yii::t(
-                        'frontend',
+                        'api',
                         'Success: Product <a href="{product_link}">{product_name}</a> updated in cart successfully',
                         [
                             'product_link' => Url::to(['browse/detail', 'slug' => $cart->item->slug]),
@@ -514,7 +533,7 @@ class CartController extends Controller
                     ];
                 } else {
                     return [
-                        'error' => Yii::t('frontend','Error while updateing cart')
+                        'error' => Yii::t('api', 'Error while updateing cart')
                     ];
                 }
             }
@@ -545,27 +564,27 @@ class CartController extends Controller
         if (empty($data["item_id"])) {
             return [
                 "operation" => "error",
-                "message" => "Invalid Item ID"
+                "message" => Yii::t('api', "Invalid Item ID")
             ];
         } else if (empty($data["time_slot"])) {
             return [
                 "operation" => "error",
-                "message" => "Invalid Time Slot"
+                "message" => Yii::t('api', "Invalid Time Slot")
             ];
         } else if (empty($data["delivery_date"])) {
             return [
                 "operation" => "error",
-                "message" => "Invalid Delivery Date"
+                "message" => Yii::t('api', "Invalid Delivery Date")
             ];
         } else if (empty($data["quantity"])) {
             return [
                 "operation" => "error",
-                "message" => "Invalid Quantity"
+                "message" => Yii::t('api', "Invalid Quantity")
             ];
         } else if (empty($data["area_id"])) {
             return [
                 "operation" => "error",
-                "message" => "Invalid Area"
+                "message" => Yii::t('api', "Invalid Area")
             ];
         }
 
@@ -664,14 +683,19 @@ class CartController extends Controller
                     $location = '';
                 }
 
+                if(Yii::$app->user->isGuest) {
+                    $cart_session_id = \common\models\Customer::currentUser();
+                } else {
+                    $cart_session_id = null;
+                }
+
                 $cart = new CustomerCart();
                 $cart->customer_id = Yii::$app->user->getId();
                 $cart->item_id = $data['item_id'];
                 $cart->cart_customization_price_per_unit = 0;
                 $cart->cart_quantity = $data['quantity'];
                 $cart->cart_datetime_added = date('Y-d-m h:i:s');
-                $cart->cart_session_id = Yii::$app->user->getId();
-                //(!Yii::$app->user->getId()) ? \common\models\Customer::currentUser() : '';
+                $cart->cart_session_id = $cart_session_id;
                 $cart->cart_valid = 'yes';
                 $cart->trash = 'Default';
 
@@ -728,7 +752,7 @@ class CartController extends Controller
                 return [
                     "operation" => "success",
                     "code" => "1",
-                    "message" => "Item added to cart successfully"
+                    "message" => Yii::t('api', "Item added to cart successfully")
                 ];
 
             } else {
@@ -773,20 +797,20 @@ class CartController extends Controller
                 return [
                     "operation" => "success",
                     "code" => "1",
-                    "message" => "Cart Item Deleted Successfully"
+                    "message" => Yii::t('api', "Cart Item Deleted Successfully")
                 ];
             } else {
                 return [
                     "operation" => "error",
                     "code" => "0",
-                    "message" => "Invalid Cart ID"
+                    "message" => Yii::t('api', "Invalid Cart ID")
                 ];
             }
         } else {
             return [
                 "operation" => "error",
                 "code" => "0",
-                "message" => "Invalid Cart ID"
+                "message" => Yii::t('api', "Invalid Cart ID")
             ];
         }
     }
@@ -830,5 +854,15 @@ class CartController extends Controller
             ->all();
 
         return $result;
+    }
+
+    /**
+     * Get cart session id to perform cart operations 
+     */
+    public function actionCartSessionId() 
+    {        
+        return [
+            'cart_session_id' => \common\models\Customer::currentUser()
+        ];
     }
 }

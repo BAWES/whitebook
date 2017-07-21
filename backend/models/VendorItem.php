@@ -146,6 +146,16 @@ class VendorItem extends \common\models\VendorItem
         return $errors;
     }
 
+    /**
+     * Validate step 6 on update / create item  
+     */
+    public static function validate_item_videos($data)
+    {
+        $errors = VendorItem::validate_item_images($data);
+        
+        return $errors;
+    }
+
     public static function vendoritemmonthcount()
     {
         $month = date('m');

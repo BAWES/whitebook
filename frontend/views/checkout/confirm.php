@@ -208,11 +208,24 @@ use common\models\CustomerCartMenuItem;
                     if($charge < 1)
                         continue;
             ?>
-            <tr>
+            <tr class="delivery-charge-detail">
                 <td colspan="2" class="text-right"><strong><?= Yii::t('frontend', 'Delivery Charge') ?></strong> <small>( <?=$vendor?> )</small></td>
                 <td class="text-right"><?= CFormatter::format($charge) ?></td>
             </tr>
             <?php } ?>
+
+            <?php if($delivery_charge > 0) { ?>
+            <tr class="delivery-charge-total">
+                <td colspan="2" class="text-right">
+                    <strong><?= Yii::t('frontend', 'Delivery Charge') ?></strong>
+                    <button class="btn btn-xs" type="button">
+                        <i class="fa fa-plus"></i> <?= Yii::t('frontend', 'Expand') ?>
+                    </button>
+                </td>
+                <td class="text-right"><?= CFormatter::format($delivery_charge) ?></td>
+            </tr>
+            <?php } ?>
+            
             <tr>
                 <td colspan="2"  class="text-right"><strong><?= Yii::t('frontend', 'Total') ?></strong></td>
                 <td class="text-right"><?= CFormatter::format($sub_total + $delivery_charge) ?></td>

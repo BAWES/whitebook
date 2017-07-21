@@ -1,3 +1,9 @@
+       
+$(document).delegate('.delivery-charge-total .btn', 'click', function() {
+    $('.delivery-charge-total').hide();
+    $('.delivery-charge-detail').show();
+});
+
 
 function resize() 
 {
@@ -337,7 +343,6 @@ function resetpwdcheck()
             async: false,
             success:function(data)
             {
-                console.log(data);
                 if(data==1)
                 {
                     $('#reset_loader').hide();
@@ -1727,6 +1732,22 @@ function filter(slug = '') {
     if(areas != '') {
         url_path += '&location=' + areas;
         ajax_data.location = areas;
+    }
+
+    $notice_period_from = $('.notice_period_from').val();
+    $notice_period_to = $('.notice_period_to').val();
+
+    if($notice_period_from != '' || $notice_period_to != '') {
+        url_path += '&notice_period_from=' + $notice_period_from + '&notice_period_to=' + $notice_period_to;
+        ajax_data.notice_period_from = $notice_period_from;
+        ajax_data.notice_period_to = $notice_period_to;
+    }
+
+    $notice_period_type = $('.notice_period_type option:selected').val();
+
+    if($notice_period_type) {
+        url_path += '&notice_period_type=' + $notice_period_type;
+        ajax_data.notice_period_type = $notice_period_type;
     }
 
     var path = load_items;

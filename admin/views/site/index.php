@@ -18,6 +18,45 @@ use yii\log\Logger;
 $this->title = 'Dashboard';
 ?>
 <!-- BEGIN DASHBOARD TILES -->
+<div class="row stats">
+	<div class="col-md-3 stat_box">
+		<div class="color_1 stat_data">
+			<i class="fa fa-info"></i>
+			<div class="details">
+				<span class="big"><?php echo $bookingPending; ?></span>
+				<span>Pending Booking</span>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3 stat_box">
+		<div class="color_2 stat_data">
+			<i class="fa fa-check"></i>
+			<div class="details">
+				<span class="big"><?php echo $bookingAccepted; ?></span>
+				<span>Accepted Booking</span>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3 stat_box">
+		<div class="color_3 stat_data">
+			<i class="fa fa-times-circle"></i>
+			<div class="details">
+				<span class="big"><?php echo $bookingRejected; ?></span>
+				<span>Rejected Booking</span>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3 stat_box">
+		<div class="color_4 stat_data">
+			<i class="fa fa-hourglass-o"></i>
+			<div class="details">
+				<span class="big"><?php echo $bookingExpired; ?></span>
+				<span>Expired Booking</span>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="row">
 	<div class="col-md-4 col-vlg-3 col-sm-6">
 		<div class="tiles green m-b-10">
@@ -44,8 +83,6 @@ $this->title = 'Dashboard';
 				</div>
 			</div>
 		</div>
-
-
 	</div>
 	<div class="col-md-4 col-vlg-3 col-sm-6">
 		<div class="tiles blue m-b-10">

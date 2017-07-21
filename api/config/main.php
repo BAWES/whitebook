@@ -25,7 +25,7 @@ return [
         'user' => [
             'identityClass' => 'api\models\Customer',
             'enableAutoLogin' => false,
-            'enableSession' => false,
+            'enableSession' => true,
             'loginUrl' => null
         ],
         'urlManager' => [
@@ -66,11 +66,13 @@ return [
                     'patterns' => [
                         'GET' => 'list',
                         'GET count' => 'cart-count',
+                        'GET cart-session-id' => 'cart-session-id',
                         'POST' => 'add',
                         'PATCH' => 'update',
                         'DELETE' => 'remove',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
+                        'OPTIONS actionCartSessionId' => 'options',
                         'OPTIONS count' => 'options',
                     ]
                 ],
@@ -171,7 +173,8 @@ return [
                         'GET type' => 'address-type-list',
                         'GET view' => 'address-view',
                         'GET questions' => 'address-questions',
-                        'GET location' => 'get-location',
+                        'GET location' => 'area-list',
+                        'GET location/<id>' => 'area-detail',
                         'POST' => 'address-add',
                         'PATCH' => 'address-update',
                         'DELETE' => 'address-remove',
@@ -182,6 +185,7 @@ return [
                         'OPTIONS view' => 'options',
                         'OPTIONS questions' => 'options',
                         'OPTIONS location' => 'options',
+                        'OPTIONS location/<id>' => 'options'
                     ]
                 ],
                 [ // CheckoutController
@@ -196,6 +200,7 @@ return [
                         'GET list-with-address' => 'cart-item-with-address',
                         'GET delivery-area' => 'delivery-area',
                         'POST confirm' => 'confirm',
+                        'POST save-guest-address' => 'save-guest-address',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
                         'OPTIONS payment-getaway' => 'options',
@@ -203,7 +208,8 @@ return [
                         'OPTIONS success' => 'options',
                         'OPTIONS list-with-address' => 'options',
                         'OPTIONS delivery-area' => 'options',
-                        'OPTIONS confirm' => 'options'
+                        'OPTIONS confirm' => 'options',
+                        'OPTIONS save-guest-address' => 'options'
                     ]
                 ],
                 [ // BookingController
@@ -270,9 +276,9 @@ return [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'v1/cms',
                     'patterns' => [
-                        'GET <id>' => 'view',
+                        'GET <slug>' => 'view',
                         // OPTIONS VERBS
-                        'OPTIONS <id>' => 'options'
+                        'OPTIONS <slug>' => 'options'
                     ]
                 ],
             ],

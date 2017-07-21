@@ -110,37 +110,7 @@ class UsersController extends BaseController
             Yii::$app->session->set('register', '1');
             
             //Send Email to user
-            Yii::$app->mailer->htmlLayout = 'layouts/empty';
-
-            Yii::$app->mailer->compose("customer/confirm",
-                [
-                    "user" => $model->customer_name,
-                    "confirm_link" => Url::to(['/users/confirm_email', 'key' => $model->customer_activation_key], true),
-                    "logo_1" => Url::to("@web/images/twb-logo-horiz-white.png", true),
-                    "logo_2" => Url::to("@web/images/twb-logo-trans.png", true),
-                ])
-                ->setFrom(Yii::$app->params['supportEmail'])
-                ->setTo($model['customer_email'])
-                ->setSubject('Welcome to The White Book')
-                ->send();
-
-            //Send Email to admin
-            Yii::$app->mailer->htmlLayout = 'layouts/empty';
-
-            $send_admin = Yii::$app->mailer->compose("customer/user-register",
-                [
-                    'confirm_link' => Url::to(['/users/confirm_email', 'key' => $model->customer_activation_key], true),
-                    'logo_1' => Url::to("@web/images/twb-logo-horiz-white.png", true),
-                    'logo_2' => Url::to("@web/images/twb-logo-trans.png", true),
-                    'model' => $model
-                ]
-            );
-
-            $send_admin
-                ->setFrom(Yii::$app->params['supportEmail'])
-                ->setTo(Yii::$app->params['adminEmail'])
-                ->setSubject('User registered')
-                ->send();
+            Customer::welcomeMail($model);
 
             return [
                 'operation' => 'success'

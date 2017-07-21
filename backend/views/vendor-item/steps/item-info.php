@@ -66,6 +66,11 @@ $this->params['breadcrumbs'][] = 'Update';
 	    		Images
 	    	</a>
 	    </li>
+	    <li>
+	    	<a href="javascript::void();">
+	    		Videos
+	    	</a>
+	    </li>
 	    <?php } else { ?>
 	    <li class="active">
 	    	<a href="<?= Url::to(['vendor-item/update', 'id' => $model->item_id]) ?>">
@@ -100,6 +105,11 @@ $this->params['breadcrumbs'][] = 'Update';
 	    <li>
 	    	<a href="<?= Url::to(['vendor-item/item-images', 'id' => $model->item_id]) ?>">
 	    		Images
+	    	</a>
+	    </li>
+	    <li>
+	    	<a href="<?= Url::to(['vendor-item/item-videos', 'id' => $model->item_id]) ?>">
+	    		Videos
 	    	</a>
 	    </li>
 	    <?php } ?>

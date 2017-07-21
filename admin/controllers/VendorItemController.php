@@ -46,6 +46,7 @@ use common\models\VendorItemMenu;
 use common\models\VendorItemMenuItem;
 use common\models\VendorDraftItemQuestion;
 use common\models\UploadForm;
+use common\models\VendorItemVideo;
 
 /**
 * VendoritemController implements the CRUD actions for VendorItem model.
@@ -118,10 +119,16 @@ class VendorItemController extends Controller
             ->all();
 
         $model_question = VendorItemQuestion::findAll(['item_id' => $id]);
+        
         $imagedata = Image::find()
             ->item($id)
             ->orderby(['vendorimage_sort_order' => SORT_ASC])
             ->all();
+
+        $videos = VendorItemVideo::find()
+                ->where(['item_id' => $id])
+                ->orderby(['video_sort_order' => SORT_ASC])
+                ->all();
 
         $categories = VendorItemToCategory::find()
             ->with('category')
@@ -129,14 +136,15 @@ class VendorItemController extends Controller
             ->all();
 
         $arr_menu = VendorItemMenu::find()->item($id)->menu('options')->all();
+        
         $arr_addon_menu = VendorItemMenu::find()->item($id)->menu('addons')->all();
-
 
         return $this->render('view', [
             'model' => $this->findModel($id), 
             'dataProvider1' => $dataProvider1, 
             'questions' => $model_question,
             'imagedata' => $imagedata,
+            'videos' => $videos,
             'categories' => $categories,
             'arr_menu' => $arr_menu,
             'arr_addon_menu' => $arr_addon_menu
@@ -253,7 +261,7 @@ class VendorItemController extends Controller
             }
 
             //clear draft 
-            VendorDraftItem::clearDraft($model->item_id);
+            VendorDraftItem::clear($this->findDraftModel($model->item_id));
 
             $complete = Yii::$app->request->post('complete');
 
@@ -320,7 +328,7 @@ class VendorItemController extends Controller
         if($model->load(Yii::$app->request->post()) && $model->save()) {
 
             //clear draft 
-            VendorDraftItem::clearDraft($model->item_id);
+            VendorDraftItem::clear($this->findDraftModel($model->item_id));
   
             $complete = Yii::$app->request->post('complete');
 
@@ -355,7 +363,7 @@ class VendorItemController extends Controller
         if($model->load(Yii::$app->request->post()) && $model->save()) {
 
             //clear draft 
-            VendorDraftItem::clearDraft($model->item_id);
+            VendorDraftItem::clear($this->findDraftModel($model->item_id));
 
             //remove old price chart
             VendorItemPricing::deleteAll('item_id = :item_id', [':item_id' => $model->item_id]);
@@ -412,7 +420,7 @@ class VendorItemController extends Controller
         if($model->load(Yii::$app->request->post()) && $model->save()) 
         {            
             //clear draft 
-            VendorDraftItem::clearDraft($model->item_id);
+            VendorDraftItem::clear($this->findDraftModel($model->item_id));
 
             //remove old menu and menu items 
 
@@ -508,7 +516,7 @@ class VendorItemController extends Controller
         if(Yii::$app->request->isPost) 
         {                     
             //clear draft 
-            VendorDraftItem::clearDraft($model->item_id);
+            VendorDraftItem::clear($this->findDraftModel($model->item_id));
   
             //remove old menu and menu items 
 
@@ -606,7 +614,7 @@ class VendorItemController extends Controller
         if($model->load(Yii::$app->request->post()) && $model->save()) {
 
             //clear draft 
-            VendorDraftItem::clearDraft($model->item_id);
+            VendorDraftItem::clear($this->findDraftModel($model->item_id));
 
             $complete = Yii::$app->request->post('complete');
 
@@ -639,7 +647,7 @@ class VendorItemController extends Controller
         if(Yii::$app->request->isPost) 
         {            
             //clear draft 
-            VendorDraftItem::clearDraft($model->item_id);
+            VendorDraftItem::clear($this->findDraftModel($model->item_id));
 
             $images = Yii::$app->request->post('images');
 
@@ -697,10 +705,60 @@ class VendorItemController extends Controller
                 return $this->redirect(['index']);    
             }            
 
-            return $this->redirect(['vendor-item/item-themes-groups', 'id' => $id,'_u'=>$_u]);
+            return $this->redirect(['vendor-item/item-videos', 'id' => $id,'_u'=>$_u]);
         }
 
         return $this->render('steps/images', [
+            'model' => $model
+        ]);
+    }
+
+    /**
+    * Save item videos from update and create page
+    */
+    public function actionItemVideos($id, $_u = null)
+    {
+        $model = $this->findModel($id);
+
+        if(Yii::$app->request->isPost) 
+        {          
+            //remove old content 
+            VendorItemVideo::deleteAll(['item_id' => $id]);
+
+            //clear draft 
+            VendorDraftItem::clear($this->findDraftModel($model->item_id));
+
+            $videos = Yii::$app->request->post('videos');
+
+            if(!$videos) {
+                $videos = array();
+            }
+
+            //add new content 
+            foreach ($videos as $key => $value) 
+            {
+                $video = new VendorItemVideo();
+                $video->item_id = $id;
+                $video->video = $value['video'];
+                $video->video_sort_order = $value['video_sort_order'];
+                $video->save();
+            }
+
+            $complete = Yii::$app->request->post('complete');
+
+            if($complete) {
+
+                Yii::$app->session->setFlash('success', 'Vendor item With ID ' . $model->item_id . ' updated successfully!');
+
+                Yii::info('[Item Updated] Admin updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
+
+                return $this->redirect(['index']);    
+            }            
+
+            return $this->redirect(['vendor-item/item-questions', 'id' => $id, '_u'=>$_u]);
+        }
+
+        return $this->render('steps/videos', [
             'model' => $model
         ]);
     }
@@ -717,7 +775,7 @@ class VendorItemController extends Controller
         if(Yii::$app->request->isPost) 
         {            
             //clear draft 
-            VendorDraftItem::clearDraft($model->item_id);
+            VendorDraftItem::clear($this->findDraftModel($model->item_id));
 
             $vendor_item = Yii::$app->request->post('VendorItem');
             // save themes
@@ -865,25 +923,14 @@ class VendorItemController extends Controller
     */
     public function actionDelete($id)
     {
-        $model = $this->findModel($id);
-        $model->deleteAllFiles();
-        VendorItemCapacityException::deleteAll(['item_id' => $id]);
-        Image::deleteAll(['item_id' => $id]);
-        VendorItemPricing::deleteAll(['item_id' => $id]);
-        VendorItemThemes::deleteAll(['item_id' => $id]);
-        VendorItemToCategory::deleteAll(['item_id' => $id]);
-        VendorItemQuestion::deleteAll(['item_id' => $id]);
-        CustomerCart::deleteAll(['item_id' => $id]);
-        PriorityItem::deleteAll(['item_id' => $id]);
-        EventItemlink::deleteAll(['item_id' => $id]);
-        FeatureGroupItem::deleteAll(['item_id' => $id]);
-        VendorDraftItem::deleteAll(['item_id' => $id]);
-        
-        //clear draft 
-        VendorDraftItem::clearDraft($model->item_id);
+        //delete main version 
+        $model = $this->findModel($id);        
+        VendorItem::clear($model);
 
-        $model->delete();
-        
+        //delete draft 
+        $draft = $this->findDraftModel($id);
+        VendorDraftItem::clear($draft); 
+
         Yii::$app->session->setFlash('success', 'Vendor item deleted successfully!');
         return $this->redirect(['index']);
     }
@@ -911,6 +958,14 @@ class VendorItemController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    protected function findDraftModel($id)
+    {
+        return VendorDraftItem::findOne([
+            'item_id' => $id, 
+            'vendor_id' => Yii::$app->user->getId()
+        ]);
     }
 
     public function actionBlock()

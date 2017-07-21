@@ -60,6 +60,11 @@ $this->params['breadcrumbs'][] = 'Update';
 	    		Images
 	    	</a>
 	    </li>
+	    <li>
+	    	<a href="<?= Url::to(['vendor-item/item-videos', 'id' => $model->item_id]) ?>">
+	    		Videos
+	    	</a>
+	    </li>
         <li>
             <a href="<?= Url::to(['vendor-item/item-questions', 'id' => $model->item_id]) ?>">
                 <?=Yii::t('app','Questions')?>
@@ -139,7 +144,7 @@ $this->params['breadcrumbs'][] = 'Update';
 
 			<div class="row">
 				<div class="col-md-6">
-					<a href="<?= Url::to(['vendor-item/item-images', 'id' => $model->item_id,'_u'=>Yii::$app->request->get('_u')]) ?>" class="btn btn-info pull-left">Prev</a>
+					<a href="<?= Url::to(['vendor-item/item-videos', 'id' => $model->item_id,'_u'=>Yii::$app->request->get('_u')]) ?>" class="btn btn-info pull-left">Prev</a>
 				</div>
 				<div class="col-md-6">
 					<input type="submit" name="complete" class="btn btn-info pull-right" value="Complete" />

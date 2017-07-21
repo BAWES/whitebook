@@ -88,7 +88,7 @@ class AccountController extends Controller
             if ($data->customer_id != $customer_id) {
                 return [
                     "operation" => "error",
-                    "message" => "Email already in use.",
+                    "message" => Yii::t('api', "Email already in use."),
                 ];
             }
             $model = Customer::findOne($customer_id);
@@ -99,10 +99,11 @@ class AccountController extends Controller
             $model->customer_dateofbirth = $dob;
             $model->customer_mobile = $mobile;
             $model->modified_datetime = date('Y-m-d H:i:s');
+
             if ($model->save()) {
                 return [
                     "operation" => "success",
-                    "message" => "Profile updated successfully.",
+                    "message" => Yii::t('api', "Profile updated successfully."),
                 ];
             } else {
                 return [
@@ -113,7 +114,7 @@ class AccountController extends Controller
         } else {
             return [
                 "operation" => "error",
-                "message" => "Invalid Profile.",
+                "message" => Yii::t('api', "Invalid Profile."),
             ];
         }
     }
@@ -130,7 +131,7 @@ class AccountController extends Controller
         $email  = Yii::$app->request->getBodyParam('email');
         $msg      = Yii::$app->request->getBodyParam('msg');
 
-        $model = new \frontend\models\Contacts();
+        $model = new \api\models\Contacts();
         $model->contact_name = $name;
         $model->contact_email = $email;
         $model->created_datetime = date('Y/m/d');
@@ -169,7 +170,7 @@ class AccountController extends Controller
             return [
                 "operation" => "success",
                 "code" => "1",
-                "message" => "Mail sent successfully",
+                "message" => Yii::t('api', "Mail sent successfully"),
             ];
 
         } else {
@@ -177,7 +178,7 @@ class AccountController extends Controller
             return [
                 "operation" => "error",
                 "code" => "1",
-                "message" => $model->errorDetail(),
+                "message" => $model->getErrors()// errorDetail(),
             ];
         }
     }
@@ -216,7 +217,7 @@ class AccountController extends Controller
 
         return [
             "operation" => "success",
-            "message" => "Mail sent successfully",
+            "message" => Yii::t("api", "Mail sent successfully"),
         ];
     }
 
@@ -230,7 +231,7 @@ class AccountController extends Controller
             return [
                 "operation" => "error",
                 "errorType" => "email-not-verified",
-                "message" => "Please click the verification link sent to you by email to activate your account",
+                "message" => Yii::t("api", "Please click the verification link sent to you by email to activate your account"),
             ];
         }
         $token = \common\models\CustomerToken::findOne([
@@ -243,13 +244,13 @@ class AccountController extends Controller
             return [
                 "operation" => "success",
                 "code" => "1",
-                "message" => 'User logged out successfully'
+                "message" => Yii::t("api", 'User logged out successfully')
             ];
         } else {
             return [
                 "operation" => "error",
                 "code" => "0",
-                "message" => 'Error with User logged out. Please try again.'
+                "message" => Yii::t("api", 'Error with User logged out. Please try again.')
             ];
         }
     }

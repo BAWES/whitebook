@@ -16,8 +16,10 @@ use common\models\Smtp;
 use common\models\CategoryPath;
 use common\models\VendorPhoneNo;
 use common\models\VendorItemThemes;
+use common\models\VendorReview;
+use common\models\Booking;
 
-class DirectoryController extends BaseController
+class CommunityController extends BaseController
 {
     /**
      * @inheritdoc
@@ -89,20 +91,11 @@ class DirectoryController extends BaseController
 
         if (Yii::$app->request->isAjax) {
             $request = Yii::$app->request;
-            if ($request->post('ajaxdata') == 0) {
-
-                return $this->renderPartial('_listing', [
-                    'directory' => $directory,
-                    'first_letter' => $result,
-                ]);
-
-            } else {
-
-                return $this->renderPartial('_m_listing', [
-                    'directory' => $directory,
-                    'first_letter' => $result
-                ]);
-            }
+        
+            return $this->renderPartial('_listing', [
+                'directory' => $directory,
+                'first_letter' => $result,
+            ]);
         }
 
         return $this->render('index', [
@@ -140,6 +133,16 @@ class DirectoryController extends BaseController
 
             $arr_min_max = explode('-', $data['price']);
             $item_query->price($arr_min_max[0], $arr_min_max[1]);
+        }
+        
+        //notice_period 
+        if (isset($data['notice_period_from']) && ($data['notice_period_from'] >= 0 || $data['notice_period_to'] >= 0)) 
+        {
+            $item_query->filterByNoticePeriod(
+                    $data['notice_period_from'],
+                    $data['notice_period_to'],
+                    $data['notice_period_type']
+                );
         }
 
         //theme filter
@@ -249,7 +252,6 @@ class DirectoryController extends BaseController
         //day off 
         $search = array(0, 1, 2, 3, 4, 5, 6, ',');
 
-
         $replace = array(
             Yii::t('frontend', 'Sunday'),
             Yii::t('frontend', 'Monday'),
@@ -269,6 +271,38 @@ class DirectoryController extends BaseController
             ->asArray()
             ->all();
 
+        $modelReview = new VendorReview;
+        $modelReview->vendor_id = $vendor_details->vendor_id;
+
+        //check if customer have place order from this vendor, but not added review for that 
+
+        $booking = Booking::find()
+            ->where([
+                'vendor_id' => $vendor_details->vendor_id,
+                'customer_id' => Yii::$app->user->getId()
+            ])
+            ->one();
+
+        $review = VendorReview::find()
+            ->where([
+                    'vendor_id' => $vendor_details->vendor_id,
+                    'customer_id' => Yii::$app->user->getId()
+            ])
+            ->one();
+
+        if($booking && !$review) {
+            $canAddReview = true;
+        } else {
+            $canAddReview = false;
+        }
+
+        $reviews = VendorReview::find()
+            ->where([
+                'vendor_id' => $vendor_details->vendor_id,
+                'approved' => 1
+            ])
+            ->all();
+
         return $this->render('profile', [
             'vendor_detail' => $vendor_details,
             'vendor_items' => $vendor_items,
@@ -280,8 +314,35 @@ class DirectoryController extends BaseController
             'customer_events_list' => $customer_events_list,
             'phones' => VendorPhoneNo::findAll(['vendor_id' => $vendor_details->vendor_id]),
             'phone_icons' => $phone_icons,
-            'txt_day_off' => $txt_day_off
+            'txt_day_off' => $txt_day_off,
+            'canAddReview' => $canAddReview,
+            'modelReview' => $modelReview,
+            'reviews' => $reviews
         ]);
+    }
+
+    public function actionReview() 
+    {
+        Yii::$app->response->format = \Yii\web\Response::FORMAT_JSON;
+
+        $model = new VendorReview();        
+        $model->customer_id = Yii::$app->user->getId();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) 
+        {
+            Yii::$app->getSession()->setFlash('success', Yii::t('frontend', 'We got your review, thank you!'));
+
+            return [
+                'operation' => 'success'
+            ];    
+        } 
+        else 
+        {
+            return [
+                'operation' => 'error',
+                'message' => $model->getErrors()
+            ];   
+        }
     }
 }
 

@@ -125,7 +125,20 @@ class SiteController extends BaseController
             </tbody>
             </table>';
 
-            if ($model->save()) {
+            Yii::$app->response->format =  yii\web\Response::FORMAT_JSON;
+
+            $recaptcha = new \ReCaptcha\ReCaptcha(Yii::$app->params['recaptcha_secret']);
+
+            $resp = $recaptcha->verify($_POST['g-recaptcha-response'], $_SERVER['REMOTE_ADDR']);
+
+            if (!$resp->isSuccess()){
+                return [
+                    'operation' => 'error',
+                    'message' => Yii::t('frontend', 'Please verify you are human')
+                ];
+            } 
+
+            if($model->save()) {
                 Yii::$app->mailer->compose([
                         "html" => "customer/contact-inquiry"
                             ],[
@@ -137,13 +150,15 @@ class SiteController extends BaseController
                     ->setSubject($subject)
                     ->send();
 
-                echo '1';
-                die;
-
+                return [
+                    'operation' => 'success',
+                    'message' => Yii::t('frontend', 'Thanks, we willll be in touch soon')
+                ];
             } else {
-
-                echo '0';
-                die;
+                return [
+                    'operation' => 'error',
+                    'message' => Yii::t('frontend', 'Plese, check form carefully')
+                ];
             }
         }
 

@@ -17,8 +17,16 @@ use yii\helpers\Url;
 <!--end of notification-->
 
 <div class="main-container">
+
     <section class="cover cover-fullscreen imagebg text-center height-100" data-overlay="4">
-    <div class="background-image-holder"><img alt="background" src="images/tourism-9.jpg"></div>
+
+      <?php if(Yii::$app->language == "en"){ ?>
+          <a href='<?= Url::current(['language'=>'ar', ]) ?>' class='btn' style='font-size:1.2em; position:absolute; top:10px; right:10px;'>العربية</a>
+      <?php }else{ ?>
+          <a href='<?= Url::current(['language'=>'en', ]) ?>' class='btn' style="font-family: 'Open Sans', 'Helvetica', 'Arial', sans-serif !important; font-size:1.2em; position:absolute; top:10px; left:10px;">English</a>
+      <?php } ?>
+     
+      <div class="background-image-holder"><img alt="background" src="images/tourism-9.jpg"></div>
         <div class="container pos-vertical-center">
             <div class="row">
                 <div class="col-sm-12">
@@ -49,16 +57,9 @@ use yii\helpers\Url;
                        </form>
                    </div>
 
-                   <?php if(Yii::$app->language == "en"){ ?>
-                        <a href='<?= Url::current(['language'=>'ar', ]) ?>' class='btn' style='font-size:1.2em; margin-top:10px;'>العربية</a>
-                    <?php }else{ ?>
-                        <a href='<?= Url::current(['language'=>'en', ]) ?>' class='btn' style='font-size:1.2em; margin-top:10px;'>English</a>
-                    <?php } ?>
-                   
                </div>
            </div>
-       </div>
-   </section>
-
+      </div>
+    </section>
 
 </div>

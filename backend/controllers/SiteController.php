@@ -1,7 +1,7 @@
 <?php
 namespace backend\controllers;
 
-use common\models\Booking;
+use backend\models\Booking;
 use common\models\VendorLocation;
 use common\models\VendorWorkingTiming;
 use Yii;
@@ -76,6 +76,34 @@ class SiteController extends Controller
             ->activeBooking()
             ->sum('total_vendor');
 
+        $bookingExpired = Booking::find()
+            ->where([
+                'booking_status' => Booking::STATUS_EXPIRED
+            ])
+            ->vendor($vendor_id)
+            ->count('booking_id');    
+            
+        $bookingRejected = Booking::find()
+            ->where([
+                'booking_status' => Booking::STATUS_REJECTED
+            ])
+            ->vendor($vendor_id)
+            ->count('booking_id');    
+
+        $bookingAccepted = Booking::find()
+            ->where([
+                'booking_status' => Booking::STATUS_ACCEPTED
+            ])
+            ->vendor($vendor_id)
+            ->count('booking_id');    
+
+        $bookingPending = Booking::find()
+            ->where([
+                'booking_status' => Booking::STATUS_PENDING
+            ])
+            ->vendor($vendor_id)
+            ->count('booking_id');    
+
         $vendor = Vendor::findOne($vendor_id);
 
         return $this->render('index', [
@@ -83,7 +111,11 @@ class SiteController extends Controller
             'monthitemcnt' => $monthitemcnt,
             'dateitemcnt' => $dateitemcnt,
             'earning_total' => number_format($earning_total, 3).' KD',
-            'vendor_payable' => number_format($vendor->vendor_payable, 3).' KD'
+            'vendor_payable' => number_format($vendor->vendor_payable, 3).' KD',
+            'bookingExpired' => $bookingExpired,
+            'bookingRejected' => $bookingRejected,
+            'bookingAccepted'=> $bookingAccepted,
+            'bookingPending' => $bookingPending
         ]);
     }
 
@@ -387,5 +419,29 @@ class SiteController extends Controller
         } else {
             die('invalid Access');
         }
+    }
+
+    public function actionGraph() 
+    {        
+        $type = Yii::$app->request->get('type');
+      
+        switch ($type) {
+            case 'month':
+              $result = Booking::getMonthGrpah();
+              break;              
+            case 'year':
+              $result = Booking::getYearGrpah();
+              break;                  
+            case 'day':
+              $result = Booking::getDayGrpah();
+              break;                  
+            default:
+              $result = Booking::getDayGrpah();
+              break;
+        }  
+
+        \Yii::$app->response->format = 'json';
+        
+        return $result;
     }
 }

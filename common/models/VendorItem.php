@@ -12,6 +12,7 @@ use yii\helpers\Url;
 use common\models\Vendor;
 use common\models\VendorDraftItem;
 use common\models\VendorItemToPackage;
+use common\models\VendorItemVideo;
 
 /**
 * This is the model class for table "whitebook_vendor_item".
@@ -26,7 +27,6 @@ use common\models\VendorItemToPackage;
 * @property integer $item_default_capacity
 * @property integer $included_quantity
 * @property string $item_price_per_unit
-* @property string $item_price_description
 * @property string $item_base_price
 * @property integer $item_how_long_to_make
 * @property integer $item_minimum_quantity_to_order
@@ -116,7 +116,7 @@ class VendorItem extends \yii\db\ActiveRecord
             
             [['minimum_increment', 'hide_price_chart', 'type_id', 'vendor_id', 'item_default_capacity', 'item_how_long_to_make', 'item_minimum_quantity_to_order', 'created_by', 'modified_by'], 'integer'],
             
-            [['notice_period_type', 'item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_price_description','item_price_description_ar', 'item_approved', 'trash', 'quantity_label','slug'], 'string'],
+            [['notice_period_type', 'item_description','item_description_ar','item_additional_info','item_additional_info_ar', 'item_approved', 'trash', 'quantity_label','slug'], 'string'],
             
             [['item_price_per_unit', 'min_order_amount','item_base_price','included_quantity'], 'number'],
             
@@ -152,8 +152,6 @@ class VendorItem extends \yii\db\ActiveRecord
             'item_default_capacity' => 'Maximum quantity ordered per day',
             'item_price_per_unit' => 'Increment Price',
             'item_base_price' => 'Base Price',
-            'item_price_description' => 'Item Price Description',
-            'item_price_description_ar' => 'Item Price Description - Arabic',
             'item_how_long_to_make' => 'Notice Period',
             'notice_period_type' => 'Notice Period Type',
             'hide_price_chart' => 'Hide price chart from customer',
@@ -248,6 +246,14 @@ class VendorItem extends \yii\db\ActiveRecord
     }
 
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVideos()
+    {
+        return $this->hasMany(VendorItemVideo::className(), ['item_id' => 'item_id'])->orderBy(['video_sort_order' => SORT_ASC]);
+    }
+
+    /**
     * @return \yii\db\ActiveQuery
     */
     public function getVendorItemCapacityExceptions()
@@ -295,13 +301,28 @@ class VendorItem extends \yii\db\ActiveRecord
         return $this->hasMany(VendorItemThemes::className(), ['item_id' => 'item_id']);
     }
 
-
     /**
     * @return \yii\db\ActiveQuery
     */
     public function getItemQuestions()
     {
         return $this->hasMany(VendorItemQuestion::className(), ['item_id' => 'item_id']);
+    }
+
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+    public function getMenuItems()
+    {
+        return $this->hasMany(VendorItemMenuItem::className(), ['item_id' => 'item_id']);
+    }
+
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+    public function getMenus()
+    {
+        return $this->hasMany(VendorItemMenu::className(), ['item_id' => 'item_id']);
     }
 
     public static function vendoritemcount($vid = '')
@@ -404,16 +425,6 @@ class VendorItem extends \yii\db\ActiveRecord
         return true;
     }
 
-    public function deleteAllFiles() {
-        if (isset($this->images) && count($this->images)>0) {
-            foreach ($this->images as $img) {
-                Yii::$app->resourceManager->delete(self::UPLOADFOLDER_210. $img->image_path);
-                Yii::$app->resourceManager->delete(self::UPLOADFOLDER_530. $img->image_path);
-                Yii::$app->resourceManager->delete(self::UPLOADFOLDER_1000. $img->image_path);
-            }
-        }
-    }
-
     public static function get_featured_product() {
         return $feature = \frontend\models\VendorItem::find()->select(['{{%vendor_item}}.*'])->where(['item_status' => 'Active'])->with('vendor')->asArray()->all();
     }
@@ -434,11 +445,7 @@ class VendorItem extends \yii\db\ActiveRecord
             $this->item_additional_info = str_replace('style="', 'inline-style-not-allowed="', $this->item_additional_info);
             
             $this->item_additional_info_ar = str_replace('style="', 'inline-style-not-allowed="', $this->item_additional_info_ar);
-            
-            $this->item_price_description = str_replace('style="', 'inline-style-not-allowed="', $this->item_price_description);
-
-            $this->item_price_description_ar = str_replace('style="', 'inline-style-not-allowed="', $this->item_price_description_ar);
-
+                        
             return true;
         } else {
             return false;
@@ -559,6 +566,48 @@ class VendorItem extends \yii\db\ActiveRecord
         }
 
         return $total;
+    }
+
+    public function deleteAllFiles() {
+        //item images 
+        if (isset($this->images) && count($this->images)>0) {
+            foreach ($this->images as $img) {
+                Yii::$app->resourceManager->delete(self::UPLOADFOLDER_210. $img->image_path);
+                Yii::$app->resourceManager->delete(self::UPLOADFOLDER_530. $img->image_path);
+                Yii::$app->resourceManager->delete(self::UPLOADFOLDER_1000. $img->image_path);
+            }
+        }
+        //menu images 
+        foreach ($this->menuItems as $menuItem) {
+            Yii::$app->resourceManager->delete(self::UPLOADFOLDER_MENUITEM_THUMBNAIL . $menuItem->image);
+            Yii::$app->resourceManager->delete(self::UPLOADFOLDER_MENUITEM . $menuItem->image);            
+        }
+    }
+
+    public static function clear($model)
+    {
+        $model->deleteAllFiles();
+        VendorItemCapacityException::deleteAll(['item_id' => $model->item_id]);
+        Image::deleteAll(['item_id' => $model->item_id]);
+        VendorItemPricing::deleteAll(['item_id' => $model->item_id]);
+        VendorItemThemes::deleteAll(['item_id' => $model->item_id]);
+        VendorItemToCategory::deleteAll(['item_id' => $model->item_id]);
+        CustomerCart::deleteAll(['item_id' => $model->item_id]);
+        PriorityItem::deleteAll(['item_id' => $model->item_id]);
+        EventItemlink::deleteAll(['item_id' => $model->item_id]);
+        FeatureGroupItem::deleteAll(['item_id' => $model->item_id]);
+        VendorItemQuestion::deleteAll(['item_id' => $model->item_id]);
+        //menu 
+
+        $menues = VendorItemMenu::findAll(['item_id' => $model->item_id]);
+
+        foreach ($menues as $key => $menu) {
+            VendorItemMenuItem::deleteAll(['menu_id' => $menu->menu_id]);
+        }
+
+        VendorItemMenu::deleteAll(['item_id' => $model->item_id]);
+
+        $model->delete();
     }
 
     /**

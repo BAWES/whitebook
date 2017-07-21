@@ -11,7 +11,7 @@ if ($items) {
             $baselink = Yii::getAlias('@vendor_logo/').$value->vendor_logo_path;
         }
 
-        $item_url = Url::to(["directory/profile", 'vendor' => $value->slug]);
+        $item_url = Url::to(["community/profile", 'vendor' => $value->slug]);
         ?>
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6 min-height-301 pull-left">
             <div class="events_items width-100-percent">

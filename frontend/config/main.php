@@ -22,7 +22,16 @@ return [
             'identityClass' => 'common\models\Customer',
             'enableAutoLogin' => true,
             'on '.\yii\web\User::EVENT_BEFORE_LOGIN => ['common\models\Customer', 'handleBeforeLogin'],
-
+        ],
+        'authClientCollection' => [
+            'class' => 'yii\authclient\Collection',
+            'clients' => [
+                'google' => [
+                    'class' => 'yii\authclient\clients\Google',
+                    'clientId' => '763967388698-khv64ob8aq5a04hv81q1ub1u6plcsuv7.apps.googleusercontent.com',
+                    'clientSecret' => 'v21H24NCl7YE4dVGQD-HOQF2',
+                ]
+            ],
         ],
         'session' => [
             'name' => 'app-frontend',
@@ -54,6 +63,7 @@ return [
             // Url Rules for Frontend
             'rules' => [
                   '' => 'site/index',
+                  'authenticate' => 'authenticate/index', 
                   'payment/<token:[0-9]+>' => 'payment/index',
                   'payment/tap' => 'payment/tap/index',
                   'payment/cod' => 'payment/cod/index',
@@ -73,7 +83,8 @@ return [
                   'browse/detail/<slug:[A-Za-z0-9\_-]+>' => 'browse/detail',
                   'themes/<slug:[A-Za-z0-9\_-]+>/<themes:[A-Za-z0-9\_-]+>' => 'themes/detail',
                   /*'vendor/<slug:[A-Za-z0-9\_-]+>/<vendor:[A-Za-z0-9\_-]+>' => 'directory/profile',*/
-                  'vendor/<vendor:[A-Za-z0-9\_-]+>' => 'directory/profile',
+                  'vendor/review' => 'community/review',
+                  'vendor/<vendor:[A-Za-z0-9\_-]+>' => 'community/profile',
                   'events/pdf/<slug:[A-Za-z0-9\_-]+>' => 'events/pdf',
                   'events/detail/<slug:[A-Za-z0-9\_-]+>' => 'events/detail',
                   'events/public/<token:[A-Za-z0-9\_-]+>' => 'events/public',
