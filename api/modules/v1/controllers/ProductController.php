@@ -315,6 +315,7 @@ class ProductController extends Controller
             'type' => $model->type,
             'vendor' => $model->vendor,
             'images' => $model->images,
+            'videos' => $model->videos,
             'menu' => $menu,
             'addons' => $addons,
             'notice' => $notice
