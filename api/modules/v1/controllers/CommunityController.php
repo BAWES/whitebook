@@ -8,9 +8,9 @@ use api\models\Vendor;
 use common\models\CategoryPath;
 
 /**
- * Directory controller 
+ * Community controller 
  */
-class DirectoryController extends Controller
+class CommunityController extends Controller
 {
     public function behaviors()
     {
@@ -91,7 +91,7 @@ class DirectoryController extends Controller
         }
 
         return [
-            'directory' => $result,
+            'community' => $result,
             'keys' => array_keys($result)
         ];
     }
