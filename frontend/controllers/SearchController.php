@@ -242,21 +242,20 @@ class SearchController extends BaseController
 
         if ($request->post('search') && $request->post('_csrf')) {
 
-            $item_details = VendorItem::find()
-                ->select(['{{%vendor_item}}.item_name', '{{%vendor_item}}.slug'])
-                ->leftJoin('{{%vendor}}', '{{%vendor_item}}.vendor_id = {{%vendor}}.vendor_id')
-                ->where(['like', '{{%vendor_item}}.item_name', $request->post('search')])
+            $item_details = $item_query = CategoryPath::find()
+                ->selectedFields()
+                ->categoryJoin()
+                ->itemJoin()
+                ->priorityItemJoin()
+                ->vendorJoin()
                 ->defaultItems()
+                ->likeItemName($request->post('search'))
                 ->approved()
                 ->active()
-                ->activeVendor()
-                ->approvedVendor()
-                ->defaultVendor()
-                ->limit(10)
+                ->groupBy('{{%vendor_item}}.item_id')
+                ->orderByExpression()
                 ->asArray()
                 ->all();
-
-            $k = '';
 
             $vendorSearchData = Vendor::find()
                 ->select(['vendor_name','slug'])

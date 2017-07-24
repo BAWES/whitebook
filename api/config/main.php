@@ -260,9 +260,9 @@ return [
                         'OPTIONS' => 'options'
                     ]
                 ],
-                [ // DirectoryController
+                [ //CommunityController
                     'class' => 'yii\rest\UrlRule',
-                    'controller' => 'v1/directory',
+                    'controller' => 'v1/community',
                     'pluralize' => false,
                     'patterns' => [
                         'GET' => 'list',
