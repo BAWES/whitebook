@@ -267,9 +267,13 @@ return [
                     'patterns' => [
                         'GET' => 'list',
                         'GET view' => 'view',
+                        'GET reviews/<id>' => 'reviews',
+                        'POST review' => 'review',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
-                        'OPTIONS view' => 'options'
+                        'OPTIONS view' => 'options',
+                        'OPTIONS review' => 'options',
+                        'OPTIONS reviews/<id>' => 'options'
                     ]
                 ],
                 [ // CmsController
