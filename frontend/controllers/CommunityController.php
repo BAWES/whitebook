@@ -274,28 +274,6 @@ class CommunityController extends BaseController
         $modelReview = new VendorReview;
         $modelReview->vendor_id = $vendor_details->vendor_id;
 
-        //check if customer have place order from this vendor, but not added review for that 
-
-        $booking = Booking::find()
-            ->where([
-                'vendor_id' => $vendor_details->vendor_id,
-                'customer_id' => Yii::$app->user->getId()
-            ])
-            ->one();
-
-        $review = VendorReview::find()
-            ->where([
-                    'vendor_id' => $vendor_details->vendor_id,
-                    'customer_id' => Yii::$app->user->getId()
-            ])
-            ->one();
-
-        if($booking && !$review) {
-            $canAddReview = true;
-        } else {
-            $canAddReview = false;
-        }
-
         $reviews = VendorReview::find()
             ->where([
                 'vendor_id' => $vendor_details->vendor_id,
@@ -315,7 +293,7 @@ class CommunityController extends BaseController
             'phones' => VendorPhoneNo::findAll(['vendor_id' => $vendor_details->vendor_id]),
             'phone_icons' => $phone_icons,
             'txt_day_off' => $txt_day_off,
-            'canAddReview' => $canAddReview,
+            'canAddReview' => VendorReview::canAddReview($vendor_details->vendor_id),
             'modelReview' => $modelReview,
             'reviews' => $reviews
         ]);
