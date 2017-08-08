@@ -29,19 +29,6 @@ class VendorItem extends \common\models\VendorItem
             ->where(['slug' => $slug])
             ->one();
     }
-
-    public static function more_from_vendor($model) {
-        
-        return VendorItem::find()
-            ->where([
-                'vendor_id' => $model->vendor_id,
-                'item_status' => 'Active',
-                'item_approved' => 'Yes',
-                'trash' => 'Default'
-            ])
-            ->andWhere(['!=','item_id', $model->item_id])
-            ->all();    
-    }
     
     public static function get_category_from_itemlist($item_id)
     {
