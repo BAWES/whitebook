@@ -97,5 +97,4 @@ class VendorItemQuery extends \yii\db\ActiveQuery
             '{{%vendor_item_to_package}}.package_id' => $id
         ]);
     }
-
 }
