@@ -42,17 +42,14 @@ return [
                         'POST create-account' => 'create-account',
                         'POST request-reset-password' => 'request-reset-password',
                         'POST resend-verification-email' => 'resend-verification-email',
+                        'POST validate-fb-token' => 'validate-fb-token',
                         // OPTIONS VERBS
                         'OPTIONS login' => 'options',
                         'OPTIONS create-account' => 'options',
                         'OPTIONS request-reset-password' => 'options',
                         'OPTIONS resend-verification-email' => 'options',
+                        'OPTIONS validate-fb-token' => 'options'
                     ]
-                ],
-                [ // OAuth
-                    'class' => 'yii\web\UrlRule',
-                    'pattern' => 'v1/authenticate',
-                    'route' => 'v1/authenticate/index'
                 ],
                 [ // SearchController
                     'class' => 'yii\rest\UrlRule',
