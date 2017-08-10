@@ -115,14 +115,14 @@ class AuthController extends Controller
     
     public function actionValidateFbToken() 
     {
-        $authResponse = Yii::$app->request->getBodyParam("authResponse");
+        $token = Yii::$app->request->getBodyParam("token");
 
-        $user_details = "https://graph.facebook.com/me?access_token=" .$authResponse['accessToken'];
+        $user_details = "https://graph.facebook.com/me?fields=name,email,gender&access_token=" .$token;
 
         $response = file_get_contents($user_details);
         $response = json_decode($response);
         
-        if(empty($response['email'])) 
+        if(empty($response->email)) 
         {
             return [
                 'operation' => 'error',
@@ -131,15 +131,15 @@ class AuthController extends Controller
         }
 
         $customer = Customer::find()->where([
-            'customer_email' => $response['email']
+            'customer_email' => $response->email
         ])->one();
 
         if (!$customer) 
         { 
             $customer = new Customer;            
-            $customer->customer_name = $response['first_name'];
-            $customer->customer_last_name = $response['last_name'];;
-            $customer->customer_email = $response['email'];
+            $customer->customer_name = $response->first_name;
+            $customer->customer_last_name = $response->last_name;
+            $customer->customer_email = $response->email;
             $customer->customer_gender = '';
             //$model->customer_mobile = 
             //$model->customer_dateofbirth 
