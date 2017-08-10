@@ -115,7 +115,7 @@ class AuthController extends Controller
     
     public function actionValidateFbToken() 
     {
-        $token = Yii::$app->request->getBodyParam("token");
+        $token = Yii::$app->request->getBodyParam("accessToken");
 
         $user_details = "https://graph.facebook.com/me?access_token=" .$token;
 
