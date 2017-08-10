@@ -49,6 +49,11 @@ return [
                         'OPTIONS resend-verification-email' => 'options',
                     ]
                 ],
+                [ // OAuth
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'v1/authenticate',
+                    'route' => 'v1/authenticate/index'
+                ],
                 [ // SearchController
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'v1/search',
