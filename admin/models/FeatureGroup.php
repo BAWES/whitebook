@@ -4,7 +4,7 @@ namespace admin\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
-
+use common\models\FeatureGroupItem;
 
 /**
  * This is the model class for table "whitebook_feature_group".

@@ -70,13 +70,31 @@ class VendorItemThemes extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getVendorName() {
+        if($this->vendor)
+            return $this->vendor->vendor_name;
+    }
+
+    public function getItemName() {
+        if($this->vendoritem)
+            return $this->vendoritem->item_name;
+    }
+
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+    public function getVendor()
+    {
+        return $this->hasOne(Vendor::className(), ['vendor_id' => 'vendor_id'])
+            ->via('vendoritem');
+    }
 
     /**
     * @return \yii\db\ActiveQuery
     */
     public function getVendoritem()
     {
-        return $this->hasOne(VendorItem::className(), ['vendor_id' => 'vendor_id']);
+        return $this->hasOne(VendorItem::className(), ['item_id' => 'item_id']);
     }
 
     /**

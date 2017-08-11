@@ -2,13 +2,14 @@
 
 namespace common\models;
 
-use yii\helpers\ArrayHelper;
 use Yii;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
+use yii\helpers\ArrayHelper;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
-use yii\db\Expression;
+use common\models\FeatureGroupItem;
 
 /**
 * This is the model class for table "whitebook_feature_group".

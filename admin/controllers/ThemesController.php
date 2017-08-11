@@ -11,6 +11,7 @@ use admin\models\ThemesSearch;
 use admin\models\AuthItem;
 use common\models\VendorItemThemes;
 use admin\models\AccessControlList;
+use admin\models\VendorItemThemesSearch;
 
 /**
  * ThemesController implements the CRUD actions for Themes model.
@@ -69,6 +70,23 @@ class ThemesController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'themes' => $themes
+        ]);
+    }
+
+    /**
+     * Lists all Item in model 
+     *
+     * @return mixed
+     */
+    public function actionItems($id)
+    {
+        $searchModel = new VendorItemThemesSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id);
+
+        return $this->render('items', [
+            'model' => $this->findModel($id),
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
