@@ -186,7 +186,7 @@ class CommunityController extends BaseController
         $provider = new ArrayDataProvider([
             'allModels' => $vendor_items,
             'pagination' => [
-                'pageSize' => 50,
+                'pageSize' => 48,
             ],
         ]);
 
