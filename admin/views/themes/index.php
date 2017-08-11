@@ -47,8 +47,17 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header'=>'Action',
-                'template' => '{update} {move} {delete}',
+                'template' => '{items} {update} {move} {delete}',
                 'buttons' => [
+                    'items' => function($url, $data) {
+                        return HTML::a(
+                            '<i class="glyphicon glyphicon-list"></i>', 
+                            Url::to(['themes/items', 'id' => $data->theme_id]),
+                            [
+                                'title' => 'Items'
+                            ]
+                        );
+                    },
                     'move' => function ($url, $model) {     
                         return '<a title="'.Yii::t('yii', 'Move').'" data-theme-name="'.$model->theme_name.'" data-theme-id="'.$model->theme_id.'" class="btn-move"><span class="glyphicon glyphicon-share"></span></a>';  
                     }

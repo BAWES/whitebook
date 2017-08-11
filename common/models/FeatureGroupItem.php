@@ -80,6 +80,14 @@ class FeatureGroupItem extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getItemName() {
+        return $this->item->item_name;
+    }
+
+    public function getVendorName() {
+        return $this->vendor->vendor_name;
+    }
+
     /**
     * @return \yii\db\ActiveQuery
     */

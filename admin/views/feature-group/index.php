@@ -30,14 +30,36 @@ $this->params['breadcrumbs'][] = $this->title;
 				'onclick'=>'change("'.$data->group_status.'","'.$data->group_id.'")']);
 				},
 			],
+            [
+                'label' => 'Total Items',
+                'format' => 'raw',
+                'value' => function($data) {
+                    $total = count($data->featureGroupItems);
+                    $url = Url::to(['/feature-group/assign', 'id' => $data->group_id]);
+                    return "<a href='$url' class=\"btn btn-primary\"><span class=\"badge\">$total</span> View & Assign</a>";
+                }
+            ],
 			[
 				'attribute'=>'created_datetime',
 				'format' => ['date', 'php:d/m/Y'],
 				'label'=>'created date',			
 			],
-             ['class' => 'yii\grid\ActionColumn',
-            'header'=>'Action',
-            'template' => '{update} {delete}{link}',],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'header'=>'Action',
+                'template' => '{items} {view} {update} {delete}',
+                'buttons' => [
+                    'items' => function($url, $data) {
+                        return HTML::a(
+                            '<i class="glyphicon glyphicon-list"></i>', 
+                            Url::to(['feature-group/items', 'id' => $data->group_id]),
+                            [
+                                'title' => 'Items'
+                            ]
+                        );
+                    }
+                ]
+            ],
         ],
     ]); ?>
 
