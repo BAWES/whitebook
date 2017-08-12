@@ -273,7 +273,7 @@ class BrowseController extends BaseController
         $provider = new ArrayDataProvider([
             'allModels' => $items,
             'pagination' => [
-                'pageSize' => 50,
+                'pageSize' => 48,
             ],
         ]);
 

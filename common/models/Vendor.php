@@ -183,6 +183,14 @@ class Vendor extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReviews()
+    {
+        return $this->hasMany(VendorReview::className(), ['vendor_id' => 'vendor_id']);
+    }
+
+    /**
     * @return \yii\db\ActiveQuery
     */
     public function getVendorAddresses()

@@ -131,4 +131,28 @@ class VendorReview extends \yii\db\ActiveRecord
             ->setSubject('New Review Added')
             ->send();
     }
+
+    //check if customer have place order from this vendor, but not added review for that 
+    public static function canAddReview($vendor_id) 
+    {
+        $booking = Booking::find()
+            ->where([
+                'vendor_id' => $vendor_id,
+                'customer_id' => Yii::$app->user->getId()
+            ])
+            ->one();
+
+        $review = VendorReview::find()
+            ->where([
+                    'vendor_id' => $vendor_id,
+                    'customer_id' => Yii::$app->user->getId()
+            ])
+            ->one();
+
+        if($booking && !$review) {
+            return true;
+        } 
+
+        return false;
+    }
 }

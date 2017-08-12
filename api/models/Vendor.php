@@ -35,4 +35,14 @@ class Vendor extends \common\models\Vendor {
 
         return $fields;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function extraFields()
+    {
+        return [
+            'reviews'
+        ];
+    }
 }

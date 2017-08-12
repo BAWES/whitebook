@@ -195,7 +195,7 @@ if (!empty($items->getModels())) {
 $this->registerCss("
     .no-record-found {padding: 12px 0 36px 0px;text-align: center;}
     .min-height-301 {min-height: 310px;padding-left: 3px;padding-right: 3px;}
-    img.item-img{width: 100%;}
+    img.item-img{width: 100%; max-height: 210px;}
     .width-100-percent{width: 100%;}
     .margin-top-15{margin-top: 15%;}
 ");

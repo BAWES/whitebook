@@ -283,8 +283,11 @@ class ProductController extends Controller
             ->menu('addons')
             ->asArray()
             ->all();
+        
         $value = $model;
+        
         $notice = '';
+
         if (isset($value['item_how_long_to_make']) && $value['item_how_long_to_make'] > 0) {
             if (isset($value['notice_period_type']) && $value['notice_period_type'] == 'Day') {
                 if ($value['item_how_long_to_make'] >= 7) {
@@ -318,7 +321,8 @@ class ProductController extends Controller
             'videos' => $model->videos,
             'menu' => $menu,
             'addons' => $addons,
-            'notice' => $notice
+            'notice' => $notice,
+            'similarItems' => VendorItem::more_from_vendor($model)
         ];
     }
 
@@ -549,11 +553,11 @@ class ProductController extends Controller
                 $to = strtotime("+30 minutes", $from);
 
                 if ($to > strtotime($endTime)) {
-                    $slots[] = date('h:i A', $from);// . '-' . date('H:i:s',strtotime($endTime));
+                    $slots[] = date('g:i A', $from);// . '-' . date('H:i:s',strtotime($endTime));
                     break;
                 }
 
-                $slots[] = date('h:i A', $from);// . ' - ' . date('h:i A',$to);
+                $slots[] = date('g:i A', $from);// . ' - ' . date('h:i A',$to);
 
                 $from = $to;
             }

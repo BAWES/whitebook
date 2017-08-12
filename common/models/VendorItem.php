@@ -610,6 +610,68 @@ class VendorItem extends \yii\db\ActiveRecord
         $model->delete();
     }
 
+    public static function more_from_vendor($model) 
+    {        
+        $result = VendorItem::find()
+            ->where([
+                'vendor_id' => $model->vendor_id,
+                'item_status' => 'Active',
+                'item_approved' => 'Yes',
+                'trash' => 'Default'
+            ])
+            ->andWhere(['!=','item_id', $model->item_id])
+            ->asArray()
+            ->all();    
+
+        $products = [];
+            
+        foreach ($result as $item) 
+        {
+            $image = \common\models\Image::find()
+                ->where(['item_id' => $item['item_id']])
+                ->orderBy(['vendorimage_sort_order' => SORT_ASC])
+                ->one();
+                
+            if ($image) {
+                $item['image'] = $image->image_path;
+            } else {
+                $item['image'] = '';
+            }
+
+            // for notice period
+            $value = $item;
+            $notice = '';
+            if (isset($value['item_how_long_to_make']) && $value['item_how_long_to_make'] > 0) {
+                if (isset($value['notice_period_type']) && $value['notice_period_type'] == 'Day') {
+                    if ($value['item_how_long_to_make'] >= 7) {
+                        $notice = Yii::t('api', '{count} week(s)', [
+                            'count' => substr(($value['item_how_long_to_make'] / 7), 0, 3)
+                        ]);
+                    } else {
+                        $notice = Yii::t('api', '{count} day(s)', [
+                            'count' => $value['item_how_long_to_make']
+                        ]);
+                    }
+                } else {
+                    if ($value['item_how_long_to_make'] >= 24) {
+                        $notice = Yii::t('api', '{count} day(s)', [
+                            'count' => substr(($value['item_how_long_to_make'] / 24), 0, 3)
+                        ]);
+                    } else {
+                        $notice = Yii::t('api', '{count} hours', [
+                            'count' => $value['item_how_long_to_make']
+                        ]);
+                    }
+                }
+            }
+            $item['notice'] = $notice;
+
+            $products[] = $item;
+        }
+
+        return $products;
+    }
+
     /**
      * @inheritdoc
      * @return query\VendorItemQuery the active query used by this AR class.

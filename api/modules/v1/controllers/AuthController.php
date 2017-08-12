@@ -48,6 +48,7 @@ class AuthController extends Controller
             'options',
             'create-account',
             'request-reset-password',
+            'validate-fb-token'
         ];
 
         return $behaviors;
@@ -110,6 +111,53 @@ class AuthController extends Controller
             "token" => $accessToken
         ];
     }
+
+    
+    public function actionValidateFbToken() 
+    {
+        $token = Yii::$app->request->getBodyParam("token");
+
+        $user_details = "https://graph.facebook.com/me?fields=name,email,gender&access_token=" .$token;
+
+        $response = file_get_contents($user_details);
+        $response = json_decode($response);
+        
+        if(empty($response->email)) 
+        {
+            return [
+                'operation' => 'error',
+                'message' => 'Invalid Token'
+            ];
+        }
+
+        $customer = Customer::find()->where([
+            'customer_email' => $response->email
+        ])->one();
+
+        if (!$customer) 
+        { 
+            $customer = new Customer;            
+            $customer->customer_name = $response->first_name;
+            $customer->customer_last_name = $response->last_name;
+            $customer->customer_email = $response->email;
+            $customer->customer_gender = '';
+            //$model->customer_mobile = 
+            //$model->customer_dateofbirth 
+            $customer->customer_password = Yii::$app->getSecurity()->generatePasswordHash($customer->customer_password);      
+            $customer->customer_activation_status = 1;      
+            $customer->save(false);
+            
+            //Send Email to admin 
+            Customer::notifyAdmin($customer);
+        }
+
+        return [
+            'operation' => 'success',
+            'token' => $customer->accessToken->token_value,
+            'email' => $customer->customer_email
+        ];
+    }
+
 
     /**
      * Creates new agent account manually

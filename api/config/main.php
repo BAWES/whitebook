@@ -42,11 +42,13 @@ return [
                         'POST create-account' => 'create-account',
                         'POST request-reset-password' => 'request-reset-password',
                         'POST resend-verification-email' => 'resend-verification-email',
+                        'POST validate-fb-token' => 'validate-fb-token',
                         // OPTIONS VERBS
                         'OPTIONS login' => 'options',
                         'OPTIONS create-account' => 'options',
                         'OPTIONS request-reset-password' => 'options',
                         'OPTIONS resend-verification-email' => 'options',
+                        'OPTIONS validate-fb-token' => 'options'
                     ]
                 ],
                 [ // SearchController
@@ -260,16 +262,20 @@ return [
                         'OPTIONS' => 'options'
                     ]
                 ],
-                [ // DirectoryController
+                [ //CommunityController
                     'class' => 'yii\rest\UrlRule',
-                    'controller' => 'v1/directory',
+                    'controller' => 'v1/community',
                     'pluralize' => false,
                     'patterns' => [
                         'GET' => 'list',
                         'GET view' => 'view',
+                        'GET reviews/<id>' => 'reviews',
+                        'POST review' => 'review',
                         // OPTIONS VERBS
                         'OPTIONS' => 'options',
-                        'OPTIONS view' => 'options'
+                        'OPTIONS view' => 'options',
+                        'OPTIONS review' => 'options',
+                        'OPTIONS reviews/<id>' => 'options'
                     ]
                 ],
                 [ // CmsController

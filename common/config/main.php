@@ -16,6 +16,16 @@ return [
              * https://thewhitebook.s3.amazonaws.com/
              * https://thewhitebook.s3.amazonaws.com/folderName/fileName.jpg
              */
+        ],        
+        'authClientCollection' => [
+            'class' => 'yii\authclient\Collection',
+            'clients' => [
+                'google' => [
+                    'class' => 'yii\authclient\clients\Google',
+                    'clientId' => '763967388698-khv64ob8aq5a04hv81q1ub1u6plcsuv7.apps.googleusercontent.com',
+                    'clientSecret' => '93CgFapHM0Ij9cQm1erN--3h',
+                ]
+            ],
         ],
         'slack' => [
             'class' => 'understeam\slack\Client',

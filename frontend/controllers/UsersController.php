@@ -32,9 +32,8 @@ use common\models\VendorItemToCategory;
 use common\models\VendorItemThemes;
 
 /**
-* Site controller.
-*/
-
+ * Site controller.
+ */
 class UsersController extends BaseController
 {
     public function actionIndex()

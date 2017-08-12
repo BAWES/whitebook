@@ -127,9 +127,10 @@ class AccountController extends Controller
     public function actionContact()
     {
         $subject = 'Enquiry from user';
-        $name = Yii::$app->request->getBodyParam('name');
-        $email  = Yii::$app->request->getBodyParam('email');
-        $msg      = Yii::$app->request->getBodyParam('msg');
+        $name    = Yii::$app->request->getBodyParam('name');
+        $email   = Yii::$app->request->getBodyParam('email');
+        $msg     = Yii::$app->request->getBodyParam('msg');
+        $topic   = Yii::$app->request->getBodyParam('topic');
 
         $model = new \api\models\Contacts();
         $model->contact_name = $name;
@@ -147,6 +148,10 @@ class AccountController extends Controller
         <tr>
         <td><b>Email-id</b></td>
         <td>' . $email . '</td>
+        </tr>
+        <tr>
+        <td><b>Topic</b></td>
+        <td>' . $topic . '</td>
         </tr>
         <tr>
         <td><b>Message</b></td>

@@ -5,12 +5,13 @@ namespace api\modules\v1\controllers;
 use Yii;
 use yii\rest\Controller;
 use api\models\Vendor;
+use api\models\VendorReview;
 use common\models\CategoryPath;
 
 /**
- * Directory controller 
+ * Community controller 
  */
-class DirectoryController extends Controller
+class CommunityController extends Controller
 {
     public function behaviors()
     {
@@ -54,6 +55,20 @@ class DirectoryController extends Controller
         ];
         return $actions;
     }
+    
+    public function __construct($id, $module, $config = [])
+    {
+        parent::__construct($id, $module, $config);
+        
+        //for guest
+        Yii::$app->session->set('_user', Yii::$app->request->get('cart-session-id'));
+
+        //for login customer 
+        $authHeader = Yii::$app->request->getHeaders()->get('Authorization');
+        if ($authHeader !== null && preg_match('/^Bearer\s+(.*?)$/', $authHeader, $matches)) {
+            Yii::$app->user->loginByAccessToken($matches[1]);
+        }
+    }
 
     /**
      * Return a List of Directory
@@ -91,7 +106,7 @@ class DirectoryController extends Controller
         }
 
         return [
-            'directory' => $result,
+            'community' => $result,
             'keys' => array_keys($result)
         ];
     }
@@ -178,5 +193,46 @@ class DirectoryController extends Controller
         }
 
         return $products;
+    }
+
+    /**
+     * Return vendor reviews 
+     */ 
+    public function actionReviews($id) 
+    {
+        $reviews = VendorReview::find()
+            ->where(['vendor_id' => $id, 'approved' => 1])
+            ->all();
+
+        $canAddReview = VendorReview::canAddReview($id);
+
+        return [
+            'reviews' => $reviews,
+            'canAddReview' => $canAddReview
+        ];
+    }
+
+    public function actionReview() 
+    {
+        $model = new VendorReview();        
+        $model->customer_id = Yii::$app->user->getId();
+        $model->rating = Yii::$app->request->getBodyParam("rating");
+        $model->vendor_id = Yii::$app->request->getBodyParam("vendor_id");
+        $model->review = Yii::$app->request->getBodyParam("review");
+
+        if ($model->save()) 
+        {
+            return [
+                'operation' => 'success',
+                'message' => Yii::t('frontend', 'We got your review, thank you!')
+            ];    
+        } 
+        else 
+        {
+            return [
+                'operation' => 'error',
+                'message' => $model->getErrors()
+            ];   
+        }
     }
 }

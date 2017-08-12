@@ -213,6 +213,7 @@ class AddressController extends Controller
             return [
                 "operation" => "success",
                 "message" => Yii::t("api", "Address Saved Successfully"),
+                "address_id" => $customer_address->address_id
             ];
 
         } else {

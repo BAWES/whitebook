@@ -6,13 +6,11 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model common\models\Featuregroup */
 
-$this->title = $model->group_id;
-$this->params['breadcrumbs'][] = ['label' => 'Featuregroups', 'url' => ['index']];
+$this->title = $model->group_name;
+$this->params['breadcrumbs'][] = ['label' => 'Feature Groups', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="featuregroup-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->group_id], ['class' => 'btn btn-primary']) ?>
