@@ -520,6 +520,46 @@ class ProductController extends Controller
         ];
     }
 
+    public function actionFilterData()
+    {
+        $vendors = Vendor::find()
+            ->where([
+                '{{%vendor}}.trash' => 'Default',
+                '{{%vendor}}.approve_status' => 'Yes',
+                '{{%vendor}}.vendor_status' => 'Active'
+            ])    
+            ->orderby(['{{%vendor}}.vendor_name' => SORT_ASC])
+            ->groupby(['{{%vendor}}.vendor_id'])
+            ->all();
+
+        $price = VendorItem::find()
+            ->select('MIN(item_price_per_unit) as minRange, MAX(item_price_per_unit) as maxRange')
+            ->where([
+                'item_status' => 'Active',
+                'trash' => 'default',
+                'item_approved' => 'Yes'
+            ])
+            ->asArray()
+            ->one();
+
+        $areas = VendorLocation::find()
+            ->select(['{{%vendor_location}}.area_id,{{%location}}.location,{{%location}}.location_ar'])
+            ->leftJoin('{{%location}}', '{{%location}}.id = {{%vendor_location}}.area_id')
+            ->asArray()
+            ->all();
+    
+        $themes = Themes::findAll(['theme_status'=>'Active','trash'=>'Default']);;
+
+        return [
+            'vendors' => $vendors,
+            'minRange' => floor($price['minRange']),
+            'maxRange' => ceil($price['maxRange']),
+            'areas' => $areas,
+            'themes' => $themes
+
+        ];
+    }
+
     public function actionFinalPrice()
     {
         $total = VendorItem::itemFinalPrice(
