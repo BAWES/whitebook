@@ -118,6 +118,7 @@ return [
                         'GET theme' => 'load-all-themes',
                         'GET vendors' => 'load-all-vendor',
                         'GET price-range' => 'price-range',
+                        'GET filter-data' => 'filter-data',
                         'POST event' => 'add-product-to-event',
                         'POST final-price' => 'final-price',
                         // OPTIONS VERBS
@@ -130,6 +131,7 @@ return [
                         'OPTIONS theme' => 'options',
                         'OPTIONS vendors' => 'options',
                         'OPTIONS price-range' => 'options',
+                        'OPTIONS filter-data' => 'options',
                         'OPTIONS event' => 'options',
                         'OPTIONS final-price' => 'options'
                     ]
