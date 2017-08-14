@@ -499,7 +499,17 @@ class BrowseController extends BaseController
 
             $customer_events_list = $user->get_customer_wishlist_details(Yii::$app->user->identity->customer_id);    
         }
-        
+
+        $similiar_items = VendorItem::find()
+            ->where([
+                'vendor_id' => $model->vendor_id,
+                'item_status' => 'Active',
+                'item_approved' => 'Yes',
+                'trash' => 'Default'
+            ])
+            ->andWhere(['!=','item_id', $model->item_id])
+            ->all();    
+
         return $this->render('detail', [
             'model' => $model,
             'menu' => $menu,
@@ -508,7 +518,7 @@ class BrowseController extends BaseController
             'phones' => VendorPhoneNo::findAll(['vendor_id' => $model->vendor_id]),
             'phone_icons' => $phone_icons,
             'txt_day_off' => $txt_day_off,
-            'similiar_item' => VendorItem::more_from_vendor($model),
+            'similiar_item' => $similiar_items,
             'AvailableStock' => $AvailableStock,
             'customer_events_list' => $customer_events_list,
             'vendor_area' => $vendor_area_list,
