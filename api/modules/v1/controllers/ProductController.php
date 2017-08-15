@@ -11,6 +11,7 @@ use common\models\VendorItemPricing;
 use common\models\VendorItemMenuItem;
 use common\models\VendorItemMenu;
 use common\models\Themes;
+use common\models\Location;
 use common\components\CFormatter;
 use frontend\models\Vendor;
 use api\models\EventItemlink;
@@ -523,6 +524,10 @@ class ProductController extends Controller
     public function actionFilterData()
     {
         $vendors = Vendor::find()
+            ->select([
+                'vendor_id',
+                'vendor_name'
+            ])
             ->where([
                 '{{%vendor}}.trash' => 'Default',
                 '{{%vendor}}.approve_status' => 'Yes',
@@ -542,13 +547,16 @@ class ProductController extends Controller
             ->asArray()
             ->one();
 
-        $areas = VendorLocation::find()
-            ->select(['{{%vendor_location}}.area_id,{{%location}}.location,{{%location}}.location_ar'])
-            ->leftJoin('{{%location}}', '{{%location}}.id = {{%vendor_location}}.area_id')
+        $areas = Location::find()
+            ->select(['{{%location}}.id, {{%location}}.location, {{%location}}.location_ar'])
+            ->leftJoin('{{%vendor_location}}', '{{%location}}.id = {{%vendor_location}}.area_id')
             ->asArray()
             ->all();
     
-        $themes = Themes::findAll(['theme_status'=>'Active','trash'=>'Default']);;
+        $themes = Themes::find()
+            ->select(['theme_id', 'theme_name', 'theme_name_ar'])
+            ->where(['theme_status' => 'Active', 'trash' => 'Default'])
+            ->all();
 
         return [
             'vendors' => $vendors,
@@ -556,7 +564,6 @@ class ProductController extends Controller
             'maxRange' => ceil($price['maxRange']),
             'areas' => $areas,
             'themes' => $themes
-
         ];
     }
 
