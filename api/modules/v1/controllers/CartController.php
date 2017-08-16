@@ -8,6 +8,7 @@ use yii\helpers\ArrayHelper;
 use common\models\CustomerCart;
 use common\models\CustomerCartMenuItem;
 use common\models\VendorItem;
+use common\models\VendorItemMenu;
 use common\models\VendorItemPricing;
 use api\models\Customer;
 use common\components\CFormatter;
@@ -556,11 +557,22 @@ class CartController extends Controller
         $data["delivery_date"] = Yii::$app->request->getBodyParam('delivery_date');
         $data["quantity"] = Yii::$app->request->getBodyParam('quantity');
         $data["area_id"] = Yii::$app->request->getBodyParam('area_id');
-        $data["menu_item"] = Yii::$app->request->getBodyParam('menu_item');
         $data["female_service"] = Yii::$app->request->getBodyParam('female_service');
         $data["special_request"] = Yii::$app->request->getBodyParam('special_request');
         $data["answer"] = Yii::$app->request->getBodyParam('answer');
 
+        $data["menu_item"] = [];
+        
+        $menu = VendorItemMenu::find()
+            ->item($data['item_id'])
+            ->all();
+
+        foreach ($menu as $key => $value) {
+            foreach ($value->vendorItemMenuItems as $key => $menuItem) {
+                $data["menu_item"][$menuItem->menu_item_id] = Yii::$app->request->getBodyParam('menu_item[' . $menuItem->menu_item_id . ']');                    
+            }
+        }    
+            
         if (empty($data["item_id"])) {
             return [
                 "operation" => "error",
