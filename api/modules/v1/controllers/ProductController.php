@@ -468,8 +468,10 @@ class ProductController extends Controller
         }
     }
 
-    public function actionItemCapacity($product_id, $deliver_date) {
+    public function actionItemCapacity($product_id, $deliver_date) 
+    {        
         $model = VendorItem::find()->where(['item_id'=>$product_id])->one();
+        
         $capacity = $model->item_default_capacity;
 
         if (isset($model->vendorItemCapacityExceptions) && count($model->vendorItemCapacityExceptions)>0) {
