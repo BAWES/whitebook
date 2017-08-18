@@ -345,6 +345,9 @@ class CustomerCart extends \yii\db\ActiveRecord
                 $errors['cart_quantity'][] = Yii::t('frontend', 'No more item available, already added available in cart');
             else         
                 $errors['cart_quantity'][] = Yii::t('frontend', 'Item is Out of stock');
+
+            if($errors)
+                return $errors;
         }
 
         //-------------- END Item Capacity -----------------//
