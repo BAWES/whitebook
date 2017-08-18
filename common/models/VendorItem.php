@@ -610,7 +610,7 @@ class VendorItem extends \yii\db\ActiveRecord
         $model->delete();
     }
 
-    public static function more_from_vendor($model) 
+    public static function more_from_vendor($model, $limit = 4) 
     {        
         $result = VendorItem::find()
             ->where([
@@ -620,6 +620,7 @@ class VendorItem extends \yii\db\ActiveRecord
                 'trash' => 'Default'
             ])
             ->andWhere(['!=','item_id', $model->item_id])
+            ->limit(4)
             ->asArray()
             ->all();    
 
