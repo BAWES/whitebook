@@ -419,5 +419,6 @@ return [
     'Day' => 'يوم',
     'Hour' => 'ساعة',
     'Please verify you are human' => 'يرجى التحقق من أنك الإنسان',
-    'Plese, check form carefully' => 'بليز، التحقق من النموذج بعناية'
+    'Plese, check form carefully' => 'بليز، التحقق من النموذج بعناية',
+    'No more item available, already added available in cart' => 'لا يوجد المزيد من العناصر المتاحة، وأضاف بالفعل المتاحة في العربة'
 ];
