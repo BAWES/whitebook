@@ -18,11 +18,9 @@ if ($directory) { ?>
                         continue;
                     }
 
-                    if($d['vendor_logo_path'] {
-                        $img = Yii::getAlias('@vendor_logo/').$d['vendor_logo_path'];
-                    }else{
-                        $img =  Url::to("@web/images/item-default.png");    
-                    }
+	                $img = ($d['vendor_logo_path']) ?
+                        Yii::getAlias('@vendor_logo/').$d['vendor_logo_path'] :
+                            Url::to("@web/images/item-default.png");
                     ?>
                     <li class="col-md-4 col-sm-6 col-xs-6">
                         <div class="vendor_thumbnail">
