@@ -240,7 +240,7 @@ class CartController extends BaseController
                     ];
                 } else {
                     return [
-                        'error' => Yii::t('frontend','Error while updateing cart')
+                        'error' => Yii::t('frontend','Error while updating cart')
                     ];
                 }
             }
