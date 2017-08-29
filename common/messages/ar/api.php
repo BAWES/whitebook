@@ -46,8 +46,8 @@ return [
 	"Password reset link sent, please check your email for further instructions." => "تم إرسال رابط إعادة تعيين كلمة المرور، يرجى التحقق من بريدك الإلكتروني للحصول على مزيد من الإرشادات.",
 	"Server issue. Please try again" => "مشكلة الخادم. حاول مرة اخرى",
 	"Email Does Not Exist" => "البريد الإلكتروني غير موجود",
-	"Booking not found" => "لم يتم العثور على الحجز"
-	'Success: Product <a href="{product_link}">{product_name}</a> updated in cart successfully' => "النجاح: تم تحديث المنتج <a href="{product_link}"> {product_name} </a> في سلة التسوق بنجاح",
+	"Booking not found" => "لم يتم العثور على الحجز",
+	'Success: Product <a href="{product_link}">{product_name}</a> updated in cart successfully' => "النجاح: تم تحديث المنتج <a href=\"{product_link}\"> {product_name} </a> في سلة التسوق بنجاح",
 	"Error while updateing cart" => "حدث خطأ أثناء تحديث العربة",
 	"Invalid Item ID" => "معرف العنصر غير صالح",
 	"Invalid Time Slot" => "فترة زمنية غير صالحة",
