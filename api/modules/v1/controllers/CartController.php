@@ -433,7 +433,7 @@ class CartController extends Controller
 //                } else {
 //                    return [
 //                        "operation" => "error",
-//                        "message" => Yii::t('frontend','Error while updateing cart')
+//                        "message" => Yii::t('frontend','Error while updating cart')
 //                    ];
 //                }
 //            }
@@ -534,7 +534,7 @@ class CartController extends Controller
                     ];
                 } else {
                     return [
-                        'error' => Yii::t('api', 'Error while updateing cart')
+                        'error' => Yii::t('api', 'Error while updating cart')
                     ];
                 }
             }
