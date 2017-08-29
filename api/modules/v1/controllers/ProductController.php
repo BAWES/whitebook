@@ -578,7 +578,7 @@ class ProductController extends Controller
         );
 
         return [
-            'total' => CFormatter::format($total)
+            'total' => $total
         ];
     }
 
