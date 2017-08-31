@@ -567,7 +567,7 @@ else
                                                                     ]);
                                                                 }
 
-                                                                /*if($value->min_quantity && $value->max_quantity) {
+                                                                if($value->min_quantity && $value->max_quantity) {
                                                                     echo ' , ';
                                                                 }
 
@@ -575,7 +575,7 @@ else
                                                                     echo Yii::t('frontend', ' upto {qty}', [
                                                                         'qty' => $value->max_quantity
                                                                     ]);
-                                                                }*/
+                                                                }
 
                                                                 ?>
                                                             </span>
