@@ -989,10 +989,10 @@ class VendorItemController extends Controller
         $temp_folder = sys_get_temp_dir().'/'; 
 
         $image_name = Yii::$app->security->generateRandomString();
-        $image_extension = '.png';
-        $content_type = 'image/png';
+        $image_extension = '.jpeg';
+        $content_type = 'image/jpeg';
 
-        $base64string = str_replace('data:image/png;base64,', '', Yii::$app->request->post('image'));
+        $base64string = str_replace('data:image/jpeg;base64,', '', Yii::$app->request->post('image'));
 
         //save to temp folder 
         file_put_contents($temp_folder . $image_name . $image_extension, base64_decode($base64string));

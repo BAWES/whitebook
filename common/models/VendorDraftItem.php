@@ -398,7 +398,8 @@ class VendorDraftItem extends \yii\db\ActiveRecord
         if(!$model)
             return true;
 
-        $model->deleteAllFiles();
+        //#Issue : Deleting images for live item 
+        //$model->deleteAllFiles();
 
         $menues = VendorDraftItemMenu::findAll(['item_id' => $model->item_id]);
 

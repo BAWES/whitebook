@@ -168,6 +168,6 @@ echo Html::hiddenInput('image_count', $image_count, ['id' => 'image_count']);
 
 $this->registerJsFile("@web/themes/default/js/jquery.cropit.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
-$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.26", ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile("@web/themes/default/js/vendor_item_validation.js?v=1.27", ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerJsFile("@web/themes/default/js/vendor_item_steps/images.js", ['depends' => [\yii\web\JqueryAsset::className()]]);
