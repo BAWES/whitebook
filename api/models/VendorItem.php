@@ -72,6 +72,7 @@ class VendorItem extends \common\models\VendorItem {
 
     public function getPrice()
     {
-        return $this->hasMany(VendorItemPricing::className(),['item_id'=>'item_id']);
+        return $this->hasMany(VendorItemPricing::className(),['item_id'=>'item_id'])
+            ->orderBy('pricing_price_per_unit DESC');
     }
 }
