@@ -235,7 +235,7 @@ $(document).delegate('.table-category-list .btn-danger','click', function(){
 	    	//remove old warning 
 	    	$('.alert-image-size').remove();
 
-	    	var imageData = $('.image-editor').cropit('export');
+	    	var imageData = $('.image-editor').cropit('export', { type: 'image/jpeg' });
 
 			if(!imageData) {
 				$html  = '<div class="alert alert-warning alert-image-size">';

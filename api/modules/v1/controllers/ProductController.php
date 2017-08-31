@@ -571,10 +571,24 @@ class ProductController extends Controller
 
     public function actionFinalPrice()
     {
+        $item_id = Yii::$app->request->getBodyParam('item_id');
+        $quantity = Yii::$app->request->getBodyParam('quantity');
+        $menu_items = VendorItemMenuItem::findAll(['item_id' => $item_id]);
+
+        $menu_selected = [];
+
+        foreach ($menu_items as $key => $value) 
+        {
+            $menu_selected[] = [
+                'quantity' => Yii::$app->request->getBodyParam('menu_item[' . $value->menu_item_id . ']'),
+                'price' => $value->price
+            ];            
+        }
+
         $total = VendorItem::itemFinalPrice(
-            Yii::$app->request->getBodyParam('item_id'), 
-            Yii::$app->request->getBodyParam('quantity'), 
-            Yii::$app->request->getBodyParam('menu_item')
+            $item_id, 
+            $quantity, 
+            $menu_selected
         );
 
         return [
