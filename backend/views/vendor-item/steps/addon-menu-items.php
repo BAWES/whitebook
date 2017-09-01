@@ -185,14 +185,13 @@ $this->params['breadcrumbs'][] = 'Update';
 			</button>
 
 			<hr />
-
 			
 			<div class="row">
 				<div class="col-md-4">
 					<a href="<?= Url::to(['vendor-item/menu-items', 'id' => $model->item_id]) ?>" class="btn btn-info pull-left">Prev</a>
 				</div>
 				<div class="col-md-4 text-center">
-					<input type="submit" name="complete" class="btn btn-info" value="Complete" />
+					<input type="submit" name="complete" class="btn btn-info" value="complete" />
 				</div>
 				<div class="col-md-4">
 					<input type="submit" name="btnNext" class="btn btn-info pull-right" value="Next" />
