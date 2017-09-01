@@ -780,6 +780,12 @@ class VendorItemController extends Controller
 
             if($complete) {
 
+                //to make draft visible to admin 
+
+                $model->is_ready = 1;
+                $model->item_approved = 'Pending';
+                $model->save(false);
+
                 Yii::$app->session->setFlash('success', "Item updated successfully.Admin will check and approve it.");
 
                 Yii::info('[Item Updated] Vendor updated ' . addslashes($model->item_name) . ' item information', __METHOD__);
