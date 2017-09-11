@@ -201,10 +201,10 @@ class CategoryPathQuery extends \yii\db\ActiveQuery
     }
 
     public function likeItemName($search) {
-        return $this->andWhere('
-            {{%vendor_item}}.item_name like "%'.$search.'%" OR 
-            {{%vendor_item}}.item_name_ar like "%'.$search.'%"
-        ');
+        if(Yii::$app->language == 'en')
+            return $this->andWhere(['like', '{{%vendor_item}}.item_name', $search]);
+        else 
+            return $this->andWhere(['like', '{{%vendor_item}}.item_name_ar', $search]);
     }
 
     public function activeVendor() {
